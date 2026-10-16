@@ -2,7 +2,7 @@ workflows:
   # APK de prueba: se instala directo en el teléfono, sin firma propia.
   tronx-apk-debug:
     name: Tronx APK (prueba)
-    instance_type: linux_x2
+    instance_type: mac_mini_m2
     max_build_duration: 30
     environment:
       node: 22
@@ -32,7 +32,7 @@ workflows:
   # subí tu keystore con la referencia "tronx_keystore".
   tronx-apk-release:
     name: Tronx APK (firmado)
-    instance_type: linux_x2
+    instance_type: mac_mini_m2
     max_build_duration: 30
     environment:
       node: 22
