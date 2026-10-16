@@ -4,7 +4,12 @@ App de notas para Android. Funciona sin internet y sin cuenta: las notas se guar
 
 Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK con [Capacitor](https://capacitorjs.com). La carpeta `android/` no se sube a GitHub: Codemagic la genera en cada build.
 
-## Qué hace (versión 1.4)
+## Qué hace (versión 1.5)
+
+- Notas en cuadrícula de dos columnas, con tarjetas redondeadas en tema espacial (oscuro y violeta por defecto; el claro y los demás colores siguen en Ajustes).
+- Cada nota puede tener un emoji o uno de los 12 stickers de Tronx (galaxia, estrella, planeta, nebulosa, luna, agujero negro, cometa, cohete, platillo, constelación, eclipse y cristal). El icono se ve en la tarjeta y en el editor, y se puede cambiar o quitar.
+- Botón **Guardar** en el editor: guarda al instante y avisa. Además todo se sigue guardando solo.
+- Sonido del agujero negro de la pantalla de inicio, generado en el momento (no hay archivos de audio). Se silencia con el botón de la esquina de esa pantalla o en Ajustes > Sonido.
 
 - Pantalla de inicio con un universo animado (galaxia, estrellas, nebulosas y un agujero negro ocasional) y el botón «Iniciar universo». Aparece siempre al abrir la app. Si el teléfono va justo, baja sola la calidad; con «reducir animaciones» activado se muestra estática.
 - Cada nota tiene un campo de título y otro de contenido, separados. Si dejás el título vacío, la nota se muestra por su texto.
@@ -73,6 +78,8 @@ El ícono actual se generó con un script de dibujo; para cambiarlo, reemplazá 
 
 ```
 www/index.html          la app completa
+www/stickers.js         los stickers (dibujos SVG)
+www/sound.js            el sonido del agujero negro
 www/universe.js         fondo animado y pantalla de inicio
 www/universe.css        estilos de la pantalla de inicio
 resources/              ícono y pantalla de inicio
@@ -82,7 +89,24 @@ capacitor.config.json   nombre y paquete (com.tronx.notas)
 codemagic.yaml          workflows de Codemagic
 ```
 
+## Actualizar la app sin desinstalarla
+
+Android solo instala una versión nueva encima de la vieja si las dos están firmadas con la **misma clave** y el `versionCode` es mayor. En este proyecto:
+
+- El identificador de la app es `com.tronx.notas` (en `capacitor.config.json`). No lo cambies.
+- El `versionCode` lo calcula `scripts/patch-android.mjs` en cada build y siempre crece. El `versionName` sale de `version` en `package.json`.
+- El workflow **Tronx APK (prueba)** firma con una clave de depuración que Codemagic crea de nuevo en cada build. Esos APK **no** se pueden instalar uno encima de otro.
+- El workflow **Tronx APK (firmado)** firma con tu keystore fijo (`tronx_keystore`). Con ese, cada versión actualiza la anterior y las notas se conservan.
+
+Pasos, una sola vez:
+1. En Ajustes > Copia de seguridad, exportá una copia de tus notas (la primera vez hay que desinstalar la versión de prueba, y al desinstalar se borran los datos).
+2. En Codemagic: Teams > Code signing identities > Android keystores. Creá o subí un keystore con la referencia `tronx_keystore` y guardá aparte el archivo y sus contraseñas. No los subas a GitHub.
+3. Desinstalá Tronx del teléfono, compilá con **Tronx APK (firmado)** e instalá ese APK. Importá la copia de seguridad.
+4. De ahí en adelante, compilá siempre con el workflow firmado: se instala encima sin perder nada.
+
 ## Cambios
+
+**1.5.0**: cuadrícula de dos columnas, tema espacial para las notas, emojis y stickers por nota, botón Guardar, sonido del agujero negro y `versionCode` creciente. Las notas y ajustes existentes se conservan (las notas ganan un campo `icon`; el tema pasa al aspecto Tronx solo si no habías elegido otro).
 
 **1.4.0**: el agujero negro absorbe las letras del título y de la descripción una por una (se deforman, giran en espiral y desaparecen) y después se reconstruyen con pequeñas partículas de luz. Textos un poco más grandes y de color translúcido. Pantalla de arranque nativa con el ícono mucho más pequeño y sin recuadro. Con «reducir animaciones» activado no se separa el texto ni hay agujero negro.
 

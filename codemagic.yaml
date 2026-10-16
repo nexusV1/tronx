@@ -1,5 +1,7 @@
 workflows:
-  # APK de prueba: se instala directo en el teléfono, sin firma propia.
+  # APK de prueba: se instala directo en el teléfono, pero queda firmado con una clave de depuración que
+  # Codemagic crea de nuevo en cada build. Por eso NO se puede instalar encima de una versión anterior:
+  # para actualizar sin desinstalar, usá el workflow "Tronx APK (firmado)" de abajo.
   tronx-apk-debug:
     name: Tronx APK (prueba)
     instance_type: mac_mini_m2
@@ -27,9 +29,10 @@ workflows:
     artifacts:
       - android/app/build/outputs/**/*.apk
 
-  # APK firmado para publicar o instalar de forma permanente.
-  # Antes de usarlo: en Codemagic, Teams > Code signing identities > Android keystores,
-  # subí tu keystore con la referencia "tronx_keystore".
+  # APK firmado con TU clave fija: cada versión nueva se instala encima de la anterior y conserva las notas.
+  # Antes de usarlo: en Codemagic, Teams > Code signing identities > Android keystores, creá o subí un keystore
+  # con la referencia "tronx_keystore". Guardá una copia de ese archivo y de su contraseña: si la perdés,
+  # no podrás actualizar la app (habría que desinstalarla). Nunca los subas a GitHub.
   tronx-apk-release:
     name: Tronx APK (firmado)
     instance_type: mac_mini_m2

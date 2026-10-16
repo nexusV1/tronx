@@ -36,6 +36,7 @@
     if (finished) return;
     finished = true;
     stop();
+    if (window.TronxSound) window.TronxSound.end(true);
     window.removeEventListener("resize", onResize);
     document.removeEventListener("visibilitychange", onVisibility);
     if (canvas) { canvas.width = 0; canvas.height = 0; }
@@ -62,6 +63,21 @@
     }
   }
   btn.addEventListener("click", enter);
+
+  /* botón de sonido de la esquina: silencia o activa el sonido del agujero negro */
+  (function () {
+    var sb = document.getElementById("soundBtn"), snd = window.TronxSound;
+    if (!sb) return;
+    if (!snd || !snd.supported || reduce) { sb.hidden = true; return; }
+    function paint() {
+      var on = snd.isEnabled();
+      sb.setAttribute("aria-pressed", on ? "true" : "false");
+      sb.setAttribute("aria-label", on ? "Silenciar el sonido" : "Activar el sonido");
+      sb.classList.toggle("off", !on);
+    }
+    sb.addEventListener("click", function () { snd.setEnabled(!snd.isEnabled()); paint(); });
+    paint();
+  })();
 
   var ctx = null;
   try { ctx = canvas && canvas.getContext("2d", { alpha: false }); } catch (e) { ctx = null; }
@@ -266,8 +282,8 @@
   }
   function onVisibility() {
     if (finished) return;
-    if (document.hidden) { stop(); }
-    else if (!reduce) { last = null; running = true; raf = requestAnimationFrame(frame); }
+    if (document.hidden) { stop(); if (window.TronxSound) window.TronxSound.suspend(); }
+    else if (!reduce) { last = null; running = true; raf = requestAnimationFrame(frame); if (window.TronxSound) window.TronxSound.resume(); }
   }
 
   var fAcc = 0, fCount = 0, fTotal = 0;
@@ -287,6 +303,7 @@
   /* ---------- agujero negro ---------- */
   var hole = { active: false, restoring: false, t: 0, dur: 18, dir: 1, x: -999, y: -999, r: 20, alpha: 0, restoreT: 0, kind: "galaxy", yAim: 0 };
   var nextHoleAt = rand(7, 13);
+  var absTick = 0, absSm = 0; // estrellas absorbidas en este cuadro y su promedio: dirigen la "succión" del sonido
 
   function startHole(kind) {
     if (hole.active || hole.restoring || entering || reduce) return;
@@ -300,6 +317,8 @@
     if (kind === "text") hole.yAim = TX.minY + (TX.maxY - TX.minY) * rand(0.12, 0.95);
     hole.active = true; hole.t = 0; hole.dir = Math.random() < 0.5 ? 1 : -1;
     updateHolePos(0);
+    absTick = 0; absSm = 0;
+    if (window.TronxSound) window.TronxSound.begin();
   }
   function updateHolePos(p) {
     var margin = hole.r * 6;
@@ -318,6 +337,7 @@
   function endHole() {
     hole.active = false; hole.restoring = true; hole.restoreT = 0;
     hole.alpha = 0; hole.x = hole.y = -999;
+    if (window.TronxSound) window.TronxSound.end(false);
     for (var i = 0; i < N; i++) {
       if (ab[i]) { ab[i] = 0; ox[i] = 0; oy[i] = 0; vx[i] = 0; vy[i] = 0; sa[i] = -rand(0, 3.5); }
     }
@@ -331,7 +351,7 @@
       var dx = hx - (sx[i] + ox[i]), dy = hy - (sy[i] + oy[i]), d2 = dx * dx + dy * dy;
       if (on && d2 < Rinf2) {
         var d = Math.sqrt(d2) + 0.001, s = 1 - d / Rinf;
-        if (d2 < rh2) { ab[i] = 1; sa[i] = 0; vx[i] = 0; vy[i] = 0; continue; }
+        if (d2 < rh2) { ab[i] = 1; sa[i] = 0; vx[i] = 0; vy[i] = 0; absTick++; continue; }
         var nx = dx / d, ny = dy / d;
         var inward = (140 * s + 2200 * s * s * s) * hole.alpha, swirl = 300 * s * hole.alpha;
         vx[i] += (nx * inward - ny * swirl) * dt;
@@ -546,7 +566,15 @@
     if (hole.active) {
       hole.t += dt;
       var p = hole.t / hole.dur;
-      if (p >= 1) endHole(); else { updateHolePos(p); physics(dt); }
+      if (p >= 1) endHole();
+      else {
+        updateHolePos(p); physics(dt);
+        if (window.TronxSound) {
+          absSm += (Math.min(1, absTick / 5) - absSm) * Math.min(1, dt * 4); absTick = 0;
+          var lv = hole.alpha * smooth(1 - Math.abs(hole.x - W * 0.5) / (W * 0.62));
+          window.TronxSound.update(lv, (hole.x / W) * 2 - 1, absSm);
+        }
+      }
     } else if (hole.restoring) {
       restore(dt);
     } else if (!entering && clock >= nextHoleAt) {
