@@ -4,7 +4,7 @@ App de notas para Android. Funciona sin internet y sin cuenta: las notas se guar
 
 Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK con [Capacitor](https://capacitorjs.com). La carpeta `android/` no se sube a GitHub: Codemagic la genera en cada build.
 
-## Qué hace (versión 1.3)
+## Qué hace (versión 1.4)
 
 - Pantalla de inicio con un universo animado (galaxia, estrellas, nebulosas y un agujero negro ocasional) y el botón «Iniciar universo». Aparece siempre al abrir la app. Si el teléfono va justo, baja sola la calidad; con «reducir animaciones» activado se muestra estática.
 - Cada nota tiene un campo de título y otro de contenido, separados. Si dejás el título vacío, la nota se muestra por su texto.
@@ -83,6 +83,8 @@ codemagic.yaml          workflows de Codemagic
 ```
 
 ## Cambios
+
+**1.4.0**: el agujero negro absorbe las letras del título y de la descripción una por una (se deforman, giran en espiral y desaparecen) y después se reconstruyen con pequeñas partículas de luz. Textos un poco más grandes y de color translúcido. Pantalla de arranque nativa con el ícono mucho más pequeño y sin recuadro. Con «reducir animaciones» activado no se separa el texto ni hay agujero negro.
 
 **1.3.0**: pantalla de inicio recompuesta (título pequeño y morado arriba a la izquierda, descripción discreta, botón morado nuevo con icono) e ícono nuevo de la app (hoja con órbita y núcleo luminoso), con capas adaptativas de Android y pantalla de arranque a juego. El fondo espacial no cambió.
 

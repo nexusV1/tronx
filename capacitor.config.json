@@ -2,7 +2,7 @@
   "appId": "com.tronx.notas",
   "appName": "Tronx",
   "webDir": "www",
-  "backgroundColor": "#e8ecf1",
+  "backgroundColor": "#05040f",
   "android": {
     "adjustMarginsForEdgeToEdge": "force",
     "allowMixedContent": false

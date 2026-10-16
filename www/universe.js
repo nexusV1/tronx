@@ -4,6 +4,8 @@
  *   cielo profundo, nebulosas, miles de estrellas en tres capas de profundidad,
  *   una galaxia espiral prerenderizada que gira despacio y, de vez en cuando,
  *   un agujero negro que cruza el centro y absorbe las estrellas cercanas.
+ * El título y la descripción se separan en letras sueltas: cuando el agujero negro pasa por el texto,
+ * las letras cercanas se deforman, se absorben una a una en espiral y después se reconstruyen.
  * La calidad baja sola si el dispositivo no llega a una cantidad de cuadros por segundo razonable.
  * El botón funciona aunque falle el canvas.
  */
@@ -258,6 +260,7 @@
     resizeTimer = setTimeout(function () {
       if (finished) return;
       applyDims();
+      if (TX.ready) { if (textActive()) TX.dirty = true; else measureText(); }
       if (!running) draw();
     }, 160);
   }
@@ -282,20 +285,34 @@
   }
 
   /* ---------- agujero negro ---------- */
-  var hole = { active: false, restoring: false, t: 0, dur: 18, dir: 1, x: -999, y: -999, r: 20, alpha: 0, restoreT: 0 };
+  var hole = { active: false, restoring: false, t: 0, dur: 18, dir: 1, x: -999, y: -999, r: 20, alpha: 0, restoreT: 0, kind: "galaxy", yAim: 0 };
   var nextHoleAt = rand(7, 13);
 
-  function startHole() {
+  function startHole(kind) {
     if (hole.active || hole.restoring || entering || reduce) return;
-    hole.active = true; hole.t = 0; hole.dir = Math.random() < 0.5 ? 1 : -1;
+    if (TX.busy) return;
     hole.r = Math.min(W, H) * 0.055;
+    if (TX.ready && !TX.busy) measureText();
+    if (kind !== "text" && kind !== "galaxy") kind = (TX.ready && Math.random() < 0.7) ? "text" : "galaxy";
+    if (kind === "text" && !TX.ready) kind = "galaxy";
+    hole.kind = kind;
+    hole.dur = kind === "text" ? 21 : 18;
+    if (kind === "text") hole.yAim = TX.minY + (TX.maxY - TX.minY) * rand(0.12, 0.95);
+    hole.active = true; hole.t = 0; hole.dir = Math.random() < 0.5 ? 1 : -1;
     updateHolePos(0);
   }
   function updateHolePos(p) {
     var margin = hole.r * 6;
     var x0 = hole.dir > 0 ? -margin : W + margin, x1 = hole.dir > 0 ? W + margin : -margin;
     hole.x = x0 + (x1 - x0) * p;
-    hole.y = gcy - Math.sin(p * Math.PI) * H * 0.045 + Math.sin(p * 9) * H * 0.006;
+    var base = gcy - Math.sin(p * Math.PI) * H * 0.045 + Math.sin(p * 9) * H * 0.006;
+    if (hole.kind === "text") {
+      // sube hasta la franja del texto mientras cruza por delante de él y luego vuelve al nivel de la galaxia
+      var hw = (TX.maxX - TX.minX) / 2, tcx = (TX.maxX + TX.minX) / 2;
+      var b = smooth((hw + hole.r * 3 + 190 - Math.abs(hole.x - tcx)) / 150);
+      base += (hole.yAim - base) * b + Math.sin(p * 11) * H * 0.004 * b;
+    }
+    hole.y = base;
     hole.alpha = smooth(p / 0.1) * smooth((1 - p) / 0.1);
   }
   function endHole() {
@@ -350,6 +367,170 @@
     }
   }
 
+  /* ---------- letras: absorción y reconstrucción ---------- */
+  var ABS_DUR = 0.62, BUILD_DUR = 0.8;
+  var TX = { chars: [], ready: false, busy: false, dirty: false, lastAbsorb: -9, lastBuild: -9,
+             minX: 0, maxX: 0, minY: 0, maxY: 0, gone: 0 };
+
+  function splitText(el) {
+    if (!el) return;
+    var text = el.textContent, parts = text.split(/(\s+)/), frag = document.createDocumentFragment();
+    for (var k = 0; k < parts.length; k++) {
+      var w = parts[k];
+      if (!w) continue;
+      if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(" ")); continue; }
+      var ws = document.createElement("span");
+      ws.className = "tx-w";
+      for (var i = 0; i < w.length; i++) {
+        var c = document.createElement("span");
+        c.className = "tx-c";
+        c.textContent = w.charAt(i);
+        ws.appendChild(c);
+        TX.chars.push({ el: c, x: 0, y: 0, st: 0, t: 0, a0: 0, r0: 0, fx: false, pa: Math.random() * 6.28 });
+      }
+      frag.appendChild(ws);
+    }
+    el.textContent = "";
+    el.appendChild(frag);
+  }
+  function initText() {
+    if (reduce) return;
+    try {
+      splitText(splash.querySelector(".logo"));
+      splitText(splash.querySelector(".tagline"));
+      TX.ready = TX.chars.length > 0;
+      if (TX.ready) measureText();
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () { if (!finished && !textActive()) measureText(); });
+      }
+    } catch (e) { TX.ready = false; }
+  }
+  function textActive() {
+    if (TX.gone > 0) return true;
+    for (var i = 0; i < TX.chars.length; i++) if (TX.chars[i].st !== 0 || TX.chars[i].fx) return true;
+    return false;
+  }
+  function measureText() {
+    var sr = splash.getBoundingClientRect(), n = TX.chars.length, i, c, r;
+    var x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    for (i = 0; i < n; i++) {
+      c = TX.chars[i];
+      r = c.el.getBoundingClientRect();
+      c.x = r.left - sr.left + r.width / 2;
+      c.y = r.top - sr.top + r.height / 2;
+      if (r.left - sr.left < x0) x0 = r.left - sr.left;
+      if (r.right - sr.left > x1) x1 = r.right - sr.left;
+      if (c.y < y0) y0 = c.y;
+      if (c.y > y1) y1 = c.y;
+    }
+    TX.minX = x0; TX.maxX = x1; TX.minY = y0; TX.maxY = y1;
+    TX.dirty = false;
+  }
+  function setFx(c, tr, op) {
+    if (!c.fx) { c.el.classList.add("fx"); c.fx = true; }
+    c.el.style.transform = tr;
+    c.el.style.opacity = op;
+  }
+  function clearFx(c) {
+    if (!c.fx) return;
+    c.el.style.transform = "";
+    c.el.style.opacity = "";
+    c.el.classList.remove("fx");
+    c.fx = false;
+  }
+  function f2(v) { return (Math.round(v * 100) / 100).toString(); }
+
+  function textUpdate(dt) {
+    var n = TX.chars.length, i, c, dx, dy, d, s;
+    var hx = hole.x, hy = hole.y, Rh = hole.r, Rcap = Rh * 2.1, Rinf = Rh * 7;
+    var on = hole.active && hole.alpha > 0.5;
+    var best = null, bestD = 1e9, gone = 0, busy = false;
+    var far = Rinf * 2.2;
+    var holeOver = !hole.active || hole.alpha < 0.05;
+    var buildGap = 0.05, goneNow = TX.gone;
+    if (goneNow > 0) buildGap = Math.min(0.06, Math.max(0.02, 2.6 / goneNow));
+    var canBuild = clock - TX.lastBuild >= buildGap, buildStarted = false;
+
+    for (i = 0; i < n; i++) {
+      c = TX.chars[i];
+      if (c.st === 0) {
+        if (on) {
+          dx = hx - c.x; dy = hy - c.y; d = Math.sqrt(dx * dx + dy * dy) + 0.001;
+          if (d < Rinf) {
+            s = d <= Rcap ? 1 : smooth((Rinf - d) / (Rinf - Rcap));
+            var ang = Math.atan2(dy, dx), pull = Math.min(16, 0.17 * d) * s * s;
+            var tilt = (dx > 0 ? 1 : -1) * 0.42 * s;
+            setFx(c, "translate(" + f2(Math.cos(ang) * pull) + "px," + f2(Math.sin(ang) * pull) + "px) rotate(" + f2(tilt) + "rad) rotate(" + f2(ang) +
+                  "rad) scale(" + f2(1 + 0.5 * s * s) + "," + f2(1 - 0.22 * s * s) + ") rotate(" + f2(-ang) + "rad)", "1");
+            busy = true;
+            if (d < Rcap && d < bestD) { best = c; bestD = d; }
+            continue;
+          }
+        }
+        clearFx(c);
+      } else if (c.st === 1) {
+        c.t += dt;
+        var p = c.t / ABS_DUR;
+        if (p >= 1 || !hole.active) {
+          c.st = 2; c.el.style.transform = "scale(0)"; c.el.style.opacity = "0";
+          gone++;
+        } else {
+          var e = Math.pow(p, 1.6), r = c.r0 * (1 - e), an = c.a0 + e * 3.4;
+          var px = hx + r * Math.cos(an) - c.x, py = hy + r * Math.sin(an) - c.y;
+          var sc = Math.pow(Math.max(0, 1 - e), 1.15) + 0.02;
+          setFx(c, "translate(" + f2(px) + "px," + f2(py) + "px) rotate(" + f2((an - c.a0) * 0.7) + "rad) scale(" + f2(sc * (1 + 0.8 * e)) + "," + f2(sc * (1 - 0.35 * e)) + ")",
+                f2(1 - smooth((e - 0.5) / 0.5)));
+          gone++; busy = true;
+        }
+      } else if (c.st === 2) {
+        gone++; busy = true;
+        if (canBuild && !buildStarted && (holeOver || Math.sqrt((hx - c.x) * (hx - c.x) + (hy - c.y) * (hy - c.y)) > far)) {
+          c.st = 3; c.t = 0; buildStarted = true; TX.lastBuild = clock;
+          c.el.style.transform = "scale(0.6)"; c.el.style.opacity = "0";
+        }
+      } else {
+        c.t += dt;
+        var q = c.t / BUILD_DUR;
+        if (q >= 1) { c.st = 0; clearFx(c); }
+        else {
+          var u = smooth(q);
+          setFx(c, "translate(0," + f2((1 - u) * 6) + "px) scale(" + f2(0.6 + 0.4 * u) + ")", f2(smooth((q - 0.15) / 0.7)));
+          gone++; busy = true;
+        }
+      }
+    }
+    if (best && clock - TX.lastAbsorb >= 0.045) {
+      best.st = 1; best.t = 0;
+      best.a0 = Math.atan2(best.y - hy, best.x - hx);
+      best.r0 = Math.sqrt((best.x - hx) * (best.x - hx) + (best.y - hy) * (best.y - hy));
+      TX.lastAbsorb = clock;
+      gone++;
+    }
+    TX.gone = gone;
+    TX.busy = busy || hole.active;
+    if (!TX.busy && TX.dirty) measureText();
+  }
+
+  // partículas luminosas que convergen sobre cada letra que se está reconstruyendo
+  function drawTextFx() {
+    if (!TX.ready || TX.gone === 0 || !flareCv) return;
+    ctx.globalCompositeOperation = "lighter";
+    for (var i = 0; i < TX.chars.length; i++) {
+      var c = TX.chars[i];
+      if (c.st !== 3) continue;
+      var q = Math.min(1, c.t / BUILD_DUR), e = smooth(q);
+      var a = Math.sin(Math.PI * Math.min(1, q * 1.1)) * 0.7;
+      if (a < 0.02) continue;
+      ctx.globalAlpha = a;
+      for (var k = 0; k < 3; k++) {
+        var ang = c.pa + k * 2.094 + q * 1.5, rad = (1 - e) * 24 + 1;
+        ctx.drawImage(flareCv, c.x + Math.cos(ang) * rad - 6, c.y + Math.sin(ang) * rad - 6, 12, 12);
+      }
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+  }
+
   /* ---------- actualización ---------- */
   function update(dt) {
     var i, L;
@@ -361,6 +542,7 @@
       if (sy[i] > H + 4) sy[i] -= H + 8;
     }
     for (i = 0; i < NF; i++) { fx[i] -= 1.6 * dt; if (fx[i] < -20) fx[i] += W + 40; }
+    if (TX.ready && (hole.active || TX.busy)) textUpdate(dt);
     if (hole.active) {
       hole.t += dt;
       var p = hole.t / hole.dur;
@@ -566,6 +748,7 @@
     drawGalaxy(t, boost);
     if (!warpOn) {
       drawStars(t, true);
+      drawTextFx();
       if (hole.active) drawHole(t);
     } else {
       drawWarp();
@@ -600,11 +783,12 @@
     nextHoleAt = clock + rand(7, 13);
     window.addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibility);
+    initText();
     api.blackHole = startHole;
     api.stats = function () {
       var gone = 0;
       for (var i = 0; i < N; i++) if (ab[i]) gone++;
-      return { running: running, tier: tier, stars: N, absorbed: gone, hole: hole.active, restoring: hole.restoring, w: W, h: H, res: res };
+      return { running: running, tier: tier, stars: N, absorbed: gone, hole: hole.active, restoring: hole.restoring, w: W, h: H, res: res, kind: hole.kind, text: { ready: TX.ready, chars: TX.chars.length, gone: TX.gone, busy: TX.busy } };
     };
     if (reduce) { draw(); return; }
     running = true;
