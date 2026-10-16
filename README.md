@@ -4,7 +4,10 @@ App de notas para Android. Funciona sin internet y sin cuenta: las notas se guar
 
 Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK con [Capacitor](https://capacitorjs.com). La carpeta `android/` no se sube a GitHub: Codemagic la genera en cada build.
 
-## Qué hace (versión 1.1)
+## Qué hace (versión 1.2)
+
+- Pantalla de inicio con un universo animado (galaxia, estrellas, nebulosas y un agujero negro ocasional) y el botón «Iniciar universo». Aparece siempre al abrir la app. Si el teléfono va justo, baja sola la calidad; con «reducir animaciones» activado se muestra estática.
+- Cada nota tiene un campo de título y otro de contenido, separados. Si dejás el título vacío, la nota se muestra por su texto.
 
 - Notas de texto y listas con casillas (Enter agrega un elemento, las casillas se tachan).
 - Colores por nota (8 colores) y etiquetas, con filtro por etiqueta arriba de la lista.
@@ -22,7 +25,7 @@ Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK 
 ```bash
 git init
 git add .
-git commit -m "Tronx 1.1"
+git commit -m "Tronx 1.2"
 git branch -M main
 git remote add origin https://github.com/TU_USUARIO/tronx.git
 git push -u origin main
@@ -70,6 +73,8 @@ Reemplazá los archivos de `resources/` (`icon-only.png`, `icon-foreground.png`,
 
 ```
 www/index.html          la app completa
+www/universe.js         fondo animado y pantalla de inicio
+www/universe.css        estilos de la pantalla de inicio
 resources/              ícono y pantalla de inicio
 scripts/copy-fonts.mjs  copia las fuentes locales
 scripts/patch-android.mjs  versión y firma
@@ -78,6 +83,8 @@ codemagic.yaml          workflows de Codemagic
 ```
 
 ## Cambios
+
+**1.2.0**: pantalla de inicio inmersiva con universo animado y agujero negro, botón «Iniciar universo» y campos separados de título y contenido. Las notas guardadas se conservan.
 
 **1.1.0**: colores, etiquetas, listas con casillas, archivo, papelera, ajustes, copia de seguridad, vista en cuadrícula y orden. Corrige un error de la 1.0 por el que la pantalla de bienvenida tapaba el editor.
 

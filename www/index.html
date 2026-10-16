@@ -242,19 +242,26 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .bar .back { display: none; }
 .bar .status { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--muted); text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .doc { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 16px 22px 8px; }
+.flabel { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px 2px; }
 #title {
   width: 100%;
-  border: 0;
-  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
   outline: none;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 28px;
+  font-size: 24px;
   letter-spacing: -0.02em;
-  line-height: 1.2;
-  padding: 0 0 6px;
+  line-height: 1.25;
+  padding: 10px 14px;
+  transition: border-color 0.12s, box-shadow 0.12s;
 }
-.taglines { display: flex; flex-wrap: wrap; gap: 5px; padding-bottom: 8px; }
+#title:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+#title:read-only { background: transparent; }
+.taglines { display: flex; flex-wrap: wrap; gap: 5px; padding: 8px 0 4px; }
+.taglines[hidden] { display: none; }
+.content { display: flex; flex-direction: column; flex: 1; min-height: 0; margin-top: 10px; padding-top: 12px; border-top: 1px dashed var(--line); }
 #title::placeholder, #body::placeholder { color: var(--muted); opacity: 0.7; }
 #body {
   flex: 1;
@@ -374,7 +381,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   .side { border-right: 0; }
   .doc { padding: 12px 16px 6px; }
   .meta { padding: 6px 16px 12px; }
-  #title { font-size: 24px; }
+  #title { font-size: 21px; padding: 9px 12px; }
   .blank { top: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -386,9 +393,21 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 }
 </style>
+<link rel="stylesheet" href="universe.css">
 </head>
 <body>
-<div class="app" id="app" data-view="list">
+<div class="splash" id="splash" role="dialog" aria-label="Bienvenida a Tronx">
+  <canvas id="universe" aria-hidden="true"></canvas>
+  <div class="shade" aria-hidden="true"></div>
+  <main class="hero">
+    <h1 class="logo" data-text="Tronx">Tronx</h1>
+    <p class="tagline">Cada pensamiento es un universo por descubrir. Escribe tus ideas, guarda tus historias y deja que tu imaginación cree mundos sin límites.</p>
+  </main>
+  <div class="cta">
+    <button class="enter" id="enterBtn" type="button"><span class="face">Iniciar universo</span></button>
+  </div>
+</div>
+<div class="app" id="app" data-view="list" inert aria-hidden="true">
   <aside class="side" aria-label="Tus notas">
     <header class="brand">
       <h1>tron<span>x</span></h1>
@@ -431,10 +450,14 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       <button class="btn" id="moreBtn" type="button" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="8.5" cy="10.5" r="1"/><circle cx="12.5" cy="8.5" r="1"/><circle cx="15.5" cy="12" r="1"/></svg>Personalizar</button>
     </div>
     <div class="doc" id="doc">
-      <input id="title" type="text" placeholder="Título" autocomplete="off" aria-label="Título de la nota">
+      <label class="flabel" for="title">Título</label>
+      <input id="title" type="text" placeholder="Poné un título a tu nota" autocomplete="off" enterkeyhint="next">
       <div class="taglines" id="taglines"></div>
-      <textarea id="body" placeholder="Escribí acá. Se guarda solo." aria-label="Texto de la nota"></textarea>
-      <div class="items" id="items" hidden></div>
+      <div class="content">
+        <div class="flabel" id="contentLabel">Contenido</div>
+        <textarea id="body" placeholder="Escribí acá. Se guarda solo." aria-label="Contenido de la nota"></textarea>
+        <div class="items" id="items" hidden></div>
+      </div>
     </div>
     <div class="meta" id="meta"></div>
     <div class="trashbar" id="trashbar" hidden>
@@ -510,10 +533,11 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 </div>
 <div class="toast" id="toast" role="status" hidden></div>
 
+<script src="universe.js"></script>
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.1.0";
+  var APP_VERSION = "1.2.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -904,7 +928,8 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     if (!has) { titleEl.value = ""; bodyEl.value = ""; itemsEl.textContent = ""; renderTint(); renderTaglines(); updateMeta(); return; }
     var ro = readOnly(), isList = n.type === "list";
     titleEl.value = n.title; titleEl.readOnly = ro;
-    titleEl.placeholder = isList ? "Título de la lista" : "Título";
+    titleEl.placeholder = isList ? "Poné un título a tu lista" : "Poné un título a tu nota";
+    $("contentLabel").textContent = isList ? "Elementos de la lista" : "Contenido";
     bodyEl.hidden = isList; itemsEl.hidden = !isList;
     bodyEl.value = n.body; bodyEl.readOnly = ro;
     $("pinBtn").setAttribute("aria-pressed", n.pinned ? "true" : "false");
@@ -1271,6 +1296,15 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   renderAll();
   $("status").textContent = "";
 })();
+</script>
+<script>
+// Si el universo no llegó a cargar, la app no puede quedar tapada ni inerte.
+window.addEventListener("load", function () {
+  if (window.TronxUniverse) return;
+  var sp = document.getElementById("splash"), ap = document.getElementById("app");
+  if (sp && sp.parentNode) sp.parentNode.removeChild(sp);
+  if (ap) { ap.removeAttribute("inert"); ap.removeAttribute("aria-hidden"); }
+});
 </script>
 </body>
 </html>
