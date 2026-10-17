@@ -29,42 +29,94 @@
     radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(1, 2, 8, 0.6) 100%);
 }
 
-/* Título y descripción: arriba a la izquierda */
+/* Título y descripción: arriba a la izquierda.
+   Composición: título pequeño con degradado violeta, una línea de luz y una descripción ligera en blanco lavanda.
+   Todo escala con clamp() para que se vea proporcionado desde 320 px de ancho hasta tabletas. */
 .hero {
+  --pad-x: clamp(24px, 7.5vw, 48px);
   position: relative;
   z-index: 2;
   align-self: stretch;
-  padding: max(26px, 4.5vh) clamp(22px, 7vw, 40px) 0;
+  padding: max(34px, 6.2vh) var(--pad-x) 0;
   text-align: left;
   display: grid;
-  gap: 16px;
+  gap: clamp(12px, 1.9vh, 18px);
   justify-items: start;
+}
+/* resplandor suave detrás del título (barato: no se anima) */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--pad-x) - 44px);
+  top: calc(max(34px, 6.2vh) - 30px);
+  width: 250px;
+  height: 120px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 50% 50% at 38% 46%, rgba(150, 105, 255, 0.26), rgba(150, 105, 255, 0) 100%);
 }
 .logo {
   margin: 0;
   font-family: var(--font-display, "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif);
   font-weight: 700;
-  font-size: clamp(34px, 9.6vw, 46px);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: rgba(190, 144, 255, 0.94);
-  text-shadow: 0 0 18px rgba(160, 110, 255, 0.34), 0 1px 3px rgba(2, 3, 20, 0.6);
+  font-size: clamp(29px, 7.6vw, 38px);
+  line-height: 1.08;
+  letter-spacing: 0.012em;
+  color: #c9a8ff;
+}
+/* Línea de luz bajo el título */
+.logo::after {
+  content: "";
+  display: block;
+  width: clamp(34px, 9vw, 46px);
+  height: 2px;
+  margin-top: clamp(10px, 1.5vh, 14px);
+  border-radius: 2px;
+  background: linear-gradient(90deg, #b48cff, rgba(120, 190, 255, 0.85) 70%, rgba(120, 190, 255, 0));
+  box-shadow: 0 0 10px rgba(160, 120, 255, 0.55);
 }
 .tagline {
   margin: 0;
-  max-width: 30ch;
-  text-wrap: balance;
+  max-width: 31ch;
+  text-wrap: pretty;
   font-family: var(--font-body, "IBM Plex Sans", system-ui, sans-serif);
-  font-size: clamp(14.5px, 4.1vw, 17px);
-  line-height: 1.58;
-  color: rgba(240, 234, 255, 0.9);
-  text-shadow: 0 1px 12px rgba(1, 1, 10, 0.9), 0 0 3px rgba(1, 1, 10, 0.7);
+  font-weight: 400;
+  font-size: clamp(13.5px, 3.75vw, 15.5px);
+  line-height: 1.7;
+  letter-spacing: 0.012em;
+  color: rgba(228, 221, 252, 0.8);
+  text-shadow: 0 1px 10px rgba(1, 1, 12, 0.85);
 }
 
 /* Letras sueltas (las separa universe.js para que el agujero negro las absorba una a una) */
 .tx-w { display: inline-block; white-space: nowrap; }
 .tx-c { display: inline-block; }
 .tx-c.fx { will-change: transform, opacity; }
+
+/* Título: degradado violeta aplicado letra por letra (de claro a profundo, de izquierda a derecha) */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .logo .tx-c {
+    padding: 0.07em 0;
+    margin: -0.07em 0;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: linear-gradient(180deg, var(--g0, #f1e8ff), var(--g1, #c9a8ff));
+  }
+  .logo .tx-c:nth-child(1) { --g0: #f4ecff; --g1: #cfb2ff; }
+  .logo .tx-c:nth-child(2) { --g0: #e8dbff; --g1: #bd9aff; }
+  .logo .tx-c:nth-child(3) { --g0: #dccaff; --g1: #aa84ff; }
+  .logo .tx-c:nth-child(4) { --g0: #cfb8ff; --g1: #9970fb; }
+  .logo .tx-c:nth-child(5) { --g0: #c0a3ff; --g1: #8760f2; }
+  /* si el texto no está separado en letras (reducir animaciones), el degradado va en todo el título */
+  .logo:not(:has(.tx-w)) {
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: linear-gradient(95deg, #f4ecff 0%, #c9a8ff 45%, #8b64f4 100%);
+    padding-bottom: 0.07em;
+  }
+}
 
 /* Botón principal */
 .cta {
@@ -182,9 +234,20 @@
   to { opacity: 1; transform: none; }
 }
 
+@media (max-width: 340px) {
+  .logo { font-size: 27px; }
+  .tagline { font-size: 13px; max-width: 30ch; }
+}
+@media (min-width: 600px) {
+  .hero { --pad-x: clamp(48px, 8vw, 84px); }
+  .logo { font-size: clamp(38px, 5vw, 48px); }
+  .tagline { font-size: clamp(16px, 2.1vw, 18px); max-width: 34ch; }
+}
 @media (max-height: 560px) {
-  .hero { padding-top: 16px; gap: 6px; }
-  .tagline { max-width: 52ch; }
+  .hero { padding-top: 16px; gap: 8px; }
+  .hero::before { top: -10px; }
+  .logo::after { margin-top: 8px; }
+  .tagline { max-width: 52ch; line-height: 1.55; }
   .cta { padding-bottom: 16px; }
   .enter { width: min(100%, 300px); }
   .enter .face { padding: 11px 22px; }
