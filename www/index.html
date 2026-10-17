@@ -590,7 +590,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <p class="tagline">Cada pensamiento es un universo por descubrir. Escribe tus ideas, guarda tus historias y deja que tu imaginación cree mundos sin límites.</p>
   </main>
   <div class="cta">
-    <button class="enter" id="enterBtn" type="button"><span class="face"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z" opacity=".75"/></svg>Iniciar universo</span></button>
+    <button class="enter" id="enterBtn" type="button"><span class="halo" aria-hidden="true"></span><span class="clip" aria-hidden="true"></span><span class="face"><svg class="orb" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.4"/><ellipse cx="12" cy="12" rx="10.2" ry="3.7" transform="rotate(-24 12 12)"/><circle cx="20.4" cy="7.4" r="1.5"/></svg><span class="lbl">Iniciar universo</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></button>
   </div>
 </div>
 <div class="app" id="app" data-view="list" inert aria-hidden="true">
@@ -777,7 +777,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.7.0";
+  var APP_VERSION = "1.7.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 

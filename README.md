@@ -113,6 +113,8 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.7.1**: botón «Iniciar universo» rediseñado: píldora de cristal con un anillo de luz que gira por el borde, un planeta con órbita y una flecha que se mueve. Con «reducir animaciones» queda quieto.
+
 **1.7.0**: fondos para las notas (12, con versión clara y oscura, general o por nota), plantillas, barra de formato con viñetas que continúan al apretar Enter, progreso y reordenado en las listas, «Guardar como .txt» y aviso de copia de seguridad. Se corrigió un defecto del tema claro: el fondo de la lista se veía en cuadrados. Las notas existentes se conservan (ganan un campo `bg`; sin él usan el fondo de Ajustes, Nebulosa por defecto).
 
 **1.5.0**: cuadrícula de dos columnas, tema espacial para las notas, emojis y stickers por nota, botón Guardar, sonido del agujero negro y `versionCode` creciente. Las notas y ajustes existentes se conservan (las notas ganan un campo `icon`; el tema pasa al aspecto Tronx solo si no habías elegido otro).
