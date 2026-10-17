@@ -66,28 +66,6 @@
 .tx-c { display: inline-block; }
 .tx-c.fx { will-change: transform, opacity; }
 
-/* Botón de sonido (esquina superior derecha) */
-.snd {
-  position: absolute; z-index: 3;
-  top: max(14px, calc(env(safe-area-inset-top, 0px) + 10px));
-  right: max(14px, calc(env(safe-area-inset-right, 0px) + 10px));
-  width: 40px; height: 40px; padding: 0; border-radius: 50%;
-  display: grid; place-items: center; cursor: pointer;
-  color: #e5dcff; background: rgba(20, 16, 56, 0.45);
-  border: 1px solid rgba(190, 170, 255, 0.28);
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.2s, transform 0.15s;
-}
-.snd:active { transform: scale(0.92); }
-.snd svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.snd .sp { fill: currentColor; fill-opacity: 0.25; }
-.snd .x { display: none; }
-.snd.off { color: #a79fcc; }
-.snd.off .w1, .snd.off .w2 { display: none; }
-.snd.off .x { display: block; }
-.snd[hidden] { display: none; }
-.splash.entering .snd { opacity: 0; transition: opacity 0.3s; }
-
 /* Botón principal */
 .cta {
   position: relative;

@@ -64,21 +64,6 @@
   }
   btn.addEventListener("click", enter);
 
-  /* botón de sonido de la esquina: silencia o activa el sonido del agujero negro */
-  (function () {
-    var sb = document.getElementById("soundBtn"), snd = window.TronxSound;
-    if (!sb) return;
-    if (!snd || !snd.supported || reduce) { sb.hidden = true; return; }
-    function paint() {
-      var on = snd.isEnabled();
-      sb.setAttribute("aria-pressed", on ? "true" : "false");
-      sb.setAttribute("aria-label", on ? "Silenciar el sonido" : "Activar el sonido");
-      sb.classList.toggle("off", !on);
-    }
-    sb.addEventListener("click", function () { snd.setEnabled(!snd.isEnabled()); paint(); });
-    paint();
-  })();
-
   var ctx = null;
   try { ctx = canvas && canvas.getContext("2d", { alpha: false }); } catch (e) { ctx = null; }
   if (!ctx) return;

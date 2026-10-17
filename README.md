@@ -4,7 +4,7 @@ App de notas para Android. Funciona sin internet y sin cuenta: las notas se guar
 
 Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK con [Capacitor](https://capacitorjs.com). La carpeta `android/` no se sube a GitHub: Codemagic la genera en cada build.
 
-## Qué hace (versión 1.5)
+## Qué hace (versión 1.6)
 
 - Notas en cuadrícula de dos columnas, con tarjetas redondeadas en tema espacial (oscuro y violeta por defecto; el claro y los demás colores siguen en Ajustes).
 - Cada nota puede tener un emoji o uno de los 12 stickers de Tronx (galaxia, estrella, planeta, nebulosa, luna, agujero negro, cometa, cohete, platillo, constelación, eclipse y cristal). El icono se ve en la tarjeta y en el editor, y se puede cambiar o quitar.
@@ -117,3 +117,5 @@ Pasos, una sola vez:
 **1.1.0**: colores, etiquetas, listas con casillas, archivo, papelera, ajustes, copia de seguridad, vista en cuadrícula y orden. Corrige un error de la 1.0 por el que la pantalla de bienvenida tapaba el editor.
 
 **1.0.0**: primera versión.
+
+**1.6.0**: el sonido del agujero negro se rehízo para parlantes de celular (mucho más fuerte, con limitador para que no distorsione feo), con volumen Normal / Alto (por defecto) / Muy alto y botón «Probar sonido» en Ajustes. Se quitó el botón del parlante de la pantalla de inicio (el sonido se silencia desde Ajustes). Los 12 stickers se rediseñaron con más detalle y ahora tienen animaciones (giro, pulso, parpadeo, llama, haz de luz, etc.); en las tarjetas solo se animan mientras se ven y se detienen si el teléfono tiene activada la opción de reducir animaciones.
