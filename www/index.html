@@ -580,6 +580,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 }
 </style>
 <link rel="stylesheet" href="universe.css">
+<link rel="stylesheet" href="constellations.css">
 </head>
 <body>
 <div class="splash" id="splash" role="dialog" aria-label="Bienvenida a Tronx">
@@ -603,6 +604,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
         <button class="btn primary" id="newBtn" type="button">Nueva nota</button>
       </div>
     </header>
+<div class="viewseg" role="group" aria-label="Vista"><button type="button" data-mode="notes" aria-pressed="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="3"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/></svg>Notas</button><button type="button" data-mode="map" aria-pressed="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg>Constelaciones</button></div>
     <div class="search">
       <input id="q" type="search" placeholder="Buscar en tus notas" autocomplete="off" aria-label="Buscar en tus notas">
     </div>
@@ -769,15 +771,57 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <p class="about" id="about"></p>
   </section>
 </div>
+<section class="cmap" id="cmap" aria-label="Constelaciones" hidden>
+  <canvas id="cmCanvas" tabindex="0" role="application" aria-label="Mapa de constelaciones: cada estrella es una nota. Arrastrá para moverte, pellizcá para acercar y tocá una estrella para abrir su vista previa."></canvas>
+  <header class="cm-top" id="cmTop">
+    <div class="viewseg" role="group" aria-label="Vista"><button type="button" data-mode="notes" aria-pressed="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="3"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/></svg>Notas</button><button type="button" data-mode="map" aria-pressed="true" id="cmapSegMap"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg>Constelaciones</button></div>
+    <div class="cm-search">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
+      <input id="cmQ" type="search" placeholder="Buscar una estrella" autocomplete="off" aria-label="Buscar una nota en el mapa" enterkeyhint="search">
+      <button class="cm-qx" id="cmQx" type="button" aria-label="Borrar búsqueda" hidden>×</button>
+      <ul class="cm-results" id="cmRes" hidden></ul>
+    </div>
+    <div class="cm-tools">
+      <button class="chip" id="cmGroups" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg>Mis constelaciones <span class="n" id="cmGn"></span></button>
+      <button class="chip" id="cmTags" type="button" aria-pressed="true" title="Mostrar u ocultar las líneas entre notas con la misma etiqueta">Etiquetas</button>
+      <button class="chip" id="cmRelayout" type="button" title="Volver a acomodar todas las estrellas">Reorganizar</button>
+      <button class="chip" id="cmFind" type="button" title="Buscar una nota">Buscar</button>
+    </div>
+  </header>
+  <div class="cm-count" id="cmCount" aria-live="polite"></div>
+  <div class="cm-zoom">
+    <button id="cmZoomIn" type="button" aria-label="Acercar">+</button>
+    <button id="cmZoomOut" type="button" aria-label="Alejar">−</button>
+    <button id="cmFit" type="button" aria-label="Ver todo el universo" title="Ver todo"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  </div>
+  <div class="cm-banner" id="cmBanner" hidden role="status"><span id="cmBanTxt"></span><button class="btn small" id="cmBanCancel" type="button">Cancelar</button></div>
+  <div class="cm-empty" id="cmEmpty" hidden>
+    <div class="orb" aria-hidden="true"></div>
+    <h2>Tu universo está vacío</h2>
+    <p>Cada nota que escribas aparecerá acá como una estrella. Después podrás conectarlas y agruparlas en constelaciones.</p>
+    <button class="btn primary" id="cmEmptyNew" type="button">Crear la primera nota</button>
+  </div>
+  <div class="cm-hint" id="cmHint" hidden>
+    <p>Cada estrella es una de tus notas. Tocá una para verla, conectarla con otra o juntarla en una constelación. Es opcional.</p>
+    <div class="row2"><button class="btn small primary" id="cmHintGroup" type="button">Crear una constelación</button><button class="btn small" id="cmHintOk" type="button">Entendido</button></div>
+  </div>
+  <div class="cm-card" id="cmCard" hidden role="dialog" aria-label="Vista previa de la nota"></div>
+  <div class="cm-scrim" id="cmScrim" hidden></div>
+  <section class="cm-sheet" id="cmSheet" role="dialog" aria-label="Mis constelaciones" hidden>
+    <div class="sheethead"><strong>Mis constelaciones</strong><button class="btn small" id="cmSheetClose" type="button">Listo</button></div>
+    <div class="cm-sheet-body" id="cmSheetBody"></div>
+  </section>
+</section>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="sound.js"></script>
 <script src="stickers.js"></script>
 <script src="universe.js"></script>
+<script src="constellations.js"></script>
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.7.2";
+  var APP_VERSION = "1.8.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -859,6 +903,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     root.style.setProperty("--note-size", settings.size + "px");
     var bg = getComputedStyle(document.body).getPropertyValue("--bg").trim();
     var m = document.querySelector('meta[name="theme-color"]'); if (m && bg) m.setAttribute("content", bg);
+    if (window.TronxMap) window.TronxMap.refreshTheme();
   }
   if (mq && mq.addEventListener) mq.addEventListener("change", applyTheme);
 
@@ -977,6 +1022,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var json = JSON.stringify(Array.from(notes.values())), ok = lsSet(KEY, json);
     if (ok) { try { ok = localStorage.getItem(KEY) === json; } catch (e) { ok = false; } }
     setStatus(ok ? "Guardado" : "No se pudo guardar: sin espacio");
+    if (window.TronxMap) window.TronxMap.prune();
     return ok;
   }
   function schedulePersist() { setStatus("Guardando…"); clearTimeout(saveTimer); saveTimer = setTimeout(persistNow, 350); }
@@ -1007,7 +1053,9 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   }
 
   /* ---------- capas (botón Atrás de Android) ---------- */
-  var layers = [];
+  var layers = [], layerHandlers = {};
+  function registerLayer(name, fn) { layerHandlers[name] = fn; }
+  function hasLayer(name) { return layers.indexOf(name) >= 0; }
   function pushLayer(name) {
     if (layers.indexOf(name) >= 0) return;
     layers.push(name);
@@ -1018,6 +1066,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     else if (name === "sheet") { $("sheet").hidden = true; $("scrim").hidden = true; }
     else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; }
     else if (name === "editor") leaveEditorUI();
+    else if (layerHandlers[name]) layerHandlers[name]();
   }
   window.addEventListener("popstate", function (e) {
     var target = (e.state && e.state.d) || 0;
@@ -1445,6 +1494,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     renderEditor(); renderAll();
     $("app").dataset.view = "editor";
     pushLayer("editor");
+    if (window.TronxMap) window.TronxMap.suspend();
   }
   function leaveEditorUI() {
     persistNow(); discardIfEmpty();
@@ -1452,6 +1502,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     $("sheet").hidden = true; $("iconSheet").hidden = true; $("scrim").hidden = true;
     $("app").dataset.view = "list";
     renderEditor(); renderAll();
+    if (window.TronxMap) window.TronxMap.resume();
   }
   function createNote(type) {
     persistNow(); discardIfEmpty();
@@ -1467,6 +1518,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     renderEditor(); renderAll();
     $("app").dataset.view = "editor";
     pushLayer("editor");
+    if (window.TronxMap) window.TronxMap.suspend();
     schedulePersist();
     titleEl.focus();
   }
@@ -1844,7 +1896,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 
   /* ---------- copia de seguridad ---------- */
   function backupJson() {
-    return JSON.stringify({ app: "tronx", version: 2, exportedAt: new Date().toISOString(), notes: Array.from(notes.values()) }, null, 2);
+    return JSON.stringify({ app: "tronx", version: 2, exportedAt: new Date().toISOString(), notes: Array.from(notes.values()), map: window.TronxMap ? window.TronxMap.exportData() : undefined }, null, 2);
   }
   // Entrega un archivo: en el teléfono abre el menú de compartir; en el navegador lo descarga.
   // Devuelve una promesa: true si se entregó, false si la persona canceló.
@@ -1913,6 +1965,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       if (!old) { notes.set(n.id, n); added++; }
       else if (n.updatedAt > old.updatedAt) { notes.set(n.id, n); updated++; }
     });
+    if (window.TronxMap && data && !Array.isArray(data) && data.map) window.TronxMap.importData(data.map);
     persistNow(); renderAll();
     if (activeId) renderEditor();
     renderSettings();
@@ -1963,6 +2016,14 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   loadNotes();
   welcome();
   if (!hadFirstRun) saveSettings();
+  if (window.TronxMap) window.TronxMap.init({
+    notes: notes, openNote: openNote, createNote: createNote, toast: toast, iconSpan: iconSpan, when: when,
+    pushLayer: pushLayer, closeLayer: closeLayer, hasLayer: hasLayer, registerLayer: registerLayer,
+    lsGet: lsGet, lsSet: lsSet, uid: uid,
+    colorRGB: function (k) { return colorOf(k).rgb || null; },
+    getSettings: function () { return settings; },
+    accent: function () { return ACCENTS[settings.accent].dark; }
+  });
   renderViewBtn();
   renderEditor();
   renderAll();

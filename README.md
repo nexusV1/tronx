@@ -4,8 +4,9 @@ App de notas para Android. Funciona sin internet y sin cuenta: las notas se guar
 
 Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK con [Capacitor](https://capacitorjs.com). La carpeta `android/` no se sube a GitHub: Codemagic la genera en cada build.
 
-## Qué hace (versión 1.7)
+## Qué hace (versión 1.8)
 
+- **Constelaciones**: el selector «Notas | Constelaciones» de la barra lateral abre un mapa galáctico donde cada nota es una estrella (el tamaño y el brillo dependen del contenido y de lo reciente). Arrastrá para moverte, pellizcá para acercar y tocá una estrella para ver su título y un fragmento, con botones para abrirla, conectarla con otra, o sumarla a una constelación. Las notas con la misma etiqueta se unen con líneas tenues; las conexiones manuales se pueden quitar sin borrar las notas. Podés crear constelaciones con nombre, buscar una nota y ubicarla en el mapa. Todo usa solo tus notas reales, se guarda en el teléfono (también en la copia de seguridad) y la vista de tarjetas no cambia.
 - **Fondos para las notas**: 12 fondos (Nebulosa, Aurora, Galaxia, Estrellas, Medianoche, Atardecer, Océano, Bosque, Rosa cuarzo, Papel, Cuadrícula y Puntos), cada uno en versión clara y oscura. Se elige uno general en Ajustes y cada nota puede tener el suyo en Personalizar. El fondo se ve en el editor y en las tarjetas. Nebulosa, Aurora, Galaxia y los fondos con estrellas se mueven muy despacio; en Ajustes se pueden dejar quietos (también se detienen con «reducir animaciones»).
 - **Plantillas**: en una nota vacía aparecen Diario, Reunión, Idea, Historia, Pendientes, Compras y Valija.
 - **Barra de formato** en las notas de texto: viñeta, casilla, fecha y hora. Enter continúa la viñeta, la casilla o la numeración, y Enter en una línea vacía sale de la lista.
@@ -89,6 +90,8 @@ www/stickers.js         los stickers (dibujos SVG)
 www/sound.js            el sonido del agujero negro
 www/universe.js         fondo animado y pantalla de inicio
 www/universe.css        estilos de la pantalla de inicio
+www/constellations.js   el mapa de Constelaciones
+www/constellations.css  estilos del mapa
 resources/              ícono y pantalla de inicio
 scripts/copy-fonts.mjs  copia las fuentes locales
 scripts/patch-android.mjs  versión y firma
@@ -112,6 +115,8 @@ Pasos, una sola vez:
 4. De ahí en adelante, compilá siempre con el workflow firmado: se instala encima sin perder nada.
 
 ## Cambios
+
+**1.8.0**: nueva función Constelaciones (mapa galáctico interactivo de las notas, con conexiones manuales, constelaciones con nombre, búsqueda con ubicación visual, pantalla de inicio vacía y guardado local incluido en la copia de seguridad). Se pausa cuando no se ve y respeta «reducir animaciones».
 
 **1.7.2**: tipografía de la pantalla de bienvenida rediseñada: título «Tronx» más pequeño y equilibrado con degradado violeta letra por letra y una línea de luz debajo, descripción más ligera (peso regular, blanco lavanda suave, interlineado amplio y ancho controlado) y un resplandor sutil detrás del título. Los tamaños se adaptan de 320 px de ancho a tabletas y a pantalla horizontal. Los textos, el fondo galáctico y la animación del agujero negro no cambian.
 
