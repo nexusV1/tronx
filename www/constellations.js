@@ -114,7 +114,7 @@
       nodes.push(nd); byId[n.id] = nd;
     });
     mEdges = [];
-    S.links.forEach(function (p) { var a = byId[p[0]], b = byId[p[1]]; if (a && b) mEdges.push([a, b, lk(p[0], p[1])]); });
+    S.links.forEach(function (p) { var a = byId[p[0]], b = byId[p[1]]; if (a && b) { var kk = lk(p[0], p[1]); mEdges.push([a, b, kk, (hash(kk) % 1000) / 1000]); } });
     // Etiquetas compartidas: cada etiqueta enlaza sus notas en cadena (barato, sin comparar todos contra todos)
     tEdges = [];
     var tags = {}, seen = {};
@@ -304,7 +304,7 @@
   var V = { x: 0, y: 0, k: 1 };
   var mapOpen = false, shown = false, active = false;
   var raf = 0, lastT = 0, lastDraw = 0, fly = null, inertia = null, tweening = false, tweenStart = 0;
-  var perf = 0, perfAcc = 0, perfN = 0;
+  var perf = 0, perfAcc = 0, frAcc = 0, frN = 0, lastBusyDraw = 0;
   var sel = null, linkFrom = null, hover = null, pulse = null, query = "", matchSet = null;
   var ptrs = {}, nPtr = 0, pinch = null, pan = null, downInfo = null;
   var reduceMQ = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
@@ -313,7 +313,9 @@
     var st = api.getSettings();
     return st.bgAnim !== false && !(reduceMQ && reduceMQ.matches) && perf < 3;
   }
-  function kick() { if (active && !raf) raf = requestAnimationFrame(tick); }
+  /* kick(): algo cambió (hay que redibujar la escena). kickMove(): solo se desplazó la vista (se reutiliza el bitmap). */
+  function kick() { sceneDirty = true; if (active && !raf) raf = requestAnimationFrame(tick); }
+  function kickMove() { if (active && !raf) raf = requestAnimationFrame(tick); }
   function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
   function setActive() {
     var on = mapOpen && shown && !document.hidden;
@@ -357,9 +359,11 @@
   }
 
   /* ---------- fondo: nebulosas y estrellas lejanas (se dibujan una sola vez) ---------- */
-  var bgC = null, tiles = [];
+  var bgC = null, tiles = [], nearPat = null;
+  var SKY = 1.3, TILE = 380;
   function buildBg() {
-    var sc = 0.5, bw = Math.ceil(W * 1.3 * sc), bh = Math.ceil(H * 1.3 * sc);
+    // cielo: un solo bitmap (nebulosas + estrellas lejanas) del tamaño de la pantalla x1.3 que se mueve con la vista
+    var pr = Math.min(dpr, 1.5), bw = Math.ceil(W * SKY * pr), bh = Math.ceil(H * SKY * pr);
     bgC = document.createElement("canvas"); bgC.width = bw; bgC.height = bh;
     var g = bgC.getContext("2d");
     g.fillStyle = "#05061a"; g.fillRect(0, 0, bw, bh);
@@ -374,21 +378,32 @@
     blob(0.88, 0.36, 0.5, 0.35, "214,72,194", 0.17);
     blob(0.14, 0.82, 0.5, 0.35, "30,164,176", 0.12);
     blob(0.5, 0.5, 0.9, 0.18, "170,150,255", 0.07);
-    var key = String(bw) + "x" + String(dpr);
-    if (tiles.key !== key) {
-      tiles = []; tiles.key = key;
-      for (var L = 0; L < 2; L++) {
-        var S0 = 380, c = document.createElement("canvas"); c.width = c.height = Math.round(S0 * dpr);
-        var x = c.getContext("2d"), r = rng(77 + L * 31), cnt = L ? 46 : 70;
-        x.scale(dpr, dpr);
-        for (var i = 0; i < cnt; i++) {
-          var px = r() * S0, py = r() * S0, pr = (L ? 0.7 : 0.45) + r() * (L ? 0.9 : 0.6), pa = (L ? 0.4 : 0.22) + r() * 0.5;
-          var tint = r(), col = tint < 0.5 ? "255,255,255" : tint < 0.8 ? "190,205,255" : "215,190,255";
-          x.fillStyle = "rgba(" + col + "," + pa + ")"; x.beginPath(); x.arc(px, py, pr, 0, 6.2832); x.fill();
-        }
-        tiles.push(c);
-      }
+    // estrellas lejanas horneadas en el cielo (se dibujan una sola vez)
+    var r0 = rng(77), cnt0 = Math.round(W * SKY * H * SKY / (TILE * TILE) * 70);
+    for (var i = 0; i < cnt0; i++) {
+      var px = r0() * bw, py = r0() * bh, rad = ((0.45 + r0() * 0.6)) * pr, pa = 0.22 + r0() * 0.5, tint = r0();
+      g.fillStyle = "rgba(" + (tint < 0.5 ? "255,255,255" : tint < 0.8 ? "190,205,255" : "215,190,255") + "," + pa + ")";
+      g.beginPath(); g.arc(px, py, rad, 0, 6.2832); g.fill();
     }
+    // estrellas cercanas: un mosaico que se repite como patron (una sola pasada por cuadro)
+    var key = String(dpr);
+    if (tiles.key !== key || !tiles.length) {
+      tiles = []; tiles.key = key;
+      var c = document.createElement("canvas"); c.width = c.height = Math.round(TILE * dpr);
+      var x = c.getContext("2d"), r = rng(108);
+      x.scale(dpr, dpr);
+      for (var j = 0; j < 46; j++) {
+        var qx = r() * TILE, qy = r() * TILE, qr = 0.7 + r() * 0.9, qa = 0.4 + r() * 0.5, tn = r();
+        x.fillStyle = "rgba(" + (tn < 0.5 ? "255,255,255" : tn < 0.8 ? "190,205,255" : "215,190,255") + "," + qa + ")";
+        x.beginPath(); x.arc(qx, qy, qr, 0, 6.2832); x.fill();
+      }
+      tiles.push(c);
+    }
+    nearPat = null;
+    try {
+      var pat = ctx.createPattern(tiles[0], "repeat");
+      if (pat && pat.setTransform) { pat.setTransform(new DOMMatrix([1 / dpr, 0, 0, 1 / dpr, 0, 0])); nearPat = pat; }
+    } catch (e) { nearPat = null; }
   }
   var spr = {};
   function glow(rgb) {
@@ -423,23 +438,20 @@
   function ease(p) { return 1 - Math.pow(1 - p, 3); }
   function onScr(ax, ay, bx, by) { return !((ax < -30 && bx < -30) || (ax > W + 30 && bx > W + 30) || (ay < -30 && by < -30) || (ay > H + 30 && by > H + 30)); }
 
-  function draw(now, dt, amb) {
-    var c = ctx, i, k = V.k;
+  var scene = null, sceneCtx = null, sceneDirty = true, sceneV = { x: 0, y: 0, k: 1 }, lastK = 0, SM = 160;
+  function renderCache(now) {
+    var cw = Math.round((W + 2 * SM) * dpr), ch = Math.round((H + 2 * SM) * dpr);
+    if (!scene) { scene = document.createElement("canvas"); sceneCtx = scene.getContext("2d"); }
+    if (scene.width !== cw || scene.height !== ch) { scene.width = cw; scene.height = ch; } else sceneCtx.clearRect(0, 0, cw, ch);
+    var w0 = W, h0 = H;
+    W = w0 + 2 * SM; H = h0 + 2 * SM;
+    try { drawScene(sceneCtx, now, false, SM); } finally { W = w0; H = h0; }
+    sceneV = { x: V.x, y: V.y, k: V.k }; sceneDirty = false;
+  }
+  function drawScene(c, now, amb, pad) {
+    var i, k = V.k;
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.globalAlpha = 1; c.globalCompositeOperation = "source-over";
-    c.fillStyle = "#04050e"; c.fillRect(0, 0, W, H);
-    if (bgC) {
-      var ex = W * 0.3, ey = H * 0.3, drift = amb ? Math.sin(now / 9000) * ex * 0.06 : 0;
-      var ox = -ex / 2 - Math.tanh(V.x * k / 1400) * ex / 2 + drift, oy = -ey / 2 - Math.tanh(V.y * k / 1400) * ey / 2;
-      c.drawImage(bgC, ox, oy, W + ex, H + ey);
-    }
-    for (var L = 0; L < tiles.length; L++) {
-      var par = L ? 0.22 : 0.1, S0 = 380, ox2 = (((-V.x * k * par) % S0) + S0) % S0, oy2 = (((-V.y * k * par) % S0) + S0) % S0;
-      c.globalAlpha = L ? 1 : 0.9;
-      for (var tx = ox2 - S0; tx < W; tx += S0) for (var ty = oy2 - S0; ty < H; ty += S0) c.drawImage(tiles[L], tx, ty, S0, S0);
-    }
-    c.globalAlpha = 1;
-
     // posiciones en pantalla
     for (i = 0; i < nodes.length; i++) { var nd = nodes[i]; nd.sx = (nd.x - V.x) * k + W / 2; nd.sy = (nd.y - V.y) * k + H / 2; }
 
@@ -452,7 +464,7 @@
       var rr = 0;
       for (q = 0; q < m.length; q++) { var dx = m[q].x - cx, dy = m[q].y - cy; rr = Math.max(rr, Math.sqrt(dx * dx + dy * dy)); }
       gi.cx = cx; gi.cy = cy; gi.r = rr + 64;
-      var hs = w2s(cx, cy), HR = gi.r * k * 1.3;
+      var hs = w2s(cx, cy), HR = Math.min(gi.r * k * 1.3, Math.max(W, H) * 0.8);
       if (hs[0] + HR < 0 || hs[0] - HR > W || hs[1] + HR < 0 || hs[1] - HR > H) continue;
       c.globalAlpha = (focusGroup === gi.g.id ? 1 : 0.7);
       c.drawImage(halo(gi.g.color), hs[0] - HR, hs[1] - HR, HR * 2, HR * 2);
@@ -462,9 +474,9 @@
     // líneas: etiquetas (punteadas y tenues), constelaciones (color), conexiones manuales (brillantes)
     var e, a, b;
     if (S.tagLines && tEdges.length) {
-      c.setLineDash([1.5, 5]); c.lineWidth = 1; c.strokeStyle = "rgba(150,165,255,0.24)"; c.beginPath();
+      c.lineWidth = 1; c.strokeStyle = "rgba(150,165,255,0.15)"; c.beginPath();
       for (i = 0; i < tEdges.length; i++) { e = tEdges[i]; a = e[0]; b = e[1]; if (onScr(a.sx, a.sy, b.sx, b.sy)) { c.moveTo(a.sx, a.sy); c.lineTo(b.sx, b.sy); } }
-      c.stroke(); c.setLineDash([]);
+      c.stroke();
     }
     if (gEdges.length) {
       for (var ci = 0; ci < GCOL.length; ci++) {
@@ -480,52 +492,51 @@
     if (mEdges.length) {
       c.beginPath();
       for (i = 0; i < mEdges.length; i++) { e = mEdges[i]; a = e[0]; b = e[1]; if (onScr(a.sx, a.sy, b.sx, b.sy)) { c.moveTo(a.sx, a.sy); c.lineTo(b.sx, b.sy); } }
-      c.lineWidth = 6; c.strokeStyle = "rgba(140,185,255,0.10)"; c.stroke();
+      if (perf < 2) { c.lineWidth = 6; c.strokeStyle = "rgba(140,185,255,0.10)"; c.stroke(); }
       c.lineWidth = 1.7; c.strokeStyle = "rgba(205,225,255,0.82)"; c.stroke();
       if (sel) {
         c.beginPath();
         for (i = 0; i < mEdges.length; i++) { e = mEdges[i]; if (e[0].id !== sel && e[1].id !== sel) continue; c.moveTo(e[0].sx, e[0].sy); c.lineTo(e[1].sx, e[1].sy); }
         c.lineWidth = 2.6; c.strokeStyle = "rgba(255,255,255,0.95)"; c.stroke();
       }
-      if (amb) {
-        c.globalCompositeOperation = "lighter";
-        var sp = glow([200, 225, 255]), cnt = 0;
-        for (i = 0; i < mEdges.length && cnt < 70; i++) {
-          e = mEdges[i]; a = e[0]; b = e[1]; if (!onScr(a.sx, a.sy, b.sx, b.sy)) continue;
-          var ph = ((now * 0.00018 + (hash(e[2]) % 1000) / 1000) % 1), px = a.sx + (b.sx - a.sx) * ph, py = a.sy + (b.sy - a.sy) * ph;
-          c.globalAlpha = 0.95 * Math.sin(ph * Math.PI); c.drawImage(sp, px - 6, py - 6, 12, 12); cnt++;
-        }
-        c.globalCompositeOperation = "source-over"; c.globalAlpha = 1;
-      }
     }
 
-    // estrellas
+    // estrellas: brillo (sprite) por estrella y todos los núcleos blancos en un solo trazo
     c.globalCompositeOperation = "lighter";
-    var anim = tweening ? 0 : 0;
+    var cores = [];
     for (i = 0; i < nodes.length; i++) {
       nd = nodes[i];
       var sx = nd.sx, sy = nd.sy, rad = nd.r * k;
       if (sx < -80 || sx > W + 80 || sy < -80 || sy > H + 80) continue;
       var born = nd.born ? clamp((now - nd.born) / 800, 0, 1) : 1, sc = born < 1 ? ease(born) : 1;
       var s = clamp(rad * 3.4, 9, 70) * sc, al = nd.bright * (matchSet ? (matchSet[nd.id] ? 1 : 0.2) : 1);
-      if (amb) al *= 0.86 + 0.14 * Math.sin(now / 1000 * nd.sp + nd.phase);
+      al *= 0.9; // el parpadeo se agrega aparte, encima del bitmap de la escena
       c.globalAlpha = Math.min(1, al);
       c.drawImage(glow(nd.col), sx - s, sy - s, s * 2, s * 2);
-      c.globalAlpha = Math.min(1, al + 0.2);
-      c.fillStyle = "#fff"; c.beginPath(); c.arc(sx, sy, Math.max(0.6, Math.max(1.3, rad * 0.38) * sc), 0, 6.2832); c.fill();
+      cores.push(sx, sy, Math.max(0.6, Math.max(1.3, rad * 0.38) * sc));
       if (nd.n.pinned || nd.r >= 10.5) {
         var L2 = s * 0.95; c.globalAlpha = Math.min(1, al * 0.55);
         c.fillStyle = "rgba(255,255,255,0.9)"; c.fillRect(sx - L2, sy - 0.5, L2 * 2, 1); c.fillRect(sx - 0.5, sy - L2, 1, L2 * 2);
       }
     }
+    if (cores.length) {
+      c.globalAlpha = 0.95; c.fillStyle = "#fff"; c.beginPath();
+      for (i = 0; i < cores.length; i += 3) { c.moveTo(cores[i] + cores[i + 2], cores[i + 1]); c.arc(cores[i], cores[i + 1], cores[i + 2], 0, 6.2832); }
+      c.fill();
+    }
     c.globalCompositeOperation = "source-over"; c.globalAlpha = 1;
-    // anillo de color de la constelación
+    // anillo de color de la constelación (un trazo por color)
     c.lineWidth = 1.2;
-    for (i = 0; i < nodes.length; i++) {
-      nd = nodes[i]; if (!nd.gs.length) continue;
-      if (nd.sx < -40 || nd.sx > W + 40 || nd.sy < -40 || nd.sy > H + 40) continue;
-      c.strokeStyle = "rgba(" + GCOL[S.groups[nd.gs[0]].color].join(",") + ",0.75)";
-      c.beginPath(); c.arc(nd.sx, nd.sy, Math.max(4.5, nd.r * k * 0.8 + 3), 0, 6.2832); c.stroke();
+    for (var gc = 0; gc < GCOL.length; gc++) {
+      var anyR = false;
+      c.beginPath();
+      for (i = 0; i < nodes.length; i++) {
+        nd = nodes[i]; if (!nd.gs.length || S.groups[nd.gs[0]].color !== gc) continue;
+        if (nd.sx < -40 || nd.sx > W + 40 || nd.sy < -40 || nd.sy > H + 40) continue;
+        var rr2 = Math.max(4.5, nd.r * k * 0.8 + 3);
+        c.moveTo(nd.sx + rr2, nd.sy); c.arc(nd.sx, nd.sy, rr2, 0, 6.2832); anyR = true;
+      }
+      if (anyR) { c.strokeStyle = "rgba(" + GCOL[gc].join(",") + ",0.75)"; c.stroke(); }
     }
 
     // selección, búsqueda y modo vincular
@@ -575,13 +586,65 @@
       c.font = "700 " + fs + "px " + fontDisp;
       if ("letterSpacing" in c) c.letterSpacing = "1.5px";
       var gt = gi.g.name.toUpperCase(), col = GCOL[gi.g.color], gw = c.measureText(gt).width / 2 + 10;
-      gs[0] = clamp(gs[0], gw, W - gw); gs[1] = clamp(gs[1], $("cmTop").offsetHeight + 14, H - 24);
+      gs[0] = clamp(gs[0], gw + pad, W - gw - pad); gs[1] = clamp(gs[1], topH + 14 + pad, H - 24 - pad);
       c.lineJoin = "round"; c.lineWidth = 4; c.strokeStyle = "rgba(4,5,16,0.8)"; c.strokeText(gt, gs[0], gs[1]);
       c.fillStyle = "rgba(" + Math.min(255, col[0] + 55) + "," + Math.min(255, col[1] + 55) + "," + Math.min(255, col[2] + 55) + ",0.95)"; c.fillText(gt, gs[0], gs[1]);
       if ("letterSpacing" in c) c.letterSpacing = "0px";
     }
     c.textAlign = "start";
 
+  }
+  function draw(now, dt, amb) {
+    var c = ctx, i, nd, k = V.k;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.globalAlpha = 1; c.globalCompositeOperation = "source-over";
+    if (bgC) {
+      var ex = W * (SKY - 1), ey = H * (SKY - 1), drift = amb ? Math.sin(now / 9000) * ex * 0.06 : 0;
+      var ox = clamp(-ex / 2 - Math.tanh(V.x * k / 1400) * ex / 2 + drift, -ex, 0), oy = clamp(-ey / 2 - Math.tanh(V.y * k / 1400) * ey / 2, -ey, 0);
+      c.drawImage(bgC, ox, oy, W + ex, H + ey);
+    } else { c.fillStyle = "#04050e"; c.fillRect(0, 0, W, H); }
+    if (nearPat) {
+      var ox2 = (((-V.x * k * 0.22) % TILE) + TILE) % TILE, oy2 = (((-V.y * k * 0.22) % TILE) + TILE) % TILE;
+      c.save(); c.translate(ox2 - TILE, oy2 - TILE); c.fillStyle = nearPat; c.fillRect(0, 0, W + TILE, H + TILE); c.restore();
+    } else if (tiles.length) {
+      var ox3 = (((-V.x * k * 0.22) % TILE) + TILE) % TILE, oy3 = (((-V.y * k * 0.22) % TILE) + TILE) % TILE;
+      for (var tx = ox3 - TILE; tx < W; tx += TILE) for (var ty = oy3 - TILE; ty < H; ty += TILE) c.drawImage(tiles[0], tx, ty, TILE, TILE);
+    }
+    c.globalAlpha = 1;
+
+    // escena (estrellas, líneas, etiquetas): al arrastrar se reutiliza un bitmap y solo se desplaza
+    var bornOn = false;
+    for (i = 0; i < nodes.length; i++) if (nodes[i].born && now - nodes[i].born < 820) { bornOn = true; break; }
+    var zoomed = Math.abs(V.k - lastK) > 1e-6; lastK = V.k;
+    var cacheable = !tweening && !pulse && !linkFrom && !zoomed && !bornOn;
+    if (!cacheable) {
+      sceneDirty = true;
+      drawScene(c, now, false, 0);
+    } else {
+      if (sceneDirty || !scene || sceneV.k !== k || Math.abs(V.x - sceneV.x) * k > SM - 10 || Math.abs(V.y - sceneV.y) * k > SM - 10) renderCache(now);
+      var bx = Math.round((-SM + (sceneV.x - V.x) * k) * dpr) / dpr, by = Math.round((-SM + (sceneV.y - V.y) * k) * dpr) / dpr;
+      c.drawImage(scene, bx, by, W + 2 * SM, H + 2 * SM);
+    }
+    // brillos vivos sobre la escena: algunas estrellas respiran y viajan chispas por las conexiones (barato: ~60 sprites)
+    if (amb) {
+      c.globalCompositeOperation = "lighter";
+      var stride = Math.max(1, Math.ceil(nodes.length / 36));
+      for (i = 0; i < nodes.length; i += stride) {
+        nd = nodes[i];
+        var tx0 = (nd.x - V.x) * k + W / 2, ty0 = (nd.y - V.y) * k + H / 2;
+        if (tx0 < -80 || tx0 > W + 80 || ty0 < -80 || ty0 > H + 80) continue;
+        var s0 = clamp(nd.r * k * 3.4, 9, 70), a0 = nd.bright * (matchSet ? (matchSet[nd.id] ? 1 : 0.2) : 1) * 0.2 * (0.5 + 0.5 * Math.sin(now / 1000 * nd.sp + nd.phase));
+        c.globalAlpha = Math.min(1, a0); c.drawImage(glow(nd.col), tx0 - s0, ty0 - s0, s0 * 2, s0 * 2);
+      }
+      var sp = glow([200, 225, 255]), cnt = 0;
+      for (i = 0; i < mEdges.length && cnt < 30; i++) {
+        var ed = mEdges[i], ax = (ed[0].x - V.x) * k + W / 2, ay = (ed[0].y - V.y) * k + H / 2, bx2 = (ed[1].x - V.x) * k + W / 2, by2 = (ed[1].y - V.y) * k + H / 2;
+        if (!onScr(ax, ay, bx2, by2)) continue;
+        var ph = ((now * 0.00018 + ed[3]) % 1);
+        c.globalAlpha = 0.95 * Math.sin(ph * Math.PI); c.drawImage(sp, ax + (bx2 - ax) * ph - 6, ay + (by2 - ay) * ph - 6, 12, 12); cnt++;
+      }
+      c.globalCompositeOperation = "source-over"; c.globalAlpha = 1;
+    }
     // partículas y estrella fugaz (solo con animaciones activas)
     if (amb) {
       for (i = 0; i < motes.length; i++) {
@@ -611,6 +674,7 @@
     }
     c.globalAlpha = 1;
   }
+  var topH = 0;
   var focusGroup = null, fontBody = "sans-serif", fontDisp = "sans-serif";
 
   function tick(now) {
@@ -642,18 +706,21 @@
     if (nPtr) busy = true;
     for (i = 0; i < nodes.length && !busy; i++) if (nodes[i].born && now - nodes[i].born < 820) busy = true;
     if (linkFrom) busy = true;
+    // En reposo solo hay brillos suaves: ~15 cuadros/s alcanzan. Mientras se mueve algo, sin adornos y a toda velocidad.
     if (!busy && amb) {
-      var gap = perf >= 2 ? 50 : 32;
-      if (now - lastDraw < gap - 3) { raf = requestAnimationFrame(tick); return; }
-    }
+      var gap = perf >= 2 ? 110 : perf >= 1 ? 80 : 66;
+      if (now - lastDraw < gap - 8) { raf = requestAnimationFrame(tick); return; }
+    } else if (busy && perf >= 2 && now - lastDraw < 28) { raf = requestAnimationFrame(tick); return; }
     var t0 = performance.now();
-    draw(now, dt, amb);
-    lastDraw = now;
+    draw(now, dt, amb && !busy);
     var cost = performance.now() - t0;
-    perfAcc += cost; perfN++;
-    if (perfN >= 60) {
-      var avg = perfAcc / perfN; perfAcc = 0; perfN = 0;
-      if (avg > 12 && perf < 3) { perf++; resize(); initMotes(); }
+    // gobernador: mide el tiempo real entre cuadros mientras se mueve (incluye lo que tarda el dibujo en pantalla)
+    if (busy && lastBusyDraw && now - lastBusyDraw < 120) { frAcc += now - lastBusyDraw; frN++; perfAcc += cost; }
+    lastBusyDraw = busy ? now : 0;
+    lastDraw = now;
+    if (frN >= 40) {
+      var fr = frAcc / frN, dc = perfAcc / frN; frAcc = 0; frN = 0; perfAcc = 0;
+      if ((fr > 26 || dc > 11) && perf < 3) { perf++; resize(); initMotes(); }
     }
     if (busy || amb) raf = requestAnimationFrame(tick);
   }
@@ -662,7 +729,7 @@
     if (!cmap || cmap.hidden) return;
     var r = cmap.getBoundingClientRect();
     var w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
-    var cap = perf >= 1 ? 1.25 : 2;
+    var cap = perf >= 2 ? 1 : perf >= 1 ? 1.25 : 1.5;
     var nd = Math.min(window.devicePixelRatio || 1, cap);
     if (w === W && h === H && nd === dpr && bgC) return;
     var ocx = V.x, ocy = V.y;
@@ -670,7 +737,7 @@
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     canvas.style.width = W + "px"; canvas.style.height = H + "px";
     V.x = ocx; V.y = ocy;
-    buildBg(); kick();
+    buildBg(); measureRect(); kick();
   }
 
   /* ---------- hit test y gestos ---------- */
@@ -682,11 +749,14 @@
     }
     return best;
   }
-  function pt(e) { var r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  var rectL = 0, rectT = 0;
+  function measureRect() { var r = canvas.getBoundingClientRect(); rectL = r.left; rectT = r.top; topH = $("cmTop") ? $("cmTop").offsetHeight : 0; }
+  function pt(e) { return { x: e.clientX - rectL, y: e.clientY - rectT }; }
   function onDown(e) {
     hideResults();
     if (e.pointerType === "mouse" && e.button !== 0) return;
     try { canvas.setPointerCapture(e.pointerId); } catch (x) { }
+    if (!nPtr) measureRect();
     var p = pt(e);
     ptrs[e.pointerId] = p; nPtr = Object.keys(ptrs).length;
     fly = null; inertia = null;
@@ -727,7 +797,7 @@
         pan.vx = pan.vx * 0.6 + (dx / dtm) * 0.4; pan.vy = pan.vy * 0.6 + (dy / dtm) * 0.4;
         canvas.style.cursor = "grabbing";
       }
-      pan.lx = p.x; pan.ly = p.y; pan.lt = now; kick();
+      pan.lx = p.x; pan.ly = p.y; pan.lt = now; kickMove();
     }
   }
   function onUp(e) {
@@ -1068,6 +1138,7 @@
   /* ---------- superposiciones: vacío, ayuda, conteo ---------- */
   function updateOverlays() {
     var count = nodes.length, hasStruct = S.links.length > 0 || S.groups.length > 0;
+    topH = $("cmTop") ? $("cmTop").offsetHeight : topH;
     $("cmEmpty").hidden = count > 0;
     $("cmHint").hidden = !(count > 0 && !hasStruct && !S.hint && !sel && !linkFrom && $("cmSheet").hidden);
     var gn = S.groups.length;
@@ -1103,7 +1174,7 @@
   function open() {
     if (mapOpen) return;
     mapOpen = true; shown = true;
-    cmap.hidden = false; document.body.classList.add("cm-open");
+    cmap.hidden = false; document.body.classList.add("cm-open", "cm-live");
     api.pushLayer("map");
     applyAccent();
     resize();
@@ -1119,15 +1190,15 @@
     if (!mapOpen) return;
     S.view = { x: V.x, y: V.y, k: V.k }; saveStoreNow();
     mapOpen = false; shown = false; cmap.hidden = true;
-    document.body.classList.remove("cm-open");
+    document.body.classList.remove("cm-open", "cm-live");
     $("cmSheet").hidden = true; $("cmScrim").hidden = true; $("cmCard").hidden = true; $("cmBanner").hidden = true;
     sel = null; linkFrom = null; hideResults(); ptrs = {}; nPtr = 0; pan = null; pinch = null; downInfo = null;
     setActive();
   }
-  function suspend() { if (!mapOpen) return; S.view = { x: V.x, y: V.y, k: V.k }; saveSoon(); shown = false; cmap.hidden = true; setActive(); }
+  function suspend() { if (!mapOpen) return; S.view = { x: V.x, y: V.y, k: V.k }; saveSoon(); shown = false; cmap.hidden = true; document.body.classList.remove("cm-live"); setActive(); }
   function resume() {
     if (!mapOpen) return;
-    shown = true; cmap.hidden = false; resize(); refresh(false);
+    shown = true; cmap.hidden = false; document.body.classList.add("cm-live"); resize(); refresh(false);
     ptrs = {}; nPtr = 0; pan = null; pinch = null; downInfo = null;
     setActive(); kick();
   }
@@ -1175,7 +1246,7 @@
   /* ---------- arranque ---------- */
   function init(a) {
     api = a;
-    cmap = $("cmap"); canvas = $("cmCanvas"); ctx = canvas.getContext("2d");
+    cmap = $("cmap"); canvas = $("cmCanvas"); ctx = canvas.getContext("2d", { alpha: false });
     loadStore();
     prune();
     api.registerLayer("map", leaveMapUI);

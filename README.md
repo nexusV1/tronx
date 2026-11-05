@@ -137,3 +137,5 @@ Pasos, una sola vez:
 **1.0.0**: primera versión.
 
 **1.6.0**: el sonido del agujero negro se rehízo para parlantes de celular (mucho más fuerte, con limitador para que no distorsione feo), con volumen Normal / Alto (por defecto) / Muy alto y botón «Probar sonido» en Ajustes. Se quitó el botón del parlante de la pantalla de inicio (el sonido se silencia desde Ajustes). Los 12 stickers se rediseñaron con más detalle y ahora tienen animaciones (giro, pulso, parpadeo, llama, haz de luz, etc.); en las tarjetas solo se animan mientras se ven y se detienen si el teléfono tiene activada la opción de reducir animaciones.
+
+**1.8.1**: Constelaciones mucho más fluido. Al arrastrar el mapa solo se desplaza una imagen ya dibujada (antes se redibujaba todo en cada cuadro); el fondo es un solo bitmap; los efectos de brillo corren a ritmo bajo en reposo y se apagan mientras te movés; se quitó el desenfoque (`backdrop-filter`) de los botones sobre el mapa; la lista de notas y sus stickers animados quedan pausados y ocultos mientras se ve el mapa; y si el teléfono sigue yendo justo, el mapa baja solo la calidad (resolución y efectos). Se ve igual y no cambia ningún dato.
