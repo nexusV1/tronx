@@ -1176,15 +1176,18 @@
     mapOpen = true; shown = true;
     cmap.hidden = false; document.body.classList.add("cm-open", "cm-live");
     api.pushLayer("map");
-    applyAccent();
-    resize();
-    var firstView = !S.view;
-    refresh(false);
-    if (S.view) { V.x = S.view.x; V.y = S.view.y; V.k = S.view.k; }
-    else { var t = fitTarget(); V.x = t.x; V.y = t.y; V.k = t.k * 0.72; flyTo(t.x, t.y, t.k, 1100); }
-    initMotes(); nextShoot = performance.now() + 4000;
-    setActive(); kick();
     try { $("cmapSegMap").focus({ preventScroll: true }); } catch (e) { }
+    /* Primero aparece el mapa vacío (un cuadro liviano) y el armado pesado va en el cuadro siguiente */
+    requestAnimationFrame(function () {
+      if (!mapOpen) return;
+      applyAccent();
+      resize();
+      refresh(false);
+      if (S.view) { V.x = S.view.x; V.y = S.view.y; V.k = S.view.k; }
+      else { var t = fitTarget(); V.x = t.x; V.y = t.y; V.k = t.k * 0.72; flyTo(t.x, t.y, t.k, 1100); }
+      initMotes(); nextShoot = performance.now() + 4000;
+      setActive(); kick();
+    });
   }
   function leaveMapUI() {
     if (!mapOpen) return;

@@ -137,6 +137,6 @@ body.cm-open .toast { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 17
 
 /* Con el mapa a la vista, lo que hay debajo (lista de notas, fondos y stickers animados) no se dibuja ni se anima:
    así toda la potencia del teléfono queda para el mapa. */
-body.cm-live .app, body.cm-live .bgfx { visibility: hidden; }
-body.cm-live .app *, body.cm-live .bgfx * { animation-play-state: paused !important; }
+/* Con el mapa a la vista, la app y el fondo no se maquetan ni se pintan ni se les recalculan estilos */
+body.cm-live .app, body.cm-live .bgfx { content-visibility: hidden; visibility: hidden; }
 .cmap #cmCanvas { will-change: transform; transform: translateZ(0); }
