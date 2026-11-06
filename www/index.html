@@ -18,23 +18,23 @@
 /* Layout: lista de notas a la izquierda, editor a la derecha; en celular una pantalla por vez. */
 /* Paleta "universo": lavanda clara de día, espacio profundo de noche. */
 :root {
-  --bg: #ece8fb;
-  --panel: #f3f0ff;
+  --bg: #f3f4f9;
+  --panel: #ffffff;
   --raised: #ffffff;
   --solid: #ffffff;
-  --ink: #1a1538;
-  --muted: #5f5a86;
-  --line: #d8d2f1;
-  --sel: #e4defb;
+  --ink: #14162b;
+  --muted: #5b6078;
+  --line: #e2e4ee;
+  --sel: #eeedff;
   --accent: #6b46d6;
   --accent-ink: #ffffff;
-  --accent-soft: rgba(107, 70, 214, 0.16);
-  --danger: #b3261e;
-  --shadow: rgba(40, 25, 110, 0.22);
-  --card-bg: linear-gradient(165deg, #ffffff 0%, #f1ecff 100%);
-  --card-bd: #d9d2f3;
-  --card-glow: rgba(107, 70, 214, 0.14);
-  --cosmos: radial-gradient(ellipse 90% 40% at 12% 0%, rgba(140, 100, 255, 0.16), transparent 70%), radial-gradient(ellipse 80% 40% at 100% 100%, rgba(90, 160, 255, 0.12), transparent 70%);
+  --accent-soft: rgba(107, 70, 214, 0.14);
+  --danger: #c0281f;
+  --shadow: rgba(18, 22, 60, 0.28);
+  --card-bg: linear-gradient(170deg, #ffffff 0%, #f8f9fe 100%);
+  --card-bd: #e3e5ef;
+  --card-glow: rgba(30, 36, 100, 0.22);
+  --cosmos: radial-gradient(ellipse 90% 34% at 10% 0%, rgba(140, 110, 255, 0.07), transparent 70%), radial-gradient(ellipse 80% 34% at 100% 100%, rgba(90, 160, 255, 0.06), transparent 70%);
   --note-size: 16px;
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -538,7 +538,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 /* Cada fondo define 4 variables: --bgbase (color de base), --bgimg (capas), --bgsize (tamaño de cada capa) y --fl (capa que se mueve).
    Hay una versión clara y otra oscura; JS pone data-dark="1" en <html> según el tema que esté activo. */
 :root {
-  --stars: radial-gradient(1.4px 1.4px at 22px 38px, rgba(120, 90, 220, 0.34), transparent 100%), radial-gradient(1.2px 1.2px at 96px 120px, rgba(90, 140, 230, 0.3), transparent 100%), radial-gradient(1.6px 1.6px at 170px 64px, rgba(150, 100, 230, 0.3), transparent 100%), radial-gradient(1.2px 1.2px at 60px 210px, rgba(90, 160, 230, 0.3), transparent 100%), radial-gradient(1.4px 1.4px at 200px 188px, rgba(120, 90, 220, 0.28), transparent 100%);
+  --stars: radial-gradient(1.4px 1.4px at 22px 38px, rgba(120, 90, 220, 0.12), transparent 100%), radial-gradient(1.2px 1.2px at 96px 120px, rgba(90, 140, 230, 0.10), transparent 100%), radial-gradient(1.6px 1.6px at 170px 64px, rgba(150, 100, 230, 0.10), transparent 100%), radial-gradient(1.2px 1.2px at 60px 210px, rgba(90, 160, 230, 0.10), transparent 100%), radial-gradient(1.4px 1.4px at 200px 188px, rgba(120, 90, 220, 0.10), transparent 100%);
   --stars-size: 230px 260px, 230px 260px, 230px 260px, 230px 260px, 230px 260px;
 }
 :root[data-dark="1"] {
@@ -550,16 +550,16 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 [data-bg] { --bgbase: transparent; --bgimg: none; --bgsize: auto; --fl: none; }
 
 /* Nebulosa */
-[data-bg="nebula"] { --bgbase: #f1edff; --bgimg: var(--stars), radial-gradient(ellipse 80% 55% at 12% 0%, rgba(150, 110, 255, 0.3), transparent 70%), radial-gradient(ellipse 70% 50% at 100% 35%, rgba(255, 140, 210, 0.2), transparent 70%), radial-gradient(ellipse 90% 55% at 70% 108%, rgba(90, 160, 255, 0.26), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 40% 30% at 30% 35%, rgba(170, 120, 255, 0.22), transparent 70%), radial-gradient(ellipse 35% 28% at 72% 62%, rgba(255, 140, 200, 0.18), transparent 70%); }
+[data-bg="nebula"] { --bgbase: #fafaff; --bgimg: var(--stars), radial-gradient(ellipse 80% 55% at 12% 0%, rgba(150, 110, 255, 0.15), transparent 70%), radial-gradient(ellipse 70% 50% at 100% 35%, rgba(255, 140, 210, 0.10), transparent 70%), radial-gradient(ellipse 90% 55% at 70% 108%, rgba(90, 160, 255, 0.13), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 40% 30% at 30% 35%, rgba(170, 120, 255, 0.11), transparent 70%), radial-gradient(ellipse 35% 28% at 72% 62%, rgba(255, 140, 200, 0.09), transparent 70%); }
 :root[data-dark="1"] [data-bg="nebula"] { --bgbase: #080720; --bgimg: var(--stars), radial-gradient(ellipse 85% 55% at 10% 0%, rgba(120, 80, 255, 0.42), transparent 70%), radial-gradient(ellipse 70% 50% at 100% 38%, rgba(220, 80, 200, 0.22), transparent 70%), radial-gradient(ellipse 90% 55% at 65% 110%, rgba(40, 130, 240, 0.3), transparent 70%); --fl: radial-gradient(ellipse 40% 30% at 30% 35%, rgba(150, 100, 255, 0.3), transparent 70%), radial-gradient(ellipse 35% 28% at 72% 62%, rgba(230, 90, 190, 0.2), transparent 70%); }
 /* Aurora */
-[data-bg="aurora"] { --bgbase: #eefbf6; --bgimg: var(--stars), radial-gradient(ellipse 120% 35% at 30% 16%, rgba(60, 200, 150, 0.24), transparent 70%), radial-gradient(ellipse 100% 30% at 75% 30%, rgba(150, 120, 255, 0.22), transparent 70%), radial-gradient(ellipse 120% 30% at 20% 46%, rgba(80, 180, 255, 0.16), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 55% 14% at 35% 40%, rgba(60, 210, 160, 0.26), transparent 75%), radial-gradient(ellipse 50% 12% at 65% 52%, rgba(150, 120, 255, 0.22), transparent 75%); }
+[data-bg="aurora"] { --bgbase: #f5fcf9; --bgimg: var(--stars), radial-gradient(ellipse 120% 35% at 30% 16%, rgba(60, 200, 150, 0.12), transparent 70%), radial-gradient(ellipse 100% 30% at 75% 30%, rgba(150, 120, 255, 0.11), transparent 70%), radial-gradient(ellipse 120% 30% at 20% 46%, rgba(80, 180, 255, 0.08), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 55% 14% at 35% 40%, rgba(60, 210, 160, 0.13), transparent 75%), radial-gradient(ellipse 50% 12% at 65% 52%, rgba(150, 120, 255, 0.11), transparent 75%); }
 :root[data-dark="1"] [data-bg="aurora"] { --bgbase: #04101a; --bgimg: var(--stars), radial-gradient(ellipse 120% 35% at 30% 16%, rgba(60, 235, 170, 0.3), transparent 70%), radial-gradient(ellipse 100% 30% at 75% 30%, rgba(130, 90, 255, 0.32), transparent 70%), radial-gradient(ellipse 120% 30% at 20% 46%, rgba(60, 180, 255, 0.18), transparent 70%); --fl: radial-gradient(ellipse 55% 14% at 35% 40%, rgba(60, 240, 170, 0.34), transparent 75%), radial-gradient(ellipse 50% 12% at 65% 52%, rgba(150, 110, 255, 0.34), transparent 75%); }
 /* Galaxia (la capa que se mueve gira muy despacio) */
-[data-bg="galaxy"] { --bgbase: #f3f0ff; --bgimg: var(--stars), radial-gradient(circle at 50% 44%, rgba(255, 245, 255, 0.9), rgba(190, 150, 255, 0.3) 7%, transparent 38%); --bgsize: var(--stars-size), 100% 100%; --fl: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(150, 110, 255, 0.2) 50deg, transparent 110deg, rgba(80, 160, 255, 0.16) 190deg, transparent 250deg, rgba(235, 110, 220, 0.16) 310deg, transparent 360deg); }
+[data-bg="galaxy"] { --bgbase: #f9f8ff; --bgimg: var(--stars), radial-gradient(circle at 50% 44%, rgba(255, 245, 255, 0.90), rgba(190, 150, 255, 0.15) 7%, transparent 38%); --bgsize: var(--stars-size), 100% 100%; --fl: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(150, 110, 255, 0.10) 50deg, transparent 110deg, rgba(80, 160, 255, 0.08) 190deg, transparent 250deg, rgba(235, 110, 220, 0.08) 310deg, transparent 360deg); }
 :root[data-dark="1"] [data-bg="galaxy"] { --bgbase: #05040f; --bgimg: var(--stars), radial-gradient(circle at 50% 44%, rgba(255, 240, 255, 0.55), rgba(160, 120, 255, 0.22) 7%, transparent 38%); --fl: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(140, 100, 255, 0.3) 50deg, transparent 110deg, rgba(70, 160, 255, 0.24) 190deg, transparent 250deg, rgba(230, 100, 220, 0.24) 310deg, transparent 360deg); }
 /* Estrellas */
-[data-bg="stars"] { --bgbase: #f3f1ff; --bgimg: var(--stars), linear-gradient(180deg, #ece8ff 0%, #f8f6ff 100%); --bgsize: var(--stars-size), 100% 100%; }
+[data-bg="stars"] { --bgbase: #f8f9ff; --bgimg: var(--stars), linear-gradient(180deg, #eff1fb 0%, #fafbff 100%); --bgsize: var(--stars-size), 100% 100%; }
 :root[data-dark="1"] [data-bg="stars"] { --bgbase: #04050f; --bgimg: var(--stars), radial-gradient(ellipse 100% 50% at 50% 0%, rgba(60, 80, 200, 0.28), transparent 70%), linear-gradient(180deg, #080b26 0%, #03040b 100%); --bgsize: var(--stars-size), 100% 100%, 100% 100%; }
 /* Medianoche (con luna) */
 [data-bg="midnight"] { --bgbase: #eef1fb; --bgimg: var(--stars), radial-gradient(circle at 84% 12%, rgba(255, 226, 150, 0.95) 0 2.4%, rgba(255, 230, 160, 0.35) 4%, transparent 22%), linear-gradient(180deg, #e4e8fa 0%, #f7f8ff 100%); --bgsize: var(--stars-size), 100% 100%, 100% 100%; }
@@ -860,8 +860,8 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <h3>Tema</h3>
     <div class="seg" id="themeSeg">
       <button type="button" data-v="system">Automático</button>
-      <button type="button" data-v="light">Claro</button>
-      <button type="button" data-v="dark">Oscuro</button>
+      <button type="button" data-v="light">Blanco</button>
+      <button type="button" data-v="dark">Universo</button>
     </div>
     <h3>Color de la app</h3>
     <div class="swatches" id="accentSw"></div>
@@ -987,7 +987,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.15.0";
+  var APP_VERSION = "1.16.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
