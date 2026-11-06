@@ -12,7 +12,7 @@
     if (raw) { var s = JSON.parse(raw); if (s && s.uiSound === false) enabled = false; }
   } catch (e) {}
 
-  var ctx = null, bus = null, noiseBuf = null, lastAt = 0;
+  var ctx = null, bus = null, noiseBuf = null, lastAt = 0, pm = 1; // pm: variación de tono por toque (evita que suene siempre idéntico)
 
   function saveSetting(k, v) {
     try {
@@ -61,8 +61,8 @@
   }
   function tone(c, out, t, type, f0, f1, peak, attack, decay) {
     var o = c.createOscillator(); o.type = type;
-    o.frequency.setValueAtTime(f0, t);
-    if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + attack + decay * 0.8);
+    o.frequency.setValueAtTime(f0 * pm, t);
+    if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1 * pm, t + attack + decay * 0.8);
     o.connect(env(c, out, t, peak, attack, decay));
     o.start(t); o.stop(t + attack + decay + 0.03);
   }
@@ -76,11 +76,13 @@
   }
 
   var SOUNDS = {
-    /* clic seco y redondo: un "pop" corto con un toque de aire */
+    /* clic con cuerpo: un chasquido brillante, un "pop" redondo y un golpecito grave que le da peso */
     tap: function (c, o, t, v) {
-      hiss(c, o, t, 3000, 2200, 0.9, 0.34 * v, 0.001, 0.022);
-      tone(c, o, t, "sine", 1500, 560, 0.42 * v, 0.002, 0.05);
-      tone(c, o, t, "triangle", 760, 380, 0.14 * v, 0.002, 0.04);
+      hiss(c, o, t, 5200, 3600, 1.2, 0.26 * v, 0.0008, 0.012);
+      hiss(c, o, t, 3000, 2200, 0.9, 0.26 * v, 0.001, 0.022);
+      tone(c, o, t, "sine", 1650, 540, 0.42 * v, 0.0015, 0.055);
+      tone(c, o, t, "triangle", 760, 380, 0.12 * v, 0.002, 0.04);
+      tone(c, o, t, "sine", 340, 150, 0.2 * v, 0.002, 0.06);
     },
     /* elegir una opción: dos notas cortas que suben */
     pick: function (c, o, t, v) {
@@ -123,6 +125,7 @@
     var fn = SOUNDS[kind] || SOUNDS.tap;
     fn(c, dest, t, vol);
   }
+  function jitter(kind) { return (kind === "tap" || kind === "pick") ? 1 + (Math.random() - 0.5) * 0.08 : 1; }
 
   var api = window.TronxUI = {
     supported: !!AC,
@@ -139,7 +142,7 @@
         var c = getCtx(); if (!c) return false;
         if (c.state === "suspended") { c.resume().catch(function () {}); }
         if (!bus) bus = makeBus(c, c.destination);
-        voice(c, bus, c.currentTime + 0.005, kind, volume());
+        pm = jitter(kind); voice(c, bus, c.currentTime + 0.005, kind, volume()); pm = 1;
         return true;
       } catch (e) { return false; }
     },

@@ -659,7 +659,14 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   .blank { top: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .item, .btn, .chip, .sw { transition: background-color 0.12s, border-color 0.12s, box-shadow 0.12s; }
+  .item, .btn, .chip, .sw { transition: background-color 0.12s, border-color 0.12s, box-shadow 0.12s, transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .item:active, .btn:active, .chip:active { transform: scale(0.97); }
+  @keyframes paneIn { from { transform: translateX(22px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes sideIn { from { transform: translateX(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @media (max-width: 760px) {
+    .app[data-view="editor"] .pane { animation: paneIn 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+    .app[data-view="list"] .side { animation: sideIn 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  }
   .sheet { animation: rise 0.18s ease-out; }
   .panel { animation: rise 0.2s ease-out; }
   .toast { animation: fade 0.18s ease-out; }
@@ -975,7 +982,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.10.0";
+  var APP_VERSION = "1.11.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1111,6 +1118,23 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     } else sp.textContent = icon.slice(2);
     return sp;
   }
+  /* Icono de tarjeta: al crearla es solo un <use> (barato); al entrar en pantalla se pasa al sticker animado */
+  var skCache = {};
+  function cardIcon(icon) {
+    if (!icon) return null;
+    if (icon.charAt(0) !== "s") return iconSpan(icon, "static");
+    var id = icon.slice(2), sp = el("span", "ic sk");
+    sp.setAttribute("aria-hidden", "true"); sp.dataset.sk = id;
+    sp.innerHTML = '<svg viewBox="0 0 64 64"><use href="#st-' + id + '"/></svg>';
+    return sp;
+  }
+  function upgradeIcon(sp) {
+    var id = sp.dataset.sk; if (!id || sp.dataset.up) return;
+    var mk = skCache[id];
+    if (mk === undefined) mk = skCache[id] = (window.TronxStickers && window.TronxStickers.markup ? window.TronxStickers.markup(id) : "") || "";
+    sp.dataset.up = "1";
+    if (mk) sp.innerHTML = '<svg viewBox="0 0 64 64">' + mk + '</svg>';
+  }
   function watermark(icon) {
     if (!icon) return null;
     var sk = icon.charAt(0) === "s", w = el("span", "wm" + (sk ? "" : " emo"));
@@ -1172,24 +1196,27 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       notes.set(n.id, n);
     });
   }
-  function persistNow() {
+  function persistNow(soft) {
     clearTimeout(saveTimer); saveTimer = null;
     var json = JSON.stringify(Array.from(notes.values())), ok = lsSet(KEY, json);
-    if (ok) { try { ok = localStorage.getItem(KEY) === json; } catch (e) { ok = false; } }
+    if (ok && soft !== true) { try { ok = localStorage.getItem(KEY) === json; } catch (e) { ok = false; } }
     setStatus(ok ? "Guardado" : "No se pudo guardar: sin espacio");
     if (window.TronxMap) window.TronxMap.prune();
     return ok;
   }
-  function schedulePersist() { setStatus("Guardando…"); clearTimeout(saveTimer); saveTimer = setTimeout(persistNow, 350); }
+  function schedulePersist() { setStatus("Guardando…"); clearTimeout(saveTimer); saveTimer = setTimeout(function () { persistNow(true); }, 350); }
   function setStatus(t) {
     $("status").textContent = t || "";
     clearTimeout(statusTimer);
     if (t === "Guardado") statusTimer = setTimeout(function () { $("status").textContent = ""; }, 1800);
   }
   function cur() { return activeId ? notes.get(activeId) : null; }
+  function listHidden() { return $("app").dataset.view === "editor" && window.matchMedia("(max-width:760px)").matches; }
   function changed(n) {
     n.updatedAt = Date.now();
-    schedulePersist(); updateMeta(); renderListSoon();
+    schedulePersist(); updateMeta();
+    if (!listHidden()) renderListSoon(); // en pantallas angostas la lista está oculta: se actualiza al volver
+
     if (n.id === activeId) { renderProg(); renderTpls(); }
   }
 
@@ -1248,7 +1275,13 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     if (n.trashedAt) return false;
     return t === "archive" ? n.archived : !n.archived;
   }
+  var hayCache = new Map();
   function haystack(n) {
+    var c = hayCache.get(n.id), k = n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + n.items.length + "|" + n.tags.length;
+    if (c && c.n === n && c.k === k) return c.h;
+    var h = haystackRaw(n); hayCache.set(n.id, { n: n, k: k, h: h }); return h;
+  }
+  function haystackRaw(n) {
     return (n.title + "\n" + n.body + "\n" + n.items.map(function (i) { return i.t; }).join("\n") + "\n" + n.tags.join(" ")).toLowerCase();
   }
   function colorIndex(k) { for (var i = 0; i < COLORS.length; i++) if (COLORS[i].k === k) return i; return 0; }
@@ -1276,7 +1309,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     b.dataset.bg = resolveBg(n);
     var wm = watermark(n.icon); if (wm) b.appendChild(wm);
     var top = el("span", "top");
-    var ic = iconSpan(n.icon, "static"); if (ic) top.appendChild(ic);
+    var ic = cardIcon(n.icon); if (ic) top.appendChild(ic);
     var t = el("span", "t" + (n.title.trim() ? "" : " empty"));
     t.textContent = n.title.trim() || (n.type === "list" ? "Lista sin título" : "Sin título");
     top.appendChild(t);
@@ -1322,32 +1355,68 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     archive: "No hay notas archivadas. Archivá las que no uses para despejar la lista.",
     trash: "La papelera está vacía. Lo que borres queda acá 30 días."
   };
-  /* Los stickers de las tarjetas solo se animan mientras se ven en pantalla (ahorra batería) */
-  var iconIO = null;
-  function watchIcons(root) {
-    if (iconIO) { iconIO.disconnect(); iconIO = null; }
-    var els = root.querySelectorAll(".ic.sk");
-    if (!els.length) return;
-    if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("anim"); }); return; }
-    iconIO = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { e.target.classList.toggle("anim", e.isIntersecting); });
-    }, { rootMargin: "40px" });
-    els.forEach(function (e) { iconIO.observe(e); });
+  /* Los stickers de las tarjetas solo se animan mientras se ven en pantalla (ahorra batería).
+     Un único observador para toda la vida de la app; las tarjetas nuevas se agregan al vuelo. */
+  var iconIO = null, preIO = null;
+  function watchIcon(e) {
+    if (!("IntersectionObserver" in window)) { upgradeIcon(e); e.classList.add("anim"); return; }
+    if (!iconIO) {
+      iconIO = new IntersectionObserver(function (es) {
+        es.forEach(function (x) { x.target.classList.toggle("anim", x.isIntersecting); });
+      }, { rootMargin: "40px" });
+      /* el sticker pasa a su versión animada un poco antes de entrar, así el scroll no paga ese costo */
+      preIO = new IntersectionObserver(function (es) {
+        es.forEach(function (x) { if (x.isIntersecting) { upgradeIcon(x.target); preIO.unobserve(x.target); } });
+      }, { rootMargin: "400px 0px" });
+    }
+    iconIO.observe(e); preIO.observe(e);
+  }
+  function unwatchIcons(li) {
+    if (!iconIO) return;
+    var e = li.querySelector(".ic.sk"); if (e) { iconIO.unobserve(e); preIO.unobserve(e); }
+  }
+  /* Caché de tarjetas: solo se reconstruye la que cambió; el resto se reutiliza y se reordena */
+  var cards = new Map();
+  function cardSig(n) {
+    var d = 0, k = 0;
+    for (var i = 0; i < n.items.length; i++) { k++; if (n.items[i].done) d++; }
+    return n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
+      (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n) + "|" + (n.id === activeId ? 1 : 0) + "|" +
+      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt);
   }
   function renderList() {
     var listEl = $("list"), rows = visibleNotes();
-    listEl.setAttribute("data-view", settings.view);
-    listEl.textContent = "";
+    if (listEl.getAttribute("data-view") !== settings.view) listEl.setAttribute("data-view", settings.view);
+    var want = [];
+    rows.forEach(function (n) {
+      var sig = cardSig(n), c = cards.get(n.id);
+      if (!c || c.n !== n || c.sig !== sig) {
+        if (c) { unwatchIcons(c.li); }
+        var li = makeItem(n); c = { li: li, sig: sig, n: n }; cards.set(n.id, c);
+        var ic = li.querySelector(".ic.sk"); if (ic) watchIcon(ic);
+      }
+      want.push(c.li);
+    });
     if (!rows.length) {
-      var li0 = el("li", "nores");
+      var li0 = listEl.querySelector(".nores");
+      if (!li0) { li0 = el("li", "nores"); }
       li0.textContent = (query.trim() || tagFilter) ? "Ninguna nota coincide con lo que buscás." : EMPTY[tab];
-      listEl.appendChild(li0);
+      want.push(li0);
     }
-    var frag = document.createDocumentFragment();
-    rows.forEach(function (n) { frag.appendChild(makeItem(n)); });
-    listEl.appendChild(frag);
-    watchIcons(listEl);
-    var total = Array.from(notes.values()).filter(function (n) { return inTab(n, tab); }).length;
+    /* quitar lo que ya no va */
+    var keep = new Set(want);
+    for (var x = listEl.firstChild; x;) { var nx = x.nextSibling; if (!keep.has(x)) listEl.removeChild(x); x = nx; }
+    /* ordenar con el menor número de movimientos */
+    var cursor = listEl.firstChild;
+    for (var j = 0; j < want.length; j++) {
+      if (cursor === want[j]) cursor = cursor.nextSibling;
+      else listEl.insertBefore(want[j], cursor);
+    }
+    if (cards.size > notes.size + 20) {
+      cards.forEach(function (c, id) { if (!notes.has(id)) cards.delete(id); });
+    }
+    var total = 0;
+    notes.forEach(function (n) { if (inTab(n, tab)) total++; });
     var label = total === 1 ? " nota" : " notas";
     $("count").textContent = (query.trim() || tagFilter) ? rows.length + " de " + total + label : total + label;
     $("emptyTrash").hidden = !(tab === "trash" && total > 0);
@@ -1647,7 +1716,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     if (n && !n.trashedAt && isEmptyNote(n)) { notes.delete(n.id); persistNow(); }
   }
   function openNote(id) {
-    if (id !== activeId) { persistNow(); discardIfEmpty(); }
+    if (id !== activeId) { if (saveTimer) persistNow(); discardIfEmpty(); }
     activeId = id;
     setStatus("");
     renderEditor(); renderAll();
@@ -1656,7 +1725,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     if (window.TronxMap) window.TronxMap.suspend();
   }
   function leaveEditorUI() {
-    persistNow(); discardIfEmpty();
+    if (saveTimer) persistNow(); discardIfEmpty();
     activeId = null; setStatus("");
     $("sheet").hidden = true; $("iconSheet").hidden = true; $("scrim").hidden = true;
     $("app").dataset.view = "list";
@@ -1977,7 +2046,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("blankNew").addEventListener("click", function () { createNote("text"); });
   $("blankList").addEventListener("click", function () { createNote("list"); });
   $("backBtn").addEventListener("click", leaveToList);
-  $("q").addEventListener("input", function () { query = $("q").value; renderList(); });
+  $("q").addEventListener("input", function () { query = $("q").value; renderListSoon(); });
   document.querySelectorAll(".tab").forEach(function (b) {
     b.addEventListener("click", function () {
       tab = b.dataset.tab; tagFilter = null;
