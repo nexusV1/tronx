@@ -1307,6 +1307,7 @@
   window.TronxMap = {
     init: init, open: open, close: function () { api && api.closeLayer("map"); }, isOpen: function () { return mapOpen; },
     suspend: suspend, resume: resume, prune: prune, exportData: exportData, importData: importData, refreshTheme: applyAccent,
+    link: function (a, b) { return addLink(a, b); }, unlink: function (a, b) { return removeLink(a, b); },
     state: function () {
       return {
         open: mapOpen, shown: shown, active: active, view: { x: V.x, y: V.y, k: V.k }, W: W, H: H, dpr: dpr, perf: perf, sel: sel,
