@@ -820,12 +820,6 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <div class="overlay" id="settings" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Ajustes">
     <div class="sheethead"><strong>Ajustes</strong><button class="btn small" id="settingsClose" type="button">Cerrar</button></div>
-    <h3>Clics de la interfaz</h3>
-    <div class="seg" id="uiSoundSeg">
-      <button type="button" data-v="on">Activados</button>
-      <button type="button" data-v="off">Silenciados</button>
-    </div>
-    <p class="hint">Un clic corto al tocar botones y opciones, y un efecto al abrir y cerrar el menú. Usan el mismo volumen que el sonido del agujero negro.</p>
     <h3>Sonido del agujero negro</h3>
     <div class="seg" id="soundSeg">
       <button type="button" data-v="on">Activado</button>
@@ -975,14 +969,13 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="sound.js"></script>
-<script src="uisound.js"></script>
 <script src="stickers.js"></script>
 <script src="universe.js"></script>
 <script src="constellations.js"></script>
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.11.0";
+  var APP_VERSION = "1.11.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1039,7 +1032,6 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   function resolveBg(n) { var b = n ? cleanBg(n.bg) : ""; return b || settings.noteBg; }
   function saveSettings() {
     if (window.TronxSound) { settings.sound = window.TronxSound.isEnabled(); settings.soundLvl = window.TronxSound.getVolume(); }
-    if (window.TronxUI) settings.uiSound = window.TronxUI.isEnabled();
     lsSet(SKEY, JSON.stringify(settings));
   }
   // Primera vez con el diseño espacial (1.5): si nunca tocaste el tema ni el color, pasan al aspecto Tronx.
@@ -2069,7 +2061,6 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       settings.noteBg = k; saveSettings(); renderSettings(); renderBg(); renderList();
     });
     $("bgAnimSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.bgAnim ? "true" : "false"); });
-    $("uiSoundSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === (!window.TronxUI || window.TronxUI.isEnabled()) ? "true" : "false"); });
     var vol = window.TronxSound ? window.TronxSound.getVolume() : 0;
     $("volSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", Number(b.dataset.v) === vol ? "true" : "false"); });
     var sw = $("accentSw"); sw.textContent = "";
@@ -2149,17 +2140,6 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("profile").addEventListener("click", function (e) { if (e.target === $("profile")) closeLayer("profile"); });
   $("pfName").addEventListener("input", function () { setProfile({ name: $("pfName").value }); renderMenu(); });
 
-  /* ---------- sonidos de la interfaz ---------- */
-  function uiSound(kind) { if (window.TronxUI) window.TronxUI.play(kind); }
-  // Un clic al tocar botones del menú, de sus paneles y de la cabecera. Elegir una opción suena distinto a un toque.
-  document.addEventListener("click", function (e) {
-    var b = e.target.closest && e.target.closest("button, .sw, .bgp");
-    if (!b || b.disabled || b.hasAttribute("data-nosound")) return;
-    if (!b.closest("#menu, #custom, #profile, #settings, #links, .brand, .tabs, .viewseg")) return;
-    if (b.id === "menuBtn" || b.id === "mnClose") return; // tienen su propio sonido
-    uiSound(b.closest(".seg, .swatches, .bgpick, .igrid") ? "pick" : "tap");
-  }, true);
-
   /* ---------- menú cósmico ---------- */
   var menuTimer = 0, menuFullTimer = 0, pausedAnims = [];
   function relTime(ts) {
@@ -2203,8 +2183,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     m.style.setProperty("--mx", Math.round(r.left + r.width / 2) + "px"); m.style.setProperty("--my", Math.round(r.top + r.height / 2) + "px");
     clearTimeout(menuTimer); clearTimeout(menuFullTimer);
     m.classList.remove("on", "closing"); m.hidden = false;
-    uiSound("open");
-    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
+        try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
     requestAnimationFrame(function () {
       m.classList.add("on");
       $("menuBtn").setAttribute("aria-expanded", "true");
@@ -2220,7 +2199,6 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     resumeBehind();
     m.classList.remove("on"); m.classList.add("closing");
     $("menuBtn").setAttribute("aria-expanded", "false");
-    uiSound("close");
     clearTimeout(menuTimer);
     menuTimer = setTimeout(function () { m.hidden = true; m.classList.remove("closing"); }, 260);
     try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
@@ -2293,8 +2271,8 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       rm.setAttribute("aria-label", "Quitar el vínculo entre " + noteLabel(r[0]) + " y " + noteLabel(r[1]));
       rm.addEventListener("click", function () {
         if (!window.TronxMap || !window.TronxMap.unlink(r[0].id, r[1].id)) return;
-        uiSound("remove"); renderLinks(); renderMenu();
-        toast("Vínculo quitado", "Deshacer", function () { if (window.TronxMap.link(r[0].id, r[1].id)) { uiSound("confirm"); if (!$("links").hidden) renderLinks(); renderMenu(); } });
+        renderLinks(); renderMenu();
+        toast("Vínculo quitado", "Deshacer", function () { if (window.TronxMap.link(r[0].id, r[1].id)) { if (!$("links").hidden) renderLinks(); renderMenu(); } });
       });
       li.appendChild(pair); li.appendChild(rm); list.appendChild(li);
     });
@@ -2303,19 +2281,14 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("lkA").addEventListener("change", renderLinks);
   $("lkB").addEventListener("change", renderLinks);
   $("lkGo").addEventListener("click", function () {
-    if (!window.TronxMap || !window.TronxMap.link($("lkA").value, $("lkB").value)) { uiSound("remove"); return; }
-    uiSound("confirm"); renderLinks(); renderMenu();
+    if (!window.TronxMap || !window.TronxMap.link($("lkA").value, $("lkB").value)) return;
+    renderLinks(); renderMenu();
     toast("Notas vinculadas", "Ver en Constelaciones", function () { closeTo(0); setTimeout(function () { window.TronxMap.open(); }, 380); });
   });
   $("lkMap").addEventListener("click", function () { closeTo(0); setTimeout(function () { if (window.TronxMap) window.TronxMap.open(); }, 380); });
   $("linksClose").addEventListener("click", function () { closeLayer("links"); });
   $("links").addEventListener("click", function (e) { if (e.target === $("links")) closeLayer("links"); });
   $("mnLink").addEventListener("click", openLinks);
-  $("uiSoundSeg").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b || !window.TronxUI) return;
-    window.TronxUI.setEnabled(b.dataset.v === "on"); saveSettings(); renderSettings();
-    if (b.dataset.v === "on") window.TronxUI.play("confirm");
-  });
   $("themeSeg").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     settings.theme = b.dataset.v; saveSettings(); applyTheme(); renderSettings();
