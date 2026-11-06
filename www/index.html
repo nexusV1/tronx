@@ -451,6 +451,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .mn-who { display: grid; min-width: 0; gap: 2px; }
 .mn-who b { font-family: var(--font-display); font-size: 21px; letter-spacing: -0.01em; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mn-who i { font-style: normal; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.mn-list > li { min-width: 0; }
 .mn-list { list-style: none; margin: 2px 0 0; padding: 0; display: grid; gap: 8px; }
 .mn-sec { margin: 8px 4px 0; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(168, 164, 214, 0.8); opacity: 0; transition: opacity 0.3s; transition-delay: calc(0.14s + var(--i) * 0.045s); }
 .menu.on .mn-sec { opacity: 1; }
@@ -465,8 +466,10 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .mn-ic svg { width: 21px; height: 21px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .mn-ic .mn-dot { top: -3px; right: -3px; }
 .mn-tx { display: grid; flex: 1; min-width: 0; gap: 1px; }
-.mn-tx b { font-family: var(--font-display); font-size: 16px; font-weight: 700; letter-spacing: -0.005em; }
+.mn-tx b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-display); font-size: 16px; font-weight: 700; letter-spacing: -0.005em; }
 .mn-tx i { font-style: normal; font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mn-soon { justify-self: start; margin-top: 3px; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em; text-transform: uppercase; color: #fde68a; border: 1px solid rgba(251, 191, 36, 0.45); background: rgba(251, 191, 36, 0.12); border-radius: 999px; padding: 3px 6px; white-space: nowrap; }
+.mn-item.soon .mn-ic, .mn-item.soon .mn-tx { opacity: 0.8; }
 .mn-go { flex: none; width: 18px; height: 18px; fill: none; stroke: rgba(200, 190, 255, 0.7); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .mn-foot { margin: auto 0 0; padding-top: 10px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: rgba(168, 164, 214, 0.75); }
 
@@ -906,14 +909,15 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <button class="mn-me" id="mnMe" type="button" aria-label="Abrir tu perfil"><span class="mn-avw"><span class="mn-av" id="mnAv"></span></span><span class="mn-who"><b id="mnName">Explorador</b><i id="mnSub"></i></span></button>
     <ul class="mn-list">
       <li class="mn-sec" style="--i:0" aria-hidden="true">Tu espacio</li>
-      <li><button class="mn-item" id="mnProfile" type="button" style="--i:1;--c1:#a78bfa;--c2:#4c1d95"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.6-6 7.5-6s6.7 2 7.5 6"/></svg></span><span class="mn-tx"><b>Perfil</b><i id="mnSubProfile">Tu nombre y tu avatar</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnProfile" type="button" style="--i:1;--c1:#a78bfa;--c2:#4c1d95"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.6-6 7.5-6s6.7 2 7.5 6"/></svg></span><span class="mn-tx"><b>Perfil</b><span class="mn-soon">En desarrollo</span></span></button></li>
       <li><button class="mn-item" id="mnCustom" type="button" style="--i:2;--c1:#f472b6;--c2:#831843"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Personalización</b><i id="mnSubCustom">Tema, colores, letra y fondos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:3" aria-hidden="true">Explorar</li>
       <li><button class="mn-item" id="mnMap" type="button" style="--i:4;--c1:#60a5fa;--c2:#1e3a8a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg></span><span class="mn-tx"><b>Constelaciones</b><i id="mnSubMap">El mapa galáctico de tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-      <li><button class="mn-item" id="mnLink" type="button" style="--i:5;--c1:#34d399;--c2:#064e3b"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="mn-tx"><b>Vinculación</b><i id="mnSubLink">Conectá notas relacionadas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-      <li class="mn-sec" style="--i:6" aria-hidden="true">Aplicación</li>
-      <li><button class="mn-item" id="mnSettings" type="button" style="--i:7;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span><span class="mn-tx"><b>Ajustes</b><i id="mnSubSet">Sonido y volumen</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-      <li><button class="mn-item" id="mnBackup" type="button" style="--i:8;--c1:#2dd4bf;--c2:#134e4a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><span class="mn-dot" id="mnBkDot" hidden></span></span><span class="mn-tx"><b>Copia de seguridad</b><i id="mnSubBk">Exportá o importá tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnLink" type="button" style="--i:5;--c1:#34d399;--c2:#064e3b"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="mn-tx"><b>Vinculación</b><span class="mn-soon">En desarrollo</span></span></button></li>
+      <li><button class="mn-item soon" id="mnMax" type="button" style="--i:6;--c1:#fb923c;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg></span><span class="mn-tx"><b>MAX</b><span class="mn-soon">En desarrollo</span></span></button></li>
+      <li class="mn-sec" style="--i:7" aria-hidden="true">Aplicación</li>
+      <li><button class="mn-item" id="mnSettings" type="button" style="--i:8;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span><span class="mn-tx"><b>Ajustes</b><i id="mnSubSet">Sonido y volumen</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnBackup" type="button" style="--i:9;--c1:#2dd4bf;--c2:#134e4a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><span class="mn-dot" id="mnBkDot" hidden></span></span><span class="mn-tx"><b>Copia de seguridad</b><i id="mnSubBk">Exportá o importá tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
     </ul>
     <p class="mn-foot" id="mnFoot"></p>
   </nav>
@@ -968,7 +972,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.12.0";
+  var APP_VERSION = "1.13.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2150,9 +2154,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     paintAvatar($("mnAv"), p.avatar);
     $("mnName").textContent = p.name || "Explorador";
     $("mnSub").textContent = st.notes + (st.notes === 1 ? " nota" : " notas") + " · " + st.groups + (st.groups === 1 ? " constelación" : " constelaciones");
-    $("mnSubProfile").textContent = p.name ? "Cambiá tu nombre o tu avatar" : "Poné tu nombre y elegí un avatar";
     $("mnSubMap").textContent = st.groups || st.links ? st.groups + (st.groups === 1 ? " constelación" : " constelaciones") + " · " + st.links + (st.links === 1 ? " vínculo" : " vínculos") : "El mapa galáctico de tus notas";
-    $("mnSubLink").textContent = st.notes < 2 ? "Necesitás al menos dos notas" : st.links ? st.links + (st.links === 1 ? " nota vinculada" : " vínculos entre notas") : "Todavía no vinculaste notas";
     $("mnSubSet").textContent = "Sonido del agujero negro: " + (window.TronxSound && !window.TronxSound.isEnabled() ? "silenciado" : "activado");
     $("mnSubBk").textContent = settings.lastBackup ? "Última copia: " + relTime(settings.lastBackup) : "Todavía no hiciste una copia";
     $("mnBkDot").hidden = !over;
@@ -2206,8 +2208,10 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("menuBtn").addEventListener("click", openMenu);
   $("mnClose").addEventListener("click", function () { closeLayer("menu"); });
   $("mnScrim").addEventListener("click", function () { closeLayer("menu"); });
-  $("mnMe").addEventListener("click", openProfile);
-  $("mnProfile").addEventListener("click", openProfile);
+  function soon(name) { toast(name + " está en desarrollo"); }
+  $("mnMe").addEventListener("click", function () { soon("El perfil"); });
+  $("mnProfile").addEventListener("click", function () { soon("El perfil"); });
+  $("mnMax").addEventListener("click", function () { soon("MAX"); });
   $("mnCustom").addEventListener("click", openCustom);
   $("mnSettings").addEventListener("click", openSettings);
   $("mnBackup").addEventListener("click", function () {
@@ -2279,7 +2283,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("lkMap").addEventListener("click", function () { closeTo(0); setTimeout(function () { if (window.TronxMap) window.TronxMap.open(); }, 380); });
   $("linksClose").addEventListener("click", function () { closeLayer("links"); });
   $("links").addEventListener("click", function (e) { if (e.target === $("links")) closeLayer("links"); });
-  $("mnLink").addEventListener("click", openLinks);
+  $("mnLink").addEventListener("click", function () { soon("La vinculación"); });
   $("themeSeg").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     settings.theme = b.dataset.v; saveSettings(); applyTheme(); renderSettings();

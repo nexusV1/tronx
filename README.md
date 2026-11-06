@@ -146,5 +146,7 @@ Pasos, una sola vez:
 **1.11.1**: se quitaron los sonidos de clic de la interfaz (toques, menú y confirmaciones) y su ajuste. Queda solo el sonido del agujero negro, que se sigue pudiendo activar, silenciar y subir o bajar en Ajustes.
 
 **1.12.0**: menú más fluido y sin adornos de más. Se quitó la onda de "supernova" al abrirlo y el giro permanente del aro del avatar; el panel entra con un deslizamiento corto sin rebote y las opciones aparecen más rápido. Además se eliminó el workflow de prueba de Codemagic: queda solo **Tronx APK (firmado)**, que usa tu clave fija y se instala encima de la versión anterior.
+
+**1.13.0**: en el menú, Perfil y Vinculación muestran la etiqueta "En desarrollo" y al tocarlos solo avisan (no abren su panel; el código sigue en la app para activarlos más adelante). Se agregó el apartado MAX, también "En desarrollo". Se corrigió que las opciones del menú podían salirse del panel en pantallas angostas.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.
