@@ -48,9 +48,7 @@ git push -u origin main
 
 1. En Codemagic, agregá la aplicación y elegí el repositorio de GitHub.
 2. Elegí **codemagic.yaml** como configuración (no el editor visual).
-3. Iniciá el workflow **Tronx APK (prueba)**. Al terminar, descargá el `.apk` desde Artifacts e instalalo en el teléfono (hay que permitir instalar apps de orígenes desconocidos).
-
-Para un APK firmado, subí tu keystore en Codemagic (Teams > Code signing identities > Android keystores) con la referencia `tronx_keystore` y usá el workflow **Tronx APK (firmado)**.
+3. Subí tu keystore en Codemagic (Teams > Code signing identities > Android keystores) con la referencia `tronx_keystore` e iniciá el workflow **Tronx APK (firmado)**. Al terminar, descargá el `.apk` desde Artifacts e instalalo en el teléfono (hay que permitir instalar apps de orígenes desconocidos).
 
 El número de versión interno (`versionCode`) sale del número de build de Codemagic. El nombre de versión sale de `version` en `package.json`.
 
@@ -105,8 +103,7 @@ Android solo instala una versión nueva encima de la vieja si las dos están fir
 
 - El identificador de la app es `com.tronx.notas` (en `capacitor.config.json`). No lo cambies.
 - El `versionCode` lo calcula `scripts/patch-android.mjs` en cada build y siempre crece. El `versionName` sale de `version` en `package.json`.
-- El workflow **Tronx APK (prueba)** firma con una clave de depuración que Codemagic crea de nuevo en cada build. Esos APK **no** se pueden instalar uno encima de otro.
-- El workflow **Tronx APK (firmado)** firma con tu keystore fijo (`tronx_keystore`). Con ese, cada versión actualiza la anterior y las notas se conservan.
+- Hay un único workflow, **Tronx APK (firmado)**, que firma con tu keystore fijo (`tronx_keystore`). Con ese, cada versión actualiza la anterior y las notas se conservan.
 
 Pasos, una sola vez:
 1. En Ajustes > Copia de seguridad, exportá una copia de tus notas (la primera vez hay que desinstalar la versión de prueba, y al desinstalar se borran los datos).
@@ -147,5 +144,7 @@ Pasos, una sola vez:
 **1.11.0**: más optimización y animaciones más fluidas. La lista reutiliza las tarjetas que no cambiaron (antes reconstruía todas en cada tecla), los stickers de las tarjetas se animan solo cuando están por entrar en pantalla, la lista oculta no se redibuja mientras escribís en el celular y la búsqueda no recalcula nada de más. Al pasar de la lista al editor hay una transición corta, y los botones y tarjetas se hunden un poco al tocarlos. Los clics suenan con más cuerpo (chasquido brillante, "pop" y golpecito) y varían un poco de tono en cada toque. Con 150 notas y la CPU frenada x4: escribir pasó de 15 a 60 fps, buscar de 17 a 58 fps (54 ms a 0,3 ms por tecla) y abrir una nota de 98 ms a 16 ms.
 
 **1.11.1**: se quitaron los sonidos de clic de la interfaz (toques, menú y confirmaciones) y su ajuste. Queda solo el sonido del agujero negro, que se sigue pudiendo activar, silenciar y subir o bajar en Ajustes.
+
+**1.12.0**: menú más fluido y sin adornos de más. Se quitó la onda de "supernova" al abrirlo y el giro permanente del aro del avatar; el panel entra con un deslizamiento corto sin rebote y las opciones aparecen más rápido. Además se eliminó el workflow de prueba de Codemagic: queda solo **Tronx APK (firmado)**, que usa tu clave fija y se instala encima de la versión anterior.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.

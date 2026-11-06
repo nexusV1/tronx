@@ -427,18 +427,14 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .mb-dot { top: -1px; right: -1px; }
 .mb-dot[hidden], .mn-dot[hidden] { display: none; }
 
-.menu { position: fixed; inset: 0; z-index: 18; --mx: 36px; --my: 34px; --ink: #ece9ff; --muted: #a8a4d6; color: #ece9ff; font-family: var(--font-body); contain: layout style; }
+.menu { position: fixed; inset: 0; z-index: 18; --ink: #ece9ff; --muted: #a8a4d6; color: #ece9ff; font-family: var(--font-body); contain: layout style; }
 .menu[hidden] { display: none; }
 .mn-scrim { position: absolute; inset: 0; background: rgba(3, 3, 16, 0.78); opacity: 0; transition: opacity 0.28s ease-out; }
 .menu.on .mn-scrim { opacity: 1; }
-.mn-nova { position: absolute; left: var(--mx); top: var(--my); width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%; pointer-events: none; opacity: 0; will-change: transform, opacity;
-  background: radial-gradient(circle, transparent 50%, rgba(205, 190, 255, 0.55) 55%, rgba(130, 100, 255, 0.28) 62%, transparent 70%); }
-.menu.on .mn-nova { animation: mnova 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-@keyframes mnova { 0% { opacity: 1; transform: scale(0.12); } 100% { opacity: 0; transform: scale(9); } }
 .mn-panel { position: absolute; left: 0; top: 0; bottom: 0; width: min(88vw, 372px); display: flex; flex-direction: column; gap: 6px; padding: calc(14px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px)); overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; isolation: isolate;
   background: radial-gradient(120% 55% at 0% 0%, rgba(112, 72, 238, 0.55), transparent 62%), radial-gradient(100% 50% at 100% 100%, rgba(38, 122, 224, 0.36), transparent 62%), linear-gradient(180deg, #0c0d2e, #060718);
   border-right: 1px solid rgba(160, 140, 255, 0.38); border-radius: 0 28px 28px 0; box-shadow: 0 0 40px rgba(100, 70, 255, 0.4);
-  transform: translate3d(-26px, 0, 0) scale(0.9); transform-origin: 0 0; opacity: 0; transition: transform 0.5s cubic-bezier(0.16, 0.9, 0.24, 1.05), opacity 0.22s ease-out; }
+  transform: translate3d(-32px, 0, 0); opacity: 0; transition: transform 0.3s cubic-bezier(0.2, 0.85, 0.25, 1), opacity 0.2s ease-out; }
 .menu.on .mn-panel { transform: none; opacity: 1; }
 .menu.closing .mn-panel { transform: translate3d(-104%, 0, 0); opacity: 1; transition: transform 0.24s cubic-bezier(0.5, 0, 0.8, 0.4); }
 .menu.closing .mn-scrim { opacity: 0; transition: opacity 0.24s; }
@@ -449,11 +445,9 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .mn-x svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .mn-me { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; border: 0; background: transparent; padding: 6px 44px 8px 0; color: inherit; }
 .mn-avw { position: relative; flex: none; width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; }
-.mn-avw::before { content: ""; position: absolute; inset: -50%; background: conic-gradient(from 0deg, #a78bfa, #60a5fa, #34d399, #f472b6, #a78bfa); animation: mnspin 8s linear infinite; }
-.menu.closing .mn-avw::before { animation: none; }
+.mn-avw::before { content: ""; position: absolute; inset: -50%; background: conic-gradient(from 0deg, #a78bfa, #60a5fa, #34d399, #f472b6, #a78bfa); }
 .mn-av { position: relative; width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 38%, #2a1f6b, #0a0a2c); }
 .mn-av .ic { width: 48px; height: 48px; font-size: 36px; }
-@keyframes mnspin { to { transform: rotate(360deg); } }
 .mn-who { display: grid; min-width: 0; gap: 2px; }
 .mn-who b { font-family: var(--font-display); font-size: 21px; letter-spacing: -0.01em; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mn-who i { font-style: normal; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
@@ -462,7 +456,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .menu.on .mn-sec { opacity: 1; }
 .mn-sec:first-child { margin-top: 2px; }
 .mn-item { position: relative; display: flex; align-items: center; gap: 14px; width: 100%; min-height: 62px; padding: 9px 12px; text-align: left; color: #ece9ff; border-radius: 20px; border: 1px solid rgba(160, 140, 255, 0.22); background: linear-gradient(135deg, rgba(70, 58, 170, 0.4), rgba(18, 16, 62, 0.55)); contain: layout paint;
-  opacity: 0; transform: translate3d(-28px, 0, 0); transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.25, 1.1), opacity 0.3s, border-color 0.15s; transition-delay: calc(0.12s + var(--i) * 0.045s); }
+  opacity: 0; transform: translate3d(-28px, 0, 0); transition: transform 0.3s cubic-bezier(0.2, 0.85, 0.25, 1), opacity 0.22s, border-color 0.15s; transition-delay: calc(0.05s + var(--i) * 0.025s); }
 .menu.on .mn-item { opacity: 1; transform: none; }
 .menu:not(.on) .mn-item, .menu:not(.on) .mn-sec { transition-delay: 0s; }
 .mn-item:active { transform: scale(0.97); transition-delay: 0s; transition-duration: 0.08s; }
@@ -906,7 +900,6 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 </div>
 <div class="menu" id="menu" hidden>
   <div class="mn-scrim" id="mnScrim"></div>
-  <div class="mn-nova" aria-hidden="true"></div>
   <nav class="mn-panel" role="dialog" aria-modal="true" aria-label="Menú de Tronx">
     <span class="mn-stars" aria-hidden="true"></span>
     <button class="mn-x" id="mnClose" type="button" aria-label="Cerrar el menú"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -975,7 +968,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.11.1";
+  var APP_VERSION = "1.12.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2179,17 +2172,15 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var m = $("menu");
     if (!m.hidden && !m.classList.contains("closing")) return;
     renderMenu();
-    var r = $("menuBtn").getBoundingClientRect();
-    m.style.setProperty("--mx", Math.round(r.left + r.width / 2) + "px"); m.style.setProperty("--my", Math.round(r.top + r.height / 2) + "px");
     clearTimeout(menuTimer); clearTimeout(menuFullTimer);
     m.classList.remove("on", "closing"); m.hidden = false;
-        try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
     requestAnimationFrame(function () {
       m.classList.add("on");
       $("menuBtn").setAttribute("aria-expanded", "true");
       pushLayer("menu");
       // el trabajo pesado va después de que arranca la animación, no antes
-      menuFullTimer = setTimeout(function () { pauseBehind(); try { $("mnClose").focus({ preventScroll: true }); } catch (e) {} }, 520);
+      menuFullTimer = setTimeout(function () { pauseBehind(); try { $("mnClose").focus({ preventScroll: true }); } catch (e) {} }, 360);
     });
   }
   function closeMenuUI() {
