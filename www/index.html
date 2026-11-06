@@ -419,12 +419,13 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 /* ---------- botón de menú y menú cósmico ----------
    Solo se animan transform y opacity (van por la GPU, no repintan). Nada de clip-path, máscaras ni sombras gigantes. */
 .brandl { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.menubtn { position: relative; flex: none; width: 40px; height: 40px; padding: 0; border-radius: 50%; display: grid; place-items: center; color: var(--ink); border: 1px solid var(--card-bd, var(--line)); background: radial-gradient(circle at 35% 28%, rgba(167, 139, 250, 0.38), rgba(38, 30, 110, 0.55)); box-shadow: 0 0 14px -3px var(--card-glow, rgba(150, 110, 255, 0.5)); transition: transform 0.12s; }
-.menubtn:active { transform: scale(0.9); }
-.menubtn svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-.menubtn svg .sp { fill: var(--accent); stroke: none; }
+.menubtn { position: relative; flex: none; width: 42px; height: 42px; padding: 0; border-radius: 14px; display: grid; place-items: center; color: var(--ink); border: 1px solid var(--card-bd, var(--line)); background: var(--raised); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 6px 16px -10px var(--card-glow, rgba(0, 0, 0, 0.4)); transition: transform 0.12s, background-color 0.15s, border-color 0.15s; }
+.menubtn:hover { border-color: var(--accent); }
+.menubtn:active { transform: scale(0.92); }
+.menubtn[aria-expanded="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.menubtn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .mb-dot, .mn-dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fbbf24; border: 2px solid #0c0d2e; }
-.mb-dot { top: -1px; right: -1px; }
+.mb-dot { top: -4px; right: -4px; border-color: var(--bg); }
 .mb-dot[hidden], .mn-dot[hidden] { display: none; }
 
 .menu { position: fixed; inset: 0; z-index: 18; --ink: #ece9ff; --muted: #a8a4d6; color: #ece9ff; font-family: var(--font-body); contain: layout style; }
@@ -432,7 +433,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .mn-scrim { position: absolute; inset: 0; background: rgba(3, 3, 16, 0.78); opacity: 0; transition: opacity 0.28s ease-out; }
 .menu.on .mn-scrim { opacity: 1; }
 .mn-panel { position: absolute; left: 0; top: 0; bottom: 0; width: min(88vw, 376px); display: flex; flex-direction: column; gap: 4px; padding: calc(16px + env(safe-area-inset-top, 0px)) 14px calc(14px + env(safe-area-inset-bottom, 0px)); overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; isolation: isolate;
-  background: radial-gradient(130% 42% at 0% 0%, rgba(124, 84, 255, 0.5), transparent 66%), radial-gradient(90% 34% at 100% 22%, rgba(236, 72, 153, 0.16), transparent 70%), radial-gradient(110% 40% at 100% 100%, rgba(34, 170, 230, 0.3), transparent 68%), linear-gradient(180deg, #0b0c27 0%, #070820 60%, #060718 100%);
+  background: radial-gradient(120% 36% at 0% 0%, rgba(110, 80, 235, 0.34), transparent 68%), radial-gradient(110% 30% at 100% 100%, rgba(40, 120, 220, 0.2), transparent 70%), linear-gradient(180deg, #0a0b24 0%, #070820 100%);
   border-radius: 0 30px 30px 0; box-shadow: 1px 0 0 rgba(190, 170, 255, 0.28), 28px 0 60px -24px rgba(0, 0, 0, 0.7);
   transform: translate3d(-32px, 0, 0); opacity: 0; transition: transform 0.3s cubic-bezier(0.2, 0.85, 0.25, 1), opacity 0.2s ease-out; }
 .menu.on .mn-panel { transform: none; opacity: 1; }
@@ -444,14 +445,21 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .mn-x { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; width: 34px; height: 34px; border-radius: 12px; border: 0; background: rgba(255, 255, 255, 0.08); color: #ece9ff; display: grid; place-items: center; padding: 0; z-index: 2; transition: transform 0.12s, background-color 0.15s; }
 .mn-x:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.16); }
 .mn-x svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
-.mn-me { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; border: 0; background: transparent; padding: 4px 44px 10px 2px; color: inherit; }
-.mn-avw { position: relative; flex: none; width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; box-shadow: 0 6px 18px -8px rgba(124, 84, 255, 0.9); }
-.mn-avw::before { content: ""; position: absolute; inset: -50%; background: conic-gradient(from 210deg, #c4b5fd, #60a5fa, #22d3ee, #f0abfc, #c4b5fd); }
-.mn-av { position: relative; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 36%, #2b2072, #0a0a2c); }
-.mn-av .ic { width: 46px; height: 46px; font-size: 34px; }
-.mn-who { display: grid; min-width: 0; gap: 4px; }
-.mn-who b { font-family: var(--font-display); font-size: 22px; letter-spacing: -0.015em; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mn-who i { justify-self: start; font-style: normal; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; color: #c9c4f5; background: rgba(255, 255, 255, 0.07); border-radius: 999px; padding: 3px 9px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mn-me { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; border: 0; background: transparent; padding: 2px 44px 4px 2px; color: inherit; }
+.mn-avw { position: relative; flex: none; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(160deg, rgba(196, 181, 253, 0.9), rgba(96, 165, 250, 0.35) 55%, rgba(196, 181, 253, 0.12)); }
+.mn-av { position: relative; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 30%, #231a66, #0a0b26); }
+.mn-av .ic { width: 42px; height: 42px; font-size: 31px; }
+.mn-who { display: grid; min-width: 0; gap: 1px; }
+.mn-rank { font-style: normal; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #a99cf5; }
+.mn-who b { font-family: var(--font-display); font-size: 21px; letter-spacing: -0.015em; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mn-sub { font-size: 12.5px; color: #9f9ccb; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mn-stats { display: grid; grid-template-columns: repeat(3, 1fr); margin: 8px 0 2px; border-radius: 16px; background: rgba(255, 255, 255, 0.04); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07); opacity: 0; transform: translate3d(-20px, 0, 0); transition: transform 0.3s cubic-bezier(0.2, 0.85, 0.25, 1), opacity 0.22s; transition-delay: 0.04s; }
+.menu.on .mn-stats { opacity: 1; transform: none; }
+.menu:not(.on) .mn-stats { transition-delay: 0s; }
+.mn-stats > div { display: grid; gap: 1px; justify-items: center; padding: 9px 4px 8px; min-width: 0; }
+.mn-stats > div + div { box-shadow: -1px 0 0 rgba(255, 255, 255, 0.07); }
+.mn-stats b { font-family: var(--font-display); font-size: 20px; line-height: 1.1; color: #fff; }
+.mn-stats span { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #9f9ccb; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mn-list > li { min-width: 0; }
 .mn-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .mn-sec { display: flex; align-items: center; gap: 10px; margin: 14px 6px 4px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(190, 184, 240, 0.72); opacity: 0; transition: opacity 0.3s; transition-delay: calc(0.1s + var(--i) * 0.025s); }
@@ -477,12 +485,13 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .mn-item.soon .mn-tx b { color: #cfcaf0; }
 .mn-go { flex: none; width: 17px; height: 17px; fill: none; stroke: rgba(200, 190, 255, 0.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 /* Constelaciones, la opción principal: tarjeta grande con su propio color */
-.mn-item.feat { min-height: 92px; padding: 12px 14px 12px 12px; border-radius: 22px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-  background: radial-gradient(2px 2px at 78% 26%, #fff, transparent), radial-gradient(1.6px 1.6px at 90% 58%, #dbeafe, transparent), radial-gradient(1.4px 1.4px at 64% 74%, #fff, transparent), radial-gradient(1.6px 1.6px at 56% 22%, #f5d0fe, transparent), linear-gradient(135deg, rgba(139, 92, 246, 0.72), rgba(59, 130, 246, 0.5) 60%, rgba(34, 211, 238, 0.42)); }
-.mn-item.feat .mn-ic { width: 56px; height: 56px; border-radius: 18px; background: rgba(255, 255, 255, 0.2); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45); }
+.mn-item.feat { min-height: 88px; padding: 12px 14px 12px 12px; border-radius: 22px; box-shadow: inset 0 0 0 1px rgba(170, 150, 255, 0.34);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cg fill='none' stroke='%23c4b5fd' stroke-opacity='.4' stroke-width='1'%3E%3Cpath d='M92 70 L112 38 L138 52 L150 18 M112 38 L128 14'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='.85'%3E%3Ccircle cx='92' cy='70' r='2'/%3E%3Ccircle cx='112' cy='38' r='2.4'/%3E%3Ccircle cx='138' cy='52' r='1.8'/%3E%3Ccircle cx='150' cy='18' r='2'/%3E%3Ccircle cx='128' cy='14' r='1.6'/%3E%3C/g%3E%3C/svg%3E") right center / auto 100% no-repeat, linear-gradient(135deg, rgba(110, 80, 235, 0.42), rgba(40, 60, 170, 0.28)); }
+.mn-item.feat .mn-ic { width: 54px; height: 54px; border-radius: 17px; background: linear-gradient(145deg, #8b6cf6, #4c3bc4); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 18px -10px #7c5cff; }
 .mn-item.feat .mn-ic svg { width: 28px; height: 28px; }
 .mn-item.feat .mn-tx b { font-size: 18px; }
-.mn-item.feat .mn-tx i { color: #e6e3ff; }
+.mn-item.feat .mn-go { display: none; }
+.mn-item.feat .mn-tx i { color: #cfc9f7; }
 .mn-item.feat:hover, .mn-item.feat:focus-visible { background-color: transparent; filter: brightness(1.08); }
 .mn-foot { margin: auto 0 0; padding-top: 12px; text-align: center; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; color: rgba(190, 184, 240, 0.6); }
 
@@ -705,7 +714,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   <aside class="side" aria-label="Tus notas">
     <header class="brand">
       <div class="brandl">
-        <button class="menubtn" id="menuBtn" type="button" title="Menú" aria-label="Abrir el menú" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h16"/><circle class="sp" cx="19" cy="12" r="1.7"/></svg><span class="mb-dot" id="mbDot" hidden></span></button>
+        <button class="menubtn" id="menuBtn" type="button" title="Menú" aria-label="Abrir el menú" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 7h15M4.5 12h10M4.5 17h15"/></svg><span class="mb-dot" id="mbDot" hidden></span></button>
         <h1>tron<span>x</span></h1>
       </div>
       <div class="tools">
@@ -921,7 +930,12 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   <nav class="mn-panel" role="dialog" aria-modal="true" aria-label="Menú de Tronx">
     <span class="mn-stars" aria-hidden="true"></span>
     <button class="mn-x" id="mnClose" type="button" aria-label="Cerrar el menú"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    <button class="mn-me" id="mnMe" type="button" aria-label="Abrir tu perfil"><span class="mn-avw"><span class="mn-av" id="mnAv"></span></span><span class="mn-who"><b id="mnName">Explorador</b><i id="mnSub"></i></span></button>
+    <button class="mn-me" id="mnMe" type="button" aria-label="Abrir tu perfil"><span class="mn-avw"><span class="mn-av" id="mnAv"></span></span><span class="mn-who"><i class="mn-rank" id="mnRank">Bienvenido</i><b id="mnName">Explorador</b><span class="mn-sub" id="mnSub"></span></span></button>
+    <div class="mn-stats" aria-label="Tu universo">
+      <div><b id="mnStN">0</b><span>Notas</span></div>
+      <div><b id="mnStC">0</b><span>Constelaciones</span></div>
+      <div><b id="mnStL">0</b><span>Vínculos</span></div>
+    </div>
     <ul class="mn-list">
       <li><button class="mn-item feat" id="mnMap" type="button" style="--i:0;--c1:#60a5fa;--c2:#1e3a8a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg></span><span class="mn-tx"><b>Constelaciones</b><i id="mnSubMap">El mapa galáctico de tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:1" aria-hidden="true">Tu espacio</li>
@@ -987,7 +1001,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.16.0";
+  var APP_VERSION = "1.17.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2168,7 +2182,9 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var p = getProfile(), st = universeStats(), over = backupOverdue();
     paintAvatar($("mnAv"), p.avatar);
     $("mnName").textContent = p.name || "Explorador";
-    $("mnSub").textContent = st.notes + (st.notes === 1 ? " nota" : " notas") + " · " + st.groups + (st.groups === 1 ? " constelación" : " constelaciones");
+    $("mnRank").textContent = p.name ? "Explorador" : "Bienvenido";
+    $("mnSub").textContent = "Tu universo de notas";
+    $("mnStN").textContent = st.notes; $("mnStC").textContent = st.groups; $("mnStL").textContent = st.links;
     $("mnSubMap").textContent = st.groups || st.links ? st.groups + (st.groups === 1 ? " constelación" : " constelaciones") + " · " + st.links + (st.links === 1 ? " vínculo" : " vínculos") : "El mapa galáctico de tus notas";
     $("mnSubSet").textContent = "Sonido del agujero negro: " + (window.TronxSound && !window.TronxSound.isEnabled() ? "silenciado" : "activado");
     $("mnSubBk").textContent = settings.lastBackup ? "Última copia: " + relTime(settings.lastBackup) : "Todavía no hiciste una copia";
