@@ -644,7 +644,9 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 @media (max-width: 760px) {
   .app { grid-template-columns: minmax(0, 1fr); border: 0; border-radius: 0; max-width: none; }
   .app[data-view="list"] .pane { display: none; }
-  .app[data-view="editor"] .side { display: none; }
+  /* la lista se oculta sin destruir su layout: volver al listado deja de costar re-maquetar todas las tarjetas */
+  .app[data-view="editor"] .side { visibility: hidden; position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .app[data-view="editor"] .side .ic *, .app[data-view="editor"] .side .ic { animation-play-state: paused !important; }
   .bar .back { display: inline-flex; }
   .bar .lbl { display: none; }
   .bar .btn { padding-inline: 10px; }
@@ -972,7 +974,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.13.0";
+  var APP_VERSION = "1.14.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
