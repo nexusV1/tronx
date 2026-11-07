@@ -188,8 +188,13 @@
     eclipse: ["#fff0c0", "#e8b23a", "#5a3a08", "#1a1236", "#030210", "#ffd27a"],
     cristal: ["#f6e6ff", "#b36cf0", "#4a1a8a", "#3a1a7a", "#0a0524", "#f0b0ff"],
     aurora: ["#e0fff6", "#3fd6b6", "#0d5a58", "#0a2a4a", "#020a1a", "#7dffd0"],
-    fenix: ["#fff0c0", "#ff8a2a", "#8a1a08", "#3a0a1a", "#0a0208", "#ffb050"],
-    brujula: ["#fff2cf", "#d1a64a", "#5f4412", "#0e3a4a", "#031018", "#ffe29a"]
+    fenix: ["#ffe6fb", "#d88aff", "#5a2a9a", "#2a0a5a", "#06021a", "#ff9ae8"],
+    brujula: ["#fff2cf", "#d1a64a", "#5f4412", "#0e3a4a", "#031018", "#ffe29a"],
+    sistema: ["#fff3d0", "#ffc04a", "#8a4a0a", "#1a1460", "#05041c", "#ffd27a"],
+    pulsar: ["#e8f8ff", "#5ac8ff", "#1a4a9a", "#0a1a4a", "#020615", "#9fe8ff"],
+    ojo: ["#fff0ff", "#c46cff", "#4a1a8a", "#2a0a4a", "#07020f", "#ff9ad8"],
+    reloj: ["#fff4d0", "#d9a63a", "#6a4a10", "#2a1a3a", "#07040f", "#ffd27a"],
+    satelite: ["#f0f4ff", "#9fb4d6", "#3a4a74", "#0e2a5a", "#030a1c", "#bfe0ff"]
   };
   function badgeDefs() {
     var o = "";
@@ -204,6 +209,12 @@
       '<radialGradient id="tb-nB"><stop offset="0" stop-color="#4ad8ff" stop-opacity=".9"/><stop offset=".6" stop-color="#2a7ad8" stop-opacity=".45"/><stop offset="1" stop-color="#1a3a9a" stop-opacity="0"/></radialGradient>' +
       '<radialGradient id="tb-nC"><stop offset="0" stop-color="#9a6cff" stop-opacity=".95"/><stop offset=".6" stop-color="#5a3ad8" stop-opacity=".5"/><stop offset="1" stop-color="#2a1a8a" stop-opacity="0"/></radialGradient>' +
       '<radialGradient id="tb-nD"><stop offset="0" stop-color="#ffc27a" stop-opacity=".85"/><stop offset=".6" stop-color="#ff7a5a" stop-opacity=".35"/><stop offset="1" stop-color="#a03a5a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="tb-jelly" cx=".5" cy=".3" r=".8"><stop offset="0" stop-color="#ffd6f6" stop-opacity=".95"/><stop offset=".6" stop-color="#c46cff" stop-opacity=".75"/><stop offset="1" stop-color="#6a3aff" stop-opacity=".55"/></radialGradient>' +
+      '<radialGradient id="tb-iris"><stop offset="0" stop-color="#ffe27a"/><stop offset=".35" stop-color="#ff7ad0"/><stop offset=".75" stop-color="#6a3aff"/><stop offset="1" stop-color="#1a0a5a"/></radialGradient>' +
+      '<linearGradient id="tb-pul" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e8fbff" stop-opacity=".95"/><stop offset="1" stop-color="#5ac8ff" stop-opacity="0"/></linearGradient>' +
+      '<linearGradient id="tb-sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a0"/><stop offset="1" stop-color="#e0922a"/></linearGradient>' +
+      '<clipPath id="tb-eye"><path d="M5 32Q32 6 59 32Q32 58 5 32Z"/></clipPath><clipPath id="tb-sun"><circle cx="32" cy="32" r="11"/></clipPath>' +
+      '<clipPath id="tb-hgT"><path d="M20 14H44C44 24 36 28 36 32H28C28 28 20 24 20 14Z"/></clipPath><clipPath id="tb-hgB"><path d="M28 32H36C36 36 44 40 44 50H20C20 40 28 36 28 32Z"/></clipPath>' +
       '<clipPath id="tb-face"><circle cx="32" cy="32" r="25.8"/></clipPath>' +
       '<clipPath id="tb-sat"><circle cx="0" cy="0" r="11"/></clipPath>' +
       '<clipPath id="tb-gem"><path d="M22 20H42L52 31L32 55L12 31Z"/></clipPath>' +
@@ -235,13 +246,16 @@
   function fit(art, sc, tx, ty) { return '<g transform="translate(' + (32 + (tx || 0)) + " " + (32 + (ty || 0)) + ") scale(" + sc + ') translate(-32 -32)">' + art + "</g>"; }
 
   function sEstrella() {
-    var P = "M32 9Q34 30 55 32Q34 34 32 55Q30 34 9 32Q30 30 32 9Z";
-    return '<circle cx="32" cy="32" r="20" fill="url(#tg-glow2)" opacity=".65"/>' +
-      '<g class="k-ring"><circle cx="32" cy="32" r="9" fill="none" stroke="#ffe9a8" stroke-width="1.2"/></g><g class="k-ring r2"><circle cx="32" cy="32" r="9" fill="none" stroke="#ffd2f0" stroke-width="1"/></g>' +
-      '<g class="k-spin-slow"><path d="' + P + '" fill="url(#tg-ray)"/></g>' +
-      '<g class="k-spin-rev"><g transform="translate(32 32) rotate(45) scale(.55) translate(-32 -32)"><path d="' + P + '" fill="url(#tg-star2)" opacity=".9"/></g></g>' +
-      '<circle cx="32" cy="32" r="8.600" fill="url(#tg-sun)"/><circle class="k-beat" cx="32" cy="32" r="4.200" fill="#fffdf2"/>' +
-      spark(14, 16, 2.800, "k-tw t1") + spark(51, 49, 2.400, "k-tw t2") + spark(50, 15, 1.800, "k-tw t3", "#ffe9a8");
+    var P = "M32 4L33.600 30.400L60 32L33.600 33.600L32 60L30.400 33.600L4 32L30.400 30.400Z", sp = "";
+    for (var k = 0; k < 2; k++) { var o = k * 24; sp += '<ellipse cx="' + (22 + o) + '" cy="28" rx="2.400" ry="1.700" fill="#c4561a" opacity=".6"/><ellipse cx="' + (31 + o) + '" cy="37" rx="1.800" ry="1.300" fill="#c4561a" opacity=".55"/><ellipse cx="' + (38 + o) + '" cy="30" rx="1.200" ry=".9" fill="#ffe9a8" opacity=".7"/><ellipse cx="' + (27 + o) + '" cy="33" rx="1" ry=".8" fill="#ffe9a8" opacity=".6"/>'; }
+    return '<circle cx="32" cy="32" r="22" fill="url(#tg-glow2)" opacity=".7"/>' +
+      '<g class="k-spin-slow"><path d="' + P + '" fill="url(#tg-ray)" opacity=".85"/></g>' +
+      '<g class="k-spin-rev"><g transform="translate(32 32) rotate(45) scale(.5) translate(-32 -32)"><path d="' + P + '" fill="url(#tg-star2)" opacity=".8"/></g></g>' +
+      '<g class="k-ring"><circle cx="32" cy="32" r="11" fill="none" stroke="#ffe9a8" stroke-width="1"/></g>' +
+      '<circle cx="32" cy="32" r="11" fill="url(#tg-sun)"/>' +
+      '<g clip-path="url(#tb-sun)"><g class="k-sunsurf">' + sp + '</g></g><circle cx="32" cy="32" r="11" fill="url(#tg-limb2)" opacity=".8"/>' +
+      '<g class="k-tw t1"><path d="M41.500 25Q48 19 45 30" fill="none" stroke="#ff8a2a" stroke-width="1.800" stroke-linecap="round"/></g><g class="k-tw t3"><path d="M22 41Q16 46 19 36" fill="none" stroke="#ff6a1a" stroke-width="1.600" stroke-linecap="round"/></g>' +
+      spark(13, 14, 2.600, "k-tw t1") + spark(52, 51, 2.200, "k-tw t2") + spark(52, 13, 1.600, "k-tw t3", "#ffe9a8");
   }
   function sSaturno() {
     var bands = "", ys = [-8, -4.500, -1, 2.500, 6, 9.500], i;
@@ -310,39 +324,88 @@
       '</g></g>' +
       spark(12, 15, 3, "k-tw t1", "#f6e0ff") + spark(53, 20, 2.400, "k-tw t2") + spark(50, 50, 2.800, "k-tw t3", "#ffd0f6") + spark(14, 48, 1.800, "k-tw t0");
   }
-  function sAurora() {
-    return dots(97, 9, [6, 6, 58, 34], ["#fff", "#cfeaff"]) +
-      '<path class="k-aur a3" d="M8 46C20 34 30 40 40 30C48 38 56 34 60 44V52H8Z" fill="url(#tb-aur3)"/>' +
-      '<path class="k-aur a2" d="M2 44C14 26 24 36 34 22C44 34 52 24 62 42V50H2Z" fill="url(#tb-aur2)"/>' +
-      '<path class="k-aur" d="M4 40C12 18 22 30 30 14C38 28 48 12 60 36V46H4Z" fill="url(#tb-aur1)"/>' +
-      '<path d="M0 64V51L9 43L15 49L25 39L35 50L45 44L55 50L64 46V64Z" fill="#020612"/>' +
-      '<path d="M10 56L13 48L16 56ZM17 58L20 50L23 58ZM44 57L47 49L50 57ZM51 58L54 51L57 58Z" fill="#010409"/>';
-  }
-  function feather(ang, len, w, fill, op) {
-    return '<path transform="rotate(' + ang + ')" d="M0 0C' + f(len * 0.25) + " " + f(-w) + " " + f(len * 0.75) + " " + f(-w * 0.7) + " " + len + " 0C" + f(len * 0.75) + " " + f(w * 0.7) + " " + f(len * 0.25) + " " + f(w) + ' 0 0Z" fill="' + fill + '"' + (op ? ' opacity="' + op + '"' : "") + "/>";
-  }
-  function wingSet() {
-    var o = "", back = [[-172, 21], [-155, 25], [-138, 25], [-120, 22], [-103, 17]], mid = [[-165, 16], [-148, 19], [-131, 19], [-114, 16]], tip = [[-158, 10], [-140, 12], [-122, 11]], i;
-    for (i = 0; i < back.length; i++) o += feather(back[i][0], back[i][1], 3.4, "#c8260f");
-    for (i = 0; i < mid.length; i++) o += feather(mid[i][0], mid[i][1], 3, "#ff6a1f");
-    for (i = 0; i < tip.length; i++) o += feather(tip[i][0], tip[i][1], 2.4, "#ffc23a");
+  function auraRays() {
+    var o = "", sd = rnd(55), i;
+    for (i = 0; i < 16; i++) { var x = 6 + i * 3.6 + sd() * 1.5, h = 14 + sd() * 18; o += '<path d="M' + f(x) + " 46V" + f(46 - h) + '" stroke="#7dffc8" stroke-width="' + f(0.6 + sd() * 0.9) + '" stroke-linecap="round" opacity="' + f(0.35 + sd() * 0.45) + '"/>'; }
     return o;
   }
-  function sFenix() {
-    var wing = '<g class="k-flap"><g transform="translate(30 31)">' + wingSet() + "</g></g>";
-    return '<circle cx="32" cy="32" r="21" fill="url(#tg-glow2)" opacity=".55"/>' +
-      '<g class="k-float"><g transform="translate(32 33.500) scale(.88) translate(-32 -32)">' +
-      wing + '<g transform="translate(64 0) scale(-1 1)">' + wing + "</g>" +
-      '<g class="k-flick">' +
-      '<path d="M32 40C27 47 25 54 20 61C27 57 30 55 32 51C34 55 37 57 44 61C39 54 37 47 32 40Z" fill="#c8260f"/>' +
-      '<path d="M32 40C29 47 28 53 25 60C29 57 31 55 32 52C33 55 35 57 39 60C36 53 35 47 32 40Z" fill="url(#tb-fire)"/>' +
-      '<path d="M32 44C31 50 31 55 32 61C33 55 33 50 32 44Z" fill="#fff2a0"/></g>' +
-      '<path d="M32 17C37 22 38 32 36 40C35 45 33.500 47 32 48C30.500 47 29 45 28 40C26 32 27 22 32 17Z" fill="url(#tb-fire)"/>' +
-      '<path d="M32 26C34 30 34 36 32 42C30 36 30 30 32 26Z" fill="#fff6c0" opacity=".85"/>' +
-      '<path d="M32 12C29.500 8 30 5 32.500 2.500C33 6 35.500 8 33.500 12Z" fill="#ffd45a"/><path d="M28.500 14C25 11 24 8 25 5C27.500 7 29.500 9 30 12Z" fill="#ff8a2a"/>' +
-      '<circle cx="32" cy="17.500" r="4.200" fill="#ffe27a"/><path d="M34.500 17.200L39.500 19L34.500 21Z" fill="#ff6a1f"/><circle cx="33.200" cy="16.800" r=".8" fill="#3a0a1a"/>' +
-      "</g></g>" +
-      '<g class="k-ember e1"><circle cx="22" cy="50" r="1.100" fill="#ffd45a"/></g><g class="k-ember e2"><circle cx="42" cy="49" r="1" fill="#ff9a3a"/></g><g class="k-ember e3"><circle cx="32" cy="55" r=".9" fill="#fff2a0"/></g><g class="k-ember e4"><circle cx="48" cy="42" r=".8" fill="#ffb02e"/></g>';
+  function sAurora() {
+    return dots(97, 9, [6, 6, 58, 34], ["#fff", "#cfeaff"]) +
+      '<path class="k-aur a3" opacity=".8" d="M8 46C20 34 30 40 40 30C48 38 56 34 60 44V52H8Z" fill="url(#tb-aur3)"/>' +
+      '<path class="k-aur a2" opacity=".8" d="M2 44C14 26 24 36 34 22C44 34 52 24 62 42V50H2Z" fill="url(#tb-aur2)"/>' +
+      '<path class="k-aur" d="M4 40C12 18 22 30 30 14C38 28 48 12 60 36V46H4Z" fill="url(#tb-aur1)"/>' +
+      '<g class="k-aur a2">' + auraRays() + '</g>' +
+      '<path d="M0 64V51L9 43L15 49L25 39L35 50L45 44L55 50L64 46V64Z" fill="#020612"/><path d="M9 43L11 45.500L9 45L7 46ZM25 39L27.500 42L25 41.500L22.500 42.500Z" fill="#cfe6ff" opacity=".8"/>' +
+      '<path d="M10 56L13 48L16 56ZM17 58L20 50L23 58ZM44 57L47 49L50 57ZM51 58L54 51L57 58Z" fill="#010409"/>';
+  }
+  function sMedusa() {
+    var t = "", i, xs = [22, 27, 32, 37, 42], cols = ["#ff9ae8", "#c79bff", "#9fe8ff", "#c79bff", "#ff9ae8"];
+    for (i = 0; i < xs.length; i++) {
+      var x = xs[i], L = 22 + (i % 3) * 3;
+      t += '<g class="k-wave' + (i % 2 ? " w2" : "") + '"><path d="M' + x + " 30C" + (x - 4) + " 36 " + (x + 4) + " 40 " + x + " 45S" + (x - 3) + " " + (50 + (i % 3)) + " " + x + " " + (30 + L) + '" fill="none" stroke="' + cols[i] + '" stroke-width="' + (i === 2 ? 1.800 : 1.300) + '" stroke-linecap="round" opacity=".85"/></g>';
+    }
+    return '<circle cx="32" cy="28" r="22" fill="url(#tg-glow)" opacity=".5"/>' +
+      '<g class="k-float">' + t +
+      '<g class="k-wave"><path d="M28 30C26 38 30 42 27 50M36 30C38 38 34 42 37 50" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2.600" stroke-linecap="round"/></g>' +
+      '<g class="k-swim"><path d="M16 31C15 17 24 8 32 8C40 8 49 17 48 31C44 28 40 30 36.500 27.500C34 30 30 30 27.500 27.500C24 30 20 28 16 31Z" fill="url(#tb-jelly)"/>' +
+      '<path d="M16 31C15 17 24 8 32 8C40 8 49 17 48 31" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".9"/>' +
+      '<path d="M22 15C25 11 29 10 32 10" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.600" stroke-linecap="round"/>' +
+      '<g fill="#fff"><circle cx="27" cy="20" r="1.600" opacity=".7"/><circle cx="36" cy="18" r="1.200" opacity=".6"/><circle cx="32" cy="24" r="1.400" opacity=".7"/><circle cx="40" cy="24" r="1" opacity=".5"/><circle cx="24" cy="25" r="1" opacity=".5"/></g></g>' +
+      '</g>' +
+      '<g class="k-ember e1"><circle cx="14" cy="50" r="1.200" fill="#cfeeff"/></g><g class="k-ember e2"><circle cx="50" cy="46" r="1" fill="#ffd0f6"/></g><g class="k-ember e3"><circle cx="44" cy="54" r=".9" fill="#fff"/></g>' +
+      dots(61, 9, [6, 6, 58, 40], ["#fff", "#e9defe"]);
+  }
+  function sSistema() {
+    return '<circle cx="32" cy="32" r="14" fill="url(#tg-glow2)" opacity=".5"/>' +
+      '<circle cx="32" cy="32" r="9.500" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width=".6"/><circle cx="32" cy="32" r="15.500" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width=".6"/><circle cx="32" cy="32" r="22" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width=".6"/>' +
+      '<g class="k-orbA"><circle cx="32" cy="22.500" r="1.700" fill="#ffb27a"/></g>' +
+      '<g class="k-orbB"><circle cx="32" cy="16.500" r="2.600" fill="#5aa8ff"/><circle cx="30.800" cy="15.600" r="1" fill="#9fe08a" opacity=".8"/></g>' +
+      '<g class="k-orbC"><g transform="translate(32 10)"><ellipse rx="5.600" ry="1.600" transform="rotate(-18)" fill="none" stroke="#ffe2a0" stroke-width="1"/><circle r="2.700" fill="#ffd08a"/></g></g>' +
+      '<circle cx="32" cy="32" r="5.200" fill="url(#tg-sun)"/><circle class="k-beat" cx="32" cy="32" r="2.600" fill="#fffdf2"/>' +
+      dots(71, 9, [5, 5, 59, 59], ["#fff", "#cfe3ff"]);
+  }
+  function sPulsar() {
+    return dots(73, 10, [5, 5, 59, 59], ["#fff", "#cfe9ff"]) +
+      '<g class="k-spin-rev"><ellipse cx="32" cy="32" rx="15" ry="5.500" transform="rotate(55 32 32)" fill="none" stroke="#7fd8ff" stroke-opacity=".4" stroke-width=".8"/><ellipse cx="32" cy="32" rx="15" ry="5.500" transform="rotate(-55 32 32)" fill="none" stroke="#7fd8ff" stroke-opacity=".4" stroke-width=".8"/></g>' +
+      '<g class="k-ring"><circle cx="32" cy="32" r="6" fill="none" stroke="#9fe8ff" stroke-width="1"/></g><g class="k-ring r2"><circle cx="32" cy="32" r="6" fill="none" stroke="#fff" stroke-width=".8"/></g>' +
+      '<g class="k-beamspin"><path d="M32 32L27 2H37Z" fill="url(#tb-pul)"/><path transform="rotate(180 32 32)" d="M32 32L27 2H37Z" fill="url(#tb-pul)"/></g>' +
+      '<circle cx="32" cy="32" r="7" fill="url(#tg-core)"/><circle class="k-beat" cx="32" cy="32" r="3.600" fill="#fff"/>';
+  }
+  function sOjo() {
+    var rays = "", i, a;
+    for (i = 0; i < 28; i++) { a = i * Math.PI / 14; rays += "M" + f(32 + 5 * Math.cos(a)) + " " + f(32 + 5 * Math.sin(a)) + "L" + f(32 + 11 * Math.cos(a)) + " " + f(32 + 11 * Math.sin(a)); }
+    return dots(75, 8, [5, 5, 59, 59], ["#fff", "#ffd9f2"]) +
+      '<g class="k-lid">' +
+      '<path d="M5 32Q32 6 59 32Q32 58 5 32Z" fill="#0b0518"/>' +
+      '<g clip-path="url(#tb-eye)"><g class="k-look"><circle cx="32" cy="32" r="12.500" fill="url(#tb-iris)"/>' +
+      '<g class="k-spin-slow"><path d="' + rays + '" stroke="#fff" stroke-opacity=".45" stroke-width=".6" stroke-linecap="round"/></g>' +
+      '<circle cx="32" cy="32" r="12.500" fill="none" stroke="#2a0a5a" stroke-width="1.200"/><circle cx="32" cy="32" r="5" fill="#04010a"/><circle cx="29.800" cy="29.500" r="1.800" fill="#fff"/><circle cx="34.500" cy="34.500" r=".8" fill="#fff" opacity=".7"/></g></g>' +
+      '<path d="M5 32Q32 6 59 32Q32 58 5 32Z" fill="none" stroke="#ffd2f6" stroke-width="1.200"/></g>' +
+      spark(10, 14, 2.600, "k-tw t1") + spark(54, 50, 2.400, "k-tw t2", "#ffd0f6");
+  }
+  function sReloj() {
+    return '<circle cx="32" cy="32" r="18" fill="url(#tg-glow)" opacity=".35"/>' +
+      '<g class="k-flip">' +
+      '<path d="M20 14H44C44 24 36 28 36 32C36 36 44 40 44 50H20C20 40 28 36 28 32C28 28 20 24 20 14Z" fill="#9fd8ff" fill-opacity=".14" stroke="#cfeeff" stroke-opacity=".8" stroke-width="1"/>' +
+      '<g clip-path="url(#tb-hgT)"><rect class="k-sandT" x="18" y="14" width="28" height="18" fill="url(#tb-sand)"/></g>' +
+      '<g clip-path="url(#tb-hgB)"><rect class="k-sandB" x="18" y="32" width="28" height="18" fill="url(#tb-sand)"/></g>' +
+      '<path class="k-sandline" d="M32 31V49" stroke="#ffd27a" stroke-width="1.100" stroke-dasharray="1.600 2.200" stroke-linecap="round"/>' +
+      '<rect x="16" y="9.500" width="32" height="4.500" rx="2" fill="url(#tb-kite)"/><rect x="16" y="50" width="32" height="4.500" rx="2" fill="url(#tb-kite)"/>' +
+      '<path d="M22 14V50M42 14V50" stroke="#c69a3e" stroke-opacity=".0" stroke-width="1"/>' +
+      '</g>' + spark(12, 20, 2.400, "k-tw t1", "#ffe9a8") + spark(53, 46, 2.200, "k-tw t2") + dots(79, 6, [5, 5, 59, 59], ["#fff", "#ffe9b8"]);
+  }
+  function sSatelite() {
+    var cont = '<path d="M26 27C28 25 31 26 32 28C31 30 28 31 27 33C25 31 25 29 26 27Z" fill="#4cae5a"/><path d="M34 33C37 32 40 34 39 37C37 38 35 37 34 35Z" fill="#4cae5a"/>';
+    return dots(85, 10, [5, 5, 59, 59], ["#fff", "#cfe3ff"]) +
+      '<circle cx="32" cy="32" r="21.500" fill="none" stroke="#bfe0ff" stroke-opacity=".28" stroke-width=".7" stroke-dasharray="1.200 2.400"/>' +
+      '<circle cx="32" cy="32" r="12" fill="url(#tg-atmo)" opacity=".7"/><circle cx="32" cy="32" r="8.800" fill="url(#tg-ocean)"/>' +
+      '<g class="k-spin-slow" style="animation-duration:30s"><g>' + cont + '</g></g>' +
+      '<circle cx="32" cy="32" r="8.800" fill="url(#tg-limb)"/>' +
+      '<g class="k-orbS"><g transform="translate(32 10.500)">' +
+      '<rect x="-9" y="-1.300" width="6.200" height="2.600" fill="#3a7aff" stroke="#bfe0ff" stroke-width=".4"/><rect x="2.800" y="-1.300" width="6.200" height="2.600" fill="#3a7aff" stroke="#bfe0ff" stroke-width=".4"/>' +
+      '<path d="M-7 -1.300V1.300M-5 -1.300V1.300M5 -1.300V1.300M7 -1.300V1.300" stroke="#bfe0ff" stroke-width=".3"/>' +
+      '<rect x="-2.800" y="-2.200" width="5.600" height="4.400" rx="1" fill="url(#tb-kite)"/><path d="M0 -2.200V-4.500" stroke="#fff" stroke-width=".5"/><circle cx="0" cy="-4.800" r=".7" fill="#ff7a6a"/>' +
+      '</g></g>';
   }
   function blob(cx, cy, r, seed, fill, op) {
     var sd = rnd(seed), n = 8, pts = [], i, d = "";
@@ -400,8 +463,13 @@
     { id: "eclipse", n: "Eclipse", svg: badge("eclipse", sEclipse()) },
     { id: "cristal", n: "Cristal", svg: badge("cristal", sCristal()) },
     { id: "aurora", n: "Aurora", svg: badge("aurora", sAurora()) },
-    { id: "fenix", n: "Fénix", svg: badge("fenix", sFenix()) },
-    { id: "brujula", n: "Brújula estelar", svg: badge("brujula", sBrujula()) }
+    { id: "fenix", n: "Medusa estelar", svg: badge("fenix", sMedusa()) }, /* id histórico "fenix": se conserva para no perder el ícono en notas existentes */
+    { id: "brujula", n: "Brújula estelar", svg: badge("brujula", sBrujula()) },
+    { id: "sistema", n: "Sistema solar", svg: badge("sistema", sSistema()) },
+    { id: "pulsar", n: "Púlsar", svg: badge("pulsar", sPulsar()) },
+    { id: "ojo", n: "Ojo cósmico", svg: badge("ojo", sOjo()) },
+    { id: "reloj", n: "Reloj de arena", svg: badge("reloj", sReloj()) },
+    { id: "satelite", n: "Satélite", svg: badge("satelite", sSatelite()) }
   ];
 
   /* Ficha de cada detalle (se ve al mantener pulsado): tipo, descripción, qué hace su animación y un dato */
@@ -420,7 +488,12 @@
     eclipse: { t: "Eclipse total", d: "Cuando la Luna tapa al Sol y solo queda visible su corona.", a: "La corona late, sus rayos giran en sentidos opuestos y el anillo de diamante recorre el borde.", c: "Un eclipse total dura como máximo unos 7 minutos y medio." },
     cristal: { t: "Gema", d: "Un cristal tallado que refracta la luz en sus facetas.", a: "Flota y un destello de luz lo recorre, con chispas alrededor.", c: "Los cristales crecen átomo a átomo, durante miles de años." },
     aurora: { t: "Fenómeno polar", d: "Cortinas de luz verde, turquesa y rosa sobre un paisaje de montañas. Nacen cuando partículas del Sol chocan con la atmósfera.", a: "Las cortinas ondulan y cambian de intensidad.", c: "Las auroras ocurren a unos 100 km de altura." },
-    fenix: { t: "Ave mítica", d: "El ave de fuego que renace de sus cenizas. Simboliza volver a empezar.", a: "Bate las alas de plumas, flota y las llamas de su cola titilan mientras suben brasas.", c: "En la mitología egipcia y griega, el fénix renacía cada 500 años." },
+    fenix: { t: "Criatura del espacio", d: "Una medusa que flota entre estrellas, con su campana translúcida y tentáculos luminosos.", a: "La campana late nadando, los tentáculos ondulan y suben burbujas.", c: "Algunas medusas existen desde hace más de 500 millones de años, antes que los dinosaurios." },
+    sistema: { t: "Sistema planetario", d: "Un sol con tres planetas en órbita: uno rocoso, uno azul con su lunita verde y uno con anillos.", a: "Cada planeta gira a su propia velocidad, más rápido cuanto más cerca del sol.", c: "Mercurio da una vuelta al Sol en 88 días; Neptuno tarda 165 años." },
+    pulsar: { t: "Estrella de neutrones", d: "El núcleo ultradenso de una estrella muerta que gira a toda velocidad y lanza dos haces de luz como un faro.", a: "Los haces barren el espacio, el núcleo late y salen ondas.", c: "Algunos púlsares giran cientos de veces por segundo." },
+    ojo: { t: "Mirada cósmica", d: "Un ojo con un iris hecho de galaxia que observa el universo.", a: "Mira de lado a lado, el iris gira despacio y parpadea de vez en cuando.", c: "Parpadeamos unas 15 veces por minuto." },
+    reloj: { t: "Tiempo", d: "Un reloj de arena dorada: lo que se acaba arriba se acumula abajo.", a: "La arena cae, y al terminar el reloj se da vuelta para empezar de nuevo.", c: "Se usaban en barcos para medir la guardia, porque el vaivén no los afecta." },
+    satelite: { t: "Nave orbital", d: "Un satélite con paneles solares dando vueltas alrededor de la Tierra.", a: "Orbita sin parar mientras la Tierra gira lento debajo.", c: "La Estación Espacial Internacional da una vuelta a la Tierra cada 90 minutos." },
     brujula: { t: "Instrumento", d: "Una rosa de los vientos con aguja magnética que busca el norte.", a: "La aguja oscila hasta asentarse y el aro exterior gira lento.", c: "La aguja apunta al norte magnético, que se desplaza unos 50 km por año." }
   };
   STICKERS.forEach(function (st) { st.info = INFO[st.id] || null; });
@@ -496,6 +569,16 @@
     ".ic.sk.anim .k-flick{transform-box:fill-box;transform-origin:50% 0;animation:tk-flick 1.1s ease-in-out infinite}" +
     ".ic.sk.anim .k-beam{animation:tk-beam 2.6s ease-in-out infinite}" +
     ".ic.sk.anim .k-hover{animation:tk-hover 3.4s ease-in-out infinite}" +
+    ".ic.sk.anim .k-orbA,.ic.sk.anim .k-orbB,.ic.sk.anim .k-orbC,.ic.sk.anim .k-orbS,.ic.sk.anim .k-beamspin,.ic.sk.anim .k-flip{transform-box:view-box;transform-origin:32px 32px}" +
+    ".ic.sk.anim .k-orbA{animation:tk-spin 7s linear infinite}.ic.sk.anim .k-orbB{animation:tk-spin 13s linear infinite}.ic.sk.anim .k-orbC{animation:tk-spin 24s linear infinite}.ic.sk.anim .k-orbS{animation:tk-spin 9s linear infinite}" +
+    ".ic.sk.anim .k-beamspin{animation:tk-spin 5s linear infinite}" +
+    ".ic.sk.anim .k-wave{transform-box:fill-box;transform-origin:50% 0;animation:tk-wave 3s ease-in-out infinite alternate}.ic.sk.anim .k-wave.w2{animation-delay:-1.500s}" +
+    ".ic.sk.anim .k-swim{transform-box:fill-box;transform-origin:50% 0;animation:tk-swim 2.600s ease-in-out infinite}" +
+    ".ic.sk.anim .k-lid{transform-box:fill-box;transform-origin:50% 50%;animation:tk-lid 6s ease-in-out infinite}.ic.sk.anim .k-look{animation:tk-look 7s ease-in-out infinite alternate}" +
+    ".ic.sk.anim .k-sunsurf{animation:tk-sunsurf 16s linear infinite}" +
+    ".ic.sk.anim .k-flip{animation:tk-flip 10s ease-in-out infinite}" +
+    ".ic.sk.anim .k-sandT{transform-box:fill-box;transform-origin:50% 100%;animation:tk-sandT 10s linear infinite}.ic.sk.anim .k-sandB{transform-box:fill-box;transform-origin:50% 100%;animation:tk-sandB 10s linear infinite}" +
+    ".ic.sk.anim .k-sandline{animation:tk-dash 1s linear infinite,tk-sandl 10s linear infinite}" +
     ".ic.sk.anim .k-band{animation:tk-band 16s linear infinite}" +
     ".ic.sk.anim .k-orb{transform-box:fill-box;transform-origin:center;animation:tk-spin 2.6s linear infinite}.ic.sk.anim .k-pulse,.ic.sk.anim .k-beat,.ic.sk.anim .k-tw,.ic.sk.anim .k-float,.ic.sk.anim .k-sway,.ic.sk.anim .k-hover,.ic.sk.anim .k-fly,.ic.sk.anim .k-d1,.ic.sk.anim .k-d2,.ic.sk.anim .k-d3{transform-box:fill-box;transform-origin:center}" +
     ".ic.sk.anim .k-spin{animation:tk-spin 26s linear infinite}" +
@@ -530,6 +613,15 @@
     "@keyframes tk-flick{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.07)}}" +
     "@keyframes tk-beam{0%,100%{opacity:.55}50%{opacity:1}}" +
     "@keyframes tk-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.600px)}}" +
+    "@keyframes tk-wave{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}" +
+    "@keyframes tk-swim{0%,100%{transform:scale(1.04,.94)}50%{transform:scale(.96,1.06)}}" +
+    "@keyframes tk-lid{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.06)}}" +
+    "@keyframes tk-look{from{transform:translateX(-4px)}to{transform:translateX(4px)}}" +
+    "@keyframes tk-sunsurf{from{transform:translateX(0)}to{transform:translateX(-24px)}}" +
+    "@keyframes tk-flip{0%,86%{transform:rotate(0)}98%,100%{transform:rotate(180deg)}}" +
+    "@keyframes tk-sandT{0%{transform:scaleY(1)}86%,100%{transform:scaleY(0)}}" +
+    "@keyframes tk-sandB{0%{transform:scaleY(0)}86%,100%{transform:scaleY(1)}}" +
+    "@keyframes tk-sandl{0%,84%{opacity:1}88%,100%{opacity:0}}" +
     "@keyframes tk-spin{to{transform:rotate(360deg)}}" +
     "@keyframes tk-spin-r{to{transform:rotate(-360deg)}}" +
     "@keyframes tk-ring{0%{transform:scale(.7);opacity:.75}100%{transform:scale(2.7);opacity:0}}" +

@@ -1055,7 +1055,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.22.1";
+  var APP_VERSION = "1.23.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1922,15 +1922,15 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       if (window.IntersectionObserver) {
         if (stkIO) stkIO.disconnect();
         var bts = g.querySelectorAll("button"), vis = new Set(), win = 0;
-        /* anima sólo una tanda de 8 insignias visibles y la va rotando: mitad de costo, se ve igual de vivo */
+        /* anima sólo una tanda de 6 insignias visibles y la va rotando: mitad de costo, se ve igual de vivo */
         var apply = function () {
           var list = [].filter.call(bts, function (x) { return vis.has(x); }), n = list.length, on = new Set();
-          for (var i = 0; i < Math.min(8, n); i++) on.add(list[(win + i) % n]);
+          for (var i = 0; i < Math.min(6, n); i++) on.add(list[(win + i) % n]);
           [].forEach.call(bts, function (x) { x.classList.toggle("off", !on.has(x)); });
         };
         stkIO = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) vis.add(e.target); else vis.delete(e.target); }); apply(); }, { rootMargin: "40px" });
         [].forEach.call(bts, function (bt) { stkIO.observe(bt); });
-        clearInterval(stkTimer); stkTimer = setInterval(function () { win += 4; apply(); }, 3000);
+        clearInterval(stkTimer); stkTimer = setInterval(function () { win += 3; apply(); }, 3000);
       }
       var hint = el("p", "hintlp"); hint.textContent = "Mantené pulsada una insignia para ver su información."; body.appendChild(hint);
     } else {
@@ -2209,6 +2209,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.23.0", d: "7 nov 2026", t: "5 insignias nuevas", l: ["Nuevas: Sistema solar, Púlsar, Ojo cósmico, Reloj de arena y Satélite. Ya son 21 insignias.", "El Fénix se reemplazó por la Medusa estelar.", "Estrella y Aurora mejoradas: la estrella tiene puntas finas, manchas y protuberancias; la aurora tiene cortinas de rayos de luz.", "Tus insignias elegidas se conservan (si usabas el Fénix, ahora verás la Medusa)."] },
     { v: "1.22.1", d: "7 nov 2026", t: "Fénix y Nebulosa nuevos", l: ["Fénix rediseñado: alas de plumas de fuego, cresta, cola en llamas y brasas que suben.", "Nebulosa rediseñada: nubes de colores que giran en sentidos opuestos, banda de polvo oscuro y cúmulo brillante."] },
     { v: "1.22.0", d: "7 nov 2026", t: "Insignias detalladas", l: ["Los Detalles pasan a llamarse Insignias detalladas y se rediseñaron desde cero como medallones: aro metálico, cara de cristal y gema.", "16 insignias, cada una con su escena y animaciones propias. Nuevas: Cohete, Ovni, Constelación, Eclipse, Cristal, Aurora, Fénix y Brújula estelar.", "Más fluido: cada insignia anima pocas piezas y se pausa cuando no se ve.", "Tus insignias anteriores se conservan."] },
     { v: "1.21.0", d: "7 nov 2026", t: "Segunda fila de Detalles", l: ["Nebulosa con pilares de polvo, Luna con fases y cráteres, Agujero negro con disco que gira y Cometa con dos colas y partículas, cada uno con animaciones propias.", "Luna cósmica ahora se llama Luna.", "Más fluido: el selector pausa las animaciones que no se ven."] },
