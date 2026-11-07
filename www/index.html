@@ -382,6 +382,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .dfacts p { margin: 2px 0 0; font-size: 13.5px; line-height: 1.4; }
 .dacts { display: flex; gap: 8px; margin-top: 14px; }
 .dacts .btn { flex: 1; }
+.list .ic.sk.idle *, body.scrolling .list .ic.sk * { animation-play-state: paused !important; }
 .igrid.stk button.off .ic *, body.dopen .igrid.stk .ic * { animation-play-state: paused !important; }
 .igrid.stk button { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
 .hintlp { margin: 10px 2px 0; font-size: 12px; color: var(--muted); text-align: center; }
@@ -1055,7 +1056,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.23.2";
+  var APP_VERSION = "1.23.3";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1431,13 +1432,32 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   };
   /* Los stickers de las tarjetas solo se animan mientras se ven en pantalla (ahorra batería).
      Un único observador para toda la vida de la app; las tarjetas nuevas se agregan al vuelo. */
-  var iconIO = null, preIO = null;
+  /* mientras se desplaza la lista se congelan las animaciones de las tarjetas y vuelven al soltar */
+  (function () {
+    var t = 0;
+    document.addEventListener("scroll", function (e) {
+      if (!e.target || !e.target.closest || !e.target.closest(".list, #list, .app")) { if (e.target !== document) return; }
+      if (!document.body.classList.contains("scrolling")) document.body.classList.add("scrolling");
+      clearTimeout(t); t = setTimeout(function () { document.body.classList.remove("scrolling"); }, 160);
+    }, { capture: true, passive: true });
+  })();
+  var iconIO = null, preIO = null, iconTimer = 0, iconWin = 0, visIcons = new Set();
+  function applyIconWin() {
+    var list = Array.from(visIcons), n = list.length;
+    if (!n) return;
+    var on = new Set();
+    for (var i = 0; i < Math.min(4, n); i++) on.add(list[(iconWin + i) % n]);
+    list.forEach(function (e) { e.classList.toggle("idle", !on.has(e)); });
+  }
   function watchIcon(e) {
     if (!("IntersectionObserver" in window)) { upgradeIcon(e); e.classList.add("anim"); return; }
     if (!iconIO) {
+      /* de los iconos a la vista solo se mueven 4 a la vez (van rotando): igual de vivo, mucho menos trabajo */
       iconIO = new IntersectionObserver(function (es) {
-        es.forEach(function (x) { x.target.classList.toggle("anim", x.isIntersecting); });
+        es.forEach(function (x) { x.target.classList.toggle("anim", x.isIntersecting); if (x.isIntersecting) visIcons.add(x.target); else { visIcons.delete(x.target); x.target.classList.remove("idle"); } });
+        applyIconWin();
       }, { rootMargin: "40px" });
+      if (!iconTimer) iconTimer = setInterval(function () { iconWin += 2; applyIconWin(); }, 3000);
       /* el sticker pasa a su versión animada un poco antes de entrar, así el scroll no paga ese costo */
       preIO = new IntersectionObserver(function (es) {
         es.forEach(function (x) { if (x.isIntersecting) { upgradeIcon(x.target); preIO.unobserve(x.target); } });
@@ -2209,6 +2229,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.23.3", d: "7 nov 2026", t: "Lista más fluida", l: ["Las insignias de las tarjetas se mueven de a 4 a la vez y se congelan mientras te desplazás, así la lista vuelve a ser tan fluida como antes."] },
     { v: "1.23.2", d: "7 nov 2026", t: "Brújula más limpia", l: ["La brújula ahora usa el borde del medallón como aro: se quitaron los círculos extra que la hacían parecer dos brújulas en una."] },
     { v: "1.23.1", d: "7 nov 2026", t: "Brújula mejorada", l: ["Brújula estelar rediseñada: aro de latón con grados, letras N E S O, rosa de los vientos con facetas en luz y sombra, y aguja roja y blanca que oscila hasta asentarse."] },
     { v: "1.23.0", d: "7 nov 2026", t: "5 insignias nuevas", l: ["Nuevas: Sistema solar, Púlsar, Ojo cósmico, Reloj de arena y Satélite. Ya son 21 insignias.", "El Fénix se reemplazó por la Medusa estelar.", "Estrella y Aurora mejoradas: la estrella tiene puntas finas, manchas y protuberancias; la aurora tiene cortinas de rayos de luz.", "Tus insignias elegidas se conservan (si usabas el Fénix, ahora verás la Medusa)."] },
