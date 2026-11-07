@@ -1055,7 +1055,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.23.0";
+  var APP_VERSION = "1.23.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2209,6 +2209,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.23.1", d: "7 nov 2026", t: "Brújula mejorada", l: ["Brújula estelar rediseñada: aro de latón con grados, letras N E S O, rosa de los vientos con facetas en luz y sombra, y aguja roja y blanca que oscila hasta asentarse."] },
     { v: "1.23.0", d: "7 nov 2026", t: "5 insignias nuevas", l: ["Nuevas: Sistema solar, Púlsar, Ojo cósmico, Reloj de arena y Satélite. Ya son 21 insignias.", "El Fénix se reemplazó por la Medusa estelar.", "Estrella y Aurora mejoradas: la estrella tiene puntas finas, manchas y protuberancias; la aurora tiene cortinas de rayos de luz.", "Tus insignias elegidas se conservan (si usabas el Fénix, ahora verás la Medusa)."] },
     { v: "1.22.1", d: "7 nov 2026", t: "Fénix y Nebulosa nuevos", l: ["Fénix rediseñado: alas de plumas de fuego, cresta, cola en llamas y brasas que suben.", "Nebulosa rediseñada: nubes de colores que giran en sentidos opuestos, banda de polvo oscuro y cúmulo brillante."] },
     { v: "1.22.0", d: "7 nov 2026", t: "Insignias detalladas", l: ["Los Detalles pasan a llamarse Insignias detalladas y se rediseñaron desde cero como medallones: aro metálico, cara de cristal y gema.", "16 insignias, cada una con su escena y animaciones propias. Nuevas: Cohete, Ovni, Constelación, Eclipse, Cristal, Aurora, Fénix y Brújula estelar.", "Más fluido: cada insignia anima pocas piezas y se pausa cuando no se ve.", "Tus insignias anteriores se conservan."] },

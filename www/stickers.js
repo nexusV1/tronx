@@ -426,16 +426,24 @@
       dots(31, 18, [4, 4, 60, 60], ["#fff", "#e9defe", "#bfe6ff"]) + spark(51, 13, 2.600, "k-tw t2") + spark(12, 52, 2, "k-tw t3", "#ffd0f0");
   }
   function sBrujula() {
-    var tk = "", i, a, rose = "";
-    for (i = 0; i < 24; i++) { a = i * Math.PI / 12; var r0 = i % 6 === 0 ? 17.5 : 19.2; tk += "M" + f(32 + r0 * Math.cos(a)) + " " + f(32 + r0 * Math.sin(a)) + "L" + f(32 + 21 * Math.cos(a)) + " " + f(32 + 21 * Math.sin(a)); }
-    for (i = 0; i < 4; i++) rose += '<path transform="rotate(' + i * 90 + ' 32 32)" d="M32 9L35.500 29L32 32L28.500 29Z" fill="' + (i === 0 ? "#ff5a4a" : "url(#tb-kite)") + '"/>';
-    for (i = 0; i < 4; i++) rose += '<path transform="rotate(' + (45 + i * 90) + ' 32 32)" d="M32 15L34 29L32 32L30 29Z" fill="#c69a3e" opacity=".85"/>';
-    return '<circle cx="32" cy="32" r="22.500" fill="none" stroke="#ffe29a" stroke-opacity=".7" stroke-width=".9"/>' +
-      '<g class="k-spin-rev"><circle cx="32" cy="32" r="24" fill="none" stroke="#9fe8ff" stroke-opacity=".5" stroke-width=".8" stroke-dasharray="1 4"/></g>' +
-      '<path d="' + tk + '" stroke="#ffe29a" stroke-opacity=".8" stroke-width=".8" stroke-linecap="round"/>' + rose +
-      '<g class="k-needle"><path d="M32 13L34.600 32H29.400Z" fill="#ff4a3a"/><path d="M32 51L34.600 32H29.400Z" fill="#f4f6ff"/></g>' +
-      '<circle cx="32" cy="32" r="3" fill="url(#tb-kite)"/><circle cx="32" cy="32" r="1.200" fill="#0a2430"/>' +
-      '<g class="k-tw t2"><circle cx="19" cy="19" r="1" fill="#fff"/></g>';
+    var tk = "", rose = "", i, a, r0, r1;
+    for (i = 0; i < 72; i++) { a = i * Math.PI / 36; r0 = i % 18 === 0 ? 20.2 : i % 6 === 0 ? 21 : 21.9; r1 = 23; tk += "M" + f(32 + r0 * Math.cos(a)) + " " + f(32 + r0 * Math.sin(a)) + "L" + f(32 + r1 * Math.cos(a)) + " " + f(32 + r1 * Math.sin(a)); }
+    var main = [[0, "#ff8a78", "#b82a1e"], [90, "#fff0c0", "#b8862e"], [180, "#fff0c0", "#b8862e"], [270, "#fff0c0", "#b8862e"]];
+    for (i = 0; i < 4; i++) rose += '<g transform="rotate(' + (45 + i * 90) + ' 32 32)"><path d="M32 20L33.600 29.500L32 32Z" fill="#e8d9b0"/><path d="M32 20L30.400 29.500L32 32Z" fill="#8a7040"/></g>';
+    for (i = 0; i < 4; i++) rose += '<g transform="rotate(' + main[i][0] + ' 32 32)"><path d="M32 14.500L35.600 28.400L32 32Z" fill="' + main[i][1] + '"/><path d="M32 14.500L28.400 28.400L32 32Z" fill="' + main[i][2] + '"/></g>';
+    var L = '<g fill="none" stroke="#ffe29a" stroke-width=".7" stroke-linecap="round" stroke-linejoin="round">' +
+      '<g transform="translate(32 10.600)" stroke="#ff6a5a"><path d="M-1.300 1.800V-1.800L1.300 1.800V-1.800"/></g>' +
+      '<g transform="translate(53.400 32)"><path d="M1 -1.800H-1V1.800H1M-1 0H.8"/></g>' +
+      '<g transform="translate(32 53.400)"><path d="M1.200 -1.300C1 -1.900 -1.200 -1.900 -1.200 -.7C-1.200 .3 1.200 0 1.200 1C1.200 2 -.9 2 -1.200 1.400"/></g>' +
+      '<g transform="translate(10.600 32)"><path d="M-1.700 -1.800L-.8 1.800L0 -.4L.8 1.800L1.700 -1.800"/></g></g>';
+    return '<circle cx="32" cy="32" r="17" fill="url(#tg-glow)" opacity=".28"/>' +
+      '<circle cx="32" cy="32" r="23.600" fill="none" stroke="#ffe29a" stroke-opacity=".75" stroke-width=".8"/><circle cx="32" cy="32" r="19.400" fill="none" stroke="#ffe29a" stroke-opacity=".28" stroke-width=".6"/>' +
+      '<path d="' + tk + '" stroke="#ffe29a" stroke-opacity=".8" stroke-width=".6" stroke-linecap="round"/>' +
+      '<g class="k-spin-rev"><circle cx="32" cy="32" r="16.200" fill="none" stroke="#9fe8ff" stroke-opacity=".4" stroke-width=".7" stroke-dasharray="1 3.200"/></g>' +
+      L + rose +
+      '<g class="k-needle"><path d="M32 16.500L34.800 32H29.200Z" fill="#ff4a3a"/><path d="M32 16.500L32 32H29.200Z" fill="#c82a1e"/><path d="M32 47.500L34.800 32H29.200Z" fill="#f4f6ff"/><path d="M32 47.500L32 32H29.200Z" fill="#aeb8d6"/></g>' +
+      '<circle cx="32" cy="32" r="3.400" fill="url(#tb-kite)" stroke="#7a5a1c" stroke-width=".5"/><circle cx="32" cy="32" r="1.400" fill="#0a2430"/><circle cx="31.300" cy="31.300" r=".5" fill="#fff" opacity=".9"/>' +
+      '<g class="k-tw t2"><circle cx="20" cy="18" r=".9" fill="#fff"/></g>';
   }
   function sLuna() {
     return dots(41, 7, [6, 6, 58, 58], ["#fff", "#dfe6ff"]) + '<circle cx="32" cy="32" r="22" fill="url(#tg-glow)" opacity=".4"/>' +
