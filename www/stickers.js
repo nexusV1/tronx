@@ -149,17 +149,6 @@
   }
 
   var OLD = [
-    { id: "nebulosa", n: "Nebulosa", svg:
-      '<g class="k-d1"><ellipse cx="22" cy="28" rx="22" ry="17" fill="url(#tg-nb1)"/></g>' +
-      '<g class="k-d2"><ellipse cx="43" cy="24" rx="21" ry="15" fill="url(#tg-nb2)"/></g>' +
-      '<g class="k-d3"><ellipse cx="36" cy="43" rx="23" ry="14" fill="url(#tg-nb3)"/></g>' +
-      '<g class="k-d2"><ellipse cx="12" cy="47" rx="13" ry="9" fill="url(#tg-nb4)"/></g>' +
-      '<g class="k-pil"><path d="M11 63Q12 46 15 38Q16 31 19.500 31Q22 33 22.500 38Q25 44 27 63Z" fill="#12082e" opacity=".7"/><path d="M15 38Q16 31 19.500 31Q22 33 22.500 38" fill="none" stroke="#ff9fd8" stroke-width="1.300" stroke-linecap="round" opacity=".7"/></g>' +
-      '<g class="k-pil p2"><path d="M34 63Q35 50 38 44Q39 39 42 39.500Q44 42 44.500 46Q46 52 46 63Z" fill="#12082e" opacity=".62"/><path d="M38 44Q39 39 42 39.500Q44 42 44.500 46" fill="none" stroke="#8fe2ff" stroke-width="1.100" stroke-linecap="round" opacity=".7"/></g>' +
-      '<ellipse cx="32" cy="36" rx="27" ry="4.200" transform="rotate(-24 32 36)" fill="url(#tg-dust)" opacity=".8"/>' +
-      '<circle class="k-pulse" cx="32" cy="22" r="11" fill="url(#tg-core)" opacity=".85"/><circle cx="32" cy="22" r="2.600" fill="#fff"/>' +
-      '<g class="k-tw t0"><circle cx="19.500" cy="29" r="1.800" fill="#fff"/></g><g class="k-tw t2"><circle cx="42" cy="37.500" r="1.600" fill="#cfeeff"/></g><g class="k-tw t1"><circle cx="50" cy="16" r="1.400" fill="#ffd9f2"/></g>' +
-      dots(31, 14, [3, 3, 61, 61], ["#fff", "#e9defe", "#bfe6ff"]) + spark(52, 12, 2.800, "k-tw t2") + spark(11, 14, 2, "k-tw t3", "#bfe6ff") },
     { id: "agujero", n: "Agujero negro", svg:
       '<circle class="k-pulse" cx="32" cy="32" r="28" fill="url(#tg-glow)" opacity=".42"/>' +
       '<g transform="translate(32 32)"><circle r="17.500" fill="none" stroke="url(#tg-disk)" stroke-width="3.400" opacity=".55" transform="scale(1 .9)"/>' +
@@ -211,6 +200,10 @@
            '<radialGradient id="tb-gem-' + id + '" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="' + c[5] + '"/><stop offset="1" stop-color="' + c[2] + '"/></radialGradient>';
     }
     return o +
+      '<radialGradient id="tb-nA"><stop offset="0" stop-color="#ff6ad5" stop-opacity=".95"/><stop offset=".6" stop-color="#c03aa8" stop-opacity=".5"/><stop offset="1" stop-color="#7a1f66" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="tb-nB"><stop offset="0" stop-color="#4ad8ff" stop-opacity=".9"/><stop offset=".6" stop-color="#2a7ad8" stop-opacity=".45"/><stop offset="1" stop-color="#1a3a9a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="tb-nC"><stop offset="0" stop-color="#9a6cff" stop-opacity=".95"/><stop offset=".6" stop-color="#5a3ad8" stop-opacity=".5"/><stop offset="1" stop-color="#2a1a8a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="tb-nD"><stop offset="0" stop-color="#ffc27a" stop-opacity=".85"/><stop offset=".6" stop-color="#ff7a5a" stop-opacity=".35"/><stop offset="1" stop-color="#a03a5a" stop-opacity="0"/></radialGradient>' +
       '<clipPath id="tb-face"><circle cx="32" cy="32" r="25.8"/></clipPath>' +
       '<clipPath id="tb-sat"><circle cx="0" cy="0" r="11"/></clipPath>' +
       '<clipPath id="tb-gem"><path d="M22 20H42L52 31L32 55L12 31Z"/></clipPath>' +
@@ -325,16 +318,49 @@
       '<path d="M0 64V51L9 43L15 49L25 39L35 50L45 44L55 50L64 46V64Z" fill="#020612"/>' +
       '<path d="M10 56L13 48L16 56ZM17 58L20 50L23 58ZM44 57L47 49L50 57ZM51 58L54 51L57 58Z" fill="#010409"/>';
   }
+  function feather(ang, len, w, fill, op) {
+    return '<path transform="rotate(' + ang + ')" d="M0 0C' + f(len * 0.25) + " " + f(-w) + " " + f(len * 0.75) + " " + f(-w * 0.7) + " " + len + " 0C" + f(len * 0.75) + " " + f(w * 0.7) + " " + f(len * 0.25) + " " + f(w) + ' 0 0Z" fill="' + fill + '"' + (op ? ' opacity="' + op + '"' : "") + "/>";
+  }
+  function wingSet() {
+    var o = "", back = [[-172, 21], [-155, 25], [-138, 25], [-120, 22], [-103, 17]], mid = [[-165, 16], [-148, 19], [-131, 19], [-114, 16]], tip = [[-158, 10], [-140, 12], [-122, 11]], i;
+    for (i = 0; i < back.length; i++) o += feather(back[i][0], back[i][1], 3.4, "#c8260f");
+    for (i = 0; i < mid.length; i++) o += feather(mid[i][0], mid[i][1], 3, "#ff6a1f");
+    for (i = 0; i < tip.length; i++) o += feather(tip[i][0], tip[i][1], 2.4, "#ffc23a");
+    return o;
+  }
   function sFenix() {
-    var wing = '<g class="k-flap"><path d="M31 31C22 29 15 22 10 10C9 22 14 32 24 38C27 40 30 40 31 40Z" fill="url(#tb-wing)"/><path d="M31 34C24 33 19 29 15 22C16 30 21 36 29 39Z" fill="#ffd45a" opacity=".9"/></g>';
-    return '<circle class="k-pulse" cx="32" cy="34" r="19" fill="url(#tg-glow2)" opacity=".5"/>' +
-      '<g class="k-float">' + fit(
-        wing + '<g transform="translate(64 0) scale(-1 1)">' + wing + "</g>" +
-        '<g class="k-flick"><path d="M32 44C26 50 22 54 20 60C27 57 31 52 32 50C33 52 37 57 44 60C42 54 38 50 32 44Z" fill="url(#tb-fire)"/><path d="M32 48C31 53 31 56 32 60C33 56 33 53 32 48Z" fill="#fff2a0"/></g>' +
-        '<path d="M32 17C36 22 37 31 36 38C35 46 33 52 32 58C31 52 29 46 28 38C27 31 28 22 32 17Z" fill="url(#tb-fire)"/>' +
-        '<path d="M32 13C30 9 31 6 33 4C33.500 7 35 9 32 13Z" fill="#ffe27a"/><circle cx="32" cy="17.500" r="3.800" fill="#ffe27a"/><path d="M34.500 17L38.500 18.500L34.500 20Z" fill="#ff7a2a"/><circle cx="33.300" cy="16.800" r=".7" fill="#3a0a1a"/>',
-        0.82, 0, 1) + "</g>" +
-      '<g class="k-ember e1"><circle cx="24" cy="50" r="1.100" fill="#ffd45a"/></g><g class="k-ember e2"><circle cx="40" cy="49" r="1" fill="#ff9a3a"/></g><g class="k-ember e3"><circle cx="32" cy="52" r=".9" fill="#fff2a0"/></g><g class="k-ember e4"><circle cx="46" cy="42" r=".8" fill="#ffb02e"/></g>';
+    var wing = '<g class="k-flap"><g transform="translate(30 31)">' + wingSet() + "</g></g>";
+    return '<circle cx="32" cy="32" r="21" fill="url(#tg-glow2)" opacity=".55"/>' +
+      '<g class="k-float"><g transform="translate(32 33.500) scale(.88) translate(-32 -32)">' +
+      wing + '<g transform="translate(64 0) scale(-1 1)">' + wing + "</g>" +
+      '<g class="k-flick">' +
+      '<path d="M32 40C27 47 25 54 20 61C27 57 30 55 32 51C34 55 37 57 44 61C39 54 37 47 32 40Z" fill="#c8260f"/>' +
+      '<path d="M32 40C29 47 28 53 25 60C29 57 31 55 32 52C33 55 35 57 39 60C36 53 35 47 32 40Z" fill="url(#tb-fire)"/>' +
+      '<path d="M32 44C31 50 31 55 32 61C33 55 33 50 32 44Z" fill="#fff2a0"/></g>' +
+      '<path d="M32 17C37 22 38 32 36 40C35 45 33.500 47 32 48C30.500 47 29 45 28 40C26 32 27 22 32 17Z" fill="url(#tb-fire)"/>' +
+      '<path d="M32 26C34 30 34 36 32 42C30 36 30 30 32 26Z" fill="#fff6c0" opacity=".85"/>' +
+      '<path d="M32 12C29.500 8 30 5 32.500 2.500C33 6 35.500 8 33.500 12Z" fill="#ffd45a"/><path d="M28.500 14C25 11 24 8 25 5C27.500 7 29.500 9 30 12Z" fill="#ff8a2a"/>' +
+      '<circle cx="32" cy="17.500" r="4.200" fill="#ffe27a"/><path d="M34.500 17.200L39.500 19L34.500 21Z" fill="#ff6a1f"/><circle cx="33.200" cy="16.800" r=".8" fill="#3a0a1a"/>' +
+      "</g></g>" +
+      '<g class="k-ember e1"><circle cx="22" cy="50" r="1.100" fill="#ffd45a"/></g><g class="k-ember e2"><circle cx="42" cy="49" r="1" fill="#ff9a3a"/></g><g class="k-ember e3"><circle cx="32" cy="55" r=".9" fill="#fff2a0"/></g><g class="k-ember e4"><circle cx="48" cy="42" r=".8" fill="#ffb02e"/></g>';
+  }
+  function blob(cx, cy, r, seed, fill, op) {
+    var sd = rnd(seed), n = 8, pts = [], i, d = "";
+    for (i = 0; i < n; i++) { var a = i * 2 * Math.PI / n, rr = r * (0.72 + sd() * 0.5); pts.push([cx + rr * Math.cos(a), cy + rr * Math.sin(a) * 0.82]); }
+    d = "M" + f((pts[0][0] + pts[n - 1][0]) / 2) + " " + f((pts[0][1] + pts[n - 1][1]) / 2);
+    for (i = 0; i < n; i++) { var nx = pts[(i + 1) % n]; d += "Q" + f(pts[i][0]) + " " + f(pts[i][1]) + " " + f((pts[i][0] + nx[0]) / 2) + " " + f((pts[i][1] + nx[1]) / 2); }
+    return '<path d="' + d + 'Z" fill="url(#' + fill + ')" opacity="' + op + '"/>';
+  }
+  function sNebulosa() {
+    return '<g class="k-spin-slow">' +
+      blob(24, 22, 17, 3, "tb-nC", 0.9) + blob(42, 40, 18, 5, "tb-nA", 0.85) + blob(40, 20, 13, 8, "tb-nB", 0.8) + blob(20, 44, 13, 11, "tb-nB", 0.75) +
+      '<path d="M6 40C20 34 30 38 44 28S58 20 62 22" fill="none" stroke="#080320" stroke-opacity=".6" stroke-width="3.600" stroke-linecap="round"/>' +
+      '</g><g class="k-spin-rev">' + blob(32, 32, 14, 14, "tb-nD", 0.7) + blob(46, 28, 9, 17, "tb-nA", 0.6) + blob(18, 30, 9, 21, "tb-nC", 0.6) + "</g>" +
+      '<circle class="k-pulse" cx="32" cy="32" r="9" fill="url(#tg-core)" opacity=".9"/>' +
+      '<g class="k-tw t1"><path d="M32 22V42M22 32H42" stroke="#fff" stroke-opacity=".7" stroke-width=".8" stroke-linecap="round"/></g>' +
+      '<circle cx="32" cy="32" r="2.200" fill="#fff"/>' +
+      '<g class="k-tw t0"><circle cx="28" cy="35" r="1" fill="#ffe0f6"/></g><g class="k-tw t2"><circle cx="36.500" cy="28.500" r="1.100" fill="#cfeeff"/></g><g class="k-tw t3"><circle cx="35" cy="37" r=".8" fill="#fff"/></g>' +
+      dots(31, 18, [4, 4, 60, 60], ["#fff", "#e9defe", "#bfe6ff"]) + spark(51, 13, 2.600, "k-tw t2") + spark(12, 52, 2, "k-tw t3", "#ffd0f0");
   }
   function sBrujula() {
     var tk = "", i, a, rose = "";
@@ -364,7 +390,7 @@
     { id: "galaxia", n: "Galaxia", svg: badge("galaxia", fit(galaxy2(), 1.02)) },
     { id: "estrella", n: "Estrella", svg: badge("estrella", sEstrella()) },
     { id: "planeta", n: "Saturno", svg: badge("planeta", sSaturno()) },
-    { id: "nebulosa", n: "Nebulosa", svg: badge("nebulosa", fit(oldArt("nebulosa"), 0.98)) },
+    { id: "nebulosa", n: "Nebulosa", svg: badge("nebulosa", sNebulosa()) },
     { id: "luna", n: "Luna", svg: badge("luna", sLuna()) },
     { id: "agujero", n: "Agujero negro", svg: badge("agujero", fit(oldArt("agujero"), 0.8)) },
     { id: "cometa", n: "Cometa", svg: badge("cometa", fit(oldArt("cometa"), 0.84, -1, 2)) },
@@ -384,7 +410,7 @@
     galaxia: { t: "Galaxia espiral", d: "Miles de millones de estrellas en brazos que giran alrededor de un núcleo cálido. Las bandas oscuras son polvo.", a: "Los brazos giran lento y la barra central gira al revés.", c: "La Vía Láctea tarda unos 230 millones de años en dar una vuelta." },
     estrella: { t: "Estrella", d: "Una esfera de gas que brilla por fusión nuclear. Los destellos en cruz son un efecto de la luz.", a: "Late, lanza ondas de luz y sus rayos giran en sentidos opuestos.", c: "El Sol es una estrella de tamaño mediano." },
     planeta: { t: "Saturno · gigante con anillos", d: "Un planeta gaseoso con bandas de nubes y anillos de hielo y roca.", a: "Las bandas se desplazan, el planeta se mece y un destello recorre el anillo.", c: "Sus anillos miden cientos de miles de km de ancho pero son delgadísimos." },
-    nebulosa: { t: "Nube cósmica", d: "Nubes de gas y polvo donde nacen las estrellas. Los pilares oscuros son columnas de polvo con estrellas jóvenes en la punta.", a: "Las nubes derivan, los pilares se mecen y las estrellas titilan.", c: "La nebulosa de Orión se ve a simple vista como una mancha difusa." },
+    nebulosa: { t: "Nube cósmica", d: "Nubes de gas y polvo de colores donde nacen las estrellas, con una banda de polvo oscuro y un cúmulo brillante en el centro.", a: "Las nubes giran despacio en sentidos opuestos, el cúmulo late y las estrellas titilan.", c: "La nebulosa de Orión se ve a simple vista como una mancha difusa." },
     luna: { t: "Satélite", d: "La Luna con sus mares oscuros y cráteres, iluminada por el Sol.", a: "Cambia de fase muy despacio y se balancea suave.", c: "La Luna se aleja de la Tierra unos 3,8 cm por año." },
     agujero: { t: "Agujero negro", d: "Una región donde la gravedad es tan fuerte que ni la luz escapa. El disco brillante es materia cayendo hacia él.", a: "El disco brilla con destellos que giran y la materia cae hacia el centro.", c: "Su borde, el horizonte de sucesos, es el punto sin retorno." },
     cometa: { t: "Cometa", d: "Una bola de hielo y polvo que, cerca del Sol, deja dos colas: una azul de gas y otra dorada de polvo.", a: "Flota mientras partículas de su cola salen disparadas.", c: "La cola siempre apunta en dirección contraria al Sol." },
@@ -394,7 +420,7 @@
     eclipse: { t: "Eclipse total", d: "Cuando la Luna tapa al Sol y solo queda visible su corona.", a: "La corona late, sus rayos giran en sentidos opuestos y el anillo de diamante recorre el borde.", c: "Un eclipse total dura como máximo unos 7 minutos y medio." },
     cristal: { t: "Gema", d: "Un cristal tallado que refracta la luz en sus facetas.", a: "Flota y un destello de luz lo recorre, con chispas alrededor.", c: "Los cristales crecen átomo a átomo, durante miles de años." },
     aurora: { t: "Fenómeno polar", d: "Cortinas de luz verde, turquesa y rosa sobre un paisaje de montañas. Nacen cuando partículas del Sol chocan con la atmósfera.", a: "Las cortinas ondulan y cambian de intensidad.", c: "Las auroras ocurren a unos 100 km de altura." },
-    fenix: { t: "Ave mítica", d: "El ave de fuego que renace de sus cenizas. Simboliza volver a empezar.", a: "Bate las alas, flota y las llamas de su cola titilan mientras suben brasas.", c: "En la mitología egipcia y griega, el fénix renacía cada 500 años." },
+    fenix: { t: "Ave mítica", d: "El ave de fuego que renace de sus cenizas. Simboliza volver a empezar.", a: "Bate las alas de plumas, flota y las llamas de su cola titilan mientras suben brasas.", c: "En la mitología egipcia y griega, el fénix renacía cada 500 años." },
     brujula: { t: "Instrumento", d: "Una rosa de los vientos con aguja magnética que busca el norte.", a: "La aguja oscila hasta asentarse y el aro exterior gira lento.", c: "La aguja apunta al norte magnético, que se desplaza unos 50 km por año." }
   };
   STICKERS.forEach(function (st) { st.info = INFO[st.id] || null; });
