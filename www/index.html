@@ -368,6 +368,31 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .sheethead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .sheethead strong { font-family: var(--font-display); font-size: 20px; }
 .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.detail { z-index: 60; align-items: center; padding: 20px; }
+.dcard { width: min(100%, 360px); max-height: 100%; overflow-y: auto; background: var(--solid); color: var(--ink); border: 1px solid var(--line); border-radius: 26px; padding: 18px 18px 16px; text-align: center; box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6); animation: dIn 0.26s cubic-bezier(0.2, 0.85, 0.25, 1) both; }
+@keyframes dIn { from { transform: translateY(14px) scale(0.96); opacity: 0; } to { transform: none; opacity: 1; } }
+.dart { width: 150px; height: 150px; margin: 2px auto 10px; border-radius: 28px; display: grid; place-items: center; background: radial-gradient(circle at 50% 38%, #241a72 0%, #0a0b26 78%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+.dart .ic { width: 136px; height: 136px; }
+.dtag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+.dname { margin: 2px 0 6px; font-family: var(--font-display); font-size: 23px; letter-spacing: -0.015em; }
+.dtext { margin: 0 0 12px; font-size: 14px; line-height: 1.45; color: var(--muted); }
+.dfacts { display: grid; gap: 8px; text-align: left; }
+.dfacts > div { background: var(--accent-soft); border-radius: 14px; padding: 9px 12px; }
+.dfacts span { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.dfacts p { margin: 2px 0 0; font-size: 13.5px; line-height: 1.4; }
+.dacts { display: flex; gap: 8px; margin-top: 14px; }
+.dacts .btn { flex: 1; }
+.igrid.stk button { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.hintlp { margin: 10px 2px 0; font-size: 12px; color: var(--muted); text-align: center; }
+.nw { margin: 0 0 12px; border: 1px solid var(--line); border-radius: 18px; padding: 12px 14px; background: var(--panel); }
+.nw.cur { border-color: var(--accent); background: var(--accent-soft); }
+.nw header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.nw .v { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); }
+.nw .new { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.nw .dt { margin-left: auto; font-size: 11.5px; color: var(--muted); }
+.nw h4 { margin: 2px 0 6px; font-family: var(--font-display); font-size: 16px; }
+.nw ul { margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.45; }
+.nw li { margin: 2px 0; }
 .igrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; margin-top: 4px; }
 .igrid button { aspect-ratio: 1; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); display: grid; place-items: center; padding: 6px; font-size: 28px; line-height: 1; position: relative; }
 .igrid button .ic { width: 100%; height: 100%; font-size: 28px; }
@@ -816,7 +841,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <section class="sheet" id="iconSheet" role="dialog" aria-label="Icono de la nota" hidden>
       <div class="sheethead"><strong>Icono de la nota</strong><button class="btn small" id="iconClose" type="button">Cerrar</button></div>
       <div class="seg" id="iconSeg">
-        <button type="button" data-k="stickers" aria-pressed="true">Stickers de Tronx</button>
+        <button type="button" data-k="stickers" aria-pressed="true">Detalles de Tronx</button>
         <button type="button" data-k="emojis" aria-pressed="false">Emojis</button>
       </div>
       <div id="iconBody"></div>
@@ -872,6 +897,22 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <p class="hint">Tus notas viven solo en este teléfono. Si desinstalás la app o borrás sus datos, se pierden. Guardá una copia de vez en cuando.</p>
     <input type="file" id="importFile" accept=".json,application/json" hidden>
     <p class="about" id="about"></p>
+  </section>
+</div>
+<div class="overlay detail" id="detail" hidden>
+  <section class="dcard" role="dialog" aria-modal="true" aria-labelledby="dName">
+    <div class="dart" id="dArt"></div>
+    <div class="dtag" id="dTag"></div>
+    <h2 class="dname" id="dName"></h2>
+    <p class="dtext" id="dText"></p>
+    <div class="dfacts"><div><span>Animación</span><p id="dAnim"></p></div><div><span>Dato curioso</span><p id="dFact"></p></div></div>
+    <div class="dacts"><button class="btn" id="dClose" type="button">Cerrar</button><button class="btn primary" id="dUse" type="button">Usar este detalle</button></div>
+  </section>
+</div>
+<div class="overlay" id="news" hidden>
+  <section class="panel" role="dialog" aria-modal="true" aria-label="Novedades">
+    <div class="sheethead"><strong>Novedades</strong><button class="btn small" id="newsClose" type="button">Listo</button></div>
+    <div id="newsBody"></div>
   </section>
 </div>
 <div class="overlay" id="custom" hidden>
@@ -958,6 +999,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       <li class="mn-sec" style="--i:7" aria-hidden="true">Aplicación</li>
       <li><button class="mn-item" id="mnSettings" type="button" style="--i:8;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span><span class="mn-tx"><b>Ajustes</b><i id="mnSubSet">Sonido y volumen</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnBackup" type="button" style="--i:9;--c1:#2dd4bf;--c2:#134e4a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><span class="mn-dot" id="mnBkDot" hidden></span></span><span class="mn-tx"><b>Copia de seguridad</b><i id="mnSubBk">Exportá o importá tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnNews" type="button" style="--i:10;--c1:#38bdf8;--c2:#0c4a6e"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg><span class="mn-dot" id="mnNewsDot" hidden></span></span><span class="mn-tx"><b>Novedades</b><i id="mnSubNews">Lo nuevo de cada actualización</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
     </ul>
     <p class="mn-foot" id="mnFoot"></p>
   </nav>
@@ -1012,7 +1054,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.18.0";
+  var APP_VERSION = "1.19.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1279,7 +1321,9 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     else if (name === "links") $("links").hidden = true;
     else if (name === "menu") closeMenuUI();
     else if (name === "sheet") { $("sheet").hidden = true; $("scrim").hidden = true; }
-    else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; }
+    else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; $("detail").hidden = true; }
+    else if (name === "detail") $("detail").hidden = true;
+    else if (name === "news") $("news").hidden = true;
     else if (name === "editor") leaveEditorUI();
     else if (layerHandlers[name]) layerHandlers[name]();
   }
@@ -1821,12 +1865,43 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     }
     b.disabled = readOnly();
   }
-  function setIcon(v) {
+  function setIcon(v, keep) {
     var n = cur(); if (!n || n.trashedAt) return;
     n.icon = cleanIcon(v);
     changed(n); persistNow(); renderIconBtn(); renderList();
-    closeLayer("icons");
+    if (!keep) closeLayer("icons");
   }
+  /* mantener pulsado: ficha del detalle */
+  function bindLongPress(b, fn) {
+    var t = 0, sx = 0, sy = 0;
+    b.addEventListener("pointerdown", function (e) {
+      b.dataset.lp = ""; sx = e.clientX; sy = e.clientY; clearTimeout(t);
+      t = setTimeout(function () { b.dataset.lp = "1"; try { if (navigator.vibrate) navigator.vibrate(14); } catch (er) {} fn(); }, 420);
+    });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) { b.addEventListener(ev, function () { clearTimeout(t); }); });
+    b.addEventListener("pointermove", function (e) { if (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10) clearTimeout(t); });
+    b.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  }
+  var detailId = "";
+  function showDetail(st) {
+    var inf = st.info || {};
+    detailId = st.id;
+    var art = $("dArt"); art.textContent = ""; art.appendChild(iconSpan("s:" + st.id));
+    $("dTag").textContent = inf.t || "Detalle";
+    $("dName").textContent = st.n;
+    $("dText").textContent = inf.d || "";
+    $("dAnim").textContent = inf.a || "—";
+    $("dFact").textContent = inf.c || "—";
+    $("dUse").hidden = !cur() || !!cur().trashedAt || $("iconSheet").hidden;
+    $("detail").hidden = false; pushLayer("detail");
+  }
+  $("dClose").addEventListener("click", function () { closeLayer("detail"); });
+  $("detail").addEventListener("click", function (e) { if (e.target === $("detail")) closeLayer("detail"); });
+  $("dUse").addEventListener("click", function () {
+    var id = detailId, i = layers.indexOf("icons");
+    setIcon("s:" + id, true);
+    if (i >= 0) closeTo(i); else closeLayer("detail");
+  });
   function renderIconSheet() {
     var n = cur(); if (!n) return;
     $("iconSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.k === iconKind ? "true" : "false"); });
@@ -1838,10 +1913,12 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
         b.setAttribute("aria-pressed", n.icon === "s:" + st.id ? "true" : "false");
         b.appendChild(iconSpan("s:" + st.id));
         var cap = el("span", "cap"); cap.textContent = st.n.split(" ")[0]; b.appendChild(cap);
-        b.addEventListener("click", function () { setIcon("s:" + st.id); });
+        b.addEventListener("click", function () { if (b.dataset.lp === "1") { b.dataset.lp = ""; return; } setIcon("s:" + st.id); });
+        bindLongPress(b, function () { showDetail(st); });
         g.appendChild(b);
       });
       body.appendChild(g);
+      var hint = el("p", "hintlp"); hint.textContent = "Mantené pulsado un detalle para ver su información."; body.appendChild(hint);
     } else {
       EMOJI_SETS.forEach(function (set) {
         var h = el("div", "ihead"); h.textContent = set.n; body.appendChild(h);
@@ -2117,6 +2194,33 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   function openSettings() { renderSettings(); $("settings").hidden = false; pushLayer("settings"); }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
+  var NEWS = [
+    { v: "1.19.0", d: "7 nov 2026", t: "Detalles y novedades", l: ["Los stickers ahora se llaman Detalles.", "Primera fila rediseñada: Tierra, Galaxia, Estrella y Planeta con anillos, cada uno con su propia animación.", "Mantené pulsado un detalle para ver su información.", "Nueva sección Novedades en el menú."] },
+    { v: "1.18.0", d: "6 nov 2026", t: "Tierra y estrellas en movimiento", l: ["Nuevo detalle: Planeta Tierra, que gira lento y es el avatar por defecto.", "Las estrellas del fondo del menú se mueven y titilan suavemente."] },
+    { v: "1.17.0", d: "6 nov 2026", t: "Encabezado del menú", l: ["Botón del menú y encabezado Explorador rediseñados, con contadores de notas, constelaciones y vínculos."] },
+    { v: "1.16.0", d: "6 nov 2026", t: "Temas Blanco y Universo", l: ["Claro pasa a llamarse Blanco y se rediseñó; Oscuro pasa a llamarse Universo."] },
+    { v: "1.15.0", d: "6 nov 2026", t: "Menú rediseñado", l: ["Nuevo estilo del menú con Constelaciones como tarjeta principal.", "Constelaciones abre más liviano."] },
+    { v: "1.13.0", d: "6 nov 2026", t: "Perfil, Vinculación y MAX", l: ["Perfil, Vinculación y MAX figuran como \"En desarrollo\"."] },
+    { v: "1.11.0", d: "6 nov 2026", t: "Más fluidez", l: ["La lista reutiliza tarjetas, escribir y buscar son mucho más fluidos y se quitaron los sonidos de clic."] }
+  ];
+  function renderNews() {
+    var b = $("newsBody"); b.textContent = "";
+    NEWS.forEach(function (n) {
+      var c = el("article", "nw" + (n.v === APP_VERSION ? " cur" : ""));
+      var h = el("header"); var v = el("span", "v"); v.textContent = "v" + n.v; h.appendChild(v);
+      if (n.v === APP_VERSION) { var nw = el("span", "new"); nw.textContent = "Nueva"; h.appendChild(nw); }
+      var d = el("span", "dt"); d.textContent = n.d; h.appendChild(d); c.appendChild(h);
+      var t = el("h4"); t.textContent = n.t; c.appendChild(t);
+      var ul = el("ul"); n.l.forEach(function (x) { var li = el("li"); li.textContent = x; ul.appendChild(li); }); c.appendChild(ul);
+      b.appendChild(c);
+    });
+  }
+  function openNews() {
+    renderNews(); $("news").hidden = false; pushLayer("news");
+    if (settings.newsSeen !== APP_VERSION) { settings.newsSeen = APP_VERSION; saveSettings(); updateMenuBadge(); try { renderMenu(); } catch (e) {} }
+  }
+  $("newsClose").addEventListener("click", function () { closeLayer("news"); });
+  $("news").addEventListener("click", function (e) { if (e.target === $("news")) closeLayer("news"); });
   function openCustom() { renderSettings(); $("custom").hidden = false; pushLayer("custom"); }
   $("customClose").addEventListener("click", function () { closeLayer("custom"); });
   $("custom").addEventListener("click", function (e) { if (e.target === $("custom")) closeLayer("custom"); });
@@ -2188,7 +2292,8 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var last = Math.max(settings.lastBackup || 0, settings.firstRun || 0);
     return real >= 3 && Math.floor((Date.now() - last) / 86400000) >= BK_DAYS;
   }
-  function updateMenuBadge() { $("mbDot").hidden = !backupOverdue(); }
+  function newsUnseen() { return settings.newsSeen !== APP_VERSION; }
+  function updateMenuBadge() { $("mbDot").hidden = !(backupOverdue() || newsUnseen()); }
   function renderMenu() {
     var p = getProfile(), st = universeStats(), over = backupOverdue();
     paintAvatar($("mnAv"), p.avatar);
@@ -2200,6 +2305,8 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     $("mnSubSet").textContent = "Sonido del agujero negro: " + (window.TronxSound && !window.TronxSound.isEnabled() ? "silenciado" : "activado");
     $("mnSubBk").textContent = settings.lastBackup ? "Última copia: " + relTime(settings.lastBackup) : "Todavía no hiciste una copia";
     $("mnBkDot").hidden = !over;
+    $("mnNewsDot").hidden = !newsUnseen();
+    $("mnSubNews").textContent = newsUnseen() ? "Nuevo en la versión " + APP_VERSION : "Versión " + APP_VERSION + " · lo nuevo";
     $("mnFoot").textContent = "Tronx " + APP_VERSION + " · funciona sin internet";
   }
   // Mientras el menú está abierto, lo que hay debajo (stickers y fondos animados) se pausa: toda la potencia va al menú.
@@ -2255,6 +2362,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("mnProfile").addEventListener("click", function () { soon("El perfil"); });
   $("mnMax").addEventListener("click", function () { soon("MAX"); });
   $("mnCustom").addEventListener("click", openCustom);
+  $("mnNews").addEventListener("click", openNews);
   $("mnSettings").addEventListener("click", openSettings);
   $("mnBackup").addEventListener("click", function () {
     openSettings();
@@ -2407,6 +2515,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   /* Aviso suave: las notas viven solo en el teléfono, así que se recuerda hacer copia cada tanto */
   var BK_DAYS = 7;
   function renderBkBar() {
+    if (settings.newsSeen == null && lsGet(WKEY) !== "1" && !notes.size) { settings.newsSeen = APP_VERSION; saveSettings(); }
     try { updateMenuBadge(); } catch (e) {}
     var real = 0;
     notes.forEach(function (n) { if (!n.trashedAt) real++; });
