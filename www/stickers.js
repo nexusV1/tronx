@@ -52,6 +52,15 @@
   }
 
   var STICKERS = [
+    { id: "tierra", n: "Planeta Tierra", svg:
+      '<circle class="k-pulse" cx="32" cy="32" r="29" fill="url(#tg-atmo)"/>' +
+      '<circle cx="32" cy="32" r="22" fill="url(#tg-ocean)"/>' +
+      '<g clip-path="url(#tg-earth)"><g class="k-earth"><g><path d="M5 17L14 12L22 15L24 21L18 26L22 30L25 36L21 46L17 49L15 41L12 33L8 27Z M30 14L39 11L47 13L49 19L43 22L36 20Z M38 25L48 24L52 31L47 43L41 41L38 33Z M52 14L66 12L74 16L72 23L64 27L57 25Z M62 38L70 37L73 43L65 45Z" fill="url(#tg-land)" stroke="#53b95f" stroke-width="2.4" stroke-linejoin="round"/><ellipse cx="40" cy="9.5" rx="46" ry="3.2" fill="#fff" opacity=".9"/><ellipse cx="40" cy="54.5" rx="46" ry="3" fill="#fff" opacity=".85"/></g><g transform="translate(80 0)"><path d="M5 17L14 12L22 15L24 21L18 26L22 30L25 36L21 46L17 49L15 41L12 33L8 27Z M30 14L39 11L47 13L49 19L43 22L36 20Z M38 25L48 24L52 31L47 43L41 41L38 33Z M52 14L66 12L74 16L72 23L64 27L57 25Z M62 38L70 37L73 43L65 45Z" fill="url(#tg-land)" stroke="#53b95f" stroke-width="2.4" stroke-linejoin="round"/><ellipse cx="40" cy="9.5" rx="46" ry="3.2" fill="#fff" opacity=".9"/><ellipse cx="40" cy="54.5" rx="46" ry="3" fill="#fff" opacity=".85"/></g></g>' +
+      '<g class="k-cloud"><g><path d="M4 22Q9 19 14 22Q18 20 22 23Q15 25 4 22Z M30 33Q36 30 42 33Q47 31 52 34Q42 37 30 33Z M58 21Q63 19 69 22Q73 21 76 23Q68 26 58 21Z M12 42Q18 39 25 42Q20 45 12 42Z M52 45Q58 42 64 45Q58 48 52 45Z M36 17Q40 15 44 17Q40 19 36 17Z" fill="#fff" fill-opacity=".62"/></g><g transform="translate(80 0)"><path d="M4 22Q9 19 14 22Q18 20 22 23Q15 25 4 22Z M30 33Q36 30 42 33Q47 31 52 34Q42 37 30 33Z M58 21Q63 19 69 22Q73 21 76 23Q68 26 58 21Z M12 42Q18 39 25 42Q20 45 12 42Z M52 45Q58 42 64 45Q58 48 52 45Z M36 17Q40 15 44 17Q40 19 36 17Z" fill="#fff" fill-opacity=".62"/></g></g>' +
+      '<circle cx="32" cy="32" r="22" fill="url(#tg-limb)"/></g>' +
+      '<circle cx="32" cy="32" r="22" fill="none" stroke="#a5dcff" stroke-opacity=".6" stroke-width="1"/>' +
+      '<ellipse cx="24.500" cy="22.500" rx="6.500" ry="3.800" transform="rotate(-38 24.500 22.500)" fill="#fff" opacity=".28"/>' +
+      dots(91, 6, [2, 2, 62, 62], ["#fff", "#cfe3ff"]) },
     { id: "galaxia", n: "Galaxia", svg: galaxy() },
     { id: "estrella", n: "Estrella", svg:
       '<circle class="k-pulse" cx="32" cy="32" r="24" fill="url(#tg-glow)" opacity=".6"/>' +
@@ -157,6 +166,11 @@
     '<linearGradient id="tg-ring" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8fd8ff"/><stop offset=".5" stop-color="#cdb8ff"/><stop offset="1" stop-color="#f4a3e4"/></linearGradient>' +
     '<radialGradient id="tg-planet" cx=".33" cy=".28" r=".95"><stop offset="0" stop-color="#e6d8ff"/><stop offset=".5" stop-color="#9468f7"/><stop offset="1" stop-color="#3a1e8f"/></radialGradient>' +
     '<radialGradient id="tg-planet2" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#cfe9ff"/><stop offset="1" stop-color="#7fb4ff"/></radialGradient>' +
+    '<radialGradient id="tg-ocean" cx=".38" cy=".32" r=".9"><stop offset="0" stop-color="#4fb3ff"/><stop offset=".55" stop-color="#1e6fd6"/><stop offset="1" stop-color="#0b2f86"/></radialGradient>' +
+    '<linearGradient id="tg-land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7bd86a"/><stop offset=".55" stop-color="#3fae55"/><stop offset="1" stop-color="#b9a45a"/></linearGradient>' +
+    '<radialGradient id="tg-limb" cx=".36" cy=".32" r=".82"><stop offset=".45" stop-color="#020a2a" stop-opacity="0"/><stop offset=".82" stop-color="#020a2a" stop-opacity=".38"/><stop offset="1" stop-color="#020a2a" stop-opacity=".78"/></radialGradient>' +
+    '<radialGradient id="tg-atmo"><stop offset=".72" stop-color="#5cc8ff" stop-opacity=".5"/><stop offset=".86" stop-color="#5cc8ff" stop-opacity=".16"/><stop offset="1" stop-color="#5cc8ff" stop-opacity="0"/></radialGradient>' +
+    '<clipPath id="tg-earth"><circle cx="32" cy="32" r="22"/></clipPath>' +
     '<clipPath id="tg-sph"><circle cx="32" cy="33" r="14.500"/></clipPath>' +
     '<radialGradient id="tg-nb1"><stop offset="0" stop-color="#8e5bff" stop-opacity=".95"/><stop offset=".6" stop-color="#6a3df0" stop-opacity=".45"/><stop offset="1" stop-color="#6a3df0" stop-opacity="0"/></radialGradient>' +
     '<radialGradient id="tg-nb2"><stop offset="0" stop-color="#ee5fd0" stop-opacity=".9"/><stop offset=".6" stop-color="#c13fb8" stop-opacity=".4"/><stop offset="1" stop-color="#c13fb8" stop-opacity="0"/></radialGradient>' +
@@ -183,6 +197,7 @@
     ".ic.sk.anim .k-spin,.ic.sk.anim .k-spin-slow,.ic.sk.anim .k-suck{transform-box:view-box;transform-origin:32px 32px}" +
     ".ic.sk.anim .k-orb{transform-box:fill-box;transform-origin:center;animation:tk-spin 2.6s linear infinite}.ic.sk.anim .k-pulse,.ic.sk.anim .k-beat,.ic.sk.anim .k-tw,.ic.sk.anim .k-float,.ic.sk.anim .k-sway,.ic.sk.anim .k-hover,.ic.sk.anim .k-fly,.ic.sk.anim .k-d1,.ic.sk.anim .k-d2,.ic.sk.anim .k-d3{transform-box:fill-box;transform-origin:center}" +
     ".ic.sk.anim .k-spin{animation:tk-spin 26s linear infinite}" +
+    ".ic.sk.anim .k-earth{animation:tk-earth 96s linear infinite}.ic.sk.anim .k-cloud{animation:tk-earth 68s linear infinite}" +
     ".ic.sk.anim .k-spin-slow{animation:tk-spin 44s linear infinite}" +
     ".ic.sk.anim .k-pulse{animation:tk-pulse 3.4s ease-in-out infinite}" +
     ".ic.sk.anim .k-beat{animation:tk-beat 3.6s ease-in-out infinite}" +
@@ -200,6 +215,7 @@
     ".ic.sk.anim .k-d1{animation:tk-d1 6s ease-in-out infinite}.ic.sk.anim .k-d2{animation:tk-d2 7.5s ease-in-out infinite}.ic.sk.anim .k-d3{animation:tk-d3 5.5s ease-in-out infinite}" +
     ".ic.sk.anim .k-suck{animation:tk-suck 3.6s ease-in infinite}.ic.sk.anim .k-suck.s1{animation-delay:-1.2s}.ic.sk.anim .k-suck.s2{animation-delay:-2.4s}" +
     "@keyframes tk-spin{to{transform:rotate(360deg)}}" +
+    "@keyframes tk-earth{from{transform:translateX(-80px)}to{transform:translateX(0)}}" +
     "@keyframes tk-pulse{0%,100%{transform:scale(.94);opacity:.8}50%{transform:scale(1.12);opacity:1}}" +
     "@keyframes tk-beat{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}" +
     "@keyframes tk-tw{0%,100%{opacity:.3;transform:scale(.65)}50%{opacity:1;transform:scale(1.25)}}" +
