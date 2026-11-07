@@ -172,5 +172,7 @@ Pasos, una sola vez:
 **1.23.0**: 5 insignias nuevas (**Sistema solar**, **Púlsar**, **Ojo cósmico**, **Reloj de arena** y **Satélite**), 21 en total. El Fénix se reemplazó por la **Medusa estelar** (se conserva el identificador interno `fenix` para no perder el ícono en notas existentes). **Estrella** y **Aurora** mejoradas. El selector sigue animando por tandas de 6 para cuidar el rendimiento. Sin migración de datos.
 
 **1.23.1**: **Brújula estelar** rediseñada: aro de latón con escala de grados, letras N, E, S, W, rosa de los vientos de 8 puntas con facetas en luz y sombra, aguja roja y blanca que oscila hasta asentarse, y aro punteado que gira lento. Sin migración de datos.
+
+**1.23.2**: **Brújula estelar** simplificada: el borde del medallón actúa como aro y la escala de grados va pegada a él; se quitaron los círculos internos duplicados y el aro punteado, de modo que se ve una sola brújula. Sin migración de datos.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.
