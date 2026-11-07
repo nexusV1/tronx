@@ -182,37 +182,48 @@
       '<path class="k-dash" d="M-25.500 0A25.500 8.200 0 0 0 25.500 0" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".8" stroke-dasharray="1.5 6"/></g></g>' +
       dots(21, 5, [3, 3, 61, 61], ["#fff", "#ffeccc"]) },
     { id: "nebulosa", n: "Nebulosa", svg:
-      '<g class="k-d1"><ellipse cx="23" cy="30" rx="21" ry="16" fill="url(#tg-nb1)"/></g>' +
-      '<g class="k-d2"><ellipse cx="42" cy="26" rx="20" ry="15" fill="url(#tg-nb2)"/></g>' +
-      '<g class="k-d3"><ellipse cx="35" cy="42" rx="22" ry="14" fill="url(#tg-nb3)"/></g>' +
-      '<g class="k-d2"><ellipse cx="14" cy="46" rx="13" ry="9" fill="url(#tg-nb4)"/></g>' +
-      '<ellipse cx="32" cy="34" rx="26" ry="4.500" transform="rotate(-24 32 34)" fill="url(#tg-dust)"/>' +
-      '<circle cx="31" cy="30" r="9" fill="url(#tg-core)" opacity=".8"/><circle cx="31" cy="30" r="2.300" fill="#fff"/>' +
-      dots(31, 13, [4, 4, 60, 60], ["#fff", "#e9defe", "#bfe6ff"]) + spark(50, 14, 2.600, "k-tw t2") },
-    { id: "luna", n: "Luna cósmica", svg:
-      '<circle class="k-pulse" cx="30" cy="34" r="27" fill="url(#tg-glow)" opacity=".45"/>' +
-      '<g class="k-sway"><path d="M43 6A26 26 0 1 0 57 43 21 21 0 0 1 43 6Z" fill="url(#tg-moon)"/>' +
-      '<path d="M43 6A26 26 0 1 0 57 43" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.200"/>' +
-      '<g fill="#8e78e0"><circle cx="24" cy="40" r="4" opacity=".42"/><circle cx="35" cy="50" r="2.600" opacity=".4"/><circle cx="18" cy="27" r="3" opacity=".4"/><circle cx="30" cy="22" r="1.800" opacity=".35"/></g>' +
-      '<g fill="#fff" opacity=".5"><circle cx="22.800" cy="38.800" r="2"/><circle cx="16.800" cy="25.800" r="1.400"/><circle cx="34" cy="48.800" r="1.200"/></g></g>' +
-      spark(51, 15, 4.200, "k-tw t1") + spark(57, 28, 2.200, "k-tw t2", "#ffe9a8") + spark(45, 29, 1.800, "k-tw t3") + dots(41, 4, [38, 4, 62, 40], ["#fff"]) },
+      '<g class="k-d1"><ellipse cx="22" cy="28" rx="22" ry="17" fill="url(#tg-nb1)"/></g>' +
+      '<g class="k-d2"><ellipse cx="43" cy="24" rx="21" ry="15" fill="url(#tg-nb2)"/></g>' +
+      '<g class="k-d3"><ellipse cx="36" cy="43" rx="23" ry="14" fill="url(#tg-nb3)"/></g>' +
+      '<g class="k-d2"><ellipse cx="12" cy="47" rx="13" ry="9" fill="url(#tg-nb4)"/></g>' +
+      '<g class="k-pil"><path d="M11 63Q12 46 15 38Q16 31 19.500 31Q22 33 22.500 38Q25 44 27 63Z" fill="#12082e" opacity=".7"/><path d="M15 38Q16 31 19.500 31Q22 33 22.500 38" fill="none" stroke="#ff9fd8" stroke-width="1.300" stroke-linecap="round" opacity=".7"/></g>' +
+      '<g class="k-pil p2"><path d="M34 63Q35 50 38 44Q39 39 42 39.500Q44 42 44.500 46Q46 52 46 63Z" fill="#12082e" opacity=".62"/><path d="M38 44Q39 39 42 39.500Q44 42 44.500 46" fill="none" stroke="#8fe2ff" stroke-width="1.100" stroke-linecap="round" opacity=".7"/></g>' +
+      '<ellipse cx="32" cy="36" rx="27" ry="4.200" transform="rotate(-24 32 36)" fill="url(#tg-dust)" opacity=".8"/>' +
+      '<circle class="k-pulse" cx="32" cy="22" r="11" fill="url(#tg-core)" opacity=".85"/><circle cx="32" cy="22" r="2.600" fill="#fff"/>' +
+      '<g class="k-tw t0"><circle cx="19.500" cy="29" r="1.800" fill="#fff"/></g><g class="k-tw t2"><circle cx="42" cy="37.500" r="1.600" fill="#cfeeff"/></g><g class="k-tw t1"><circle cx="50" cy="16" r="1.400" fill="#ffd9f2"/></g>' +
+      dots(31, 14, [3, 3, 61, 61], ["#fff", "#e9defe", "#bfe6ff"]) + spark(52, 12, 2.800, "k-tw t2") + spark(11, 14, 2, "k-tw t3", "#bfe6ff") },
+    { id: "luna", n: "Luna", svg:
+      '<circle class="k-pulse" cx="32" cy="32" r="30" fill="url(#tg-glow)" opacity=".38"/>' +
+      '<g class="k-sway"><g clip-path="url(#tg-moonc)">' +
+      '<circle cx="32" cy="32" r="23" fill="url(#tg-moon2)"/>' +
+      '<g fill="#a89ad6" opacity=".5"><path d="M18 22Q24 16 30 21Q33 27 27 31Q19 31 18 22Z"/><path d="M34 36Q42 31 47 37Q46 45 38 46Q32 43 34 36Z"/><path d="M28 12Q34 9 38 13Q35 17 29 16Z"/></g>' +
+      '<g><circle cx="22" cy="42" r="4.200" fill="#9a8cc8" opacity=".42"/><circle cx="22" cy="42" r="3.100" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".8"/>' +
+      '<circle cx="41" cy="24" r="3" fill="#9a8cc8" opacity=".4"/><circle cx="41" cy="24" r="2.100" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".7"/>' +
+      '<circle cx="35" cy="48" r="2.200" fill="#9a8cc8" opacity=".4"/><circle cx="14" cy="30" r="2.400" fill="#9a8cc8" opacity=".38"/><circle cx="48" cy="40" r="1.800" fill="#9a8cc8" opacity=".38"/><circle cx="29" cy="30" r="1.500" fill="#9a8cc8" opacity=".35"/></g>' +
+      '<circle cx="32" cy="32" r="23" fill="url(#tg-limb2)"/>' +
+      '<g class="k-phase"><circle cx="32" cy="32" r="23.500" fill="#070820" opacity=".86"/></g></g>' +
+      '<circle cx="32" cy="32" r="23" fill="none" stroke="#e9e1ff" stroke-opacity=".35" stroke-width=".8"/></g>' +
+      spark(55, 12, 3.400, "k-tw t1") + spark(8, 52, 2.400, "k-tw t2", "#ffe9a8") + dots(41, 6, [2, 2, 62, 62], ["#fff"]) },
     { id: "agujero", n: "Agujero negro", svg:
-      '<circle class="k-pulse" cx="32" cy="32" r="26" fill="url(#tg-glow)" opacity=".4"/>' +
-      '<g transform="translate(32 32) rotate(-14)"><path d="M-29 0A29 9.500 0 0 1 29 0" fill="none" stroke="url(#tg-disk)" stroke-width="5" stroke-linecap="round" opacity=".85"/></g>' +
-      '<path d="M16.500 30.500A15.500 13 0 0 1 47.500 30.500" fill="none" stroke="url(#tg-disk)" stroke-width="2.600" stroke-linecap="round" opacity=".95"/>' +
-      '<circle cx="32" cy="32" r="12.500" fill="#04020c"/><circle cx="32" cy="32" r="12.500" fill="none" stroke="url(#tg-ring)" stroke-width="1.800"/>' +
-      '<g transform="translate(32 32) rotate(-14)"><path d="M-29 0A29 9.500 0 0 0 29 0" fill="none" stroke="url(#tg-disk)" stroke-width="5.400" stroke-linecap="round"/>' +
-      '<path d="M-25 0A25 7.600 0 0 0 25 0" fill="none" stroke="#fff6dc" stroke-opacity=".7" stroke-width="1"/></g>' +
-      '<g transform="translate(32 32) rotate(-14) scale(1 .33)"><g class="k-orb"><circle cx="27" cy="0" r="3" fill="#fff"/><circle cx="-27" cy="0" r="3" fill="none"/></g></g>' +
-      '<g class="k-suck"><circle cx="54" cy="32" r="1.400" fill="#fff"/></g><g class="k-suck s1"><circle cx="32" cy="9" r="1.200" fill="#cfe3ff"/></g><g class="k-suck s2"><circle cx="11" cy="36" r="1.300" fill="#ffe6c0"/></g>' +
-      dots(51, 3, [4, 4, 60, 12], ["#fff"]) },
+      '<circle class="k-pulse" cx="32" cy="32" r="28" fill="url(#tg-glow)" opacity=".42"/>' +
+      '<g transform="translate(32 32)"><circle r="17.500" fill="none" stroke="url(#tg-disk)" stroke-width="3.400" opacity=".55" transform="scale(1 .9)"/>' +
+      '<circle class="k-beat" r="15.200" fill="none" stroke="#ffe9b8" stroke-width="1" opacity=".7"/></g>' +
+      '<g transform="translate(32 32) rotate(-14)"><path d="M-30 0A30 10 0 0 1 30 0" fill="none" stroke="url(#tg-disk)" stroke-width="4.600" stroke-linecap="round" opacity=".6"/></g>' +
+      '<circle cx="32" cy="32" r="12.800" fill="#030109"/><circle cx="32" cy="32" r="12.800" fill="none" stroke="url(#tg-ring)" stroke-width="1.600"/>' +
+      '<g transform="translate(32 32) rotate(-14)"><ellipse rx="29" ry="9.200" fill="none" stroke="url(#tg-disk)" stroke-width="5.600" clip-path="url(#tg-front)"/>' +
+      '<ellipse class="k-dash" rx="26" ry="8.200" fill="none" stroke="#fff6dc" stroke-opacity=".85" stroke-width="1.200" stroke-dasharray="3 8" clip-path="url(#tg-front)"/>' +
+      '<ellipse class="k-dash k-dash2" rx="31.500" ry="10" fill="none" stroke="#ffd09a" stroke-opacity=".7" stroke-width=".9" stroke-dasharray="2 12" clip-path="url(#tg-front)"/></g>' +
+      '<g transform="translate(32 32) rotate(-14) scale(1 .32)"><g class="k-orb"><circle cx="27" cy="0" r="3.200" fill="#fff"/></g></g>' +
+      '<g class="k-suck"><circle cx="55" cy="32" r="1.400" fill="#fff"/></g><g class="k-suck s1"><circle cx="32" cy="8" r="1.200" fill="#cfe3ff"/></g><g class="k-suck s2"><circle cx="9" cy="38" r="1.300" fill="#ffe6c0"/></g>' +
+      dots(51, 4, [4, 4, 60, 14], ["#fff"]) },
     { id: "cometa", n: "Cometa", svg:
-      '<g class="k-fly"><path d="M49 13C37 20 22 34 6 58C23 50 38 41 52 23Z" fill="url(#tg-tail)" opacity=".92"/>' +
-      '<path d="M50 18C41 31 31 41 17 53" fill="none" stroke="#bfeaff" stroke-opacity=".7" stroke-width="2" stroke-linecap="round"/>' +
-      '<path d="M46 12C34 22 22 32 10 46" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.100" stroke-linecap="round"/>' +
-      '<circle cx="30" cy="34" r="1.100" fill="#fff"/><circle cx="21" cy="42" r=".9" fill="#dff3ff"/><circle cx="38" cy="26" r="1" fill="#fff"/><circle cx="14" cy="48" r=".8" fill="#fff"/>' +
-      '<circle cx="50" cy="16" r="12" fill="url(#tg-glow)"/><circle cx="50" cy="16" r="6.200" fill="url(#tg-planet2)"/><circle cx="50" cy="16" r="3.600" fill="#fff"/></g>' +
-      dots(61, 5, [3, 3, 61, 61], ["#fff", "#dcd0ff"]) + spark(16, 14, 3, "k-tw t1") + spark(54, 48, 2.200, "k-tw t2") },
+      '<g class="k-float">' +
+      '<path d="M49 15L3 58L6 60Z" fill="url(#tg-ion)" opacity=".85"/>' +
+      '<path d="M47 12C36 14 20 24 6 42C22 38 38 30 52 20Z" fill="url(#tg-tail2)" opacity=".9"/>' +
+      '<path d="M51 18C40 30 28 42 14 52" fill="none" stroke="#dff6ff" stroke-opacity=".7" stroke-width="1.300" stroke-linecap="round"/>' +
+      '<g class="k-stream"><circle cx="40" cy="24" r="1.100" fill="#fff"/></g><g class="k-stream s1"><circle cx="34" cy="29" r="1" fill="#cfeeff"/></g><g class="k-stream s2"><circle cx="28" cy="33" r=".9" fill="#fff"/></g><g class="k-stream s3"><circle cx="43" cy="19" r=".9" fill="#ffe6c0"/></g>' +
+      '<circle class="k-pulse" cx="50" cy="15" r="13" fill="url(#tg-glow)"/><circle cx="50" cy="15" r="7" fill="url(#tg-planet2)" opacity=".9"/><circle cx="50" cy="15" r="3.700" fill="#fff"/></g>' +
+      dots(61, 6, [3, 3, 61, 61], ["#fff", "#dcd0ff"]) + spark(14, 12, 3, "k-tw t1") + spark(56, 50, 2.400, "k-tw t2", "#bfe6ff") },
     { id: "cohete", n: "Cohete", svg:
       '<circle cx="32" cy="30" r="24" fill="url(#tg-glow)" opacity=".35"/>' +
       '<g class="k-float"><g class="k-flame"><path d="M26 45C25 52 28.500 58 32 63C35.500 58 39 52 38 45Z" fill="url(#tg-flame)"/><path d="M29.200 45C29 50 30.600 54 32 57C33.400 54 35 50 34.800 45Z" fill="#fff4b8"/></g>' +
@@ -260,10 +271,10 @@
     galaxia: { t: "Galaxia espiral", d: "Miles de millones de estrellas alrededor de un centro brillante. En los brazos nacen estrellas nuevas.", a: "Los brazos giran lento, la barra central gira al revés y el núcleo late.", c: "La Vía Láctea tarda unos 230 millones de años en dar una vuelta." },
     estrella: { t: "Estrella", d: "Una esfera de gas que brilla por fusión nuclear. Los destellos en cruz son un efecto de la luz, no su forma real.", a: "Late, lanza ondas de luz y sus destellos giran en sentidos opuestos.", c: "El Sol es una estrella de tamaño mediano." },
     planeta: { t: "Saturno · gigante con anillos", d: "Un planeta gaseoso con bandas de nubes y anillos de hielo y roca.", a: "Las bandas de nubes se desplazan, una tormenta cruza su cara y el anillo centellea.", c: "Sus anillos son anchísimos pero muy delgados: en general de unas decenas de metros." },
-    nebulosa: { t: "Nube cósmica", d: "Nubes de gas y polvo donde nacen las estrellas.", a: "Las nubes derivan y se mezclan despacio.", c: "La nebulosa de Orión se ve a simple vista como una mancha difusa." },
-    luna: { t: "Satélite", d: "Una luna en cuarto creciente rodeada de estrellas.", a: "Se balancea suave y las estrellas titilan.", c: "La Luna se aleja de la Tierra unos 3,8 cm por año." },
-    agujero: { t: "Agujero negro", d: "Una región donde la gravedad es tan fuerte que ni la luz escapa. El disco brillante es materia cayendo hacia él.", a: "Una partícula orbita el disco y otras son succionadas hacia el centro.", c: "Su borde, el horizonte de sucesos, es el punto sin retorno." },
-    cometa: { t: "Cometa", d: "Una bola de hielo y polvo que, al acercarse al Sol, deja una cola brillante.", a: "Cruza el cielo dejando una estela que se desvanece.", c: "La cola siempre apunta en dirección contraria al Sol." },
+    nebulosa: { t: "Nube cósmica", d: "Nubes de gas y polvo donde nacen las estrellas. Los pilares oscuros son columnas de polvo con estrellas jóvenes en sus puntas.", a: "Las nubes derivan, los pilares se mecen y las estrellas jóvenes titilan.", c: "La nebulosa de Orión se ve a simple vista como una mancha difusa." },
+    luna: { t: "Satélite", d: "La Luna con sus mares oscuros y cráteres, iluminada por el Sol.", a: "Cambia de fase muy despacio, de creciente a gibosa, y se balancea suave.", c: "La Luna se aleja de la Tierra unos 3,8 cm por año." },
+    agujero: { t: "Agujero negro", d: "Una región donde la gravedad es tan fuerte que ni la luz escapa. El disco brillante es materia cayendo hacia él.", a: "El disco brilla con destellos que giran, una partícula orbita y otras caen hacia el centro.", c: "Su borde, el horizonte de sucesos, es el punto sin retorno." },
+    cometa: { t: "Cometa", d: "Una bola de hielo y polvo que, al acercarse al Sol, deja dos colas: una azul de gas y otra dorada de polvo.", a: "Flota mientras partículas de su cola salen disparadas en dirección contraria al Sol.", c: "La cola siempre apunta en dirección contraria al Sol." },
     cohete: { t: "Nave", d: "Un cohete rumbo al espacio.", a: "Flota suavemente y su llama vibra.", c: "Para escapar de la gravedad terrestre hay que superar unos 11 km por segundo." },
     ovni: { t: "Platillo", d: "Un platillo volador de fantasía con su rayo de luz.", a: "Flota en el aire, sus luces parpadean y el rayo pulsa.", c: "Es un detalle de fantasía: ¡no hay avistamientos confirmados!" },
     constelacion: { t: "Constelación", d: "Un dibujo imaginario que une estrellas. En Tronx, las constelaciones son tus notas unidas.", a: "Las líneas avanzan punteadas y las estrellas titilan.", c: "Hay 88 constelaciones reconocidas oficialmente." },
@@ -288,6 +299,12 @@
     '<radialGradient id="tg-limb" cx=".36" cy=".32" r=".82"><stop offset=".45" stop-color="#020a2a" stop-opacity="0"/><stop offset=".82" stop-color="#020a2a" stop-opacity=".38"/><stop offset="1" stop-color="#020a2a" stop-opacity=".78"/></radialGradient>' +
     '<radialGradient id="tg-atmo"><stop offset=".72" stop-color="#5cc8ff" stop-opacity=".5"/><stop offset=".86" stop-color="#5cc8ff" stop-opacity=".16"/><stop offset="1" stop-color="#5cc8ff" stop-opacity="0"/></radialGradient>' +
     '<clipPath id="tg-earth"><circle cx="32" cy="32" r="22"/></clipPath>' +
+    '<radialGradient id="tg-moon2" cx=".36" cy=".3" r=".95"><stop offset="0" stop-color="#fffdf2"/><stop offset=".5" stop-color="#e6dcff"/><stop offset="1" stop-color="#9c88e6"/></radialGradient>' +
+    '<radialGradient id="tg-limb2" cx=".4" cy=".35" r=".75"><stop offset=".55" stop-color="#1b1060" stop-opacity="0"/><stop offset="1" stop-color="#1b1060" stop-opacity=".45"/></radialGradient>' +
+    '<clipPath id="tg-moonc"><circle cx="32" cy="32" r="23"/></clipPath>' +
+    '<clipPath id="tg-front"><rect x="-40" y="0" width="80" height="20"/></clipPath>' +
+    '<linearGradient id="tg-ion" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fe6ff"/><stop offset=".5" stop-color="#5fb4ff" stop-opacity=".5"/><stop offset="1" stop-color="#5fb4ff" stop-opacity="0"/></linearGradient>' +
+    '<linearGradient id="tg-tail2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe6b8"/><stop offset=".4" stop-color="#d9a6ff" stop-opacity=".6"/><stop offset="1" stop-color="#9a7bff" stop-opacity="0"/></linearGradient>' +
     '<radialGradient id="tg-bulge"><stop offset="0" stop-color="#fffaf0"/><stop offset=".35" stop-color="#ffe3a8"/><stop offset=".75" stop-color="#ff9ec9" stop-opacity=".45"/><stop offset="1" stop-color="#b58bff" stop-opacity="0"/></radialGradient>' +
     '<radialGradient id="tg-sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffdf2"/><stop offset=".42" stop-color="#ffe58a"/><stop offset=".78" stop-color="#ffa94d" stop-opacity=".85"/><stop offset="1" stop-color="#ff8a3d" stop-opacity="0"/></radialGradient>' +
     '<linearGradient id="tg-ray" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffbe6"/><stop offset=".5" stop-color="#ffd978"/><stop offset="1" stop-color="#ff9f4a"/></linearGradient>' +
@@ -320,7 +337,11 @@
     ".ic.sk.anim .k-spin,.ic.sk.anim .k-spin-slow,.ic.sk.anim .k-spin-rev,.ic.sk.anim .k-gal-a,.ic.sk.anim .k-gal-b,.ic.sk.anim .k-suck{transform-box:view-box;transform-origin:32px 32px}" +
     ".ic.sk.anim .k-ring{transform-box:fill-box;transform-origin:center;animation:tk-ring 4s ease-out infinite}.ic.sk.anim .k-ring.r2{animation-delay:-2s}" +
     ".ic.sk.anim .k-spin-rev{animation:tk-spin-r 34s linear infinite}.ic.sk.anim .k-gal-a{animation:tk-spin 70s linear infinite}.ic.sk.anim .k-gal-b{animation:tk-spin-r 22s linear infinite}" +
-    ".ic.sk.anim .k-band{animation:tk-band 16s linear infinite}" +
+    ".ic.sk.anim .k-phase{animation:tk-phase 28s ease-in-out infinite}" +
+    ".ic.sk.anim .k-pil{transform-box:fill-box;transform-origin:50% 100%;animation:tk-pil 7s ease-in-out infinite}.ic.sk.anim .k-pil.p2{animation-duration:9s;animation-delay:-3s}" +
+    ".ic.sk.anim .k-dash2{animation-duration:3.6s;animation-direction:reverse}" +
+    ".ic.sk.anim .k-stream{animation:tk-stream 2.4s ease-in infinite}.ic.sk.anim .k-stream.s1{animation-delay:-.6s}.ic.sk.anim .k-stream.s2{animation-delay:-1.2s}.ic.sk.anim .k-stream.s3{animation-delay:-1.8s}" +
+        ".ic.sk.anim .k-band{animation:tk-band 16s linear infinite}" +
     ".ic.sk.anim .k-orb{transform-box:fill-box;transform-origin:center;animation:tk-spin 2.6s linear infinite}.ic.sk.anim .k-pulse,.ic.sk.anim .k-beat,.ic.sk.anim .k-tw,.ic.sk.anim .k-float,.ic.sk.anim .k-sway,.ic.sk.anim .k-hover,.ic.sk.anim .k-fly,.ic.sk.anim .k-d1,.ic.sk.anim .k-d2,.ic.sk.anim .k-d3{transform-box:fill-box;transform-origin:center}" +
     ".ic.sk.anim .k-spin{animation:tk-spin 26s linear infinite}" +
     ".ic.sk.anim .k-earth{animation:tk-earth 110s linear infinite}.ic.sk.anim .k-cloud{animation:tk-earth 80s linear infinite}" +
@@ -340,7 +361,10 @@
     ".ic.sk.anim .k-sweep{animation:tk-sweep 3.8s ease-in-out infinite}" +
     ".ic.sk.anim .k-d1{animation:tk-d1 6s ease-in-out infinite}.ic.sk.anim .k-d2{animation:tk-d2 7.5s ease-in-out infinite}.ic.sk.anim .k-d3{animation:tk-d3 5.5s ease-in-out infinite}" +
     ".ic.sk.anim .k-suck{animation:tk-suck 3.6s ease-in infinite}.ic.sk.anim .k-suck.s1{animation-delay:-1.2s}.ic.sk.anim .k-suck.s2{animation-delay:-2.4s}" +
-    "@keyframes tk-spin{to{transform:rotate(360deg)}}" +
+    "@keyframes tk-phase{0%,100%{transform:translateX(-12px)}50%{transform:translateX(-38px)}}" +
+    "@keyframes tk-pil{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}" +
+    "@keyframes tk-stream{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(-13px,12px);opacity:0}}" +
+        "@keyframes tk-spin{to{transform:rotate(360deg)}}" +
     "@keyframes tk-spin-r{to{transform:rotate(-360deg)}}" +
     "@keyframes tk-ring{0%{transform:scale(.7);opacity:.75}100%{transform:scale(2.7);opacity:0}}" +
     "@keyframes tk-band{from{transform:translateX(0)}to{transform:translateX(-40px)}}" +

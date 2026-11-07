@@ -382,6 +382,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .dfacts p { margin: 2px 0 0; font-size: 13.5px; line-height: 1.4; }
 .dacts { display: flex; gap: 8px; margin-top: 14px; }
 .dacts .btn { flex: 1; }
+.igrid.stk button.off .ic *, body.dopen .igrid.stk .ic * { animation-play-state: paused !important; }
 .igrid.stk button { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
 .hintlp { margin: 10px 2px 0; font-size: 12px; color: var(--muted); text-align: center; }
 .nw { margin: 0 0 12px; border: 1px solid var(--line); border-radius: 18px; padding: 12px 14px; background: var(--panel); }
@@ -1054,7 +1055,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.20.0";
+  var APP_VERSION = "1.21.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1321,8 +1322,8 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     else if (name === "links") $("links").hidden = true;
     else if (name === "menu") closeMenuUI();
     else if (name === "sheet") { $("sheet").hidden = true; $("scrim").hidden = true; }
-    else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; $("detail").hidden = true; }
-    else if (name === "detail") $("detail").hidden = true;
+    else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; $("detail").hidden = true; document.body.classList.remove("dopen"); if (stkIO) stkIO.disconnect(); }
+    else if (name === "detail") { $("detail").hidden = true; document.body.classList.remove("dopen"); }
     else if (name === "news") $("news").hidden = true;
     else if (name === "editor") leaveEditorUI();
     else if (layerHandlers[name]) layerHandlers[name]();
@@ -1882,7 +1883,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     b.addEventListener("pointermove", function (e) { if (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10) clearTimeout(t); });
     b.addEventListener("contextmenu", function (e) { e.preventDefault(); });
   }
-  var detailId = "";
+  var detailId = "", stkIO = null;
   function showDetail(st) {
     var inf = st.info || {};
     detailId = st.id;
@@ -1893,7 +1894,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     $("dAnim").textContent = inf.a || "—";
     $("dFact").textContent = inf.c || "—";
     $("dUse").hidden = !cur() || !!cur().trashedAt || $("iconSheet").hidden;
-    $("detail").hidden = false; pushLayer("detail");
+    $("detail").hidden = false; document.body.classList.add("dopen"); pushLayer("detail");
   }
   $("dClose").addEventListener("click", function () { closeLayer("detail"); });
   $("detail").addEventListener("click", function (e) { if (e.target === $("detail")) closeLayer("detail"); });
@@ -1918,6 +1919,11 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
         g.appendChild(b);
       });
       body.appendChild(g);
+      if (window.IntersectionObserver) {
+        if (stkIO) stkIO.disconnect();
+        stkIO = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle("off", !e.isIntersecting); }); }, { rootMargin: "40px" });
+        g.querySelectorAll("button").forEach(function (bt) { stkIO.observe(bt); });
+      }
       var hint = el("p", "hintlp"); hint.textContent = "Mantené pulsado un detalle para ver su información."; body.appendChild(hint);
     } else {
       EMOJI_SETS.forEach(function (set) {
@@ -2195,6 +2201,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.21.0", d: "7 nov 2026", t: "Segunda fila de Detalles", l: ["Nebulosa con pilares de polvo, Luna con fases y cráteres, Agujero negro con disco que gira y Cometa con dos colas y partículas, cada uno con animaciones propias.", "Luna cósmica ahora se llama Luna.", "Más fluido: el selector pausa las animaciones que no se ven."] },
     { v: "1.20.0", d: "7 nov 2026", t: "Tierra real y galaxia espiral", l: ["La Tierra ahora usa un mapa real simplificado: se reconocen América, África, Europa, Asia y Australia, con desiertos, selvas y hielo polar. Es igual en el menú y en Detalles.", "El detalle Planeta pasa a llamarse Saturno y Planeta Tierra pasa a llamarse Tierra.", "Galaxia rediseñada: brazos espirales con polvo oscuro, miles de estrellas de colores, núcleo cálido y zonas de nacimiento estelar."] },
     { v: "1.19.0", d: "7 nov 2026", t: "Detalles y novedades", l: ["Los stickers ahora se llaman Detalles.", "Primera fila rediseñada: Tierra, Galaxia, Estrella y Planeta con anillos, cada uno con su propia animación.", "Mantené pulsado un detalle para ver su información.", "Nueva sección Novedades en el menú."] },
     { v: "1.18.0", d: "6 nov 2026", t: "Tierra y estrellas en movimiento", l: ["Nuevo detalle: Planeta Tierra, que gira lento y es el avatar por defecto.", "Las estrellas del fondo del menú se mueven y titilan suavemente."] },
