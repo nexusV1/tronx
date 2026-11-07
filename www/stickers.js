@@ -148,39 +148,7 @@
     return out + dots(8, 8, [3, 3, 61, 61], ["#fff", "#cdbfff"]);
   }
 
-  var STICKERS = [
-    { id: "tierra", n: "Tierra", svg: earth() },
-    { id: "galaxia", n: "Galaxia", svg: galaxy2() },
-    { id: "estrella", n: "Estrella", svg:
-      '<circle class="k-pulse" cx="32" cy="32" r="28" fill="url(#tg-glow2)" opacity=".55"/>' +
-      '<g class="k-ring"><circle cx="32" cy="32" r="10" fill="none" stroke="#ffe9a8" stroke-width="1.3"/></g>' +
-      '<g class="k-ring r2"><circle cx="32" cy="32" r="10" fill="none" stroke="#ffd2f0" stroke-width="1"/></g>' +
-      '<g class="k-spin-slow"><path d="M32 1Q34.4 29.6 63 32Q34.4 34.4 32 63Q29.6 34.4 1 32Q29.6 29.6 32 1Z" fill="url(#tg-ray)" opacity=".92"/></g>' +
-      '<g class="k-spin-rev"><g transform="translate(32 32) rotate(45) scale(.52) translate(-32 -32)"><path d="M32 1Q34.4 29.6 63 32Q34.4 34.4 32 63Q29.6 34.4 1 32Q29.6 29.6 32 1Z" fill="url(#tg-star2)" opacity=".85"/></g></g>' +
-      '<circle cx="32" cy="32" r="10.500" fill="url(#tg-sun)"/><circle class="k-beat" cx="32" cy="32" r="4.600" fill="#fffdf2"/>' +
-      spark(12, 13, 3.200, "k-tw t1") + spark(54, 51, 2.800, "k-tw t2") + spark(53, 12, 2, "k-tw t3", "#ffe9a8") + dots(61, 4, [3, 3, 61, 61], ["#fff", "#ffe9a8"]) },
-    { id: "planeta", n: "Saturno", svg:
-      '<circle class="k-pulse" cx="32" cy="33" r="28" fill="url(#tg-glow2)" opacity=".4"/>' +
-      '<g class="k-sway"><g transform="translate(32 33) rotate(-20)">' +
-      '<path d="M-29 0A29 9.600 0 0 1 29 0" fill="none" stroke="url(#tg-ring2)" stroke-width="2.6" stroke-linecap="round" opacity=".55"/>' +
-      '<path d="M-25.500 0A25.500 8.200 0 0 1 25.500 0" fill="none" stroke="url(#tg-ring2)" stroke-width="3.4" stroke-linecap="round" opacity=".8"/>' +
-      '<path d="M-21 0A21 6.800 0 0 1 21 0" fill="none" stroke="url(#tg-ring2)" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></g>' +
-      '<circle cx="32" cy="33" r="14.500" fill="url(#tg-gas)"/>' +
-      '<g clip-path="url(#tg-sph)"><g class="k-band" transform="translate(0 0)">' +
-'<path d="M-40 24 q10 -2.2 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#b9753c" stroke-width="3" stroke-opacity=".5"/>' +
-      '<path d="M-40 29 q10 1.8 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#fff3cf" stroke-width="2.2" stroke-opacity=".45"/>' +
-      '<path d="M-40 34 q10 -2.6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#a8632f" stroke-width="4" stroke-opacity=".5"/>' +
-      '<path d="M-40 40 q10 2 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#fff0c4" stroke-width="2.6" stroke-opacity=".4"/>' +
-      '<path d="M-40 44.5 q10 -1.6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#8c4f24" stroke-width="2.4" stroke-opacity=".45"/>' +
-            '<ellipse cx="22" cy="37" rx="3.600" ry="1.900" fill="#d35a2c" opacity=".75"/><ellipse cx="62" cy="37" rx="3.600" ry="1.900" fill="#d35a2c" opacity=".75"/><ellipse cx="102" cy="37" rx="3.600" ry="1.900" fill="#d35a2c" opacity=".75"/></g>' +
-      '<circle cx="43" cy="43" r="19" fill="#1b0a2e" opacity=".46"/></g>' +
-      '<ellipse cx="26.500" cy="26.500" rx="4.500" ry="2.600" transform="rotate(-35 26.500 26.500)" fill="#fff" opacity=".4"/>' +
-      '<g transform="translate(32 33) rotate(-20)">' +
-      '<path d="M-29 0A29 9.600 0 0 0 29 0" fill="none" stroke="url(#tg-ring2)" stroke-width="2.6" stroke-linecap="round" opacity=".7"/>' +
-      '<path d="M-25.500 0A25.500 8.200 0 0 0 25.500 0" fill="none" stroke="url(#tg-ring2)" stroke-width="3.4" stroke-linecap="round"/>' +
-      '<path d="M-21 0A21 6.800 0 0 0 21 0" fill="none" stroke="url(#tg-ring2)" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>' +
-      '<path class="k-dash" d="M-25.500 0A25.500 8.200 0 0 0 25.500 0" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".8" stroke-dasharray="1.5 6"/></g></g>' +
-      dots(21, 5, [3, 3, 61, 61], ["#fff", "#ffeccc"]) },
+  var OLD = [
     { id: "nebulosa", n: "Nebulosa", svg:
       '<g class="k-d1"><ellipse cx="22" cy="28" rx="22" ry="17" fill="url(#tg-nb1)"/></g>' +
       '<g class="k-d2"><ellipse cx="43" cy="24" rx="21" ry="15" fill="url(#tg-nb2)"/></g>' +
@@ -192,18 +160,6 @@
       '<circle class="k-pulse" cx="32" cy="22" r="11" fill="url(#tg-core)" opacity=".85"/><circle cx="32" cy="22" r="2.600" fill="#fff"/>' +
       '<g class="k-tw t0"><circle cx="19.500" cy="29" r="1.800" fill="#fff"/></g><g class="k-tw t2"><circle cx="42" cy="37.500" r="1.600" fill="#cfeeff"/></g><g class="k-tw t1"><circle cx="50" cy="16" r="1.400" fill="#ffd9f2"/></g>' +
       dots(31, 14, [3, 3, 61, 61], ["#fff", "#e9defe", "#bfe6ff"]) + spark(52, 12, 2.800, "k-tw t2") + spark(11, 14, 2, "k-tw t3", "#bfe6ff") },
-    { id: "luna", n: "Luna", svg:
-      '<circle class="k-pulse" cx="32" cy="32" r="30" fill="url(#tg-glow)" opacity=".38"/>' +
-      '<g class="k-sway"><g clip-path="url(#tg-moonc)">' +
-      '<circle cx="32" cy="32" r="23" fill="url(#tg-moon2)"/>' +
-      '<g fill="#a89ad6" opacity=".5"><path d="M18 22Q24 16 30 21Q33 27 27 31Q19 31 18 22Z"/><path d="M34 36Q42 31 47 37Q46 45 38 46Q32 43 34 36Z"/><path d="M28 12Q34 9 38 13Q35 17 29 16Z"/></g>' +
-      '<g><circle cx="22" cy="42" r="4.200" fill="#9a8cc8" opacity=".42"/><circle cx="22" cy="42" r="3.100" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".8"/>' +
-      '<circle cx="41" cy="24" r="3" fill="#9a8cc8" opacity=".4"/><circle cx="41" cy="24" r="2.100" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".7"/>' +
-      '<circle cx="35" cy="48" r="2.200" fill="#9a8cc8" opacity=".4"/><circle cx="14" cy="30" r="2.400" fill="#9a8cc8" opacity=".38"/><circle cx="48" cy="40" r="1.800" fill="#9a8cc8" opacity=".38"/><circle cx="29" cy="30" r="1.500" fill="#9a8cc8" opacity=".35"/></g>' +
-      '<circle cx="32" cy="32" r="23" fill="url(#tg-limb2)"/>' +
-      '<g class="k-phase"><circle cx="32" cy="32" r="23.500" fill="#070820" opacity=".86"/></g></g>' +
-      '<circle cx="32" cy="32" r="23" fill="none" stroke="#e9e1ff" stroke-opacity=".35" stroke-width=".8"/></g>' +
-      spark(55, 12, 3.400, "k-tw t1") + spark(8, 52, 2.400, "k-tw t2", "#ffe9a8") + dots(41, 6, [2, 2, 62, 62], ["#fff"]) },
     { id: "agujero", n: "Agujero negro", svg:
       '<circle class="k-pulse" cx="32" cy="32" r="28" fill="url(#tg-glow)" opacity=".42"/>' +
       '<g transform="translate(32 32)"><circle r="17.500" fill="none" stroke="url(#tg-disk)" stroke-width="3.400" opacity=".55" transform="scale(1 .9)"/>' +
@@ -223,63 +179,223 @@
       '<path d="M51 18C40 30 28 42 14 52" fill="none" stroke="#dff6ff" stroke-opacity=".7" stroke-width="1.300" stroke-linecap="round"/>' +
       '<g class="k-stream"><circle cx="40" cy="24" r="1.100" fill="#fff"/></g><g class="k-stream s1"><circle cx="34" cy="29" r="1" fill="#cfeeff"/></g><g class="k-stream s2"><circle cx="28" cy="33" r=".9" fill="#fff"/></g><g class="k-stream s3"><circle cx="43" cy="19" r=".9" fill="#ffe6c0"/></g>' +
       '<circle class="k-pulse" cx="50" cy="15" r="13" fill="url(#tg-glow)"/><circle cx="50" cy="15" r="7" fill="url(#tg-planet2)" opacity=".9"/><circle cx="50" cy="15" r="3.700" fill="#fff"/></g>' +
-      dots(61, 6, [3, 3, 61, 61], ["#fff", "#dcd0ff"]) + spark(14, 12, 3, "k-tw t1") + spark(56, 50, 2.400, "k-tw t2", "#bfe6ff") },
-    { id: "cohete", n: "Cohete", svg:
-      '<circle cx="32" cy="30" r="24" fill="url(#tg-glow)" opacity=".35"/>' +
-      '<g class="k-float"><g class="k-flame"><path d="M26 45C25 52 28.500 58 32 63C35.500 58 39 52 38 45Z" fill="url(#tg-flame)"/><path d="M29.200 45C29 50 30.600 54 32 57C33.400 54 35 50 34.800 45Z" fill="#fff4b8"/></g>' +
-      '<path d="M20.500 29L10 42V50L21.500 43.500Z" fill="url(#tg-fin)"/><path d="M43.500 29L54 42V50L42.500 43.500Z" fill="url(#tg-fin)"/>' +
-      '<path d="M32 3C41.500 9.500 46 20 44.500 32V40C44.500 42 43 43 41.500 43H22.500C21 43 19.500 42 19.500 40V32C18 20 22.500 9.500 32 3Z" fill="url(#tg-hull)"/>' +
-      '<path d="M32 3C37 6.500 40.600 11.500 42.200 17H21.800C23.400 11.500 27 6.500 32 3Z" fill="url(#tg-nose)"/>' +
-      '<path d="M32 3C41.500 9.500 46 20 44.500 32V40C44.500 42 43 43 41.500 43H36C40 36 41 18 32 3Z" fill="#3a1b9a" opacity=".22"/>' +
-      '<path d="M19.800 35H44.200" stroke="#e0408a" stroke-width="2.200" opacity=".85"/>' +
-      '<circle cx="32" cy="25" r="6.300" fill="#fff" fill-opacity=".9"/><circle cx="32" cy="25" r="4.800" fill="url(#tg-glass2)"/><ellipse cx="30.200" cy="23.200" rx="1.700" ry="1.100" transform="rotate(-35 30.200 23.200)" fill="#fff" opacity=".85"/>' +
-      '<rect x="27" y="42" width="10" height="4" rx="1.600" fill="#3b2a7a"/></g>' +
-      dots(71, 6, [3, 3, 61, 61], ["#fff", "#dcd0ff"]) },
-    { id: "ovni", n: "Platillo", svg:
-      '<path class="k-beam" d="M24 42L13 61H51L40 42Z" fill="url(#tg-beam)"/>' +
-      '<g class="k-hover"><path d="M21 27C21 17 26 11 32 11C38 11 43 17 43 27Z" fill="url(#tg-glass)" opacity=".92"/>' +
-      '<circle cx="32" cy="22" r="4.400" fill="#8be8b8"/><ellipse cx="30.300" cy="22" rx="1.200" ry="1.700" fill="#0b2a30" transform="rotate(14 30.300 22)"/><ellipse cx="33.700" cy="22" rx="1.200" ry="1.700" fill="#0b2a30" transform="rotate(-14 33.700 22)"/>' +
-      '<path d="M24 25C24 19.500 26.600 15.500 30 13.800" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.400" stroke-linecap="round"/>' +
-      '<path d="M5 33C5 27.500 17.500 24 32 24C46.500 24 59 27.500 59 33C59 39 46.500 43 32 43C17.500 43 5 39 5 33Z" fill="url(#tg-hull)"/>' +
-      '<path d="M7 31.500C12 28 21 26 32 26C43 26 52 28 57 31.500" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.400" stroke-linecap="round"/>' +
-      '<path d="M8 35C13 40 22 42 32 42C42 42 51 40 56 35C52 39 43 40.500 32 40.500C21 40.500 12 39 8 35Z" fill="#4b2fb0" opacity=".35"/>' +
-      '<circle class="k-light" cx="15" cy="34" r="2" fill="#8fe0ff"/><circle class="k-light l1" cx="26" cy="37.500" r="2" fill="#ffd36e"/><circle class="k-light l2" cx="38" cy="37.500" r="2" fill="#ff8fd0"/><circle class="k-light l3" cx="49" cy="34" r="2" fill="#8fe0ff"/></g>' +
-      dots(81, 5, [3, 3, 61, 20], ["#fff", "#dcd0ff"]) },
-    { id: "constelacion", n: "Constelación", svg: constellation() },
-    { id: "eclipse", n: "Eclipse", svg:
-      '<circle class="k-pulse" cx="32" cy="32" r="28" fill="url(#tg-glow)" opacity=".75"/>' +
-      '<g class="k-spin-slow"><path d="M32 3V11M32 53V61M3 32H11M53 32H61M11.500 11.500L17 17M47 47L52.500 52.500M52.500 11.500L47 17M17 47L11.500 52.500" stroke="#efe6ff" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/>' +
-      '<path d="M32 6V9.500M32 54.500V58M6 32H9.500M54.500 32H58M18 8.800L19.500 11.500M44.500 52.500L46 55.200M55.200 18L52.500 19.500M11.500 44.500L8.800 46M55.200 46L52.500 44.500M11.500 19.500L8.800 18M46 8.800L44.500 11.500M19.500 52.500L18 55.200" stroke="#bda8ff" stroke-opacity=".6" stroke-width="1.200" stroke-linecap="round"/></g>' +
-      '<circle cx="32" cy="32" r="18.500" fill="none" stroke="url(#tg-ring)" stroke-width="3"/>' +
-      '<circle cx="32" cy="32" r="16.500" fill="#05030f"/>' +
-      '<g class="k-tw t0"><circle cx="45.300" cy="20.500" r="6" fill="url(#tg-glow)"/><circle cx="45.300" cy="20.500" r="2.600" fill="#fff"/></g>' },
-    { id: "cristal", n: "Cristal cósmico", svg:
-      '<circle class="k-pulse" cx="32" cy="32" r="26" fill="url(#tg-glow)" opacity=".5"/>' +
-      '<g class="k-float"><g clip-path="url(#tg-gem)">' +
-      '<path d="M15 21L32 58L49 21Z" fill="url(#tg-crystal)"/><path d="M15 21L24 8H40L49 21Z" fill="url(#tg-crystal2)"/>' +
-      '<path d="M24 8L29 21L15 21Z" fill="#fff" opacity=".22"/><path d="M40 8L35 21L49 21Z" fill="#3a1b9a" opacity=".2"/>' +
-      '<path d="M24 8H40L35 21H29Z" fill="#fff" opacity=".3"/><path d="M15 21L29 21L32 58Z" fill="#fff" opacity=".16"/><path d="M49 21L35 21L32 58Z" fill="#2a1070" opacity=".28"/>' +
-      '<g class="k-sweep"><rect x="-6" y="-4" width="9" height="74" fill="#fff" opacity=".55" transform="rotate(24 0 30)"/></g></g>' +
-      '<path d="M15 21L24 8H40L49 21L32 58Z" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.200" stroke-linejoin="round"/>' +
-      '<path d="M15 21H49M24 8L29 21L32 58L35 21L40 8M29 21L15 21M35 21L49 21" fill="none" stroke="#fff" stroke-opacity=".42" stroke-width=".9" stroke-linejoin="round"/></g>' +
-      spark(10, 12, 3.400, "k-tw t1") + spark(55, 46, 2.800, "k-tw t2") + spark(53, 11, 2, "k-tw t3", "#ffe9a8") + dots(91, 4, [3, 30, 14, 60], ["#fff"]) }
+      dots(61, 6, [3, 3, 61, 61], ["#fff", "#dcd0ff"]) + spark(14, 12, 3, "k-tw t1") + spark(56, 50, 2.400, "k-tw t2", "#bfe6ff") }
+  ];
+
+  /* ================= Insignias detalladas =================
+     Cada insignia es un medallón (aro metálico + cara oscura + gema) con una escena propia dentro. */
+  var PAL = {
+    tierra: ["#fff1b8", "#e0a93a", "#7a4a12", "#143a8a", "#050d2e", "#7fd0ff"],
+    galaxia: ["#f1eaff", "#a58cf0", "#3b2a8a", "#2a1470", "#07041c", "#e9a9ff"],
+    estrella: ["#fff3c0", "#ffb02e", "#9a3d08", "#3a0f4a", "#08031a", "#ffe27a"],
+    planeta: ["#ffe6c4", "#d9954a", "#6b3a12", "#2a1a3a", "#07041a", "#ffd08a"],
+    nebulosa: ["#ffe0f2", "#f07ac8", "#7a1f66", "#2a1060", "#060318", "#ff9ad5"],
+    luna: ["#ffffff", "#b9c3e6", "#4a5586", "#16204e", "#05081f", "#dfe6ff"],
+    agujero: ["#ffd9b0", "#c4672a", "#4a1a08", "#1a0a2a", "#020108", "#ffb35c"],
+    cometa: ["#e6fbff", "#6cc7ee", "#1d4f7a", "#0f2a5a", "#040a22", "#bfeaff"],
+    cohete: ["#ffe3d0", "#f0644a", "#7a1a20", "#1a2a6a", "#050a28", "#ff8f6a"],
+    ovni: ["#d8ffe9", "#38c98a", "#0d5a42", "#0a3a46", "#02121a", "#7dffc2"],
+    constelacion: ["#e0e8ff", "#6a86f0", "#1f2f8a", "#16286a", "#050a24", "#a9bcff"],
+    eclipse: ["#fff0c0", "#e8b23a", "#5a3a08", "#1a1236", "#030210", "#ffd27a"],
+    cristal: ["#f6e6ff", "#b36cf0", "#4a1a8a", "#3a1a7a", "#0a0524", "#f0b0ff"],
+    aurora: ["#e0fff6", "#3fd6b6", "#0d5a58", "#0a2a4a", "#020a1a", "#7dffd0"],
+    fenix: ["#fff0c0", "#ff8a2a", "#8a1a08", "#3a0a1a", "#0a0208", "#ffb050"],
+    brujula: ["#fff2cf", "#d1a64a", "#5f4412", "#0e3a4a", "#031018", "#ffe29a"]
+  };
+  function badgeDefs() {
+    var o = "";
+    for (var id in PAL) {
+      var c = PAL[id];
+      o += '<linearGradient id="tb-rim-' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".45" stop-color="' + c[1] + '"/><stop offset=".75" stop-color="' + c[2] + '"/><stop offset="1" stop-color="' + c[1] + '"/></linearGradient>' +
+           '<radialGradient id="tb-bg-' + id + '" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="' + c[3] + '"/><stop offset="1" stop-color="' + c[4] + '"/></radialGradient>' +
+           '<radialGradient id="tb-gem-' + id + '" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="' + c[5] + '"/><stop offset="1" stop-color="' + c[2] + '"/></radialGradient>';
+    }
+    return o +
+      '<clipPath id="tb-face"><circle cx="32" cy="32" r="25.8"/></clipPath>' +
+      '<clipPath id="tb-sat"><circle cx="0" cy="0" r="11"/></clipPath>' +
+      '<clipPath id="tb-gem"><path d="M22 20H42L52 31L32 55L12 31Z"/></clipPath>' +
+      '<linearGradient id="tb-horizon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b9bff"/><stop offset=".4" stop-color="#1b4fc0"/><stop offset="1" stop-color="#081a5a"/></linearGradient>' +
+      '<linearGradient id="tb-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8ffe6" stop-opacity=".85"/><stop offset="1" stop-color="#7dffc2" stop-opacity=".05"/></linearGradient>' +
+      '<linearGradient id="tb-saucer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2f6ff"/><stop offset=".5" stop-color="#9fb4d6"/><stop offset="1" stop-color="#4a5a84"/></linearGradient>' +
+      '<radialGradient id="tb-corona"><stop offset=".45" stop-color="#fff6d0" stop-opacity=".95"/><stop offset=".62" stop-color="#ffd27a" stop-opacity=".5"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>' +
+      '<linearGradient id="tb-aur1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5dffb0" stop-opacity="0"/><stop offset="1" stop-color="#5dffb0" stop-opacity=".9"/></linearGradient>' +
+      '<linearGradient id="tb-aur2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a8cff" stop-opacity="0"/><stop offset="1" stop-color="#3fe0d0" stop-opacity=".8"/></linearGradient>' +
+      '<linearGradient id="tb-aur3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d27aff" stop-opacity="0"/><stop offset="1" stop-color="#ff7ad0" stop-opacity=".7"/></linearGradient>' +
+      '<linearGradient id="tb-fire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a0"/><stop offset=".4" stop-color="#ffb02e"/><stop offset="1" stop-color="#e0301a"/></linearGradient>' +
+      '<linearGradient id="tb-wing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5a2a"/><stop offset="1" stop-color="#ffb02e"/></linearGradient>' +
+      '<linearGradient id="tb-kite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2cf"/><stop offset="1" stop-color="#c69a3e"/></linearGradient>';
+  }
+  function badge(id, scene) {
+    var c = PAL[id], orn = "", i;
+    for (i = 0; i < 16; i++) { var a = i * Math.PI / 8; orn += '<circle cx="' + f(32 + 29.7 * Math.cos(a)) + '" cy="' + f(32 + 29.7 * Math.sin(a)) + '" r="' + (i % 2 ? 0.45 : 0.7) + '" fill="' + (i % 2 ? c[2] : "#fff") + '" opacity="' + (i % 2 ? 0.8 : 0.85) + '"/>'; }
+    return '<circle cx="32" cy="32" r="31.2" fill="url(#tb-rim-' + id + ')"/>' +
+      '<circle cx="32" cy="32" r="28.4" fill="#06041a"/>' +
+      '<g class="k-orn">' + orn + '</g>' +
+      '<circle cx="32" cy="32" r="25.8" fill="url(#tb-bg-' + id + ')"/>' +
+      '<g clip-path="url(#tb-face)">' + scene + '</g>' +
+      '<circle cx="32" cy="32" r="25.8" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width=".8"/>' +
+      '<path d="M13 21A22 22 0 0 1 30 9" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.6" stroke-linecap="round"/>' +
+      '<circle cx="32" cy="32" r="30.4" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width=".5"/>' +
+      '<g class="k-tw t1"><circle cx="32" cy="3.4" r="2.1" fill="url(#tb-gem-' + id + ')" stroke="' + c[2] + '" stroke-width=".5"/></g>';
+  }
+  function oldArt(id) { for (var i = 0; i < OLD.length; i++) if (OLD[i].id === id) return OLD[i].svg; return ""; }
+  function fit(art, sc, tx, ty) { return '<g transform="translate(' + (32 + (tx || 0)) + " " + (32 + (ty || 0)) + ") scale(" + sc + ') translate(-32 -32)">' + art + "</g>"; }
+
+  function sEstrella() {
+    var P = "M32 9Q34 30 55 32Q34 34 32 55Q30 34 9 32Q30 30 32 9Z";
+    return '<circle cx="32" cy="32" r="20" fill="url(#tg-glow2)" opacity=".65"/>' +
+      '<g class="k-ring"><circle cx="32" cy="32" r="9" fill="none" stroke="#ffe9a8" stroke-width="1.2"/></g><g class="k-ring r2"><circle cx="32" cy="32" r="9" fill="none" stroke="#ffd2f0" stroke-width="1"/></g>' +
+      '<g class="k-spin-slow"><path d="' + P + '" fill="url(#tg-ray)"/></g>' +
+      '<g class="k-spin-rev"><g transform="translate(32 32) rotate(45) scale(.55) translate(-32 -32)"><path d="' + P + '" fill="url(#tg-star2)" opacity=".9"/></g></g>' +
+      '<circle cx="32" cy="32" r="8.600" fill="url(#tg-sun)"/><circle class="k-beat" cx="32" cy="32" r="4.200" fill="#fffdf2"/>' +
+      spark(14, 16, 2.800, "k-tw t1") + spark(51, 49, 2.400, "k-tw t2") + spark(50, 15, 1.800, "k-tw t3", "#ffe9a8");
+  }
+  function sSaturno() {
+    var bands = "", ys = [-8, -4.500, -1, 2.500, 6, 9.500], i;
+    for (i = 0; i < ys.length; i++) bands += '<path d="M-44 ' + ys[i] + "q10 -2 20 0t20 0t20 0t20 0t20 0\" fill=\"none\" stroke=\"" + (i % 2 ? "#b87a3a" : "#fff0c8") + '" stroke-width="2.200" opacity=".5"/>';
+    return '<circle cx="32" cy="32" r="22" fill="url(#tg-glow2)" opacity=".35"/>' +
+      '<g class="k-sway"><g transform="translate(32 32) rotate(-18)">' +
+      '<path d="M-24.500 0A24.500 7.500 0 0 1 24.500 0" fill="none" stroke="url(#tg-ring2)" stroke-width="3" opacity=".5"/>' +
+      '<circle r="11" fill="url(#tg-gas)"/><g clip-path="url(#tb-sat)"><g class="k-band">' + bands + '</g></g><circle r="11" fill="url(#tg-limb2)"/>' +
+      '<ellipse cx="-3.500" cy="-4.500" rx="3.600" ry="2" transform="rotate(-30 -3.500 -4.500)" fill="#fff" opacity=".3"/>' +
+      '<path d="M-27 0A27 8.300 0 0 0 27 0" fill="none" stroke="url(#tg-ring2)" stroke-width="2" opacity=".65"/>' +
+      '<path d="M-23.500 0A23.500 7.200 0 0 0 23.500 0" fill="none" stroke="url(#tg-ring2)" stroke-width="3.200"/>' +
+      '<path class="k-dash" d="M-23.500 0A23.500 7.200 0 0 0 23.500 0" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="1" stroke-linecap="round" stroke-dasharray="1.200 9"/>' +
+      '</g></g>' + dots(7, 7, [6, 6, 58, 58], ["#fff", "#ffe9c4"]);
+  }
+  function sCohete() {
+    return dots(77, 7, [8, 8, 56, 42], ["#fff", "#cfe3ff"]) +
+      '<ellipse cx="32" cy="68" rx="40" ry="18" fill="url(#tb-horizon)"/><ellipse cx="32" cy="68" rx="40" ry="18" fill="none" stroke="#a5e4ff" stroke-width="1.400" opacity=".85"/>' +
+      '<g class="k-streak"><path d="M20 12V20" stroke="#cfe8ff" stroke-width="1" stroke-linecap="round"/></g><g class="k-streak s1"><path d="M44 10V19" stroke="#cfe8ff" stroke-width="1" stroke-linecap="round"/></g><g class="k-streak s2"><path d="M12 28V34" stroke="#cfe8ff" stroke-width=".9" stroke-linecap="round"/></g><g class="k-streak s3"><path d="M52 30V37" stroke="#cfe8ff" stroke-width=".9" stroke-linecap="round"/></g>' +
+      '<g class="k-float"><g transform="translate(32 29) rotate(22) scale(.62)">' +
+      '<g class="k-flame"><path d="M-5 12Q0 36 5 12Z" fill="url(#tg-flame)"/><path d="M-2.500 12Q0 25 2.500 12Z" fill="#fff4b8"/></g>' +
+      '<path d="M-9 2L-18 17L-9 13Z M9 2L18 17L9 13Z" fill="url(#tg-fin)"/>' +
+      '<path d="M0 -24C9 -17 11 -4 10 12H-10C-11 -4 -9 -17 0 -24Z" fill="url(#tg-hull)"/>' +
+      '<path d="M0 -24C5 -20 8 -16 9.500 -11H-9.500C-8 -16 -5 -20 0 -24Z" fill="url(#tg-nose)"/>' +
+      '<path d="M-10.500 6H10.500" stroke="#e0408a" stroke-width="2.200" opacity=".85"/>' +
+      '<circle cx="0" cy="-3" r="4.800" fill="#fff"/><circle cx="0" cy="-3" r="3.600" fill="url(#tg-glass2)"/><ellipse cx="-1.300" cy="-4.300" rx="1.200" ry=".8" fill="#fff" opacity=".85"/>' +
+      '</g></g>';
+  }
+  function sOvni() {
+    return dots(81, 6, [8, 8, 56, 26], ["#fff", "#cfeee0"]) +
+      '<path class="k-beam" d="M26 33H38L50 54H14Z" fill="url(#tb-beam)"/>' +
+      '<g class="k-ember e1"><circle cx="32" cy="50" r="1" fill="#eafff4"/></g><g class="k-ember e2"><circle cx="27" cy="52" r=".9" fill="#b8ffe0"/></g><g class="k-ember e3"><circle cx="37" cy="51" r=".9" fill="#eafff4"/></g>' +
+      '<path d="M0 64V51Q10 45 20 50T40 49T64 47V64Z" fill="#021016"/><path d="M8 52L10 46L12 52ZM50 51L52 44L54 51Z" fill="#031a20"/>' +
+      '<g class="k-hover"><ellipse cx="32" cy="31" rx="17" ry="5.600" fill="url(#tb-saucer)"/><ellipse cx="32" cy="29.500" rx="14" ry="2.200" fill="#fff" opacity=".35"/>' +
+      '<path d="M24 29A8 8.500 0 0 1 40 29Z" fill="#9ff3ff" opacity=".7"/><circle cx="32" cy="26.500" r="2.400" fill="#7dffc2"/><circle cx="31.200" cy="26" r=".5" fill="#04202a"/><circle cx="32.900" cy="26" r=".5" fill="#04202a"/>' +
+      '<circle class="k-blink" cx="23" cy="32.500" r="1.200" fill="#ffd54a"/><circle class="k-blink b2" cx="32" cy="34" r="1.200" fill="#ff7ad0"/><circle class="k-blink b3" cx="41" cy="32.500" r="1.200" fill="#7ae8ff"/></g>';
+  }
+  function sConstelacion() {
+    var pts = [[13, 41], [22, 21], [34, 29], [46, 15], [51, 41], [36, 47]], d = "M13 41L22 21L34 29L46 15M34 29L51 41L36 47L13 41", o = "", i;
+    o += '<ellipse cx="30" cy="34" rx="22" ry="12" transform="rotate(-20 30 34)" fill="url(#tg-nb1)" opacity=".35"/>';
+    o += '<path d="' + d + '" fill="none" stroke="#9fb4ff" stroke-opacity=".3" stroke-width="3.600" stroke-linecap="round" stroke-linejoin="round"/>';
+    o += '<path class="k-dash" d="' + d + '" fill="none" stroke="#e8eeff" stroke-opacity=".9" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 3.200"/>';
+    for (i = 0; i < pts.length; i++) o += '<g class="k-tw t' + i % 4 + '"><circle cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" r="5" fill="url(#tg-glow)"/><circle cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" r="' + (2.200 + (i % 2) * 0.7) + '" fill="url(#tg-star)"/><circle cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" r="1" fill="#fff"/></g>';
+    o += '<g class="k-shoot"><path d="M54 8L45 15" stroke="#fff" stroke-width="1.300" stroke-linecap="round" opacity=".9"/><circle cx="45" cy="15" r="1.300" fill="#fff"/></g>';
+    return o + dots(83, 8, [6, 6, 58, 58], ["#fff", "#cdd8ff"]);
+  }
+  function sEclipse() {
+    var r1 = "", r2 = "", i, a, L;
+    for (i = 0; i < 28; i++) { a = i * Math.PI / 14; L = i % 2 ? 17 : 21; r1 += "M" + f(32 + 12.5 * Math.cos(a)) + " " + f(32 + 12.5 * Math.sin(a)) + "L" + f(32 + L * Math.cos(a)) + " " + f(32 + L * Math.sin(a)); }
+    for (i = 0; i < 9; i++) { a = i * Math.PI / 4.5 + 0.2; r2 += "M" + f(32 + 13 * Math.cos(a)) + " " + f(32 + 13 * Math.sin(a)) + "L" + f(32 + 25 * Math.cos(a)) + " " + f(32 + 25 * Math.sin(a)); }
+    return '<circle class="k-pulse" cx="32" cy="32" r="22" fill="url(#tb-corona)"/>' +
+      '<g class="k-spin-rev"><path d="' + r2 + '" stroke="#ffe2a0" stroke-opacity=".35" stroke-width="1.800" stroke-linecap="round"/></g>' +
+      '<g class="k-spin-slow"><path d="' + r1 + '" stroke="#fff0c0" stroke-opacity=".75" stroke-width=".8" stroke-linecap="round"/></g>' +
+      '<circle cx="32" cy="32" r="11" fill="#04020a"/><circle cx="32" cy="32" r="11" fill="none" stroke="#ffeab8" stroke-width="1"/>' +
+      '<g class="k-diam"><circle cx="32" cy="21" r="4.600" fill="url(#tg-core)"/><circle cx="32" cy="21" r="1.500" fill="#fff"/></g>' +
+      '<g class="k-tw t2"><path d="M22 40Q20 36 22 33" fill="none" stroke="#ff7a4a" stroke-width="1.400" stroke-linecap="round" opacity=".9"/></g>' +
+      dots(91, 5, [5, 5, 59, 59], ["#fff", "#ffe9b8"]);
+  }
+  function sCristal() {
+    return '<circle cx="32" cy="32" r="19" fill="url(#tg-glow)" opacity=".5"/>' +
+      '<g class="k-float"><g transform="translate(0 -4)">' +
+      '<path d="M22 20H42L52 31L32 55L12 31Z" fill="#6a2fd0"/>' +
+      '<path d="M22 20H42L38 31H26Z" fill="#fff" opacity=".92"/><path d="M22 20L26 31H12Z" fill="#e7c8ff"/><path d="M42 20L52 31H38Z" fill="#c99bff"/>' +
+      '<path d="M12 31H26L32 55Z" fill="#8a47f0"/><path d="M26 31H38L32 55Z" fill="#c28bff"/><path d="M38 31H52L32 55Z" fill="#5a22b8"/>' +
+      '<path d="M22 20H42L52 31L32 55L12 31ZM12 31H52M26 31L32 55M38 31L32 55M22 20L26 31M42 20L38 31" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".6" stroke-linejoin="round"/>' +
+      '<g clip-path="url(#tb-gem)"><rect class="k-sweep2" x="0" y="10" width="7" height="60" transform="rotate(22 10 30)" fill="#fff" opacity=".6"/></g>' +
+      '</g></g>' +
+      spark(12, 15, 3, "k-tw t1", "#f6e0ff") + spark(53, 20, 2.400, "k-tw t2") + spark(50, 50, 2.800, "k-tw t3", "#ffd0f6") + spark(14, 48, 1.800, "k-tw t0");
+  }
+  function sAurora() {
+    return dots(97, 9, [6, 6, 58, 34], ["#fff", "#cfeaff"]) +
+      '<path class="k-aur a3" d="M8 46C20 34 30 40 40 30C48 38 56 34 60 44V52H8Z" fill="url(#tb-aur3)"/>' +
+      '<path class="k-aur a2" d="M2 44C14 26 24 36 34 22C44 34 52 24 62 42V50H2Z" fill="url(#tb-aur2)"/>' +
+      '<path class="k-aur" d="M4 40C12 18 22 30 30 14C38 28 48 12 60 36V46H4Z" fill="url(#tb-aur1)"/>' +
+      '<path d="M0 64V51L9 43L15 49L25 39L35 50L45 44L55 50L64 46V64Z" fill="#020612"/>' +
+      '<path d="M10 56L13 48L16 56ZM17 58L20 50L23 58ZM44 57L47 49L50 57ZM51 58L54 51L57 58Z" fill="#010409"/>';
+  }
+  function sFenix() {
+    var wing = '<g class="k-flap"><path d="M31 31C22 29 15 22 10 10C9 22 14 32 24 38C27 40 30 40 31 40Z" fill="url(#tb-wing)"/><path d="M31 34C24 33 19 29 15 22C16 30 21 36 29 39Z" fill="#ffd45a" opacity=".9"/></g>';
+    return '<circle class="k-pulse" cx="32" cy="34" r="19" fill="url(#tg-glow2)" opacity=".5"/>' +
+      '<g class="k-float">' + fit(
+        wing + '<g transform="translate(64 0) scale(-1 1)">' + wing + "</g>" +
+        '<g class="k-flick"><path d="M32 44C26 50 22 54 20 60C27 57 31 52 32 50C33 52 37 57 44 60C42 54 38 50 32 44Z" fill="url(#tb-fire)"/><path d="M32 48C31 53 31 56 32 60C33 56 33 53 32 48Z" fill="#fff2a0"/></g>' +
+        '<path d="M32 17C36 22 37 31 36 38C35 46 33 52 32 58C31 52 29 46 28 38C27 31 28 22 32 17Z" fill="url(#tb-fire)"/>' +
+        '<path d="M32 13C30 9 31 6 33 4C33.500 7 35 9 32 13Z" fill="#ffe27a"/><circle cx="32" cy="17.500" r="3.800" fill="#ffe27a"/><path d="M34.500 17L38.500 18.500L34.500 20Z" fill="#ff7a2a"/><circle cx="33.300" cy="16.800" r=".7" fill="#3a0a1a"/>',
+        0.82, 0, 1) + "</g>" +
+      '<g class="k-ember e1"><circle cx="24" cy="50" r="1.100" fill="#ffd45a"/></g><g class="k-ember e2"><circle cx="40" cy="49" r="1" fill="#ff9a3a"/></g><g class="k-ember e3"><circle cx="32" cy="52" r=".9" fill="#fff2a0"/></g><g class="k-ember e4"><circle cx="46" cy="42" r=".8" fill="#ffb02e"/></g>';
+  }
+  function sBrujula() {
+    var tk = "", i, a, rose = "";
+    for (i = 0; i < 24; i++) { a = i * Math.PI / 12; var r0 = i % 6 === 0 ? 17.5 : 19.2; tk += "M" + f(32 + r0 * Math.cos(a)) + " " + f(32 + r0 * Math.sin(a)) + "L" + f(32 + 21 * Math.cos(a)) + " " + f(32 + 21 * Math.sin(a)); }
+    for (i = 0; i < 4; i++) rose += '<path transform="rotate(' + i * 90 + ' 32 32)" d="M32 9L35.500 29L32 32L28.500 29Z" fill="' + (i === 0 ? "#ff5a4a" : "url(#tb-kite)") + '"/>';
+    for (i = 0; i < 4; i++) rose += '<path transform="rotate(' + (45 + i * 90) + ' 32 32)" d="M32 15L34 29L32 32L30 29Z" fill="#c69a3e" opacity=".85"/>';
+    return '<circle cx="32" cy="32" r="22.500" fill="none" stroke="#ffe29a" stroke-opacity=".7" stroke-width=".9"/>' +
+      '<g class="k-spin-rev"><circle cx="32" cy="32" r="24" fill="none" stroke="#9fe8ff" stroke-opacity=".5" stroke-width=".8" stroke-dasharray="1 4"/></g>' +
+      '<path d="' + tk + '" stroke="#ffe29a" stroke-opacity=".8" stroke-width=".8" stroke-linecap="round"/>' + rose +
+      '<g class="k-needle"><path d="M32 13L34.600 32H29.400Z" fill="#ff4a3a"/><path d="M32 51L34.600 32H29.400Z" fill="#f4f6ff"/></g>' +
+      '<circle cx="32" cy="32" r="3" fill="url(#tb-kite)"/><circle cx="32" cy="32" r="1.200" fill="#0a2430"/>' +
+      '<g class="k-tw t2"><circle cx="19" cy="19" r="1" fill="#fff"/></g>';
+  }
+  function sLuna() {
+    return dots(41, 7, [6, 6, 58, 58], ["#fff", "#dfe6ff"]) + '<circle cx="32" cy="32" r="22" fill="url(#tg-glow)" opacity=".4"/>' +
+      fit('<g class="k-sway"><g clip-path="url(#tg-moonc)">' +
+      '<circle cx="32" cy="32" r="23" fill="url(#tg-moon2)"/>' +
+      '<g fill="#a89ad6" opacity=".5"><path d="M18 22Q24 16 30 21Q33 27 27 31Q19 31 18 22Z"/><path d="M34 36Q42 31 47 37Q46 45 38 46Q32 43 34 36Z"/><path d="M28 12Q34 9 38 13Q35 17 29 16Z"/></g>' +
+      '<circle cx="22" cy="42" r="4.200" fill="#9a8cc8" opacity=".42"/><circle cx="22" cy="42" r="3.100" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".8"/>' +
+      '<circle cx="41" cy="24" r="3" fill="#9a8cc8" opacity=".4"/><circle cx="35" cy="48" r="2.200" fill="#9a8cc8" opacity=".4"/><circle cx="14" cy="30" r="2.400" fill="#9a8cc8" opacity=".38"/><circle cx="48" cy="40" r="1.800" fill="#9a8cc8" opacity=".38"/>' +
+      '<circle cx="32" cy="32" r="23" fill="url(#tg-limb2)"/><g class="k-phase"><circle cx="32" cy="32" r="23.500" fill="#070820" opacity=".86"/></g></g></g>', 0.82);
+  }
+
+  var OLD_IDS = { nebulosa: 1, agujero: 1, cometa: 1 };
+  var STICKERS = [
+    { id: "tierra", n: "Tierra", svg: badge("tierra", fit(earth(), 0.74) + '<g class="k-spin-slow"><circle cx="32" cy="8.500" r="2.100" fill="#e8e4ff"/><circle cx="31.500" cy="8" r=".8" fill="#9a8cc8" opacity=".6"/></g>') },
+    { id: "galaxia", n: "Galaxia", svg: badge("galaxia", fit(galaxy2(), 1.02)) },
+    { id: "estrella", n: "Estrella", svg: badge("estrella", sEstrella()) },
+    { id: "planeta", n: "Saturno", svg: badge("planeta", sSaturno()) },
+    { id: "nebulosa", n: "Nebulosa", svg: badge("nebulosa", fit(oldArt("nebulosa"), 0.98)) },
+    { id: "luna", n: "Luna", svg: badge("luna", sLuna()) },
+    { id: "agujero", n: "Agujero negro", svg: badge("agujero", fit(oldArt("agujero"), 0.8)) },
+    { id: "cometa", n: "Cometa", svg: badge("cometa", fit(oldArt("cometa"), 0.84, -1, 2)) },
+    { id: "cohete", n: "Cohete", svg: badge("cohete", sCohete()) },
+    { id: "ovni", n: "Ovni", svg: badge("ovni", sOvni()) },
+    { id: "constelacion", n: "Constelación", svg: badge("constelacion", sConstelacion()) },
+    { id: "eclipse", n: "Eclipse", svg: badge("eclipse", sEclipse()) },
+    { id: "cristal", n: "Cristal", svg: badge("cristal", sCristal()) },
+    { id: "aurora", n: "Aurora", svg: badge("aurora", sAurora()) },
+    { id: "fenix", n: "Fénix", svg: badge("fenix", sFenix()) },
+    { id: "brujula", n: "Brújula estelar", svg: badge("brujula", sBrujula()) }
   ];
 
   /* Ficha de cada detalle (se ve al mantener pulsado): tipo, descripción, qué hace su animación y un dato */
   var INFO = {
-    tierra: { t: "Planeta Tierra", d: "Nuestro hogar: el único mundo conocido con océanos líquidos y vida. Su atmósfera se ve como un halo azul.", a: "Gira sobre su eje; las nubes van un poco más rápido que el suelo.", c: "Un día completo dura 24 horas." },
-    galaxia: { t: "Galaxia espiral", d: "Miles de millones de estrellas alrededor de un centro brillante. En los brazos nacen estrellas nuevas.", a: "Los brazos giran lento, la barra central gira al revés y el núcleo late.", c: "La Vía Láctea tarda unos 230 millones de años en dar una vuelta." },
-    estrella: { t: "Estrella", d: "Una esfera de gas que brilla por fusión nuclear. Los destellos en cruz son un efecto de la luz, no su forma real.", a: "Late, lanza ondas de luz y sus destellos giran en sentidos opuestos.", c: "El Sol es una estrella de tamaño mediano." },
-    planeta: { t: "Saturno · gigante con anillos", d: "Un planeta gaseoso con bandas de nubes y anillos de hielo y roca.", a: "Las bandas de nubes se desplazan, una tormenta cruza su cara y el anillo centellea.", c: "Sus anillos son anchísimos pero muy delgados: en general de unas decenas de metros." },
-    nebulosa: { t: "Nube cósmica", d: "Nubes de gas y polvo donde nacen las estrellas. Los pilares oscuros son columnas de polvo con estrellas jóvenes en sus puntas.", a: "Las nubes derivan, los pilares se mecen y las estrellas jóvenes titilan.", c: "La nebulosa de Orión se ve a simple vista como una mancha difusa." },
-    luna: { t: "Satélite", d: "La Luna con sus mares oscuros y cráteres, iluminada por el Sol.", a: "Cambia de fase muy despacio, de creciente a gibosa, y se balancea suave.", c: "La Luna se aleja de la Tierra unos 3,8 cm por año." },
-    agujero: { t: "Agujero negro", d: "Una región donde la gravedad es tan fuerte que ni la luz escapa. El disco brillante es materia cayendo hacia él.", a: "El disco brilla con destellos que giran, una partícula orbita y otras caen hacia el centro.", c: "Su borde, el horizonte de sucesos, es el punto sin retorno." },
-    cometa: { t: "Cometa", d: "Una bola de hielo y polvo que, al acercarse al Sol, deja dos colas: una azul de gas y otra dorada de polvo.", a: "Flota mientras partículas de su cola salen disparadas en dirección contraria al Sol.", c: "La cola siempre apunta en dirección contraria al Sol." },
-    cohete: { t: "Nave", d: "Un cohete rumbo al espacio.", a: "Flota suavemente y su llama vibra.", c: "Para escapar de la gravedad terrestre hay que superar unos 11 km por segundo." },
-    ovni: { t: "Platillo", d: "Un platillo volador de fantasía con su rayo de luz.", a: "Flota en el aire, sus luces parpadean y el rayo pulsa.", c: "Es un detalle de fantasía: ¡no hay avistamientos confirmados!" },
-    constelacion: { t: "Constelación", d: "Un dibujo imaginario que une estrellas. En Tronx, las constelaciones son tus notas unidas.", a: "Las líneas avanzan punteadas y las estrellas titilan.", c: "Hay 88 constelaciones reconocidas oficialmente." },
-    eclipse: { t: "Eclipse", d: "Cuando la Luna tapa al Sol y solo queda visible su corona.", a: "La corona de luz gira despacio y late.", c: "Un eclipse total dura como máximo unos 7 minutos y medio." },
-    cristal: { t: "Gema", d: "Un cristal con facetas que refracta la luz.", a: "Flota y un destello recorre sus facetas.", c: "Los cristales crecen átomo a átomo, durante miles de años." }
+    tierra: { t: "Planeta", d: "Nuestro hogar, con sus continentes, océanos y una Luna que la acompaña. Está dibujada con un mapa real simplificado.", a: "Gira sobre su eje, las nubes van un poco más rápido y la Luna da vueltas alrededor.", c: "Un día completo dura 24 horas." },
+    galaxia: { t: "Galaxia espiral", d: "Miles de millones de estrellas en brazos que giran alrededor de un núcleo cálido. Las bandas oscuras son polvo.", a: "Los brazos giran lento y la barra central gira al revés.", c: "La Vía Láctea tarda unos 230 millones de años en dar una vuelta." },
+    estrella: { t: "Estrella", d: "Una esfera de gas que brilla por fusión nuclear. Los destellos en cruz son un efecto de la luz.", a: "Late, lanza ondas de luz y sus rayos giran en sentidos opuestos.", c: "El Sol es una estrella de tamaño mediano." },
+    planeta: { t: "Saturno · gigante con anillos", d: "Un planeta gaseoso con bandas de nubes y anillos de hielo y roca.", a: "Las bandas se desplazan, el planeta se mece y un destello recorre el anillo.", c: "Sus anillos miden cientos de miles de km de ancho pero son delgadísimos." },
+    nebulosa: { t: "Nube cósmica", d: "Nubes de gas y polvo donde nacen las estrellas. Los pilares oscuros son columnas de polvo con estrellas jóvenes en la punta.", a: "Las nubes derivan, los pilares se mecen y las estrellas titilan.", c: "La nebulosa de Orión se ve a simple vista como una mancha difusa." },
+    luna: { t: "Satélite", d: "La Luna con sus mares oscuros y cráteres, iluminada por el Sol.", a: "Cambia de fase muy despacio y se balancea suave.", c: "La Luna se aleja de la Tierra unos 3,8 cm por año." },
+    agujero: { t: "Agujero negro", d: "Una región donde la gravedad es tan fuerte que ni la luz escapa. El disco brillante es materia cayendo hacia él.", a: "El disco brilla con destellos que giran y la materia cae hacia el centro.", c: "Su borde, el horizonte de sucesos, es el punto sin retorno." },
+    cometa: { t: "Cometa", d: "Una bola de hielo y polvo que, cerca del Sol, deja dos colas: una azul de gas y otra dorada de polvo.", a: "Flota mientras partículas de su cola salen disparadas.", c: "La cola siempre apunta en dirección contraria al Sol." },
+    cohete: { t: "Nave", d: "Un cohete que despega rumbo al espacio, con la Tierra abajo.", a: "Flota, su llama vibra y las líneas de velocidad pasan de largo.", c: "Para escapar de la gravedad terrestre hay que superar unos 11 km por segundo." },
+    ovni: { t: "Platillo", d: "Un platillo volador de fantasía con su rayo tractor sobre una colina.", a: "Flota, sus luces parpadean y el rayo pulsa con chispas que suben.", c: "Es un detalle de fantasía: ¡no hay avistamientos confirmados!" },
+    constelacion: { t: "Constelación", d: "Un dibujo imaginario que une estrellas. En Tronx, las constelaciones son tus notas unidas.", a: "Las líneas avanzan punteadas, las estrellas titilan y de vez en cuando cruza una estrella fugaz.", c: "Hay 88 constelaciones reconocidas oficialmente." },
+    eclipse: { t: "Eclipse total", d: "Cuando la Luna tapa al Sol y solo queda visible su corona.", a: "La corona late, sus rayos giran en sentidos opuestos y el anillo de diamante recorre el borde.", c: "Un eclipse total dura como máximo unos 7 minutos y medio." },
+    cristal: { t: "Gema", d: "Un cristal tallado que refracta la luz en sus facetas.", a: "Flota y un destello de luz lo recorre, con chispas alrededor.", c: "Los cristales crecen átomo a átomo, durante miles de años." },
+    aurora: { t: "Fenómeno polar", d: "Cortinas de luz verde, turquesa y rosa sobre un paisaje de montañas. Nacen cuando partículas del Sol chocan con la atmósfera.", a: "Las cortinas ondulan y cambian de intensidad.", c: "Las auroras ocurren a unos 100 km de altura." },
+    fenix: { t: "Ave mítica", d: "El ave de fuego que renace de sus cenizas. Simboliza volver a empezar.", a: "Bate las alas, flota y las llamas de su cola titilan mientras suben brasas.", c: "En la mitología egipcia y griega, el fénix renacía cada 500 años." },
+    brujula: { t: "Instrumento", d: "Una rosa de los vientos con aguja magnética que busca el norte.", a: "La aguja oscila hasta asentarse y el aro exterior gira lento.", c: "La aguja apunta al norte magnético, que se desplaza unos 50 km por año." }
   };
   STICKERS.forEach(function (st) { st.info = INFO[st.id] || null; });
 
@@ -341,7 +457,20 @@
     ".ic.sk.anim .k-pil{transform-box:fill-box;transform-origin:50% 100%;animation:tk-pil 7s ease-in-out infinite}.ic.sk.anim .k-pil.p2{animation-duration:9s;animation-delay:-3s}" +
     ".ic.sk.anim .k-dash2{animation-duration:3.6s;animation-direction:reverse}" +
     ".ic.sk.anim .k-stream{animation:tk-stream 2.4s ease-in infinite}.ic.sk.anim .k-stream.s1{animation-delay:-.6s}.ic.sk.anim .k-stream.s2{animation-delay:-1.2s}.ic.sk.anim .k-stream.s3{animation-delay:-1.8s}" +
-        ".ic.sk.anim .k-band{animation:tk-band 16s linear infinite}" +
+        ".ic.sk.anim .k-orn,.ic.sk.anim .k-diam,.ic.sk.anim .k-needle{transform-box:view-box;transform-origin:32px 32px}" +
+    ".dart .ic.sk.anim .k-orn{animation:tk-spin 120s linear infinite}.ic.sk.anim .k-diam{animation:tk-spin 16s linear infinite}" +
+    ".ic.sk.anim .k-needle{animation:tk-needle 8s ease-in-out infinite}" +
+    ".ic.sk.anim .k-flap{transform-box:view-box;transform-origin:31px 36px;animation:tk-flap 1.4s ease-in-out infinite alternate}" +
+    ".ic.sk.anim .k-streak{animation:tk-streak 1.5s linear infinite}.ic.sk.anim .k-streak.s1{animation-delay:-.4s}.ic.sk.anim .k-streak.s2{animation-delay:-.8s}.ic.sk.anim .k-streak.s3{animation-delay:-1.1s}" +
+    ".ic.sk.anim .k-ember{transform-box:fill-box;transform-origin:50% 50%;animation:tk-ember 2.4s ease-out infinite}.ic.sk.anim .k-ember.e2{animation-delay:-.6s}.ic.sk.anim .k-ember.e3{animation-delay:-1.2s}.ic.sk.anim .k-ember.e4{animation-delay:-1.8s}" +
+    ".ic.sk.anim .k-aur{transform-box:fill-box;transform-origin:50% 100%;animation:tk-aur 7s ease-in-out infinite}.ic.sk.anim .k-aur.a2{animation-duration:9s;animation-delay:-3s}.ic.sk.anim .k-aur.a3{animation-duration:11s;animation-delay:-5s}" +
+    ".ic.sk.anim .k-sweep2{animation:tk-sweep2 4.4s ease-in-out infinite}" +
+    ".ic.sk.anim .k-shoot{animation:tk-shoot 7s linear infinite}" +
+    ".ic.sk.anim .k-blink{animation:tk-blink 1.8s ease-in-out infinite}.ic.sk.anim .k-blink.b2{animation-delay:-.6s}.ic.sk.anim .k-blink.b3{animation-delay:-1.2s}" +
+    ".ic.sk.anim .k-flick{transform-box:fill-box;transform-origin:50% 0;animation:tk-flick 1.1s ease-in-out infinite}" +
+    ".ic.sk.anim .k-beam{animation:tk-beam 2.6s ease-in-out infinite}" +
+    ".ic.sk.anim .k-hover{animation:tk-hover 3.4s ease-in-out infinite}" +
+    ".ic.sk.anim .k-band{animation:tk-band 16s linear infinite}" +
     ".ic.sk.anim .k-orb{transform-box:fill-box;transform-origin:center;animation:tk-spin 2.6s linear infinite}.ic.sk.anim .k-pulse,.ic.sk.anim .k-beat,.ic.sk.anim .k-tw,.ic.sk.anim .k-float,.ic.sk.anim .k-sway,.ic.sk.anim .k-hover,.ic.sk.anim .k-fly,.ic.sk.anim .k-d1,.ic.sk.anim .k-d2,.ic.sk.anim .k-d3{transform-box:fill-box;transform-origin:center}" +
     ".ic.sk.anim .k-spin{animation:tk-spin 26s linear infinite}" +
     ".ic.sk.anim .k-earth{animation:tk-earth 110s linear infinite}.ic.sk.anim .k-cloud{animation:tk-earth 80s linear infinite}" +
@@ -364,7 +493,18 @@
     "@keyframes tk-phase{0%,100%{transform:translateX(-12px)}50%{transform:translateX(-38px)}}" +
     "@keyframes tk-pil{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}" +
     "@keyframes tk-stream{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(-13px,12px);opacity:0}}" +
-        "@keyframes tk-spin{to{transform:rotate(360deg)}}" +
+        "@keyframes tk-needle{0%,100%{transform:rotate(-34deg)}15%{transform:rotate(24deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(8deg)}60%{transform:rotate(-3deg)}75%{transform:rotate(1deg)}}" +
+    "@keyframes tk-flap{from{transform:rotate(4deg)}to{transform:rotate(-12deg)}}" +
+    "@keyframes tk-streak{0%{transform:translateY(-8px);opacity:0}25%{opacity:.85}100%{transform:translateY(16px);opacity:0}}" +
+    "@keyframes tk-ember{0%{transform:translate(0,0) scale(1);opacity:0}15%{opacity:1}100%{transform:translate(2px,-16px) scale(.3);opacity:0}}" +
+    "@keyframes tk-aur{0%,100%{transform:translateX(-2px) scaleY(1);opacity:.85}50%{transform:translateX(2px) scaleY(1.14);opacity:1}}" +
+    "@keyframes tk-sweep2{0%,50%{transform:translateX(-28px)}100%{transform:translateX(60px)}}" +
+    "@keyframes tk-shoot{0%,78%{transform:translate(0,0);opacity:0}80%{opacity:1}100%{transform:translate(-24px,18px);opacity:0}}" +
+    "@keyframes tk-blink{0%,100%{opacity:.25}50%{opacity:1}}" +
+    "@keyframes tk-flick{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.07)}}" +
+    "@keyframes tk-beam{0%,100%{opacity:.55}50%{opacity:1}}" +
+    "@keyframes tk-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.600px)}}" +
+    "@keyframes tk-spin{to{transform:rotate(360deg)}}" +
     "@keyframes tk-spin-r{to{transform:rotate(-360deg)}}" +
     "@keyframes tk-ring{0%{transform:scale(.7);opacity:.75}100%{transform:scale(2.7);opacity:0}}" +
     "@keyframes tk-band{from{transform:translateX(0)}to{transform:translateX(-40px)}}" +
@@ -389,7 +529,7 @@
 
   function mount() {
     if (document.getElementById("tronx-stickers")) return;
-    var parts = [DEFS];
+    var parts = [DEFS.replace("</defs>", badgeDefs() + "</defs>")];
     STICKERS.forEach(function (s) { parts.push('<symbol id="st-' + s.id + '" viewBox="0 0 64 64">' + s.svg + "</symbol>"); });
     var holder = document.createElement("div");
     holder.id = "tronx-stickers";

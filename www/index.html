@@ -842,7 +842,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <section class="sheet" id="iconSheet" role="dialog" aria-label="Icono de la nota" hidden>
       <div class="sheethead"><strong>Icono de la nota</strong><button class="btn small" id="iconClose" type="button">Cerrar</button></div>
       <div class="seg" id="iconSeg">
-        <button type="button" data-k="stickers" aria-pressed="true">Detalles de Tronx</button>
+        <button type="button" data-k="stickers" aria-pressed="true">Insignias detalladas</button>
         <button type="button" data-k="emojis" aria-pressed="false">Emojis</button>
       </div>
       <div id="iconBody"></div>
@@ -907,7 +907,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <h2 class="dname" id="dName"></h2>
     <p class="dtext" id="dText"></p>
     <div class="dfacts"><div><span>Animación</span><p id="dAnim"></p></div><div><span>Dato curioso</span><p id="dFact"></p></div></div>
-    <div class="dacts"><button class="btn" id="dClose" type="button">Cerrar</button><button class="btn primary" id="dUse" type="button">Usar este detalle</button></div>
+    <div class="dacts"><button class="btn" id="dClose" type="button">Cerrar</button><button class="btn primary" id="dUse" type="button">Usar esta insignia</button></div>
   </section>
 </div>
 <div class="overlay" id="news" hidden>
@@ -1055,7 +1055,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.21.0";
+  var APP_VERSION = "1.22.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1322,7 +1322,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     else if (name === "links") $("links").hidden = true;
     else if (name === "menu") closeMenuUI();
     else if (name === "sheet") { $("sheet").hidden = true; $("scrim").hidden = true; }
-    else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; $("detail").hidden = true; document.body.classList.remove("dopen"); if (stkIO) stkIO.disconnect(); }
+    else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; $("detail").hidden = true; document.body.classList.remove("dopen"); if (stkIO) stkIO.disconnect(); clearInterval(stkTimer); }
     else if (name === "detail") { $("detail").hidden = true; document.body.classList.remove("dopen"); }
     else if (name === "news") $("news").hidden = true;
     else if (name === "editor") leaveEditorUI();
@@ -1872,7 +1872,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     changed(n); persistNow(); renderIconBtn(); renderList();
     if (!keep) closeLayer("icons");
   }
-  /* mantener pulsado: ficha del detalle */
+  /* mantener pulsado: ficha de la insignia */
   function bindLongPress(b, fn) {
     var t = 0, sx = 0, sy = 0;
     b.addEventListener("pointerdown", function (e) {
@@ -1883,12 +1883,12 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     b.addEventListener("pointermove", function (e) { if (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10) clearTimeout(t); });
     b.addEventListener("contextmenu", function (e) { e.preventDefault(); });
   }
-  var detailId = "", stkIO = null;
+  var detailId = "", stkIO = null, stkTimer = 0;
   function showDetail(st) {
     var inf = st.info || {};
     detailId = st.id;
     var art = $("dArt"); art.textContent = ""; art.appendChild(iconSpan("s:" + st.id));
-    $("dTag").textContent = inf.t || "Detalle";
+    $("dTag").textContent = inf.t || "Insignia";
     $("dName").textContent = st.n;
     $("dText").textContent = inf.d || "";
     $("dAnim").textContent = inf.a || "—";
@@ -1921,10 +1921,18 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       body.appendChild(g);
       if (window.IntersectionObserver) {
         if (stkIO) stkIO.disconnect();
-        stkIO = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle("off", !e.isIntersecting); }); }, { rootMargin: "40px" });
-        g.querySelectorAll("button").forEach(function (bt) { stkIO.observe(bt); });
+        var bts = g.querySelectorAll("button"), vis = new Set(), win = 0;
+        /* anima sólo una tanda de 8 insignias visibles y la va rotando: mitad de costo, se ve igual de vivo */
+        var apply = function () {
+          var list = [].filter.call(bts, function (x) { return vis.has(x); }), n = list.length, on = new Set();
+          for (var i = 0; i < Math.min(8, n); i++) on.add(list[(win + i) % n]);
+          [].forEach.call(bts, function (x) { x.classList.toggle("off", !on.has(x)); });
+        };
+        stkIO = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) vis.add(e.target); else vis.delete(e.target); }); apply(); }, { rootMargin: "40px" });
+        [].forEach.call(bts, function (bt) { stkIO.observe(bt); });
+        clearInterval(stkTimer); stkTimer = setInterval(function () { win += 4; apply(); }, 3000);
       }
-      var hint = el("p", "hintlp"); hint.textContent = "Mantené pulsado un detalle para ver su información."; body.appendChild(hint);
+      var hint = el("p", "hintlp"); hint.textContent = "Mantené pulsada una insignia para ver su información."; body.appendChild(hint);
     } else {
       EMOJI_SETS.forEach(function (set) {
         var h = el("div", "ihead"); h.textContent = set.n; body.appendChild(h);
@@ -2201,6 +2209,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.22.0", d: "7 nov 2026", t: "Insignias detalladas", l: ["Los Detalles pasan a llamarse Insignias detalladas y se rediseñaron desde cero como medallones: aro metálico, cara de cristal y gema.", "16 insignias, cada una con su escena y animaciones propias. Nuevas: Cohete, Ovni, Constelación, Eclipse, Cristal, Aurora, Fénix y Brújula estelar.", "Más fluido: cada insignia anima pocas piezas y se pausa cuando no se ve.", "Tus insignias anteriores se conservan."] },
     { v: "1.21.0", d: "7 nov 2026", t: "Segunda fila de Detalles", l: ["Nebulosa con pilares de polvo, Luna con fases y cráteres, Agujero negro con disco que gira y Cometa con dos colas y partículas, cada uno con animaciones propias.", "Luna cósmica ahora se llama Luna.", "Más fluido: el selector pausa las animaciones que no se ven."] },
     { v: "1.20.0", d: "7 nov 2026", t: "Tierra real y galaxia espiral", l: ["La Tierra ahora usa un mapa real simplificado: se reconocen América, África, Europa, Asia y Australia, con desiertos, selvas y hielo polar. Es igual en el menú y en Detalles.", "El detalle Planeta pasa a llamarse Saturno y Planeta Tierra pasa a llamarse Tierra.", "Galaxia rediseñada: brazos espirales con polvo oscuro, miles de estrellas de colores, núcleo cálido y zonas de nacimiento estelar."] },
     { v: "1.19.0", d: "7 nov 2026", t: "Detalles y novedades", l: ["Los stickers ahora se llaman Detalles.", "Primera fila rediseñada: Tierra, Galaxia, Estrella y Planeta con anillos, cada uno con su propia animación.", "Mantené pulsado un detalle para ver su información.", "Nueva sección Novedades en el menú."] },
