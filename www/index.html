@@ -1054,7 +1054,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.19.0";
+  var APP_VERSION = "1.20.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2195,6 +2195,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.20.0", d: "7 nov 2026", t: "Tierra real y galaxia espiral", l: ["La Tierra ahora usa un mapa real simplificado: se reconocen América, África, Europa, Asia y Australia, con desiertos, selvas y hielo polar. Es igual en el menú y en Detalles.", "El detalle Planeta pasa a llamarse Saturno y Planeta Tierra pasa a llamarse Tierra.", "Galaxia rediseñada: brazos espirales con polvo oscuro, miles de estrellas de colores, núcleo cálido y zonas de nacimiento estelar."] },
     { v: "1.19.0", d: "7 nov 2026", t: "Detalles y novedades", l: ["Los stickers ahora se llaman Detalles.", "Primera fila rediseñada: Tierra, Galaxia, Estrella y Planeta con anillos, cada uno con su propia animación.", "Mantené pulsado un detalle para ver su información.", "Nueva sección Novedades en el menú."] },
     { v: "1.18.0", d: "6 nov 2026", t: "Tierra y estrellas en movimiento", l: ["Nuevo detalle: Planeta Tierra, que gira lento y es el avatar por defecto.", "Las estrellas del fondo del menú se mueven y titilan suavemente."] },
     { v: "1.17.0", d: "6 nov 2026", t: "Encabezado del menú", l: ["Botón del menú y encabezado Explorador rediseñados, con contadores de notas, constelaciones y vínculos."] },

@@ -43,26 +43,100 @@
   }
   /* ---- galaxia (nueva): 2 brazos grandes + 2 menores, polvo, barra central y bulbo cálido; cada capa gira a su ritmo ---- */
   function galaxy2() {
-    var arms = "", sd = rnd(17), a, i, specs = [[0, 1, 2.2, 29], [Math.PI, 1, 2.2, 29], [Math.PI / 2, 0.55, 5, 21], [Math.PI * 1.5, 0.55, 5, 21]];
+    var arms = "", dust = "", stars = "", sd = rnd(29), a, i;
+    var specs = [[0, 1, 2.4, 30], [Math.PI, 1, 2.4, 30], [Math.PI / 2, 0.6, 5, 23], [Math.PI * 1.5, 0.6, 5, 23]];
+    function pt(th0, r) { var th = th0 + 1.8 * Math.log(r / 2.4); return [32 + r * Math.cos(th), 32 + r * Math.sin(th)]; }
     for (a = 0; a < specs.length; a++) {
-      var sp = specs[a], pts = [];
-      for (var r = sp[2]; r <= sp[3]; r += 1) { var th = sp[0] + 1.85 * Math.log(r / 2.2); pts.push(f(32 + r * Math.cos(th)) + " " + f(32 + r * Math.sin(th))); }
-      var d = "M" + pts.join("L"), w = sp[1];
-      arms += '<path d="' + d + '" fill="none" stroke="url(#tg-arm)" stroke-width="' + f(9 * w) + '" stroke-linecap="round" opacity=".13"/>' +
-              '<path d="' + d + '" fill="none" stroke="url(#tg-arm)" stroke-width="' + f(4.6 * w) + '" stroke-linecap="round" opacity=".42"/>' +
-              '<path d="' + d + '" fill="none" stroke="#f4ecff" stroke-width="' + f(1.15 * w) + '" stroke-linecap="round" opacity=".8"/>';
-      for (i = 0; i < (w > 0.7 ? 20 : 9); i++) {
-        var rr = sp[2] + 2 + i * ((sp[3] - sp[2] - 3) / (w > 0.7 ? 20 : 9)) + sd() * 1.2, tt = sp[0] + 1.85 * Math.log(rr / 2.2) + (sd() - 0.5) * 0.6;
-        arms += '<circle cx="' + f(32 + rr * Math.cos(tt)) + '" cy="' + f(32 + rr * Math.sin(tt)) + '" r="' + f(0.35 + sd() * 0.7) + '" fill="' + (i % 4 === 0 ? "#bfe6ff" : i % 4 === 1 ? "#ffd9f2" : "#fff") + '"/>';
+      var sp = specs[a], w = sp[1], pts = [], dp = [];
+      for (var r = sp[2]; r <= sp[3]; r += 0.8) { var q = pt(sp[0], r), q2 = pt(sp[0] - 0.2, r * 0.97); pts.push(f(q[0]) + " " + f(q[1])); dp.push(f(q2[0]) + " " + f(q2[1])); }
+      var d = "M" + pts.join("L");
+      arms += '<path d="' + d + '" fill="none" stroke="url(#tg-arm)" stroke-width="' + f(11 * w) + '" stroke-linecap="round" opacity=".12"/>' +
+              '<path d="' + d + '" fill="none" stroke="url(#tg-arm)" stroke-width="' + f(6 * w) + '" stroke-linecap="round" opacity=".3"/>' +
+              '<path d="' + d + '" fill="none" stroke="#cfe0ff" stroke-width="' + f(2.2 * w) + '" stroke-linecap="round" opacity=".5"/>';
+      dust += '<path d="M' + dp.join("L") + '" fill="none" stroke="#0a0420" stroke-width="' + f(2.1 * w) + '" stroke-linecap="round" opacity=".55"/>';
+      var n = w > 0.7 ? 46 : 20;
+      for (i = 0; i < n; i++) {
+        var rr = sp[2] + 1.5 + (i / n) * (sp[3] - sp[2] - 2) + (sd() - 0.5) * 1.4, q3 = pt(sp[0] + (sd() - 0.5) * 0.5, rr), t = rr / sp[3];
+        var col = t < 0.35 ? "#ffe2b0" : t < 0.65 ? "#f6f2ff" : (i % 3 === 0 ? "#ff9ad5" : "#a9d4ff");
+        stars += '<circle cx="' + f(q3[0] + (sd() - 0.5) * 2.2) + '" cy="' + f(q3[1] + (sd() - 0.5) * 2.2) + '" r="' + f(0.22 + sd() * 0.55) + '" fill="' + col + '" opacity="' + f(0.55 + sd() * 0.45) + '"/>';
       }
     }
-    return '<circle class="k-pulse" cx="32" cy="32" r="31" fill="url(#tg-glow)" opacity=".28"/>' +
-      '<g transform="rotate(-24 32 32)"><g transform="translate(32 32) scale(1 .62) translate(-32 -32)">' +
-      '<g class="k-gal-a">' + arms + '</g>' +
-      '<g class="k-gal-b"><ellipse cx="32" cy="32" rx="12" ry="3.6" transform="rotate(32 32 32)" fill="url(#tg-bulge)" opacity=".9"/><circle cx="32" cy="32" r="11" fill="none" stroke="#ffe3b0" stroke-opacity=".28" stroke-width="1" stroke-dasharray="1.5 3.5"/></g>' +
+    for (i = 0; i < 6; i++) { var qq = pt(i % 2 ? Math.PI : 0, 9 + i * 3.6 + sd() * 2); stars += '<circle cx="' + f(qq[0]) + '" cy="' + f(qq[1]) + '" r="' + f(0.9 + sd() * 0.6) + '" fill="#ff7cc4" opacity=".7"/>'; }
+    return '<circle class="k-pulse" cx="32" cy="32" r="31" fill="url(#tg-glow)" opacity=".3"/>' +
+      '<g transform="rotate(-24 32 32)"><g transform="translate(32 32) scale(1 .6) translate(-32 -32)">' +
+      '<circle cx="32" cy="32" r="30" fill="url(#tg-bulge)" opacity=".13"/>' +
+      '<g class="k-gal-a">' + arms + dust + stars + '</g>' +
+      '<g class="k-gal-b"><ellipse cx="32" cy="32" rx="13" ry="3.2" transform="rotate(32 32 32)" fill="url(#tg-bulge)" opacity=".95"/><circle cx="32" cy="32" r="12" fill="none" stroke="#ffe3b0" stroke-opacity=".25" stroke-width="1" stroke-dasharray="1.5 3.5"/></g>' +
       '</g></g>' +
-      '<circle class="k-pulse" cx="32" cy="32" r="8" fill="url(#tg-bulge)"/><circle cx="32" cy="32" r="2.6" fill="#fffaf0"/>' +
-      dots(5, 6, [3, 3, 61, 61], ["#fff", "#dcd0ff"]) + spark(52, 10, 2.4, "k-tw t1") + spark(10, 53, 2, "k-tw t3", "#ffe9a8");
+      '<circle class="k-pulse" cx="32" cy="32" r="8.500" fill="url(#tg-bulge)"/><circle cx="32" cy="32" r="4" fill="#fff1cf" opacity=".9"/><circle cx="32" cy="32" r="2" fill="#fff"/>' +
+      dots(5, 8, [3, 3, 61, 61], ["#fff", "#dcd0ff"]) + spark(53, 9, 2.4, "k-tw t1") + spark(9, 54, 2, "k-tw t3", "#ffe9a8");
+  }
+  /* ---- Tierra: mapa real simplificado (lon/lat) que rota; mismo dibujo en menú y selector ---- */
+  var EP = 88; /* ancho del mapa = 360° ; el disco (44px) muestra 180° */
+  var LAND = {
+    na: "-168,66 -156,71 -140,69.5 -125,70 -110,68 -95,68 -85,70 -82,66 -93,59 -94,57 -85,55 -80,52 -78,58 -77,62 -70,60 -64,60 -60,55 -56,52 -60,47 -66,45 -70,42 -74,40 -76,35 -81,31 -80,26 -82,26 -84,30 -89,30 -94,29 -97,26 -97,22 -95,19 -91,19 -90,21 -87,21 -88,16 -84,15 -83,10 -80,8 -78,8 -80,7 -84,9 -86,12 -92,14.5 -97,16 -105,20 -106,23 -110,27 -113,31 -115,30 -110,23 -112,25 -115,29 -117,33 -121,35 -124,40 -124,47 -128,51 -134,57 -140,60 -148,60 -152,58 -158,57 -165,55 -160,59 -165,62 -166,65",
+    gr: "-73,78 -60,82 -30,83 -20,80 -20,72 -28,68 -40,65 -44,60 -50,63 -54,68 -58,75",
+    sa: "-77,8 -72,12 -64,10 -60,8 -52,5 -50,0 -44,-2 -35,-5 -35,-9 -39,-14 -40,-20 -44,-23 -48,-26 -53,-34 -58,-35 -57,-38 -62,-39 -65,-42 -66,-47 -69,-51 -68,-55 -72,-54 -75,-50 -74,-42 -72,-35 -71,-28 -70,-18 -76,-14 -81,-6 -80,-2 -78,2 -78,7",
+    eu: "-9,37 -9,43 -2,43.5 -1,46 -4,48 2,51 5,53 8,54 9,57 11,56 12,54 20,54 22,58 24,60 30,60 22,61 25,65 21,64 17,61 19,59 16,56 12,56 11,59 5,59 5,62 14,67 20,70 28,71 40,67 44,68 60,69 70,73 80,73 100,77 113,74 130,72 140,72 160,70 170,70 180,68 180,65 170,60 163,60 160,54 156,51 155,57 143,59 137,54 141,52 140,48 135,43 129,41 129,35 126,35 126,38 122,40 118,38 122,37 120,32 122,30 118,24 110,21 108,16 109,12 105,9 101,13 100,8 104,1 101,3 98,8 98,16 94,17 92,22 87,21 80,15 80,10 77,8 73,17 70,21 67,25 62,25 57,26 56,27 50,30 48,30 50,26 56,24 59,22 55,17 44,12 43,15 38,21 35,28 33,30 35,33 36,36 30,36 27,37 26,40 29,41 23,40 24,38 22,37 19,41 13,45 16,41 18,40 16,38 12,42 8,44 3,43 0,39 -5,36",
+    af: "-6,36 10,37 11,33 20,31 25,32 32,31 34,28 37,22 39,16 43,12 51,12 48,5 42,-1 40,-10 40,-15 35,-20 35,-25 32,-29 27,-34 20,-35 18,-32 14,-23 12,-15 13,-9 9,-1 9,4 5,5 -2,5 -8,4 -13,8 -17,14 -17,21 -13,27 -10,30 -9,32",
+    au: "114,-22 122,-18 130,-12 136,-12 137,-16 142,-11 146,-19 153,-26 150,-37 145,-39 140,-38 135,-34 130,-31 124,-33 115,-34 114,-26",
+    mg: "44,-25 47,-25 50,-15 49,-12 44,-17",
+    uk: "-5,50 1,51 2,53 -2,56 -3,58.5 -6,58 -5,55 -3,54 -5,52",
+    ie: "-10,52 -6,52 -6,55 -10,54",
+    jp: "130,33 135,34 140,35 141,41 140,42 137,37 132,35",
+    su: "95,5 98,4 106,-6 104,-5 100,-1",
+    bo: "109,1 117,7 119,1 116,-4 110,-3",
+    jv: "105,-6 114,-7 114,-8.5 106,-7.5",
+    ng: "131,-1 141,-3 150,-10 142,-9 138,-8",
+    nz: "172,-35 178,-38 175,-41 173,-40",
+    nz2: "172,-41 174,-42 170,-46 167,-46",
+    cu: "-85,22 -77,20 -74,20 -80,23"
+  };
+  var DESERT = {
+    sahara: "-13,27 -5,31 10,32 25,30 33,26 35,22 25,16 10,15 -5,16 -13,20",
+    arabia: "36,28 43,30 48,29 55,24 55,18 45,14 40,20",
+    outback: "124,-22 135,-22 142,-26 135,-30 125,-29",
+    gobi: "90,42 110,44 112,40 100,38",
+    kalahari: "17,-20 26,-20 26,-27 18,-28",
+    sw: "-114,36 -106,36 -104,30 -112,30"
+  };
+  var FOREST = {
+    amazon: "-70,-3 -60,2 -50,-1 -52,-10 -62,-12 -70,-9",
+    congo: "12,3 26,4 28,-4 20,-8 13,-4",
+    sib: "60,62 100,66 140,64 130,56 90,56 62,56",
+    canada: "-125,58 -95,60 -70,54 -80,48 -110,50"
+  };
+  function poly(str) {
+    var pts = str.split(" "), out = "";
+    for (var i = 0; i < pts.length; i++) {
+      var c = pts[i].split(","), x = (parseFloat(c[0]) + 180) / 360 * EP, y = 32 - parseFloat(c[1]) / 90 * 22;
+      out += (i ? "L" : "M") + f(x) + " " + f(y);
+    }
+    return out + "Z";
+  }
+  function layer(map) { var o = ""; for (var k in map) o += poly(map[k]); return o; }
+  function earth() {
+    var land = layer(LAND), desert = layer(DESERT), forest = layer(FOREST);
+    var ice = "M0 54.5L" + EP + " 54.5L" + EP + " 52.2Q80 51 72 52.6T56 52T40 52.8T24 51.8T8 52.6T0 52Z" +
+              "M0 9.5L" + EP + " 9.5L" + EP + " 11Q76 12.5 66 11.2T46 11.4T26 11T10 11.6T0 11Z";
+    var sd = rnd(23), cl = "", i;
+    for (i = 0; i < 30; i++) {
+      var cx = sd() * EP, cy = 13 + sd() * 38, rx = 1.6 + sd() * 4, ry = 0.5 + sd() * 0.8;
+      cl += "M" + f(cx - rx) + " " + f(cy) + "Q" + f(cx) + " " + f(cy - ry * 2.2) + " " + f(cx + rx) + " " + f(cy) + "Q" + f(cx) + " " + f(cy + ry * 1.6) + " " + f(cx - rx) + " " + f(cy) + "Z";
+    }
+    function two(inner) { return "<g>" + inner + '</g><g transform="translate(' + EP + ' 0)">' + inner + "</g>"; }
+    var surf = '<path d="' + land + '" fill="#3f9e4d"/><path d="' + forest + '" fill="#26773a" opacity=".75"/><path d="' + desert + '" fill="#d6b676" opacity=".85"/>' +
+               '<path d="' + land + '" fill="none" stroke="#a9d98a" stroke-opacity=".5" stroke-width=".5" stroke-linejoin="round"/>' +
+               '' +
+               '<path d="' + ice + '" fill="#f4f9ff"/><path d="' + poly("-73,78 -60,82 -30,83 -20,80 -20,72 -28,68 -40,65 -44,60 -50,63 -54,68 -58,75") + '" fill="#f1f7ff" opacity=".9"/>';
+    return '<circle class="k-pulse" cx="32" cy="32" r="29" fill="url(#tg-atmo)"/>' +
+      '<circle cx="32" cy="32" r="22" fill="url(#tg-ocean)"/>' +
+      '<g clip-path="url(#tg-earth)"><g transform="translate(10 0)"><g class="k-earth">' + two(surf) + '</g></g>' +
+      '<g transform="translate(10 0)"><g class="k-cloud">' + two('<path d="' + cl + '" fill="#fff" fill-opacity=".55"/>') + '</g></g>' +
+      '<circle cx="32" cy="32" r="22" fill="url(#tg-limb)"/></g>' +
+      '<circle cx="32" cy="32" r="22" fill="none" stroke="#a5dcff" stroke-opacity=".6" stroke-width="1"/>' +
+      '<ellipse cx="24.500" cy="22.500" rx="6.500" ry="3.800" transform="rotate(-38 24.500 22.500)" fill="#fff" opacity=".22"/>' +
+      dots(91, 6, [2, 2, 62, 62], ["#fff", "#cfe3ff"]);
   }
   function constellation() {
     var pts = [[10, 47], [21, 23], [37, 31], [54, 12], [46, 52]], d = "M10 47L21 23 37 31 54 12M37 31L46 52", out = "";
@@ -75,15 +149,7 @@
   }
 
   var STICKERS = [
-    { id: "tierra", n: "Planeta Tierra", svg:
-      '<circle class="k-pulse" cx="32" cy="32" r="29" fill="url(#tg-atmo)"/>' +
-      '<circle cx="32" cy="32" r="22" fill="url(#tg-ocean)"/>' +
-      '<g clip-path="url(#tg-earth)"><g class="k-earth"><g><path d="M5 17L14 12L22 15L24 21L18 26L22 30L25 36L21 46L17 49L15 41L12 33L8 27Z M30 14L39 11L47 13L49 19L43 22L36 20Z M38 25L48 24L52 31L47 43L41 41L38 33Z M52 14L66 12L74 16L72 23L64 27L57 25Z M62 38L70 37L73 43L65 45Z" fill="url(#tg-land)" stroke="#53b95f" stroke-width="2.4" stroke-linejoin="round"/><ellipse cx="40" cy="9.5" rx="46" ry="3.2" fill="#fff" opacity=".9"/><ellipse cx="40" cy="54.5" rx="46" ry="3" fill="#fff" opacity=".85"/></g><g transform="translate(80 0)"><path d="M5 17L14 12L22 15L24 21L18 26L22 30L25 36L21 46L17 49L15 41L12 33L8 27Z M30 14L39 11L47 13L49 19L43 22L36 20Z M38 25L48 24L52 31L47 43L41 41L38 33Z M52 14L66 12L74 16L72 23L64 27L57 25Z M62 38L70 37L73 43L65 45Z" fill="url(#tg-land)" stroke="#53b95f" stroke-width="2.4" stroke-linejoin="round"/><ellipse cx="40" cy="9.5" rx="46" ry="3.2" fill="#fff" opacity=".9"/><ellipse cx="40" cy="54.5" rx="46" ry="3" fill="#fff" opacity=".85"/></g></g>' +
-      '<g class="k-cloud"><g><path d="M4 22Q9 19 14 22Q18 20 22 23Q15 25 4 22Z M30 33Q36 30 42 33Q47 31 52 34Q42 37 30 33Z M58 21Q63 19 69 22Q73 21 76 23Q68 26 58 21Z M12 42Q18 39 25 42Q20 45 12 42Z M52 45Q58 42 64 45Q58 48 52 45Z M36 17Q40 15 44 17Q40 19 36 17Z" fill="#fff" fill-opacity=".62"/></g><g transform="translate(80 0)"><path d="M4 22Q9 19 14 22Q18 20 22 23Q15 25 4 22Z M30 33Q36 30 42 33Q47 31 52 34Q42 37 30 33Z M58 21Q63 19 69 22Q73 21 76 23Q68 26 58 21Z M12 42Q18 39 25 42Q20 45 12 42Z M52 45Q58 42 64 45Q58 48 52 45Z M36 17Q40 15 44 17Q40 19 36 17Z" fill="#fff" fill-opacity=".62"/></g></g>' +
-      '<circle cx="32" cy="32" r="22" fill="url(#tg-limb)"/></g>' +
-      '<circle cx="32" cy="32" r="22" fill="none" stroke="#a5dcff" stroke-opacity=".6" stroke-width="1"/>' +
-      '<ellipse cx="24.500" cy="22.500" rx="6.500" ry="3.800" transform="rotate(-38 24.500 22.500)" fill="#fff" opacity=".28"/>' +
-      dots(91, 6, [2, 2, 62, 62], ["#fff", "#cfe3ff"]) },
+    { id: "tierra", n: "Tierra", svg: earth() },
     { id: "galaxia", n: "Galaxia", svg: galaxy2() },
     { id: "estrella", n: "Estrella", svg:
       '<circle class="k-pulse" cx="32" cy="32" r="28" fill="url(#tg-glow2)" opacity=".55"/>' +
@@ -93,7 +159,7 @@
       '<g class="k-spin-rev"><g transform="translate(32 32) rotate(45) scale(.52) translate(-32 -32)"><path d="M32 1Q34.4 29.6 63 32Q34.4 34.4 32 63Q29.6 34.4 1 32Q29.6 29.6 32 1Z" fill="url(#tg-star2)" opacity=".85"/></g></g>' +
       '<circle cx="32" cy="32" r="10.500" fill="url(#tg-sun)"/><circle class="k-beat" cx="32" cy="32" r="4.600" fill="#fffdf2"/>' +
       spark(12, 13, 3.200, "k-tw t1") + spark(54, 51, 2.800, "k-tw t2") + spark(53, 12, 2, "k-tw t3", "#ffe9a8") + dots(61, 4, [3, 3, 61, 61], ["#fff", "#ffe9a8"]) },
-    { id: "planeta", n: "Planeta con anillos", svg:
+    { id: "planeta", n: "Saturno", svg:
       '<circle class="k-pulse" cx="32" cy="33" r="28" fill="url(#tg-glow2)" opacity=".4"/>' +
       '<g class="k-sway"><g transform="translate(32 33) rotate(-20)">' +
       '<path d="M-29 0A29 9.600 0 0 1 29 0" fill="none" stroke="url(#tg-ring2)" stroke-width="2.6" stroke-linecap="round" opacity=".55"/>' +
@@ -190,10 +256,10 @@
 
   /* Ficha de cada detalle (se ve al mantener pulsado): tipo, descripción, qué hace su animación y un dato */
   var INFO = {
-    tierra: { t: "Planeta", d: "Nuestro hogar: el único mundo conocido con océanos líquidos y vida. Su atmósfera se ve como un halo azul.", a: "Gira sobre su eje; las nubes van un poco más rápido que el suelo.", c: "Un día completo dura 24 horas." },
+    tierra: { t: "Planeta Tierra", d: "Nuestro hogar: el único mundo conocido con océanos líquidos y vida. Su atmósfera se ve como un halo azul.", a: "Gira sobre su eje; las nubes van un poco más rápido que el suelo.", c: "Un día completo dura 24 horas." },
     galaxia: { t: "Galaxia espiral", d: "Miles de millones de estrellas alrededor de un centro brillante. En los brazos nacen estrellas nuevas.", a: "Los brazos giran lento, la barra central gira al revés y el núcleo late.", c: "La Vía Láctea tarda unos 230 millones de años en dar una vuelta." },
     estrella: { t: "Estrella", d: "Una esfera de gas que brilla por fusión nuclear. Los destellos en cruz son un efecto de la luz, no su forma real.", a: "Late, lanza ondas de luz y sus destellos giran en sentidos opuestos.", c: "El Sol es una estrella de tamaño mediano." },
-    planeta: { t: "Gigante con anillos", d: "Un planeta gaseoso con bandas de nubes y anillos de hielo y roca.", a: "Las bandas de nubes se desplazan, una tormenta cruza su cara y el anillo centellea.", c: "Sus anillos son anchísimos pero muy delgados: en general de unas decenas de metros." },
+    planeta: { t: "Saturno · gigante con anillos", d: "Un planeta gaseoso con bandas de nubes y anillos de hielo y roca.", a: "Las bandas de nubes se desplazan, una tormenta cruza su cara y el anillo centellea.", c: "Sus anillos son anchísimos pero muy delgados: en general de unas decenas de metros." },
     nebulosa: { t: "Nube cósmica", d: "Nubes de gas y polvo donde nacen las estrellas.", a: "Las nubes derivan y se mezclan despacio.", c: "La nebulosa de Orión se ve a simple vista como una mancha difusa." },
     luna: { t: "Satélite", d: "Una luna en cuarto creciente rodeada de estrellas.", a: "Se balancea suave y las estrellas titilan.", c: "La Luna se aleja de la Tierra unos 3,8 cm por año." },
     agujero: { t: "Agujero negro", d: "Una región donde la gravedad es tan fuerte que ni la luz escapa. El disco brillante es materia cayendo hacia él.", a: "Una partícula orbita el disco y otras son succionadas hacia el centro.", c: "Su borde, el horizonte de sucesos, es el punto sin retorno." },
@@ -257,7 +323,7 @@
     ".ic.sk.anim .k-band{animation:tk-band 16s linear infinite}" +
     ".ic.sk.anim .k-orb{transform-box:fill-box;transform-origin:center;animation:tk-spin 2.6s linear infinite}.ic.sk.anim .k-pulse,.ic.sk.anim .k-beat,.ic.sk.anim .k-tw,.ic.sk.anim .k-float,.ic.sk.anim .k-sway,.ic.sk.anim .k-hover,.ic.sk.anim .k-fly,.ic.sk.anim .k-d1,.ic.sk.anim .k-d2,.ic.sk.anim .k-d3{transform-box:fill-box;transform-origin:center}" +
     ".ic.sk.anim .k-spin{animation:tk-spin 26s linear infinite}" +
-    ".ic.sk.anim .k-earth{animation:tk-earth 96s linear infinite}.ic.sk.anim .k-cloud{animation:tk-earth 68s linear infinite}" +
+    ".ic.sk.anim .k-earth{animation:tk-earth 110s linear infinite}.ic.sk.anim .k-cloud{animation:tk-earth 80s linear infinite}" +
     ".ic.sk.anim .k-spin-slow{animation:tk-spin 44s linear infinite}" +
     ".ic.sk.anim .k-pulse{animation:tk-pulse 3.4s ease-in-out infinite}" +
     ".ic.sk.anim .k-beat{animation:tk-beat 3.6s ease-in-out infinite}" +
@@ -278,7 +344,7 @@
     "@keyframes tk-spin-r{to{transform:rotate(-360deg)}}" +
     "@keyframes tk-ring{0%{transform:scale(.7);opacity:.75}100%{transform:scale(2.7);opacity:0}}" +
     "@keyframes tk-band{from{transform:translateX(0)}to{transform:translateX(-40px)}}" +
-    "@keyframes tk-earth{from{transform:translateX(-80px)}to{transform:translateX(0)}}" +
+    "@keyframes tk-earth{from{transform:translateX(-88px)}to{transform:translateX(0)}}" +
     "@keyframes tk-pulse{0%,100%{transform:scale(.94);opacity:.8}50%{transform:scale(1.12);opacity:1}}" +
     "@keyframes tk-beat{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}" +
     "@keyframes tk-tw{0%,100%{opacity:.3;transform:scale(.65)}50%{opacity:1;transform:scale(1.25)}}" +
