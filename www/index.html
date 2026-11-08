@@ -1074,6 +1074,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <div class="remrow"><input type="datetime-local" id="remAt" aria-label="Fecha y hora del aviso"><select id="remRep" aria-label="Repetir"><option value="">Una vez</option><option value="day">Cada día</option><option value="week">Cada semana</option></select></div>
       <div class="actions"><button class="btn primary" id="remSet" type="button">Programar aviso</button><button class="btn danger" id="remOff" type="button" hidden>Quitar aviso</button></div>
       <p class="hint" id="remHint"></p>
+      <div class="actions"><button class="btn" id="remPermBtn" type="button">Permitir notificaciones</button></div>
+      <p class="hint" id="remPerm"></p>
       <h3>Carpeta</h3>
       <input class="folderin" id="folderIn" list="folderlist" maxlength="30" placeholder="Sin carpeta" aria-label="Carpeta de la nota" autocomplete="off">
       <datalist id="folderlist"></datalist>
@@ -1329,7 +1331,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.33.0";
+  var APP_VERSION = "1.33.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -3241,6 +3243,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.33.1", d: "8 nov 2026", t: "Permiso de notificaciones", l: ["En Personalizar > Recordatorio ahora se ve el estado real del permiso de notificaciones y hay un botón \"Permitir notificaciones\" para pedirlo.","Si Android lo tiene bloqueado, Tronx te dice dónde activarlo. Si esta versión se compiló sin el componente de avisos, también lo indica."] },
     { v: "1.33.0", d: "8 nov 2026", t: "Cámara, dibujo y PDF con imágenes", l: ["Botón Foto: sacá una foto y se agrega a la nota como imagen.","Botón Dibujo: dibujá a mano alzada con colores, tres grosores, goma y fondo transparente, blanco, papel u oscuro. El dibujo queda como una imagen más que podés mover, escalar y girar.","El PDF ahora incluye las imágenes (con su forma, filtro y opacidad).","Si buscás algo que está en una subnota, también aparece la nota principal."] },
     { v: "1.32.0", d: "8 nov 2026", t: "Limpieza interna", l: ["Se quitó código y dibujos que ya no se usaban. La app pesa un poco menos y queda más ordenada por dentro.","No cambia nada de lo que ves: las insignias se comprobaron idénticas pixel por pixel."] },
     { v: "1.31.0", d: "8 nov 2026", t: "Recordatorios con aviso", l: ["Programá un aviso en cualquier nota desde Personalizar > Recordatorio: elegí fecha y hora o un atajo (en 1 hora, esta noche, mañana, lunes).","Puede repetirse cada día o cada semana.","Tronx te avisa con una notificación aunque la app esté cerrada; al tocarla se abre la nota.","Las notas con aviso muestran un reloj en la lista y hay un filtro \"Con recordatorio\".","La primera vez Android te pide permiso para mostrar notificaciones."] },
@@ -3767,12 +3770,36 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       return plug.requestPermissions().then(function (q) { return q.display === "granted" ? "granted" : "denied"; });
     }).catch(function () { return "denied"; });
   }
+  /* estado real del permiso, para ver por qué no llegan los avisos */
+  function permStatus() {
+    var plug = ln();
+    if (!plug) return Promise.resolve({ st: "web", txt: "Estás usando Tronx fuera de la app de Android: los avisos con la app cerrada no están disponibles." });
+    return plug.checkPermissions().then(function (p) {
+      var d = p && p.display;
+      if (d === "granted") return { st: "granted", txt: "Notificaciones: permitidas." };
+      if (d === "denied") return { st: "denied", txt: "Notificaciones: bloqueadas. Abrí los ajustes de Android > Aplicaciones > Tronx > Notificaciones y activalas." };
+      return { st: "prompt", txt: "Notificaciones: todavía no autorizadas (" + d + "). Tocá \"Permitir notificaciones\"." };
+    }).catch(function (e) {
+      return { st: "error", txt: "El componente de avisos no responde (" + String((e && (e.message || e.code)) || e).slice(0, 80) + "). Probablemente esta versión se compiló sin el plugin de notificaciones." };
+    });
+  }
+  function renderPerm() {
+    permStatus().then(function (r) { $("remPerm").textContent = r.txt; $("remPermBtn").hidden = r.st === "granted" || r.st === "web" || r.st === "error"; });
+  }
+  $("remPermBtn").addEventListener("click", function () {
+    var plug = ln(); if (!plug) return;
+    plug.requestPermissions().then(function (q) {
+      toast(q.display === "granted" ? "Notificaciones permitidas" : "Android respondió: " + q.display);
+      renderPerm();
+    }).catch(function (e) { toast("No se pudo pedir el permiso: " + String((e && e.message) || e).slice(0, 60)); renderPerm(); });
+  });
   function renderRem() {
     var n = cur(); if (!n) return;
     var r = n.remind;
     $("remOff").hidden = !r; $("remSet").textContent = r ? "Cambiar aviso" : "Programar aviso";
     $("remAt").value = r ? localInput(nextAt(r)) : ""; $("remRep").value = r ? r.rep : "";
     $("remHint").textContent = r ? "Aviso: " + remText(r) + "." : (ln() ? "Tronx te avisa con una notificación aunque la app esté cerrada." : "Los avisos con la app cerrada funcionan solo en la app de Android. Acá solo se muestra un aviso si la app está abierta.");
+    renderPerm();
     var q = $("remQuick"); if (!q.firstChild) {
       [["En 1 hora", function () { return Date.now() + 3600000; }], ["Esta noche 21:00", function () { var d = new Date(); d.setHours(21, 0, 0, 0); if (d <= Date.now()) d.setDate(d.getDate() + 1); return d.getTime(); }],
        ["Mañana 9:00", function () { var d = new Date(); d.setDate(d.getDate() + 1); d.setHours(9, 0, 0, 0); return d.getTime(); }],
