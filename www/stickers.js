@@ -22,25 +22,6 @@
   }
 
   /* ---- galaxia: dos brazos en espiral hechos de trazos y polvo de estrellas ---- */
-  function galaxy() {
-    var arms = "", sd = rnd(11), a, i;
-    for (a = 0; a < 2; a++) {
-      var base = a * Math.PI, pts = [];
-      for (var r = 2.6; r <= 28.5; r += 1.1) { var th = base + 1.9 * Math.log(r / 2.6); pts.push(f(32 + r * Math.cos(th)) + " " + f(32 + r * Math.sin(th))); }
-      var d = "M" + pts.join("L");
-      arms += '<path d="' + d + '" fill="none" stroke="url(#tg-arm)" stroke-width="7.5" stroke-linecap="round" opacity=".2"/>' +
-              '<path d="' + d + '" fill="none" stroke="url(#tg-arm)" stroke-width="4" stroke-linecap="round" opacity=".5"/>' +
-              '<path d="' + d + '" fill="none" stroke="#f1e8ff" stroke-width="1.2" stroke-linecap="round" opacity=".85"/>';
-      for (i = 0; i < 16; i++) {
-        var rr = 5 + i * 1.5 + sd() * 1.2, tt = base + 1.9 * Math.log(rr / 2.6) + (sd() - 0.5) * 0.55;
-        arms += '<circle cx="' + f(32 + rr * Math.cos(tt)) + '" cy="' + f(32 + rr * Math.sin(tt)) + '" r="' + f(0.5 + sd() * 0.7) + '" fill="' + (i % 3 ? "#ffffff" : "#bfe6ff") + '"/>';
-      }
-    }
-    return '<ellipse cx="32" cy="32" rx="30" ry="14" transform="rotate(-20 32 32)" fill="url(#tg-glow)" opacity=".55"/>' +
-      '<g transform="rotate(-20 32 32)"><g transform="translate(32 32) scale(1 .66) translate(-32 -32)"><g class="k-spin">' + arms + "</g></g></g>" +
-      '<circle class="k-pulse" cx="32" cy="32" r="9" fill="url(#tg-core)"/><circle cx="32" cy="32" r="3" fill="#fff"/>' +
-      dots(5, 5, [4, 4, 60, 60], ["#fff", "#dcd0ff"]);
-  }
   /* ---- galaxia (nueva): 2 brazos grandes + 2 menores, polvo, barra central y bulbo cálido; cada capa gira a su ritmo ---- */
   function galaxy2() {
     var arms = "", dust = "", stars = "", sd = rnd(29), a, i;
@@ -127,7 +108,6 @@
     function two(inner) { return "<g>" + inner + '</g><g transform="translate(' + EP + ' 0)">' + inner + "</g>"; }
     var surf = '<path d="' + land + '" fill="#3f9e4d"/><path d="' + forest + '" fill="#26773a" opacity=".75"/><path d="' + desert + '" fill="#d6b676" opacity=".85"/>' +
                '<path d="' + land + '" fill="none" stroke="#a9d98a" stroke-opacity=".5" stroke-width=".5" stroke-linejoin="round"/>' +
-               '' +
                '<path d="' + ice + '" fill="#f4f9ff"/><path d="' + poly("-73,78 -60,82 -30,83 -20,80 -20,72 -28,68 -40,65 -44,60 -50,63 -54,68 -58,75") + '" fill="#f1f7ff" opacity=".9"/>';
     return '<circle class="k-pulse" cx="32" cy="32" r="29" fill="url(#tg-atmo)"/>' +
       '<circle cx="32" cy="32" r="22" fill="url(#tg-ocean)"/>' +
@@ -137,15 +117,6 @@
       '<circle cx="32" cy="32" r="22" fill="none" stroke="#a5dcff" stroke-opacity=".6" stroke-width="1"/>' +
       '<ellipse cx="24.500" cy="22.500" rx="6.500" ry="3.800" transform="rotate(-38 24.500 22.500)" fill="#fff" opacity=".22"/>' +
       dots(91, 6, [2, 2, 62, 62], ["#fff", "#cfe3ff"]);
-  }
-  function constellation() {
-    var pts = [[10, 47], [21, 23], [37, 31], [54, 12], [46, 52]], d = "M10 47L21 23 37 31 54 12M37 31L46 52", out = "";
-    out += '<path d="' + d + '" fill="none" stroke="#9f86ff" stroke-opacity=".28" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>';
-    out += '<path class="k-dash" d="' + d + '" fill="none" stroke="#d9ccff" stroke-opacity=".85" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 3.2"/>';
-    pts.forEach(function (p, i) {
-      out += '<g class="k-tw t' + i % 4 + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="6" fill="url(#tg-glow)"/><circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (3 + (i % 2) * 0.8) + '" fill="url(#tg-star)"/><circle cx="' + p[0] + '" cy="' + p[1] + '" r="1.3" fill="#fff"/></g>';
-    });
-    return out + dots(8, 8, [3, 3, 61, 61], ["#fff", "#cdbfff"]);
   }
 
   var OLD = [
@@ -225,8 +196,6 @@
       '<linearGradient id="tb-aur1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5dffb0" stop-opacity="0"/><stop offset="1" stop-color="#5dffb0" stop-opacity=".9"/></linearGradient>' +
       '<linearGradient id="tb-aur2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a8cff" stop-opacity="0"/><stop offset="1" stop-color="#3fe0d0" stop-opacity=".8"/></linearGradient>' +
       '<linearGradient id="tb-aur3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d27aff" stop-opacity="0"/><stop offset="1" stop-color="#ff7ad0" stop-opacity=".7"/></linearGradient>' +
-      '<linearGradient id="tb-fire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a0"/><stop offset=".4" stop-color="#ffb02e"/><stop offset="1" stop-color="#e0301a"/></linearGradient>' +
-      '<linearGradient id="tb-wing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5a2a"/><stop offset="1" stop-color="#ffb02e"/></linearGradient>' +
       '<linearGradient id="tb-kite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2cf"/><stop offset="1" stop-color="#c69a3e"/></linearGradient>';
   }
   function badge(id, scene) {
@@ -453,7 +422,6 @@
       '<circle cx="32" cy="32" r="23" fill="url(#tg-limb2)"/><g class="k-phase"><circle cx="32" cy="32" r="23.500" fill="#070820" opacity=".86"/></g></g></g>', 0.82);
   }
 
-  var OLD_IDS = { nebulosa: 1, agujero: 1, cometa: 1 };
   var STICKERS = [
     { id: "tierra", n: "Tierra", svg: badge("tierra", fit(earth(), 0.74) + '<g class="k-spin-slow"><circle cx="32" cy="8.500" r="2.100" fill="#e8e4ff"/><circle cx="31.500" cy="8" r=".8" fill="#9a8cc8" opacity=".6"/></g>') },
     { id: "galaxia", n: "Galaxia", svg: badge("galaxia", fit(galaxy2(), 1.02)) },
@@ -516,7 +484,6 @@
     '<radialGradient id="tg-planet" cx=".33" cy=".28" r=".95"><stop offset="0" stop-color="#e6d8ff"/><stop offset=".5" stop-color="#9468f7"/><stop offset="1" stop-color="#3a1e8f"/></radialGradient>' +
     '<radialGradient id="tg-planet2" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#cfe9ff"/><stop offset="1" stop-color="#7fb4ff"/></radialGradient>' +
     '<radialGradient id="tg-ocean" cx=".38" cy=".32" r=".9"><stop offset="0" stop-color="#4fb3ff"/><stop offset=".55" stop-color="#1e6fd6"/><stop offset="1" stop-color="#0b2f86"/></radialGradient>' +
-    '<linearGradient id="tg-land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7bd86a"/><stop offset=".55" stop-color="#3fae55"/><stop offset="1" stop-color="#b9a45a"/></linearGradient>' +
     '<radialGradient id="tg-limb" cx=".36" cy=".32" r=".82"><stop offset=".45" stop-color="#020a2a" stop-opacity="0"/><stop offset=".82" stop-color="#020a2a" stop-opacity=".38"/><stop offset="1" stop-color="#020a2a" stop-opacity=".78"/></radialGradient>' +
     '<radialGradient id="tg-atmo"><stop offset=".72" stop-color="#5cc8ff" stop-opacity=".5"/><stop offset=".86" stop-color="#5cc8ff" stop-opacity=".16"/><stop offset="1" stop-color="#5cc8ff" stop-opacity="0"/></radialGradient>' +
     '<clipPath id="tg-earth"><circle cx="32" cy="32" r="22"/></clipPath>' +
@@ -532,12 +499,7 @@
     '<radialGradient id="tg-glow2"><stop offset="0" stop-color="#ffdca3" stop-opacity=".9"/><stop offset=".5" stop-color="#ff9c6b" stop-opacity=".3"/><stop offset="1" stop-color="#ff9c6b" stop-opacity="0"/></radialGradient>' +
     '<radialGradient id="tg-gas" cx=".34" cy=".3" r=".95"><stop offset="0" stop-color="#fff3d1"/><stop offset=".5" stop-color="#e8b86d"/><stop offset="1" stop-color="#7a4a26"/></radialGradient>' +
     '<linearGradient id="tg-ring2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe9b8"/><stop offset=".5" stop-color="#e2b46a"/><stop offset="1" stop-color="#fff2d2"/></linearGradient>' +
-    '<clipPath id="tg-sph"><circle cx="32" cy="33" r="14.500"/></clipPath>' +
     '<radialGradient id="tg-nb1"><stop offset="0" stop-color="#8e5bff" stop-opacity=".95"/><stop offset=".6" stop-color="#6a3df0" stop-opacity=".45"/><stop offset="1" stop-color="#6a3df0" stop-opacity="0"/></radialGradient>' +
-    '<radialGradient id="tg-nb2"><stop offset="0" stop-color="#ee5fd0" stop-opacity=".9"/><stop offset=".6" stop-color="#c13fb8" stop-opacity=".4"/><stop offset="1" stop-color="#c13fb8" stop-opacity="0"/></radialGradient>' +
-    '<radialGradient id="tg-nb3"><stop offset="0" stop-color="#3fc4ff" stop-opacity=".85"/><stop offset=".6" stop-color="#2f86f0" stop-opacity=".4"/><stop offset="1" stop-color="#2f86f0" stop-opacity="0"/></radialGradient>' +
-    '<radialGradient id="tg-nb4"><stop offset="0" stop-color="#ffb26b" stop-opacity=".8"/><stop offset="1" stop-color="#ff8a5b" stop-opacity="0"/></radialGradient>' +
-    '<radialGradient id="tg-dust"><stop offset="0" stop-color="#0a0420" stop-opacity=".7"/><stop offset="1" stop-color="#0a0420" stop-opacity="0"/></radialGradient>' +
     '<radialGradient id="tg-moon" cx=".38" cy=".33" r=".95"><stop offset="0" stop-color="#fffbe8"/><stop offset=".55" stop-color="#ddd0ff"/><stop offset="1" stop-color="#8a74e0"/></radialGradient>' +
     '<linearGradient id="tg-disk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff7a3d" stop-opacity=".25"/><stop offset=".3" stop-color="#ffb35c"/><stop offset=".7" stop-color="#fff0b8"/><stop offset=".85" stop-color="#e97ad8"/><stop offset="1" stop-color="#7c4dff" stop-opacity=".25"/></linearGradient>' +
     '<linearGradient id="tg-tail" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6ebff"/><stop offset=".45" stop-color="#9a7bff" stop-opacity=".7"/><stop offset="1" stop-color="#9a7bff" stop-opacity="0"/></linearGradient>' +
@@ -545,12 +507,9 @@
     '<linearGradient id="tg-nose" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7ac0"/><stop offset="1" stop-color="#c2307f"/></linearGradient>' +
     '<linearGradient id="tg-fin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ee74d4"/><stop offset="1" stop-color="#7a3fc4"/></linearGradient>' +
     '<linearGradient id="tg-flame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a8"/><stop offset=".45" stop-color="#ff9a5a"/><stop offset="1" stop-color="#e0408a" stop-opacity="0"/></linearGradient>' +
-    '<linearGradient id="tg-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fe3ff" stop-opacity=".85"/><stop offset="1" stop-color="#9fe3ff" stop-opacity="0"/></linearGradient>' +
     '<linearGradient id="tg-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3f7ff"/><stop offset="1" stop-color="#6aa8ff"/></linearGradient>' +
     '<linearGradient id="tg-glass2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fd6ff"/><stop offset="1" stop-color="#2a1d8a"/></linearGradient>' +
     '<linearGradient id="tg-crystal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a6e8ff"/><stop offset=".5" stop-color="#a98bff"/><stop offset="1" stop-color="#e472d2"/></linearGradient>' +
-    '<linearGradient id="tg-crystal2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e7fbff"/><stop offset=".5" stop-color="#c8b4ff"/><stop offset="1" stop-color="#f3a6e6"/></linearGradient>' +
-    '<clipPath id="tg-gem"><path d="M15 21L24 8H40L49 21L32 58Z"/></clipPath>' +
     '</defs>';
 
   var CSS =

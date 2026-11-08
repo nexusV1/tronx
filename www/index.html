@@ -1303,7 +1303,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.31.0";
+  var APP_VERSION = "1.32.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1350,7 +1350,6 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     { k: "paper", n: "Papel" }, { k: "grid", n: "Cuadrícula" }, { k: "dots", n: "Puntos" }
   ];
   function bgOk(k) { for (var i = 0; i < BGS.length; i++) if (BGS[i].k === k) return true; return false; }
-  function bgName(k) { for (var i = 0; i < BGS.length; i++) if (BGS[i].k === k) return BGS[i].n; return "Sin fondo"; }
   function cleanBg(v) { v = String(v || ""); return v === "none" || bgOk(v) ? v : ""; }
   if (settings.noteBg !== "none" && !bgOk(settings.noteBg)) settings.noteBg = "nebula";
   settings.bgAnim = settings.bgAnim !== false;
@@ -2591,11 +2590,6 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* Barra de formato: viñeta, casilla, fecha y hora en el punto donde estás escribiendo */
   function fireInput() { bodyEl.dispatchEvent(new Event("input", { bubbles: true })); }
-  function insertPrefix(prefix) {
-    var v = bodyEl.value, s = bodyEl.selectionStart, ls = v.lastIndexOf("\n", s - 1) + 1;
-    bodyEl.setRangeText(prefix, ls, ls, "preserve");
-    var c = s + prefix.length; bodyEl.setSelectionRange(c, c);
-  }
   var MARK = /^(#{1,2} |> |• |\[[ xX]\] |\d+[.)] )/;
   function lineBounds() {
     var v = bodyEl.value, s = bodyEl.selectionStart, ls = v.lastIndexOf("\n", s - 1) + 1, le = v.indexOf("\n", s);
@@ -3119,6 +3113,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.32.0", d: "8 nov 2026", t: "Limpieza interna", l: ["Se quitó código y dibujos que ya no se usaban. La app pesa un poco menos y queda más ordenada por dentro.","No cambia nada de lo que ves: las insignias se comprobaron idénticas pixel por pixel."] },
     { v: "1.31.0", d: "8 nov 2026", t: "Recordatorios con aviso", l: ["Programá un aviso en cualquier nota desde Personalizar > Recordatorio: elegí fecha y hora o un atajo (en 1 hora, esta noche, mañana, lunes).","Puede repetirse cada día o cada semana.","Tronx te avisa con una notificación aunque la app esté cerrada; al tocarla se abre la nota.","Las notas con aviso muestran un reloj en la lista y hay un filtro \"Con recordatorio\".","La primera vez Android te pide permiso para mostrar notificaciones."] },
     { v: "1.30.0", d: "8 nov 2026", t: "Texto alrededor de las imágenes", l: ["Nueva opción \"Texto alrededor\" en el panel de cada imagen.","En modo Leer la imagen se acomoda a un lado (según de qué lado la dejaste) y el texto la rodea; con forma de círculo el texto sigue la curva.","Mientras editás, la imagen se sigue viendo en el lugar donde la dejaste."] },
     { v: "1.29.0", d: "8 nov 2026", t: "Compartir y proteger", l: ["Guardá cualquier nota como PDF o como Markdown (.md) desde Personalizar. El PDF lleva el texto, sin imágenes.","Historial de versiones: Tronx guarda una versión cada vez que terminás de editar una nota (hasta 10) y podés restaurar cualquiera desde Personalizar > Historial.","Bloqueo con PIN de 4 dígitos en Ajustes: se pide al abrir la app y al volver después de unos segundos. Es un candado para curiosos, no cifra las notas, y si lo olvidás no se puede recuperar."] },
@@ -3217,7 +3212,6 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var sc = $("pfSince");
     sc.textContent = st.first ? "Explorando tu universo desde el " + new Date(st.first).toLocaleDateString("es", { day: "numeric", month: "long", year: "numeric" }) : "Tu universo está por empezar.";
   }
-  function openProfile() { renderProfile(); $("profile").hidden = false; pushLayer("profile"); }
   $("profileClose").addEventListener("click", function () { closeLayer("profile"); });
   $("profile").addEventListener("click", function (e) { if (e.target === $("profile")) closeLayer("profile"); });
   $("pfName").addEventListener("input", function () { setProfile({ name: $("pfName").value }); renderMenu(); });
@@ -3454,7 +3448,6 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       li.appendChild(pair); li.appendChild(rm); list.appendChild(li);
     });
   }
-  function openLinks() { renderLinks(); $("links").hidden = false; pushLayer("links"); }
   $("lkA").addEventListener("change", renderLinks);
   $("lkB").addEventListener("change", renderLinks);
   $("lkGo").addEventListener("click", function () {
