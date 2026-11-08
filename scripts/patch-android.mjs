@@ -52,12 +52,14 @@ try {
     "android.permission.SCHEDULE_EXACT_ALARM",
     "android.permission.RECEIVE_BOOT_COMPLETED",
     "android.permission.VIBRATE",
+    "android.permission.CAMERA",
   ];
   const missing = perms.filter((p) => !xml.includes(`"${p}"`));
   if (missing.length) {
     const lines = missing.map((p) => `    <uses-permission android:name="${p}" />`).join("\n");
     if (!/<application[\s>]/.test(xml)) throw new Error("no se encontró <application>");
-    xml = xml.replace(/(\s*)<application/, `\n${lines}\n$1<application`);
+    const feat = xml.includes("android.hardware.camera") ? "" : `\n    <uses-feature android:name="android.hardware.camera" android:required="false" />`;
+    xml = xml.replace(/(\s*)<application/, `\n${lines}${feat}\n$1<application`);
     writeFileSync(manifest, xml);
   }
   console.log("Permisos de notificaciones listos:", perms.join(", "));
