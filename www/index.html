@@ -1138,6 +1138,11 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     </div>
     <p class="hint">Tus notas viven solo en este teléfono. Si desinstalás la app o borrás sus datos, se pierden. Guardá una copia de vez en cuando.</p>
     <input type="file" id="importFile" accept=".json,application/json" hidden>
+    <h3>Copia automática</h3>
+    <div class="seg" id="autoBkSeg" role="group" aria-label="Copia automática"><button type="button" data-v="on">Activada</button><button type="button" data-v="off">Apagada</button></div>
+    <p class="hint" id="autoBkHint"></p>
+    <div class="actions"><button class="btn" id="autoBkNow" type="button">Copiar ahora</button><button class="btn" id="autoBkPerm" type="button" hidden>Dar permiso de almacenamiento</button></div>
+    <div id="autoBkList"></div>
     <h3>Bloqueo con PIN</h3>
     <p class="hint" id="pinHint"></p>
     <div class="actions">
@@ -1344,7 +1349,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.34.0";
+  var APP_VERSION = "1.35.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1378,7 +1383,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   };
 
   /* ---------- ajustes ---------- */
-  var settings = { theme: "dark", accent: "violet", font: "sans", size: 16, view: "grid", sort: "updated", skin: 0, noteBg: "nebula", bgAnim: true, firstRun: 0, lastBackup: 0, bkNag: 0 };
+  var settings = { theme: "dark", accent: "violet", font: "sans", size: 16, view: "grid", sort: "updated", skin: 0, noteBg: "nebula", bgAnim: true, firstRun: 0, lastBackup: 0, bkNag: 0, autoBk: true, autoBkAt: 0, autoBkSig: "", autoBkWhere: "" };
   try { var sraw = lsGet(SKEY); if (sraw) Object.assign(settings, JSON.parse(sraw)); } catch (e) {}
   if (!ACCENTS[settings.accent]) settings.accent = "ember";
   settings.size = Math.min(24, Math.max(14, Number(settings.size) || 16));
@@ -1393,7 +1398,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function bgOk(k) { for (var i = 0; i < BGS.length; i++) if (BGS[i].k === k) return true; return false; }
   function cleanBg(v) { v = String(v || ""); return v === "none" || bgOk(v) ? v : ""; }
   if (settings.noteBg !== "none" && !bgOk(settings.noteBg)) settings.noteBg = "nebula";
-  settings.bgAnim = settings.bgAnim !== false;
+  settings.bgAnim = settings.bgAnim !== false; settings.autoBk = settings.autoBk !== false;
   var hadFirstRun = !!settings.firstRun;
   if (!hadFirstRun) settings.firstRun = Date.now();
   // El fondo que se ve de verdad: el de la nota si lo eligió, si no el de Ajustes.
@@ -2277,8 +2282,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     return new Promise(function (res, rej) {
       if (IDB) return res(IDB);
       try {
-        var r = indexedDB.open("tronx-img", 1);
-        r.onupgradeneeded = function () { r.result.createObjectStore("i"); };
+        var r = indexedDB.open("tronx-img", 2);
+        r.onupgradeneeded = function () { var d = r.result; if (!d.objectStoreNames.contains("i")) d.createObjectStore("i"); if (!d.objectStoreNames.contains("bk")) d.createObjectStore("bk"); };
         r.onsuccess = function () { IDB = r.result; res(IDB); };
         r.onerror = function () { rej(r.error); };
       } catch (e) { rej(e); }
@@ -3255,7 +3260,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* ---------- ajustes ---------- */
   function renderSettings() {
-    try { renderPinUI(); } catch (e) {}
+    try { renderPinUI(); renderAutoBk(); } catch (e) {}
     $("themeSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.theme ? "true" : "false"); });
     $("fontSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.font ? "true" : "false"); });
     var soundOn = !window.TronxSound || window.TronxSound.isEnabled();
@@ -3284,6 +3289,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.35.0", d: "8 nov 2026", t: "Copia automática", l: ["Tronx guarda solo una copia de tus notas cuando cambian (como máximo cada 6 horas) y conserva las últimas 7 dentro de la app.","También intenta guardar un archivo en Documentos/Tronx (tronx-copia-auto.json) para que sobreviva a una reinstalación.","En Ajustes ves el estado, podés copiar ahora, activar o apagar, y recuperar cualquier copia."] },
     { v: "1.34.0", d: "8 nov 2026", t: "Información en las imágenes", l: ["Cada imagen puede llevar un texto de información: seleccionala y escribilo en el panel.","Elegí dónde aparece: abajo, arriba, o encima de la imagen (abajo o arriba).","Elegí cuándo se ve: solo al tocar la imagen o siempre visible. En modo Leer, tocá la imagen para mostrar u ocultar el texto.","El texto también sale como pie de imagen en el PDF.","Arreglo: el botón Editar del modo Leer se veía casi invisible."] },
     { v: "1.33.2", d: "8 nov 2026", t: "Notificaciones más lindas", l: ["El título de la notificación es el de tu nota, sin el reloj ni los dos puntos sobrantes.","El texto se muestra limpio (sin símbolos de formato) y, al desplegar la notificación, se ve más de la nota con sus casillas y líneas.","Ícono propio de Tronx en la barra de estado y un canal llamado \"Recordatorios\", que podés ajustar desde los ajustes de Android (sonido, vibración, importancia)."] },
     { v: "1.33.1", d: "8 nov 2026", t: "Permiso de notificaciones", l: ["En Personalizar > Recordatorio ahora se ve el estado real del permiso de notificaciones y hay un botón \"Permitir notificaciones\" para pedirlo.","Si Android lo tiene bloqueado, Tronx te dice dónde activarlo. Si esta versión se compiló sin el componente de avisos, también lo indica."] },
@@ -3907,6 +3913,78 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }); } catch (e) {}
   }
   setTimeout(syncReminders, 2500);
+
+  /* ---------- copia automática ---------- */
+  function bkTx(mode) { return idbOpen().then(function (db) { return db.transaction("bk", mode).objectStore("bk"); }); }
+  function bkPut(key, val) { return bkTx("readwrite").then(function (st) { return new Promise(function (res, rej) { var q = st.put(val, key); q.onsuccess = function () { res(true); }; q.onerror = function () { rej(q.error); }; }); }); }
+  function bkAll() {
+    return bkTx("readonly").then(function (st) {
+      return new Promise(function (res) { var out = [], q = st.openCursor(); q.onsuccess = function () { var c = q.result; if (c) { out.push({ k: c.key, v: c.value }); c.continue(); } else res(out); }; q.onerror = function () { res(out); }; });
+    }).catch(function () { return []; });
+  }
+  function bkTrim() {
+    return bkAll().then(function (a) {
+      a = a.filter(function (x) { return String(x.k).indexOf("auto-") === 0; }).sort(function (x, y) { return x.k < y.k ? 1 : -1; });
+      if (a.length <= 7) return;
+      return bkTx("readwrite").then(function (st) { a.slice(7).forEach(function (x) { st.delete(x.k); }); });
+    }).catch(function () {});
+  }
+  function notesSig() { var m = 0, c = 0, l = 0; notes.forEach(function (n) { c++; m = Math.max(m, n.updatedAt); l += n.body.length + n.title.length + n.images.length; }); return c + ":" + m + ":" + l; }
+  var bkBusy = false;
+  function autoBackup(force) {
+    if (bkBusy || !notes.size) return Promise.resolve();
+    if (!force) {
+      if (!settings.autoBk) return Promise.resolve();
+      var age = Date.now() - (settings.autoBkAt || 0), changedNow = notesSig() !== settings.autoBkSig;
+      if (!((changedNow && age > 6 * 3600000) || age > 7 * 86400000)) return Promise.resolve();
+    }
+    bkBusy = true; persistNow();
+    var json = backupJson(), d = new Date(), p2 = function (x) { return String(x).padStart(2, "0"); };
+    var key = "auto-" + d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()), where = "";
+    return bkPut(key, { t: Date.now(), n: notes.size, json: json }).then(bkTrim).catch(function () {}).then(function () {
+      var fs = capPlugin("Filesystem"); if (!fs) { where = "web"; return; }
+      return imagesForBackup().then(function (imgs) {
+        var obj = JSON.parse(json), size = 0, ids = Object.keys(imgs);
+        ids.forEach(function (id) { size += imgs[id].length; });
+        if (ids.length && size < 15 * 1024 * 1024) obj.images = imgs;
+        return fs.writeFile({ path: "Tronx/tronx-copia-auto.json", data: JSON.stringify(obj), directory: "DOCUMENTS", encoding: "utf8", recursive: true })
+          .then(function () { where = "ok" + (ids.length && !obj.images ? "-sinimg" : ""); });
+      }).catch(function (e) { where = "fail:" + String((e && (e.message || e.code)) || e).slice(0, 90); });
+    }).then(function () {
+      settings.autoBkAt = Date.now(); settings.autoBkSig = notesSig(); settings.autoBkWhere = where;
+      if (where.indexOf("ok") === 0) settings.lastBackup = Date.now();
+      saveSettings(); bkBusy = false; renderAutoBk(); try { renderBkBar(); } catch (e) {}
+    }).catch(function () { bkBusy = false; });
+  }
+  var BKDT = new Intl.DateTimeFormat("es-AR", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  function renderAutoBk() {
+    var seg = $("autoBkSeg"); if (!seg) return;
+    seg.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.autoBk ? "true" : "false"); });
+    var w = settings.autoBkWhere || "", t = settings.autoBkAt ? "Última copia: " + BKDT.format(new Date(settings.autoBkAt)).replace(",", "") + ". " : "Todavía no se hizo ninguna copia. ";
+    var where = w.indexOf("ok") === 0 ? "Guardada también en la carpeta Documentos/Tronx del teléfono" + (w === "ok-sinimg" ? " (sin las imágenes, por su tamaño)." : ".")
+      : w.indexOf("fail") === 0 ? "No se pudo guardar en Documentos (" + w.slice(5) + "); quedó solo dentro de la app." : w === "web" ? "Guardada dentro de la app." : "";
+    $("autoBkHint").textContent = (settings.autoBk ? "Tronx guarda una copia sola cuando cambian tus notas (como máximo cada 6 horas) y conserva las últimas 7 dentro de la app. " : "Está apagada. ") + t + where;
+    $("autoBkPerm").hidden = !(w.indexOf("fail") === 0 && /permi|denied|EACCES/i.test(w));
+    bkAll().then(function (a) {
+      var box = $("autoBkList"); box.textContent = "";
+      a.filter(function (x) { return x.v && x.v.json; }).sort(function (x, y) { return x.v.t < y.v.t ? 1 : -1; }).forEach(function (x) {
+        var row = el("div", "verrow"), vt = el("div", "vt"), b = el("b"), sp = el("span");
+        b.textContent = BKDT.format(new Date(x.v.t)).replace(",", ""); sp.textContent = x.v.n + (x.v.n === 1 ? " nota" : " notas");
+        vt.appendChild(b); vt.appendChild(sp); row.appendChild(vt);
+        var rb = el("button", "btn small"); rb.type = "button"; rb.textContent = "Recuperar";
+        rb.addEventListener("click", function () { importBackup(x.v.json); });
+        row.appendChild(rb); box.appendChild(row);
+      });
+    });
+  }
+  $("autoBkSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.autoBk = b.dataset.v === "on"; saveSettings(); renderAutoBk(); });
+  $("autoBkNow").addEventListener("click", function () { toast("Haciendo la copia…"); autoBackup(true).then(function () { toast(settings.autoBkWhere.indexOf("ok") === 0 ? "Copia hecha en Documentos/Tronx" : "Copia hecha dentro de la app"); }); });
+  $("autoBkPerm").addEventListener("click", function () {
+    var fs = capPlugin("Filesystem"); if (!fs || !fs.requestPermissions) return;
+    fs.requestPermissions().then(function () { return autoBackup(true); }).catch(function () { toast("No se pudo pedir el permiso"); });
+  });
+  setTimeout(function () { autoBackup(false); renderAutoBk(); }, 7000);
+  document.addEventListener("visibilitychange", function () { if (document.hidden) autoBackup(false); });
 
   /* ---------- historial de versiones ---------- */
   var baseline = null;
