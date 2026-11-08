@@ -756,6 +756,19 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .pimg.sel { touch-action: none; outline: 2px dashed var(--accent); outline-offset: 2px; z-index: 50 !important; }
 .pimg.lock { cursor: default; }
 .pimgs.ro .pimg { pointer-events: none; }
+.pimgs.ro .pimg.hasinfo { pointer-events: auto; cursor: pointer; }
+.pinfo { display: none; position: absolute; width: max(100%, 150px); box-sizing: border-box; font-size: 13px; line-height: 1.35; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 6px 9px; box-shadow: 0 6px 18px rgba(0,0,0,0.35); pointer-events: none; white-space: pre-wrap; overflow-wrap: anywhere; z-index: 2; text-align: left; }
+.pinfo.below { top: 100%; left: 0; margin-top: 8px; } .pinfo.above { bottom: 100%; left: 0; margin-bottom: 8px; }
+.pinfo.in-bottom, .pinfo.in-top { left: 0; width: 100%; border: 0; border-radius: 0; background: rgba(8,8,24,0.74); color: #fff; box-shadow: none; }
+.pinfo.in-bottom { bottom: 0; } .pinfo.in-top { top: 0; }
+.pimg.sel .pinfo, .pimg.always .pinfo, .pimg.info-on .pinfo { display: block; }
+.pfimg { position: relative; }
+.pfloat .pinfo.below, .pfloat .pinfo.above { position: static; width: auto; margin: 6px 0 0; }
+.pfloat .pinfo.above { margin: 0 0 6px; }
+.pfloat .pinfo.in-bottom, .pfloat .pinfo.in-top { position: absolute; }
+.pfloat.hasinfo { cursor: pointer; }
+.pfloat.always .pinfo, .pfloat.info-on .pinfo { display: block; }
+.imgpanel .infoin { width: 100%; box-sizing: border-box; min-height: 52px; resize: vertical; font: inherit; font-size: 14px; color: var(--ink); background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; }
 .pimgs.reading .pimg.wrapped { display: none; }
 .pimg.sel.wrapped::after { content: "Texto alrededor: se ve en Leer"; position: absolute; left: 0; top: -24px; font-size: 11px; line-height: 1; padding: 4px 7px; border-radius: 7px; background: var(--accent); color: var(--accent-ink); white-space: nowrap; pointer-events: none; }
 .read { display: flow-root; position: relative; }
@@ -834,7 +847,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .read th { background: var(--raised); }
 .fmt .btn.ic { min-width: 38px; }
 .fmt .btn:disabled { opacity: 0.35; }
-.fmt .btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.fmt .btn[aria-pressed="true"] { background: var(--accent) !important; color: var(--accent-ink) !important; border-color: var(--accent) !important; }
 .fmt.reading [data-ins]:not([data-ins="read"]) { display: none; }
 .read { flex: 1; min-height: 0; overflow-y: auto; max-width: 70ch; font-family: var(--note-font); font-size: var(--note-size); line-height: 1.7; padding: 4px 0 16px; overflow-wrap: anywhere; }
 .read[hidden] { display: none; }
@@ -1331,7 +1344,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.33.2";
+  var APP_VERSION = "1.34.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1511,7 +1524,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         id: String(i.id), src: String(i.src || i.id), cx: numIn(i.cx, 0, 1, 0.5), cy: numIn(i.cy, 0, 30000, 80), w: numIn(i.w, 0.05, 1.5, 0.6),
         nar: nar, ar: numIn(i.ar, 0.1, 10, nar), r: numIn(i.r, -180, 180, 0), op: numIn(i.op, 0.1, 1, 1),
         rad: numIn(i.rad, 0, 50, 0), wrap: !!i.wrap, fl: !!i.fl, bd: Math.round(numIn(i.bd, 0, 3, 0)), sh: !!i.sh,
-        ft: IMG_FT.indexOf(i.ft) >= 0 ? i.ft : "", z: Math.round(numIn(i.z, 0, 999, 0)), back: !!i.back, lock: !!i.lock
+        ft: IMG_FT.indexOf(i.ft) >= 0 ? i.ft : "", z: Math.round(numIn(i.z, 0, 999, 0)), back: !!i.back, lock: !!i.lock,
+        info: String(i.info || "").slice(0, 600), ip: ["below", "above", "in-bottom", "in-top"].indexOf(i.ip) >= 0 ? i.ip : "below", show: i.show === "always" ? "always" : "tap"
       });
     });
     return out;
@@ -2321,6 +2335,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     node.classList.toggle("shadow", it.sh); node.classList.toggle("lock", it.lock); node.classList.toggle("wrapped", !!it.wrap);
     var im = node.querySelector("img");
     if (im) styleImgEl(it, im);
+    var inf = node.querySelector(".pinfo");
+    if (!it.info) { if (inf) inf.remove(); }
+    else { if (!inf) { inf = el("div"); node.appendChild(inf); } inf.className = "pinfo " + it.ip; inf.textContent = it.info; }
+    node.classList.toggle("hasinfo", !!it.info); node.classList.toggle("always", !!it.info && it.show === "always");
   }
   function styleImgEl(it, im) {
     im.className = it.ft ? "f-" + it.ft : "";
@@ -2335,9 +2353,15 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (!ws.length) return;
     var W = readEl.clientWidth || imgsEl.clientWidth || 300, blocks = Array.from(readEl.children), tops = blocks.map(function (b) { return b.offsetTop; });
     ws.forEach(function (it) {
-      var f = el("div", "pfloat"), im = el("img"); im.alt = ""; f.appendChild(im);
+      var f = el("div", "pfloat"), box = el("div", "pfimg"), im = el("img"); im.alt = ""; box.appendChild(im); box.style.aspectRatio = String(it.ar);
+      if (it.info) {
+        var inf = el("div", "pinfo " + it.ip); inf.textContent = it.info;
+        if (it.ip === "above") f.appendChild(inf);
+        f.appendChild(box); if (it.ip === "below") f.appendChild(inf); else if (it.ip !== "above") box.appendChild(inf);
+        f.classList.add("hasinfo"); if (it.show === "always") f.classList.add("always");
+      } else f.appendChild(box);
       var left = it.cx < 0.5;
-      f.style.width = (Math.min(it.w, 0.6) * W) + "px"; f.style.aspectRatio = String(it.ar); f.style.opacity = it.op;
+      f.style.width = (Math.min(it.w, 0.6) * W) + "px"; f.style.opacity = it.op;
       f.style.float = left ? "left" : "right"; f.style.margin = left ? "4px 14px 8px 0" : "4px 0 8px 14px";
       if (it.rad >= 49) f.style.shapeOutside = "circle(50%)";
       f.classList.toggle("shadow", it.sh); styleImgEl(it, im);
@@ -2355,7 +2379,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     bodyEl.style.height = ""; readEl.style.minHeight = "";
     if (!on) return;
     var W = imgsEl.clientWidth || 300, bottom = 0;
-    n.images.forEach(function (i) { var h = i.w * W / i.ar, ex = Math.abs(Math.sin(i.r * Math.PI / 180)) * Math.max(0, (h - i.w * W) / 2); bottom = Math.max(bottom, i.cy + h / 2 + ex + 24); });
+    n.images.forEach(function (i) { var h = i.w * W / i.ar, ex = Math.abs(Math.sin(i.r * Math.PI / 180)) * Math.max(0, (h - i.w * W) / 2); var xi = i.info && (i.ip === "below" || i.ip === "above") ? 16 * Math.ceil(i.info.length / Math.max(14, i.w * W / 7)) + 22 : 0; bottom = Math.max(bottom, i.cy + h / 2 + ex + 24 + xi); });
     var top = bodyEl.offsetTop || 0, need = Math.max(bottom - top, contentEl.clientHeight - top - 8);
     if (readMode) readEl.style.minHeight = need + "px";
     else { bodyEl.style.height = "auto"; bodyEl.style.height = Math.max(bodyEl.scrollHeight, need) + "px"; }
@@ -2400,6 +2424,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       sp.textContent = label; inp.type = "range"; inp.min = min; inp.max = max; inp.step = step; inp.dataset.k = k;
       d.appendChild(sp); d.appendChild(inp); d.appendChild(out); P.appendChild(d);
     }
+    var ta = el("textarea", "infoin"); ta.rows = 2; ta.maxLength = 600; ta.placeholder = "Información de la imagen (se muestra al tocarla)"; ta.setAttribute("aria-label", "Información de la imagen"); P.appendChild(ta);
+    grp("Texto", [["below", "Abajo"], ["above", "Arriba"], ["in-bottom", "Sobre la imagen ↓"], ["in-top", "Sobre la imagen ↑"]], "ip");
+    grp("Mostrar", [["tap", "Al tocar"], ["always", "Siempre visible"]], "show");
     ctl("w", "Tamaño", 5, 150, 1); ctl("r", "Giro", -180, 180, 1); ctl("op", "Opacidad", 10, 100, 1);
     function grp(label, items, key) {
       var g = el("div", "grp"), l = el("span", "lbl"); l.textContent = label; g.appendChild(l);
@@ -2419,8 +2446,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var vals = { w: Math.round(it.w * 100), r: Math.round(it.r), op: Math.round(it.op * 100) };
     P.querySelectorAll("input[type=range]").forEach(function (i) { i.value = vals[i.dataset.k]; i.nextSibling.textContent = i.dataset.k === "r" ? vals.r + "°" : vals[i.dataset.k] + "%"; });
     var shape = it.rad >= 49 ? "circ" : Math.abs(it.ar - it.nar) < 0.01 ? (it.rad > 0 ? "round" : "orig") : Math.abs(it.ar - 1) < 0.01 ? "sq" : Math.abs(it.ar - 4 / 3) < 0.01 ? "43" : Math.abs(it.ar - 16 / 9) < 0.01 ? "169" : "";
+    var ta = P.querySelector(".infoin"); if (ta && document.activeElement !== ta) ta.value = it.info || "";
     P.querySelectorAll(".chip").forEach(function (c) {
       var k = c.dataset.k, v = c.dataset.v, on = false;
+      if (k === "ip") on = it.ip === v; else if (k === "show") on = it.show === v;
       if (k === "shape") on = v === shape; else if (k === "bd") on = String(it.bd) === v; else if (k === "ft") on = it.ft === v;
       else if (k === "tog") on = !!it[v];
       if (k === "act") c.removeAttribute("aria-pressed"); else c.setAttribute("aria-pressed", on ? "true" : "false");
@@ -2440,6 +2469,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     else { it.op = v / 100; i.nextSibling.textContent = v + "%"; }
     imgChanged(it, true);
   });
+  $("imgPanel").addEventListener("input", function (e) {
+    var ta = e.target.closest(".infoin"), it = selImg && imgOf(selImg); if (!ta || !it) return;
+    it.info = ta.value.slice(0, 600); imgChanged(it, true);
+  });
   $("imgPanel").addEventListener("click", function (e) {
     var c = e.target.closest(".chip"), it = selImg && imgOf(selImg), n = cur(); if (!c || !it || !n) return;
     var k = c.dataset.k, v = c.dataset.v;
@@ -2450,6 +2483,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     } else if (k === "bd") it.bd = Number(v);
     else if (k === "ft") it.ft = v;
     else if (k === "tog") it[v] = !it[v];
+    else if (k === "ip") it.ip = v;
+    else if (k === "show") it.show = v;
     else if (k === "act") {
       var top = n.images.reduce(function (m, x) { return Math.max(m, x.z); }, 0), low = n.images.reduce(function (m, x) { return Math.min(m, x.z); }, 999);
       if (v === "front") { it.z = Math.min(999, top + 1); it.back = false; }
@@ -2511,6 +2546,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     gest = null; ptrs.clear();
     imgChanged(it, true); renderPanel();
   }
+  imgsEl.addEventListener("click", function (e) {
+    var nd = e.target.closest(".pimg.hasinfo"), n = cur();
+    if (nd && n && (readMode || n.trashedAt)) nd.classList.toggle("info-on");
+  });
   imgsEl.addEventListener("pointerup", endGest); imgsEl.addEventListener("pointercancel", endGest);
   /* agregar imágenes */
   function addImageBlob(n, blob, w, h, k) {
@@ -2701,6 +2740,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     fitBody();
   }
   readEl.addEventListener("click", function (e) {
+    var pf = e.target.closest(".pfloat.hasinfo");
+    if (pf) { pf.classList.toggle("info-on"); return; }
     var w = e.target.closest("a.wl");
     if (w) {
       e.preventDefault();
@@ -3243,6 +3284,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.34.0", d: "8 nov 2026", t: "Información en las imágenes", l: ["Cada imagen puede llevar un texto de información: seleccionala y escribilo en el panel.","Elegí dónde aparece: abajo, arriba, o encima de la imagen (abajo o arriba).","Elegí cuándo se ve: solo al tocar la imagen o siempre visible. En modo Leer, tocá la imagen para mostrar u ocultar el texto.","El texto también sale como pie de imagen en el PDF.","Arreglo: el botón Editar del modo Leer se veía casi invisible."] },
     { v: "1.33.2", d: "8 nov 2026", t: "Notificaciones más lindas", l: ["El título de la notificación es el de tu nota, sin el reloj ni los dos puntos sobrantes.","El texto se muestra limpio (sin símbolos de formato) y, al desplegar la notificación, se ve más de la nota con sus casillas y líneas.","Ícono propio de Tronx en la barra de estado y un canal llamado \"Recordatorios\", que podés ajustar desde los ajustes de Android (sonido, vibración, importancia)."] },
     { v: "1.33.1", d: "8 nov 2026", t: "Permiso de notificaciones", l: ["En Personalizar > Recordatorio ahora se ve el estado real del permiso de notificaciones y hay un botón \"Permitir notificaciones\" para pedirlo.","Si Android lo tiene bloqueado, Tronx te dice dónde activarlo. Si esta versión se compiló sin el componente de avisos, también lo indica."] },
     { v: "1.33.0", d: "8 nov 2026", t: "Cámara, dibujo y PDF con imágenes", l: ["Botón Foto: sacá una foto y se agrega a la nota como imagen.","Botón Dibujo: dibujá a mano alzada con colores, tres grosores, goma y fondo transparente, blanco, papel u oscuro. El dibujo queda como una imagen más que podés mover, escalar y girar.","El PDF ahora incluye las imágenes (con su forma, filtro y opacidad).","Si buscás algo que está en una subnota, también aparece la nota principal."] },
@@ -3998,8 +4040,15 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     function placeImg(q) {
       var wpt = Math.min(1, q.pi.it.w) * MAXW, hpt = wpt / q.pi.it.ar, maxh = PH - 2 * M - 10;
       if (hpt > maxh) { wpt *= maxh / hpt; hpt = maxh; }
-      if (y - hpt < M) { pages.push([]); y = PH - M; }
-      y -= hpt; pages[pages.length - 1].push({ img: q.idx, x: M + (MAXW - wpt) / 2, y: y, w: wpt, h: hpt }); y -= 10;
+      var inf = q.pi.it.info ? wrap(latin1(q.pi.it.info), 9.5, false, wpt) : [], capH = inf.length ? inf.length * 13.3 + 4 : 0;
+      if (hpt + capH > maxh) { hpt = maxh - capH; wpt = hpt * q.pi.it.ar; }
+      if (y - hpt - capH < M) { pages.push([]); y = PH - M; }
+      var x0 = M + (MAXW - wpt) / 2;
+      function cap() { inf.forEach(function (ln) { y -= 13.3; pages[pages.length - 1].push({ x: x0, y: y + 2.4, size: 9.5, bold: false, t: ln }); }); y -= 4; }
+      if (q.pi.it.ip === "above" && inf.length) cap();
+      y -= hpt; pages[pages.length - 1].push({ img: q.idx, x: x0, y: y, w: wpt, h: hpt });
+      if (q.pi.it.ip !== "above" && inf.length) cap();
+      y -= 10;
     }
     blocks.forEach(function (b) {
       while (pend.length && b.ey > 0 && pend[0].top <= b.ey) placeImg(pend.shift());
