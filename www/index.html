@@ -728,7 +728,22 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .tplrow { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 0 0 4px; }
 .tplrow::-webkit-scrollbar { display: none; }
 .tpl { display: inline-flex; align-items: center; gap: 6px; }
-.fmt { display: flex; gap: 6px; padding: 8px 0 2px; overflow-x: auto; scrollbar-width: none; }
+.fmt { display: flex; gap: 6px; padding: 8px 0 6px; overflow-x: auto; scrollbar-width: none; position: sticky; bottom: 0; z-index: 3; background: var(--solid); border-top: 1px solid var(--line); }
+.fmt .btn.ic { min-width: 38px; }
+.fmt .btn:disabled { opacity: 0.35; }
+.fmt .btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.fmt.reading [data-ins]:not([data-ins="read"]) { display: none; }
+.read { flex: 1; min-height: 0; overflow-y: auto; max-width: 70ch; font-family: var(--note-font); font-size: var(--note-size); line-height: 1.7; padding: 4px 0 16px; overflow-wrap: anywhere; }
+.read[hidden] { display: none; }
+.read h1, .read h2 { margin: 0.7em 0 0.3em; line-height: 1.25; letter-spacing: -0.02em; }
+.read h1 { font-size: 1.5em; } .read h2 { font-size: 1.22em; }
+.read p { margin: 0.15em 0; min-height: 1.2em; }
+.read blockquote { margin: 0.4em 0; padding: 2px 0 2px 12px; border-left: 3px solid var(--accent); color: var(--muted); }
+.read ul, .read ol { margin: 0.3em 0; padding-left: 1.3em; }
+.read hr { border: 0; border-top: 1px solid var(--line); margin: 0.8em 0; }
+.read .ck { display: flex; gap: 8px; align-items: baseline; cursor: pointer; }
+.read .ck.on span:last-child { text-decoration: line-through; color: var(--muted); }
+.read a { color: var(--accent); }
 .fmt::-webkit-scrollbar { display: none; }
 .fmt .btn { min-height: 34px; padding: 3px 11px; font-size: 13px; flex: none; }
 .pane .fmt .btn { background: var(--raised); background: color-mix(in srgb, var(--raised) 70%, transparent); }
@@ -862,13 +877,22 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
         <div class="flabel" id="contentLabel">Contenido</div>
         <div class="prog" id="prog" hidden><i></i></div>
         <textarea id="body" placeholder="Escribí acá. Se guarda solo." aria-label="Contenido de la nota"></textarea>
+        <div class="read" id="read" hidden aria-label="Vista de lectura"></div>
         <div class="items" id="items" hidden></div>
       </div>
-      <div class="fmt" id="fmt" role="toolbar" aria-label="Insertar en la nota">
+      <div class="fmt" id="fmt" role="toolbar" aria-label="Dar formato a la nota">
+        <button class="btn ic" type="button" data-ins="undo" aria-label="Deshacer" disabled>↶</button>
+        <button class="btn ic" type="button" data-ins="redo" aria-label="Rehacer" disabled>↷</button>
+        <button class="btn ic" type="button" data-ins="bold" aria-label="Negrita"><b>B</b></button>
+        <button class="btn ic" type="button" data-ins="italic" aria-label="Cursiva"><i>I</i></button>
+        <button class="btn" type="button" data-ins="head">Título</button>
+        <button class="btn" type="button" data-ins="quote">❝ Cita</button>
         <button class="btn" type="button" data-ins="bullet">• Viñeta</button>
+        <button class="btn" type="button" data-ins="num">1. Lista</button>
         <button class="btn" type="button" data-ins="check">☐ Casilla</button>
         <button class="btn" type="button" data-ins="date">Fecha</button>
         <button class="btn" type="button" data-ins="time">Hora</button>
+        <button class="btn" type="button" data-ins="read" aria-pressed="false">Leer</button>
       </div>
     </div>
     <div class="meta" id="meta"></div>
@@ -1117,7 +1141,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.24.1";
+  var APP_VERSION = "1.25.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1636,7 +1660,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       txt += done + " de " + real.length + (real.length === 1 ? " elemento" : " elementos");
     } else {
       var words = (n.body.trim().match(/\S+/g) || []).length;
-      txt += words + (words === 1 ? " palabra" : " palabras") + " · " + n.body.length + " caracteres";
+      txt += words + (words === 1 ? " palabra" : " palabras") + " · " + n.body.length + " caracteres" + (words > 40 ? " · ~" + Math.max(1, Math.round(words / 200)) + " min de lectura" : "");
     }
     $("meta").textContent = txt;
   }
@@ -1812,13 +1836,78 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     $("contentLabel").textContent = isList ? "Elementos de la lista" : "Contenido";
     bodyEl.hidden = isList; itemsEl.hidden = !isList;
     bodyEl.value = n.body; bodyEl.readOnly = ro;
+    setReading(false); histReset();
     $("pinBtn").setAttribute("aria-pressed", n.pinned ? "true" : "false");
     $("pinBtn").textContent = n.pinned ? "Fijada" : "Fijar";
     renderItems(); renderTint(); renderBg(); renderProg(); renderTpls(); renderTaglines(); renderIconBtn(); updateMeta();
   }
 
   titleEl.addEventListener("input", function () { var n = cur(); if (!n || n.trashedAt) return; n.title = titleEl.value; changed(n); });
-  bodyEl.addEventListener("input", function () { var n = cur(); if (!n || n.trashedAt) return; n.body = bodyEl.value; changed(n); });
+  bodyEl.addEventListener("input", function () { var n = cur(); if (!n || n.trashedAt) return; n.body = bodyEl.value; changed(n); histSoon(); });
+
+  /* Historial propio (deshacer / rehacer): los cambios de la barra rompen el nativo */
+  var hist = [], hi = 0, histTimer = 0;
+  function undoBtns() { $("fmt").querySelector('[data-ins="undo"]').disabled = hi <= 0; $("fmt").querySelector('[data-ins="redo"]').disabled = hi >= hist.length - 1; }
+  function histReset() { hist = [{ v: bodyEl.value, s: bodyEl.value.length }]; hi = 0; clearTimeout(histTimer); histTimer = 0; undoBtns(); }
+  function histNow() {
+    clearTimeout(histTimer); histTimer = 0;
+    if (hist[hi] && hist[hi].v === bodyEl.value) return;
+    hist = hist.slice(0, hi + 1); hist.push({ v: bodyEl.value, s: bodyEl.selectionStart }); if (hist.length > 200) hist.shift();
+    hi = hist.length - 1; undoBtns();
+  }
+  function histSoon() { clearTimeout(histTimer); histTimer = setTimeout(histNow, 600); }
+  function histGo(d) {
+    histNow();
+    var k = hi + d; if (k < 0 || k >= hist.length) return;
+    hi = k; var h = hist[hi];
+    bodyEl.value = h.v; bodyEl.setSelectionRange(h.s, h.s);
+    var n = cur(); if (n) { n.body = h.v; changed(n); }
+    undoBtns();
+  }
+
+  /* Vista de lectura: muestra el texto con formato (Markdown sencillo) */
+  var readMode = false, readEl = $("read");
+  function esc(t) { return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function inline(t) {
+    t = esc(t);
+    t = t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<i>$2</i>");
+    return t.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  }
+  function mdHtml(src) {
+    var out = [], lines = src.split("\n"), list = null;
+    function close() { if (list) { out.push("</" + list + ">"); list = null; } }
+    lines.forEach(function (ln, i) {
+      var m;
+      if ((m = ln.match(/^\s*(•|-|\*)\s+(.*)$/))) { if (list !== "ul") { close(); out.push("<ul>"); list = "ul"; } out.push("<li>" + inline(m[2]) + "</li>"); return; }
+      if ((m = ln.match(/^\s*\d+[.)]\s+(.*)$/))) { if (list !== "ol") { close(); out.push("<ol>"); list = "ol"; } out.push("<li>" + inline(m[1]) + "</li>"); return; }
+      close();
+      if ((m = ln.match(/^\s*\[([ xX])\]\s*(.*)$/))) { var on = m[1] !== " "; out.push('<div class="ck' + (on ? " on" : "") + '" data-line="' + i + '"><span>' + (on ? "☑" : "☐") + "</span><span>" + inline(m[2]) + "</span></div>"); return; }
+      if ((m = ln.match(/^(#{1,2})\s+(.*)$/))) { out.push("<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">"); return; }
+      if ((m = ln.match(/^>\s?(.*)$/))) { out.push("<blockquote>" + inline(m[1]) + "</blockquote>"); return; }
+      if (/^\s*(---+|___+)\s*$/.test(ln)) { out.push("<hr>"); return; }
+      out.push("<p>" + inline(ln) + "</p>");
+    });
+    close();
+    return out.join("");
+  }
+  function setReading(on) {
+    var n = cur();
+    readMode = !!on && !!n && n.type === "text";
+    readEl.hidden = !readMode;
+    bodyEl.hidden = readMode || !n || n.type === "list";
+    var b = $("fmt").querySelector('[data-ins="read"]');
+    b.setAttribute("aria-pressed", readMode ? "true" : "false"); b.textContent = readMode ? "Editar" : "Leer";
+    $("fmt").classList.toggle("reading", readMode);
+    if (readMode) readEl.innerHTML = mdHtml(bodyEl.value);
+  }
+  readEl.addEventListener("click", function (e) {
+    var c = e.target.closest(".ck"), n = cur();
+    if (!c || !n || n.trashedAt) return;
+    var ls = n.body.split("\n"), i = Number(c.dataset.line);
+    ls[i] = /^\s*\[ \]/.test(ls[i]) ? ls[i].replace("[ ]", "[x]") : ls[i].replace(/\[[xX]\]/, "[ ]");
+    bodyEl.value = n.body = ls.join("\n"); changed(n); histNow();
+    readEl.innerHTML = mdHtml(n.body);
+  });
 
   /* Barra de formato: viñeta, casilla, fecha y hora en el punto donde estás escribiendo */
   function fireInput() { bodyEl.dispatchEvent(new Event("input", { bubbles: true })); }
@@ -1826,6 +1915,32 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var v = bodyEl.value, s = bodyEl.selectionStart, ls = v.lastIndexOf("\n", s - 1) + 1;
     bodyEl.setRangeText(prefix, ls, ls, "preserve");
     var c = s + prefix.length; bodyEl.setSelectionRange(c, c);
+  }
+  var MARK = /^(#{1,2} |> |• |\[[ xX]\] |\d+[.)] )/;
+  function lineBounds() {
+    var v = bodyEl.value, s = bodyEl.selectionStart, ls = v.lastIndexOf("\n", s - 1) + 1, le = v.indexOf("\n", s);
+    return { ls: ls, le: le < 0 ? v.length : le, s: s };
+  }
+  // pone el prefijo en la línea; si ya lo tenía lo quita; si tenía otro lo cambia
+  function togglePrefix(prefix) {
+    var b = lineBounds(), line = bodyEl.value.slice(b.ls, b.le), m = line.match(MARK), old = m ? m[0] : "";
+    var same = old === prefix || (prefix === "1. " && /^\d+[.)] $/.test(old)) || (prefix === "[ ] " && /^\[[xX ]\] $/.test(old));
+    bodyEl.setRangeText(same ? "" : prefix, b.ls, b.ls + old.length, "preserve");
+    var d = (same ? 0 : prefix.length) - old.length, c = Math.max(b.ls, b.s + d); bodyEl.setSelectionRange(c, c);
+  }
+  function cycleHead() {
+    var b = lineBounds(), line = bodyEl.value.slice(b.ls, b.le), m = line.match(/^(#{1,2}) /), old = m ? m[0] : "";
+    var nx = !m ? "# " : m[1] === "#" ? "## " : "";
+    bodyEl.setRangeText(nx, b.ls, b.ls + old.length, "preserve");
+    var c = Math.max(b.ls, b.s + nx.length - old.length); bodyEl.setSelectionRange(c, c);
+  }
+  function wrapSel(w) {
+    var v = bodyEl.value, s = bodyEl.selectionStart, e = bodyEl.selectionEnd, L = w.length;
+    if (s === e) { bodyEl.setRangeText(w + w, s, e, "end"); bodyEl.setSelectionRange(s + L, s + L); return; }
+    if (s >= L && v.slice(s - L, s) === w && v.slice(e, e + L) === w && !(L === 1 && (v.charAt(s - 2) === "*" || v.charAt(e + 1) === "*"))) {
+      bodyEl.setRangeText(v.slice(s, e), s - L, e + L, "preserve"); bodyEl.setSelectionRange(s - L, e - L); return;
+    }
+    bodyEl.setRangeText(w + v.slice(s, e) + w, s, e, "preserve"); bodyEl.setSelectionRange(s + L, e + L);
   }
   var dlong = new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "long", year: "numeric" });
   function insertAtCaret(text) {
@@ -1837,14 +1952,24 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("fmt").addEventListener("click", function (e) {
     var b = e.target.closest("button"), n = cur();
     if (!b || !n || n.trashedAt || n.type !== "text") return;
-    var now = new Date();
+    var now = new Date(), k = b.dataset.ins;
+    if (k === "read") { setReading(!readMode); return; }
+    if (readMode) return;
+    if (k === "undo") { bodyEl.focus(); histGo(-1); return; }
+    if (k === "redo") { bodyEl.focus(); histGo(1); return; }
+    histNow();
     bodyEl.focus();
-    if (b.dataset.ins === "bullet") insertPrefix("• ");
-    else if (b.dataset.ins === "check") insertPrefix("[ ] ");
-    else if (b.dataset.ins === "date") insertAtCaret(dlong.format(now));
-    else if (b.dataset.ins === "time") insertAtCaret(tf.format(now));
+    if (k === "bullet") togglePrefix("• ");
+    else if (k === "num") togglePrefix("1. ");
+    else if (k === "check") togglePrefix("[ ] ");
+    else if (k === "quote") togglePrefix("> ");
+    else if (k === "head") cycleHead();
+    else if (k === "bold") wrapSel("**");
+    else if (k === "italic") wrapSel("*");
+    else if (k === "date") insertAtCaret(dlong.format(now));
+    else if (k === "time") insertAtCaret(tf.format(now));
     else return;
-    fireInput();
+    fireInput(); histNow();
   });
   // Enter continúa la viñeta, la casilla o la numeración; Enter en una línea vacía sale de la lista.
   function nextMarker(m) {
@@ -2291,6 +2416,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.25.0", d: "8 nov 2026", t: "Escribir mejor", l: ["Barra de formato nueva: negrita, cursiva, título, cita, viñetas, lista numerada y casillas.","Deshacer y rehacer propios, que también deshacen los cambios de la barra.","Modo Leer: muestra la nota con formato y podés tildar las casillas tocándolas.","El contador ahora indica el tiempo de lectura y la barra queda fija abajo, sobre el teclado."] },
     { v: "1.24.1", d: "8 nov 2026", t: "Arreglo de compilación", l: ["Se corrigió el archivo de configuración del proyecto que impedía compilar el APK. No cambia nada de lo que ves en la app."] },
     { v: "1.24.0", d: "7 nov 2026", t: "Guía de bienvenida y menú mejorado", l: ["Nueva guía de bienvenida de 8 pasos que explica todo lo que hay en Tronx. Por ahora se muestra una vez a todos; podés volver a verla desde el menú, en Guía de Tronx.", "El menú ahora tiene niveles según tus notas (Polvo estelar, Tripulante, Navegante, Cartógrafo, Astrónomo y Capitán estelar) con una barra de progreso.", "Atajos rápidos en el menú: Nota, Lista, Buscar y Papelera.", "Consejos que cambian cada día, y también al tocarlos."] },
     { v: "1.23.3", d: "7 nov 2026", t: "Lista más fluida", l: ["Las insignias de las tarjetas se mueven de a 4 a la vez y se congelan mientras te desplazás, así la lista vuelve a ser tan fluida como antes."] },
