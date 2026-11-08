@@ -42,3 +42,25 @@ if (process.env.CM_KEYSTORE_PATH) {
 
 writeFileSync(file, gradle);
 console.log(`build.gradle actualizado: versionCode ${code}, versionName ${pkg.version}`);
+
+// Permisos para los recordatorios (notificaciones locales). `cap add android` crea el manifiesto desde cero en cada build.
+const manifest = "android/app/src/main/AndroidManifest.xml";
+try {
+  let xml = readFileSync(manifest, "utf8");
+  const perms = [
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.SCHEDULE_EXACT_ALARM",
+    "android.permission.RECEIVE_BOOT_COMPLETED",
+    "android.permission.VIBRATE",
+  ];
+  const missing = perms.filter((p) => !xml.includes(`"${p}"`));
+  if (missing.length) {
+    const lines = missing.map((p) => `    <uses-permission android:name="${p}" />`).join("\n");
+    if (!/<application[\s>]/.test(xml)) throw new Error("no se encontró <application>");
+    xml = xml.replace(/(\s*)<application/, `\n${lines}\n$1<application`);
+    writeFileSync(manifest, xml);
+  }
+  console.log("Permisos de notificaciones listos:", perms.join(", "));
+} catch (e) {
+  console.warn("No se pudieron agregar los permisos de notificaciones:", e.message);
+}
