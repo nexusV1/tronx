@@ -383,6 +383,53 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .dacts { display: flex; gap: 8px; margin-top: 14px; }
 .dacts .btn { flex: 1; }
 .list .ic.sk.idle *, body.scrolling .list .ic.sk * { animation-play-state: paused !important; }
+/* nivel y atajos del menú */
+.mn-lv { margin: 6px 4px 2px; display: grid; gap: 5px; opacity: 0; transition: opacity 0.3s ease-out 0.12s; }
+.menu.on .mn-lv { opacity: 1; }
+.mn-lv span { font-size: 11.5px; color: #b3aedd; }
+.mn-lv i { display: block; height: 5px; border-radius: 99px; background: rgba(255, 255, 255, 0.09); overflow: hidden; }
+.mn-lv b { display: block; height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, #8b6cf6, #60a5fa, #34d399); transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s; }
+.mn-qa { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 0; opacity: 0; transform: translateY(8px); transition: opacity 0.3s ease-out 0.1s, transform 0.3s ease-out 0.1s; }
+.menu.on .mn-qa { opacity: 1; transform: none; }
+.mn-qa button { display: grid; justify-items: center; gap: 5px; padding: 10px 2px 8px; border: 0; border-radius: 16px; background: rgba(255, 255, 255, 0.055); box-shadow: inset 0 0 0 1px rgba(190, 170, 255, 0.14); color: #e9e6ff; font: inherit; font-size: 11px; min-width: 0; cursor: pointer; transition: transform 0.1s, background-color 0.15s; }
+.mn-qa button:active { transform: scale(0.94); background-color: rgba(255, 255, 255, 0.12); }
+.mn-qa button:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(196, 181, 253, 0.85); }
+.mn-qa svg { width: 22px; height: 22px; fill: none; stroke: #c4b5fd; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.mn-qa span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mn-tip { display: flex; align-items: flex-start; gap: 11px; width: 100%; margin-top: 14px; padding: 11px 12px; border: 0; border-radius: 18px; text-align: left; color: #e9e6ff; font: inherit; cursor: pointer; background: linear-gradient(135deg, rgba(251, 191, 36, 0.13), rgba(139, 108, 246, 0.12)); box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.22); }
+.mn-tip:active { transform: scale(0.98); }
+.mn-tip:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(251, 191, 36, 0.8); }
+.mn-tip svg { flex: none; width: 22px; height: 22px; margin-top: 1px; fill: none; stroke: #fbbf24; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.mn-tip small { display: block; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #fcd34d; }
+.mn-tip span { display: block; font-size: 12.5px; line-height: 1.4; margin-top: 2px; }
+/* recorrido de bienvenida */
+.tour { position: fixed; inset: 0; z-index: 70; display: flex; flex-direction: column; padding: calc(14px + env(safe-area-inset-top, 0px)) 22px calc(18px + env(safe-area-inset-bottom, 0px)); color: #fff; background: radial-gradient(120% 70% at 50% 0%, #2b1f86 0%, #0d0e34 55%, #04051a 100%); }
+.tour[hidden] { display: none; }
+.tr-top { display: flex; align-items: center; justify-content: space-between; min-height: 38px; }
+.tr-dots { display: flex; gap: 6px; }
+.tr-dots i { width: 6px; height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.25); transition: width 0.25s, background-color 0.25s; }
+.tr-dots i.on { width: 22px; background: #c4b5fd; }
+.tr-skip { border: 0; border-radius: 999px; padding: 8px 15px; background: rgba(255, 255, 255, 0.09); color: #d9d4ff; font: inherit; font-size: 13px; cursor: pointer; }
+.tr-stage { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; touch-action: pan-y; }
+.tr-stage.go > * { animation: trIn 0.34s cubic-bezier(0.2, 0.85, 0.25, 1) both; }
+.tr-stage.go > *:nth-child(2) { animation-delay: 0.04s; } .tr-stage.go > *:nth-child(3) { animation-delay: 0.08s; } .tr-stage.go > *:nth-child(4) { animation-delay: 0.12s; }
+@keyframes trIn { from { opacity: 0; transform: translateX(var(--dx, 26px)); } to { opacity: 1; transform: none; } }
+.tr-art { position: relative; width: min(46vw, 200px); aspect-ratio: 1; display: grid; place-items: center; }
+.tr-art::before { content: ""; position: absolute; inset: -14%; border-radius: 50%; background: radial-gradient(circle, rgba(167, 139, 250, 0.45), rgba(96, 165, 250, 0.12) 55%, transparent 70%); }
+.tr-art .ic { position: relative; width: 100%; height: 100%; }
+.tr-kick { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #a99cf5; }
+.tr-title { margin: 0; font-family: var(--font-display); font-size: clamp(24px, 7vw, 30px); letter-spacing: -0.02em; line-height: 1.15; }
+.tr-text { margin: 0; max-width: 34ch; font-size: 15px; line-height: 1.5; color: #cfcaf0; }
+.tr-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; }
+.tr-chips span { padding: 6px 12px; border-radius: 999px; font-size: 12.5px; background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px rgba(190, 170, 255, 0.2); color: #e9e6ff; }
+.tr-nav { display: flex; gap: 10px; padding-top: 10px; }
+.tr-btn { flex: 1; min-height: 50px; border: 0; border-radius: 16px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; color: #fff; background: rgba(255, 255, 255, 0.1); }
+.tr-btn.pri { flex: 2; background: linear-gradient(135deg, #8b6cf6, #4c3bc4); box-shadow: 0 10px 26px -10px rgba(139, 108, 246, 0.8); }
+.tr-btn:active { transform: scale(0.97); }
+.tr-btn:focus-visible, .tr-skip:focus-visible { outline: 2px solid #c4b5fd; outline-offset: 2px; }
+.tr-btn[hidden] { display: none; }
+@media (max-height: 640px) { .tr-art { width: 120px; } .tr-text { font-size: 14px; } }
+@media (prefers-reduced-motion: reduce) { .tr-stage.go > * { animation: none; } }
 .igrid.stk button.off .ic *, body.dopen .igrid.stk .ic * { animation-play-state: paused !important; }
 .igrid.stk button { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
 .hintlp { margin: 10px 2px 0; font-size: 12px; color: var(--muted); text-align: center; }
@@ -901,6 +948,11 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     <p class="about" id="about"></p>
   </section>
 </div>
+<section class="tour" id="tour" role="dialog" aria-modal="true" aria-label="Guía de Tronx" hidden>
+  <div class="tr-top"><div class="tr-dots" id="trDots" aria-hidden="true"></div><button class="tr-skip" id="trSkip" type="button">Saltar</button></div>
+  <div class="tr-stage" id="trStage"></div>
+  <div class="tr-nav"><button class="tr-btn" id="trBack" type="button">Atrás</button><button class="tr-btn pri" id="trNext" type="button">Siguiente</button></div>
+</section>
 <div class="overlay detail" id="detail" hidden>
   <section class="dcard" role="dialog" aria-modal="true" aria-labelledby="dName">
     <div class="dart" id="dArt"></div>
@@ -990,6 +1042,13 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       <div><b id="mnStC">0</b><span>Constelaciones</span></div>
       <div><b id="mnStL">0</b><span>Vínculos</span></div>
     </div>
+    <div class="mn-lv" aria-live="polite"><span id="mnLvT"></span><i><b id="mnLvB"></b></i></div>
+    <div class="mn-qa" aria-label="Atajos">
+      <button type="button" id="qaNote"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Nota</span></button>
+      <button type="button" id="qaList"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6l1.5 1.5L8 5M4 12l1.5 1.5L8 11M4 18l1.5 1.5L8 17M11 6.500h9M11 12.500h9M11 18.500h9"/></svg><span>Lista</span></button>
+      <button type="button" id="qaFind"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.500"/><path d="M16 16l4 4"/></svg><span>Buscar</span></button>
+      <button type="button" id="qaTrash"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 4h4M7 7l1 12h8l1-12M10 11v5M14 11v5"/></svg><span>Papelera</span></button>
+    </div>
     <ul class="mn-list">
       <li><button class="mn-item feat" id="mnMap" type="button" style="--i:0;--c1:#60a5fa;--c2:#1e3a8a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg></span><span class="mn-tx"><b>Constelaciones</b><i id="mnSubMap">El mapa galáctico de tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:1" aria-hidden="true">Tu espacio</li>
@@ -999,10 +1058,12 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       <li><button class="mn-item" id="mnLink" type="button" style="--i:5;--c1:#34d399;--c2:#064e3b"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="mn-tx"><b>Vinculación</b><span class="mn-soon">En desarrollo</span></span></button></li>
       <li><button class="mn-item soon" id="mnMax" type="button" style="--i:6;--c1:#fb923c;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg></span><span class="mn-tx"><b>MAX</b><span class="mn-soon">En desarrollo</span></span></button></li>
       <li class="mn-sec" style="--i:7" aria-hidden="true">Aplicación</li>
+      <li><button class="mn-item" id="mnTour" type="button" style="--i:8;--c1:#a78bfa;--c2:#312e81"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.500"/><path d="M15.500 8.500l-2 5-5 2 2-5z"/></svg></span><span class="mn-tx"><b>Guía de Tronx</b><i>Recorrido por todo lo que hay</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnSettings" type="button" style="--i:8;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span><span class="mn-tx"><b>Ajustes</b><i id="mnSubSet">Sonido y volumen</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnBackup" type="button" style="--i:9;--c1:#2dd4bf;--c2:#134e4a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg><span class="mn-dot" id="mnBkDot" hidden></span></span><span class="mn-tx"><b>Copia de seguridad</b><i id="mnSubBk">Exportá o importá tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnNews" type="button" style="--i:10;--c1:#38bdf8;--c2:#0c4a6e"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg><span class="mn-dot" id="mnNewsDot" hidden></span></span><span class="mn-tx"><b>Novedades</b><i id="mnSubNews">Lo nuevo de cada actualización</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
     </ul>
+    <button class="mn-tip" id="mnTip" type="button" aria-label="Siguiente consejo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.6.5 1 1.200 1 2.100h5c0-.9.4-1.600 1-2.100A6 6 0 0 0 12 3z"/></svg><div><small>Sabías que</small><span id="mnTipT"></span></div></button>
     <p class="mn-foot" id="mnFoot"></p>
   </nav>
 </div>
@@ -1056,7 +1117,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.23.3";
+  var APP_VERSION = "1.24.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1326,6 +1387,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     else if (name === "icons") { $("iconSheet").hidden = true; $("scrim").hidden = true; $("detail").hidden = true; document.body.classList.remove("dopen"); if (stkIO) stkIO.disconnect(); clearInterval(stkTimer); }
     else if (name === "detail") { $("detail").hidden = true; document.body.classList.remove("dopen"); }
     else if (name === "news") $("news").hidden = true;
+    else if (name === "tour") { $("tour").hidden = true; lsSet("tronx.tour", "1"); }
     else if (name === "editor") leaveEditorUI();
     else if (layerHandlers[name]) layerHandlers[name]();
   }
@@ -2229,6 +2291,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.24.0", d: "7 nov 2026", t: "Guía de bienvenida y menú mejorado", l: ["Nueva guía de bienvenida de 8 pasos que explica todo lo que hay en Tronx. Por ahora se muestra una vez a todos; podés volver a verla desde el menú, en Guía de Tronx.", "El menú ahora tiene niveles según tus notas (Polvo estelar, Tripulante, Navegante, Cartógrafo, Astrónomo y Capitán estelar) con una barra de progreso.", "Atajos rápidos en el menú: Nota, Lista, Buscar y Papelera.", "Consejos que cambian cada día, y también al tocarlos."] },
     { v: "1.23.3", d: "7 nov 2026", t: "Lista más fluida", l: ["Las insignias de las tarjetas se mueven de a 4 a la vez y se congelan mientras te desplazás, así la lista vuelve a ser tan fluida como antes."] },
     { v: "1.23.2", d: "7 nov 2026", t: "Brújula más limpia", l: ["La brújula ahora usa el borde del medallón como aro: se quitaron los círculos extra que la hacían parecer dos brújulas en una."] },
     { v: "1.23.1", d: "7 nov 2026", t: "Brújula mejorada", l: ["Brújula estelar rediseñada: aro de latón con grados, letras N E S O, rosa de los vientos con facetas en luz y sombra, y aguja roja y blanca que oscila hasta asentarse."] },
@@ -2340,7 +2403,11 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var p = getProfile(), st = universeStats(), over = backupOverdue();
     paintAvatar($("mnAv"), p.avatar);
     $("mnName").textContent = p.name || "Explorador";
-    $("mnRank").textContent = p.name ? "Explorador" : "Bienvenido";
+    var lv = levelInfo(st.notes);
+    $("mnRank").textContent = "Nivel " + lv.n + " · " + lv.name;
+    $("mnLvT").textContent = lv.next ? lv.left + (lv.left === 1 ? " nota" : " notas") + " para ser " + lv.next : "Nivel máximo alcanzado";
+    $("mnLvB").style.width = lv.pct + "%";
+    $("mnTipT").textContent = TIPS[tipI];
     $("mnSub").textContent = "Tu universo de notas";
     $("mnStN").textContent = st.notes; $("mnStC").textContent = st.groups; $("mnStL").textContent = st.links;
     $("mnSubMap").textContent = st.groups || st.links ? st.groups + (st.groups === 1 ? " constelación" : " constelaciones") + " · " + st.links + (st.links === 1 ? " vínculo" : " vínculos") : "El mapa galáctico de tus notas";
@@ -2395,6 +2462,93 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
+  /* ---------- nivel, consejos y guía de bienvenida ---------- */
+  var LEVELS = [[0, "Polvo estelar"], [1, "Tripulante"], [5, "Navegante"], [15, "Cartógrafo"], [40, "Astrónomo"], [100, "Capitán estelar"]];
+  function levelInfo(n) {
+    var i = 0; while (i + 1 < LEVELS.length && n >= LEVELS[i + 1][0]) i++;
+    var nx = LEVELS[i + 1], cur = LEVELS[i][0];
+    return { n: i + 1, name: LEVELS[i][1], next: nx ? nx[1] : "", left: nx ? nx[0] - n : 0, pct: nx ? Math.round((n - cur) / (nx[0] - cur) * 100) : 100 };
+  }
+  var TIPS = [
+    "Mantené pulsada una insignia en el selector para ver su información.",
+    "Lo que mandás a la papelera queda 30 días antes de borrarse.",
+    "Tronx funciona sin internet: todo se guarda en tu teléfono.",
+    "En Constelaciones podés agrupar notas por tema sin moverlas de la lista.",
+    "Hacé una copia de seguridad desde el menú para no perder tus notas.",
+    "Fijá una nota para que quede siempre arriba de la lista.",
+    "Podés crear listas con casillas desde el botón junto a Nueva nota.",
+    "Las etiquetas te ayudan a filtrar tus notas con un toque.",
+    "Mirá Novedades en el menú para ver qué trae cada versión.",
+    "Elegí el tema Blanco o Universo, el color y la letra desde Ajustes."
+  ];
+  var tipI = Math.floor(Date.now() / 86400000) % TIPS.length;
+  var TOURKEY = "tronx.tour";
+  var TOUR = [
+    { k: "Bienvenido", i: "tierra", t: "Tronx, tu universo de notas", d: "Escribí ideas, listas e historias. Todo se guarda en tu teléfono y funciona sin internet.", c: ["Sin internet", "Privado", "Gratis"] },
+    { k: "Notas y listas", i: "cristal", t: "Todo en su lugar", d: "Creá notas libres o listas con casillas. Ponele color y etiquetas, fijá las importantes y archivá las que ya no usás.", c: ["Colores", "Etiquetas", "Fijar", "Archivo"] },
+    { k: "Insignias detalladas", i: "galaxia", t: "21 insignias animadas", d: "Elegí una para cada nota. Mantené pulsada una insignia para ver qué es y cómo se mueve.", c: ["Planetas", "Criaturas", "Instrumentos"] },
+    { k: "Constelaciones", i: "constelacion", t: "Tus notas, un mapa", d: "Agrupá notas por tema y unilas con líneas. Recorré el mapa con zoom y buscá cualquier estrella.", c: ["Grupos", "Vínculos", "Búsqueda"] },
+    { k: "Buscar y ordenar", i: "brujula", t: "Encontrá lo que quieras", d: "Buscá en todo el texto, ordená por fecha, título o color y cambiá entre lista y cuadrícula.", c: ["Búsqueda", "Orden", "Vistas"] },
+    { k: "Tus datos", i: "satelite", t: "Siempre a salvo", d: "Exportá una copia cuando quieras e importala en otro teléfono. Lo que borrás queda 30 días en la papelera.", c: ["Copia", "Papelera 30 días"] },
+    { k: "Estilo", i: "luna", t: "Hacela tuya", d: "Elegí el tema Universo o Blanco, el color de acento y la tipografía desde Ajustes y Personalizar.", c: ["Universo", "Blanco", "Acentos"] },
+    { k: "Lo que viene", i: "nebulosa", t: "Esto recién empieza", d: "Perfil, Vinculación y MAX están en desarrollo. Mirá Novedades en el menú para ver qué trae cada versión.", c: ["Perfil", "Vinculación", "MAX"] }
+  ];
+  var tourI = 0, tourDir = 1;
+  function renderTour() {
+    var s = TOUR[tourI], st = $("trStage"), dots = $("trDots");
+    if (dots.children.length !== TOUR.length) { dots.textContent = ""; TOUR.forEach(function () { dots.appendChild(el("i")); }); }
+    [].forEach.call(dots.children, function (d, i) { d.classList.toggle("on", i === tourI); });
+    st.textContent = "";
+    var art = el("div", "tr-art"); art.appendChild(iconSpan("s:" + s.i)); st.appendChild(art);
+    var mid = el("div"); var kk = el("div", "tr-kick"); kk.textContent = s.k; var tt = el("h2", "tr-title"); tt.textContent = s.t; mid.appendChild(kk); mid.appendChild(tt); st.appendChild(mid);
+    var dd = el("p", "tr-text"); dd.textContent = s.d; st.appendChild(dd);
+    var ch = el("div", "tr-chips"); s.c.forEach(function (x) { var c = el("span"); c.textContent = x; ch.appendChild(c); }); st.appendChild(ch);
+    st.style.setProperty("--dx", (tourDir * 26) + "px");
+    st.classList.remove("go"); void st.offsetWidth; st.classList.add("go");
+    $("trBack").hidden = tourI === 0;
+    $("trNext").textContent = tourI === TOUR.length - 1 ? "Empezar" : "Siguiente";
+    $("trSkip").hidden = tourI === TOUR.length - 1;
+  }
+  function tourGo(d) {
+    var n = tourI + d;
+    if (n >= TOUR.length) { lsSet(TOURKEY, "1"); closeLayer("tour"); return; }
+    if (n < 0) return;
+    tourDir = d; tourI = n; renderTour();
+  }
+  function openTour() {
+    if (!$("tour").hidden) return;
+    tourI = 0; tourDir = 1; renderTour();
+    $("tour").hidden = false; pushLayer("tour");
+    try { $("trNext").focus({ preventScroll: true }); } catch (e) {}
+  }
+  $("trNext").addEventListener("click", function () { tourGo(1); });
+  $("trBack").addEventListener("click", function () { tourGo(-1); });
+  $("trSkip").addEventListener("click", function () { lsSet(TOURKEY, "1"); closeLayer("tour"); });
+  (function () {
+    var sx = 0, sy = 0, on = false, stg = $("trStage");
+    stg.addEventListener("pointerdown", function (e) { on = true; sx = e.clientX; sy = e.clientY; });
+    stg.addEventListener("pointerup", function (e) {
+      if (!on) return; on = false;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) tourGo(dx < 0 ? 1 : -1);
+    });
+    stg.addEventListener("pointercancel", function () { on = false; });
+    document.addEventListener("keydown", function (e) {
+      if ($("tour").hidden) return;
+      if (e.key === "ArrowRight") tourGo(1); else if (e.key === "ArrowLeft") tourGo(-1);
+    });
+  })();
+  document.addEventListener("tronx:enter", function () {
+    if (lsGet(TOURKEY) === "1") return;
+    setTimeout(function () { if (lsGet(TOURKEY) !== "1") openTour(); }, 650);
+  });
+  $("mnTour").addEventListener("click", function () { closeMenuThen(openTour); });
+  $("mnTip").addEventListener("click", function () { tipI = (tipI + 1) % TIPS.length; $("mnTipT").textContent = TIPS[tipI]; });
+  $("qaNote").addEventListener("click", function () { closeMenuThen(function () { $("newBtn").click(); }); });
+  $("qaList").addEventListener("click", function () { closeMenuThen(function () { $("newListBtn").click(); }); });
+  $("qaFind").addEventListener("click", function () { closeMenuThen(function () { try { $("q").focus(); $("q").scrollIntoView({ block: "center" }); } catch (e) {} }); });
+  $("qaTrash").addEventListener("click", function () { closeMenuThen(function () { var t = document.querySelector('.tab[data-tab="trash"]'); if (t) t.click(); }); });
+
   function closeMenuThen(fn) { closeLayer("menu"); setTimeout(fn, 300); }
   $("menuBtn").addEventListener("click", openMenu);
   $("mnClose").addEventListener("click", function () { closeLayer("menu"); });
@@ -2654,6 +2808,7 @@ window.addEventListener("load", function () {
   var sp = document.getElementById("splash"), ap = document.getElementById("app");
   if (sp && sp.parentNode) sp.parentNode.removeChild(sp);
   if (ap) { ap.removeAttribute("inert"); ap.removeAttribute("aria-hidden"); }
+  try { document.dispatchEvent(new CustomEvent("tronx:enter")); } catch (e) {}
 });
 </script>
 </body>
