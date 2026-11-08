@@ -744,6 +744,18 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .tplrow::-webkit-scrollbar { display: none; }
 .tpl { display: inline-flex; align-items: center; gap: 6px; }
 .fmt { display: flex; gap: 6px; padding: 8px 0 6px; overflow-x: auto; scrollbar-width: none; position: sticky; bottom: 0; z-index: 3; background: var(--solid); border-top: 1px solid var(--line); }
+.crumb { padding: 6px 0 0; } .crumb[hidden] { display: none; }
+.crumb button { border: 0; background: transparent; color: var(--accent); font: inherit; font-size: 13px; padding: 2px 0; cursor: pointer; }
+.sugg, .rel { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 6px 0 0; align-items: center; flex: none; }
+.sugg[hidden], .rel[hidden] { display: none; }
+.sugg::-webkit-scrollbar, .rel::-webkit-scrollbar { display: none; }
+.sugg .chip, .rel .chip { flex: none; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rel .lbl { flex: none; font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.read a.wl { color: var(--accent); text-decoration: underline dotted; cursor: pointer; }
+.read a.wl.missing { color: var(--muted); }
+.read table { border-collapse: collapse; margin: 0.5em 0; display: block; overflow-x: auto; max-width: 100%; }
+.read th, .read td { border: 1px solid var(--line); padding: 5px 10px; text-align: left; }
+.read th { background: var(--raised); }
 .fmt .btn.ic { min-width: 38px; }
 .fmt .btn:disabled { opacity: 0.35; }
 .fmt .btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -909,6 +921,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
         <input id="title" type="text" placeholder="Poné un título a tu nota" autocomplete="off" enterkeyhint="next">
         <button class="iconbtn" id="iconBtn" type="button" aria-label="Elegir icono de la nota" aria-haspopup="dialog"></button>
       </div>
+      <div class="crumb" id="crumb" hidden></div>
       <div class="taglines" id="taglines"></div>
       <div class="tpls" id="tpls" hidden>
         <div class="flabel">Empezar con una plantilla</div>
@@ -921,6 +934,8 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
         <div class="read" id="read" hidden aria-label="Vista de lectura"></div>
         <div class="items" id="items" hidden></div>
       </div>
+      <div class="sugg" id="sugg" hidden></div>
+      <div class="rel" id="rel" hidden></div>
       <div class="fmt" id="fmt" role="toolbar" aria-label="Dar formato a la nota">
         <button class="btn ic" type="button" data-ins="undo" aria-label="Deshacer" disabled>↶</button>
         <button class="btn ic" type="button" data-ins="redo" aria-label="Rehacer" disabled>↷</button>
@@ -931,6 +946,8 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
         <button class="btn" type="button" data-ins="bullet">• Viñeta</button>
         <button class="btn" type="button" data-ins="num">1. Lista</button>
         <button class="btn" type="button" data-ins="check">☐ Casilla</button>
+        <button class="btn" type="button" data-ins="link">[[ ]] Enlace</button>
+        <button class="btn" type="button" data-ins="table">▦ Tabla</button>
         <button class="btn" type="button" data-ins="date">Fecha</button>
         <button class="btn" type="button" data-ins="time">Hora</button>
         <button class="btn" type="button" data-ins="read" aria-pressed="false">Leer</button>
@@ -1185,7 +1202,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.26.0";
+  var APP_VERSION = "1.27.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1373,6 +1390,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
       color: colorOf(x.color).k,
       tags: tags,
       folder: cleanFolder(x.folder),
+      parent: x.parent && String(x.parent) !== String(x.id) ? String(x.parent) : "",
       icon: cleanIcon(x.icon),
       bg: cleanBg(x.bg),
       pinned: !!x.pinned,
@@ -1495,6 +1513,10 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
   function visibleNotes() {
     var q = query.trim().toLowerCase();
     var arr = Array.from(notes.values()).filter(function (n) { return inTab(n, tab); });
+    if (!filtering()) arr = arr.filter(function (n) {
+      var pr = n.parent && notes.get(n.parent);
+      return !(pr && !pr.trashedAt && pr.archived === n.archived && pr.parent !== n.id);
+    });
     if (tagFilter) arr = arr.filter(function (n) { return n.tags.indexOf(tagFilter) >= 0; });
     if (folderFilter !== null) arr = arr.filter(function (n) { return n.folder === folderFilter; });
     if (kindFilter !== "all") arr = arr.filter(function (n) {
@@ -1575,6 +1597,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     }
     var m = el("span", "m");
     if (n.pinned) { var pin = el("span", "pin"); pin.textContent = "fijada"; m.appendChild(pin); }
+    if (kidCount[n.id]) { var ki = el("span", "fold"); ki.textContent = "↳ " + kidCount[n.id]; m.appendChild(ki); }
     if (n.folder) { var fo = el("span", "fold"); fo.textContent = "▣ " + n.folder; m.appendChild(fo); }
     if (c.rgb) m.appendChild(el("span", "dot"));
     var w = el("span"); w.textContent = when(n.trashedAt || n.updatedAt); m.appendChild(w);
@@ -1633,16 +1656,18 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     var e = li.querySelector(".ic.sk"); if (e) { iconIO.unobserve(e); preIO.unobserve(e); }
   }
   /* Caché de tarjetas: solo se reconstruye la que cambió; el resto se reutiliza y se reordena */
-  var cards = new Map();
+  var cards = new Map(), kidCount = {};
   function cardSig(n) {
     var d = 0, k = 0;
     for (var i = 0; i < n.items.length; i++) { k++; if (n.items[i].done) d++; }
     return n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
       (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n) + "|" + (n.id === activeId ? 1 : 0) + "|" +
-      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
+      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + (kidCount[n.id] || 0) + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
   }
   function renderList() {
     var listEl = $("list"), rows = visibleNotes();
+    kidCount = {};
+    notes.forEach(function (k) { if (k.parent && !k.trashedAt && notes.has(k.parent)) kidCount[k.parent] = (kidCount[k.parent] || 0) + 1; });
     if (listEl.getAttribute("data-view") !== settings.view) listEl.setAttribute("data-view", settings.view);
     var want = [];
     rows.forEach(function (n) {
@@ -1973,7 +1998,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     $("pinBtn").hidden = !has || readOnly();
     $("moreBtn").hidden = !has || readOnly();
     $("trashbar").hidden = !(has && readOnly());
-    if (!has) { titleEl.value = ""; bodyEl.value = ""; itemsEl.textContent = ""; renderTint(); renderBg(); renderProg(); renderTpls(); $("fmt").hidden = true; renderTaglines(); renderIconBtn(); updateMeta(); return; }
+    if (!has) { $("rel").hidden = true; $("crumb").hidden = true; $("sugg").hidden = true; titleEl.value = ""; bodyEl.value = ""; itemsEl.textContent = ""; renderTint(); renderBg(); renderProg(); renderTpls(); $("fmt").hidden = true; renderTaglines(); renderIconBtn(); updateMeta(); return; }
     var ro = readOnly(), isList = n.type === "list";
     $("fmt").hidden = isList || ro;
     titleEl.value = n.title; titleEl.readOnly = ro;
@@ -1984,11 +2009,76 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     setReading(false); histReset();
     $("pinBtn").setAttribute("aria-pressed", n.pinned ? "true" : "false");
     $("pinBtn").textContent = n.pinned ? "Fijada" : "Fijar";
-    renderItems(); renderTint(); renderBg(); renderProg(); renderTpls(); renderTaglines(); renderIconBtn(); updateMeta();
+    renderItems(); renderTint(); renderBg(); renderProg(); renderTpls(); renderTaglines(); renderIconBtn(); updateMeta(); renderRel();
   }
 
   titleEl.addEventListener("input", function () { var n = cur(); if (!n || n.trashedAt) return; n.title = titleEl.value; changed(n); });
   bodyEl.addEventListener("input", function () { var n = cur(); if (!n || n.trashedAt) return; n.body = bodyEl.value; changed(n); histSoon(); });
+
+  /* Enlaces entre notas, subnotas y tablas */
+  function findByTitle(t) {
+    t = String(t || "").trim().toLowerCase(); if (!t) return null;
+    var hit = null;
+    notes.forEach(function (n) { if (!hit && !n.trashedAt && n.title.trim().toLowerCase() === t) hit = n; });
+    return hit;
+  }
+  function chipBtn(label, fn, cls) { var c = el("button", "chip" + (cls ? " " + cls : "")); c.type = "button"; c.textContent = label; c.addEventListener("click", fn); return c; }
+  function renderRel() {
+    var n = cur(), box = $("rel"), cr = $("crumb");
+    box.textContent = ""; cr.textContent = "";
+    if (!n || n.trashedAt) { box.hidden = true; cr.hidden = true; return; }
+    var pr = n.parent && notes.get(n.parent);
+    cr.hidden = !(pr && !pr.trashedAt);
+    if (!cr.hidden) { var cb = el("button"); cb.type = "button"; cb.textContent = "↳ dentro de «" + (pr.title.trim() || "Sin título") + "»"; cb.addEventListener("click", function () { openNote(pr.id); }); cr.appendChild(cb); }
+    var kids = Array.from(notes.values()).filter(function (k) { return k.parent === n.id && !k.trashedAt; }).sort(function (a, b) { return a.createdAt - b.createdAt; });
+    var back = [], tl = n.title.trim().toLowerCase();
+    if (tl) notes.forEach(function (o) {
+      if (o.id === n.id || o.trashedAt) return;
+      var txt = o.type === "list" ? o.items.map(function (i) { return i.t; }).join("\n") : o.body;
+      if (txt.toLowerCase().indexOf("[[" + tl + "]]") >= 0) back.push(o);
+    });
+    if (kids.length) { var l1 = el("span", "lbl"); l1.textContent = "Subnotas"; box.appendChild(l1); }
+    kids.forEach(function (k) { box.appendChild(chipBtn(k.title.trim() || "Sin título", function () { openNote(k.id); })); });
+    box.appendChild(chipBtn("+ Subnota", function () {
+      if (isEmptyNote(n)) { toast("Escribí algo en esta nota antes de agregarle subnotas"); return; }
+      createNote("text", { parent: n.id, folder: n.folder });
+    }, "add"));
+    if (back.length) { var l2 = el("span", "lbl"); l2.textContent = "Enlazada desde"; box.appendChild(l2); }
+    back.forEach(function (o) { box.appendChild(chipBtn(o.title.trim() || "Sin título", function () { openNote(o.id); })); });
+    box.hidden = false;
+  }
+  function updateSugg() {
+    var box = $("sugg"), n = cur();
+    var m = (!readMode && n && n.type === "text" && !n.trashedAt) ? bodyEl.value.slice(0, bodyEl.selectionStart).match(/\[\[([^\]\n]*)$/) : null;
+    if (!m) { box.hidden = true; return; }
+    var term = m[1].toLowerCase(), c = [];
+    notes.forEach(function (o) { if (o.id !== n.id && !o.trashedAt && o.title.trim() && o.title.toLowerCase().indexOf(term) >= 0) c.push(o); });
+    c.sort(function (a, b) { return b.updatedAt - a.updatedAt; });
+    box.textContent = "";
+    if (!c.length) { var e = el("span", "lbl"); e.textContent = term ? "Ninguna nota se llama así: al tocar el enlace en Leer se crea" : "Todavía no hay otras notas con título"; box.appendChild(e); }
+    c.slice(0, 8).forEach(function (o) {
+      box.appendChild(chipBtn(o.title.trim(), function () {
+        var v = bodyEl.value, s = bodyEl.selectionStart, a = s - m[1].length, t = o.title.trim();
+        var tail = v.slice(s, s + 2) === "]]" ? 2 : 0;
+        bodyEl.setRangeText(t + "]]", a, s + tail, "end");
+        fireInput(); histNow(); box.hidden = true; bodyEl.focus();
+      }));
+    });
+    box.hidden = false;
+  }
+  $("sugg").addEventListener("mousedown", function (e) { e.preventDefault(); });
+  ["input", "keyup", "click"].forEach(function (ev) { bodyEl.addEventListener(ev, updateSugg); });
+  function insertTable() {
+    var v = bodyEl.value, s = bodyEl.selectionStart, pre = (s > 0 && v.charAt(s - 1) !== "\n") ? "\n" : "";
+    var t = pre + "| Columna 1 | Columna 2 | Columna 3 |\n| --- | --- | --- |\n|  |  |  |\n";
+    bodyEl.setRangeText(t, s, bodyEl.selectionEnd, "end");
+    var c = s + t.length - 8; bodyEl.setSelectionRange(c, c);
+  }
+  function insertLink() {
+    var v = bodyEl.value, s = bodyEl.selectionStart, e = bodyEl.selectionEnd;
+    if (s !== e) { bodyEl.setRangeText("[[" + v.slice(s, e) + "]]", s, e, "end"); return; }
+    bodyEl.setRangeText("[[]]", s, e, "end"); bodyEl.setSelectionRange(s + 2, s + 2);
+  }
 
   /* Historial propio (deshacer / rehacer): los cambios de la barra rompen el nativo */
   var hist = [], hi = 0, histTimer = 0;
@@ -2016,13 +2106,27 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
   function inline(t) {
     t = esc(t);
     t = t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<i>$2</i>");
+    t = t.replace(/\[\[([^\]\n]+?)\]\]/g, function (all, name) { return '<a class="wl' + (findByTitle(name.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")) ? "" : " missing") + '" data-t="' + name + '">' + name + "</a>"; });
     return t.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   }
   function mdHtml(src) {
-    var out = [], lines = src.split("\n"), list = null;
+    var out = [], lines = src.split("\n"), list = null, tbl = [];
     function close() { if (list) { out.push("</" + list + ">"); list = null; } }
+    function flushTbl() {
+      if (!tbl.length) return;
+      var isSep = tbl.length > 1 && tbl[1].every(function (c) { return /^:?-{2,}:?$/.test(c); });
+      var h = "<table>";
+      tbl.forEach(function (r, i) {
+        if (isSep && i === 1) return;
+        var tag = isSep && i === 0 ? "th" : "td";
+        h += "<tr>" + r.map(function (c) { return "<" + tag + ">" + inline(c) + "</" + tag + ">"; }).join("") + "</tr>";
+      });
+      out.push(h + "</table>"); tbl = [];
+    }
     lines.forEach(function (ln, i) {
       var m;
+      if ((m = ln.match(/^\s*\|(.*)\|\s*$/))) { close(); tbl.push(m[1].split("|").map(function (c) { return c.trim(); })); return; }
+      flushTbl();
       if ((m = ln.match(/^\s*(•|-|\*)\s+(.*)$/))) { if (list !== "ul") { close(); out.push("<ul>"); list = "ul"; } out.push("<li>" + inline(m[2]) + "</li>"); return; }
       if ((m = ln.match(/^\s*\d+[.)]\s+(.*)$/))) { if (list !== "ol") { close(); out.push("<ol>"); list = "ol"; } out.push("<li>" + inline(m[1]) + "</li>"); return; }
       close();
@@ -2032,7 +2136,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
       if (/^\s*(---+|___+)\s*$/.test(ln)) { out.push("<hr>"); return; }
       out.push("<p>" + inline(ln) + "</p>");
     });
-    close();
+    close(); flushTbl();
     return out.join("");
   }
   function setReading(on) {
@@ -2046,6 +2150,13 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     if (readMode) readEl.innerHTML = mdHtml(bodyEl.value);
   }
   readEl.addEventListener("click", function (e) {
+    var w = e.target.closest("a.wl");
+    if (w) {
+      e.preventDefault();
+      var t = w.dataset.t, hit = findByTitle(t);
+      if (hit) openNote(hit.id); else { var cn = cur(); createNote("text", { title: t, folder: cn ? cn.folder : "" }); }
+      return;
+    }
     var c = e.target.closest(".ck"), n = cur();
     if (!c || !n || n.trashedAt) return;
     var ls = n.body.split("\n"), i = Number(c.dataset.line);
@@ -2111,6 +2222,8 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     else if (k === "head") cycleHead();
     else if (k === "bold") wrapSel("**");
     else if (k === "italic") wrapSel("*");
+    else if (k === "link") insertLink();
+    else if (k === "table") insertTable();
     else if (k === "date") insertAtCaret(dlong.format(now));
     else if (k === "time") insertAtCaret(tf.format(now));
     else return;
@@ -2129,6 +2242,16 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     var v = bodyEl.value, s = bodyEl.selectionStart;
     if (s !== bodyEl.selectionEnd) return;
     var ls = v.lastIndexOf("\n", s - 1) + 1, line = v.slice(ls, s);
+    var le = v.indexOf("\n", s); if (le < 0) le = v.length;
+    var full = v.slice(ls, le), tm = full.match(/^\s*\|(.*)\|\s*$/);
+    if (tm) {
+      var cells = tm[1].split("|");
+      if (cells.every(function (c) { return /^\s*:?-{2,}:?\s*$/.test(c); })) return;
+      ev.preventDefault();
+      if (cells.every(function (c) { return !c.trim(); })) { bodyEl.setRangeText("", ls, le, "end"); }
+      else { var row = "\n|" + new Array(cells.length + 1).join("  |"); bodyEl.setRangeText(row, le, le, "end"); bodyEl.setSelectionRange(le + 3, le + 3); }
+      fireInput(); return;
+    }
     var m = line.match(/^(\s*)(•|-|\*|\[[ xX]\]|\d+[.)])[ \t]+/);
     if (!m) return;
     ev.preventDefault();
@@ -2158,13 +2281,15 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
     renderEditor(); renderAll();
     if (window.TronxMap) window.TronxMap.resume();
   }
-  function createNote(type) {
+  function createNote(type, opts) {
+    opts = opts || {};
     persistNow(); discardIfEmpty();
     tab = "notes"; query = ""; $("q").value = "";
     var now = Date.now();
     var n = normalize({
-      id: uid(), type: type, title: "", body: "",
+      id: uid(), type: type, title: opts.title || "", body: "",
       items: type === "list" ? [{ id: uid(), t: "", done: false }] : [],
+      parent: opts.parent || "", folder: opts.folder || (folderFilter || ""),
       tags: tagFilter ? [tagFilter] : [], createdAt: now, updatedAt: now
     });
     notes.set(n.id, n);
@@ -2567,6 +2692,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.27.0", d: "8 nov 2026", t: "Más contenido en tus notas", l: ["Enlaces entre notas: escribí [[ y elegí una nota, o usá el botón Enlace. En modo Leer se tocan para abrir la nota; si no existe, se crea.","Cada nota muestra abajo desde qué otras notas está enlazada.","Subnotas: con + Subnota, dentro de cualquier nota. En la lista aparecen dentro de su nota principal.","Tablas sencillas: botón Tabla, Enter agrega filas y en modo Leer se ven como tabla."] },
     { v: "1.26.0", d: "8 nov 2026", t: "Organizar mejor", l: ["Carpetas: asigná una carpeta a cada nota desde Personalizar y filtrá la lista con un toque.","Selección múltiple: tocá el botón de casilla o mantené apretada una nota para elegir varias y fijarlas, archivarlas, moverlas de carpeta o mandarlas a la papelera, con Deshacer.","Nuevo filtro por tipo: solo notas, solo listas, listas sin terminar, fijadas o con color.","La búsqueda ahora resalta lo que encontró dentro de cada tarjeta."] },
     { v: "1.25.0", d: "8 nov 2026", t: "Escribir mejor", l: ["Barra de formato nueva: negrita, cursiva, título, cita, viñetas, lista numerada y casillas.","Deshacer y rehacer propios, que también deshacen los cambios de la barra.","Modo Leer: muestra la nota con formato y podés tildar las casillas tocándolas.","El contador ahora indica el tiempo de lectura y la barra queda fija abajo, sobre el teclado."] },
     { v: "1.24.1", d: "8 nov 2026", t: "Arreglo de compilación", l: ["Se corrigió el archivo de configuración del proyecto que impedía compilar el APK. No cambia nada de lo que ves en la app."] },
