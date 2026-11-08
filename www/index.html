@@ -780,6 +780,24 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .pimg img.f-fade { filter: contrast(0.82) brightness(1.12) saturate(0.8); }
 .pimg img.f-vivid { filter: saturate(1.6) contrast(1.1); }
 .pimg.shadow img { box-shadow: 0 10px 24px -6px rgba(0,0,0,0.55); }
+.lock { position: fixed; inset: 0; z-index: 100000; display: grid; place-items: center; background: var(--solid); padding: 20px; }
+.lock[hidden] { display: none; }
+.lockbox { text-align: center; width: min(320px, 100%); display: grid; gap: 12px; justify-items: center; }
+.lockbox h2 { margin: 0; font-size: 24px; letter-spacing: -0.02em; }
+.lockbox p { margin: 0; color: var(--muted); min-height: 1.3em; font-size: 14px; }
+.lockdots { display: flex; gap: 14px; height: 18px; }
+.lockdots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--muted); }
+.lockdots i.on { background: var(--accent); border-color: var(--accent); }
+.lockbox.shake .lockdots { animation: lockShake 0.35s; }
+@keyframes lockShake { 20% { transform: translateX(-9px); } 40% { transform: translateX(9px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+.lockpad { display: grid; grid-template-columns: repeat(3, 72px); gap: 12px; margin-top: 6px; }
+.lockpad button { height: 62px; border-radius: 18px; border: 1px solid var(--line); background: var(--raised); color: var(--ink); font: inherit; font-size: 24px; }
+.lockpad button:active { background: var(--accent-soft); }
+.lockpad button:disabled { opacity: 0.4; }
+.lockpad .nil { visibility: hidden; }
+.verrow { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.verrow .vt { min-width: 0; } .verrow .vt b { display: block; font-size: 13px; font-family: var(--font-mono); font-weight: 500; }
+.verrow .vt span { display: block; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 52vw; }
 .crumb { padding: 6px 0 0; } .crumb[hidden] { display: none; }
 .crumb button { border: 0; background: transparent; color: var(--accent); font: inherit; font-size: 13px; padding: 2px 0; cursor: pointer; }
 .sugg, .rel { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 6px 0 0; align-items: center; flex: none; }
@@ -1043,6 +1061,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn" id="shareBtn" type="button">Compartir</button>
         <button class="btn" id="copyBtn" type="button">Copiar texto</button>
         <button class="btn" id="txtBtn" type="button">Guardar como .txt</button>
+        <button class="btn" id="mdBtn" type="button">Guardar como .md</button>
+        <button class="btn" id="pdfBtn" type="button">Guardar como PDF</button>
+        <button class="btn" id="histBtn" type="button">Historial</button>
         <button class="btn danger" id="trashBtn" type="button">A la papelera</button>
       </div>
     </section>
@@ -1071,6 +1092,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     </div>
     <p class="hint">Tus notas viven solo en este teléfono. Si desinstalás la app o borrás sus datos, se pierden. Guardá una copia de vez en cuando.</p>
     <input type="file" id="importFile" accept=".json,application/json" hidden>
+    <h3>Bloqueo con PIN</h3>
+    <p class="hint" id="pinHint"></p>
+    <div class="actions">
+      <button class="btn" id="pinSetBtn" type="button">Activar PIN</button>
+      <button class="btn" id="pinChgBtn" type="button" hidden>Cambiar PIN</button>
+      <button class="btn danger" id="pinOffBtn" type="button" hidden>Quitar PIN</button>
+    </div>
     <p class="about" id="about"></p>
   </section>
 </div>
@@ -1088,6 +1116,22 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <div class="dfacts"><div><span>Animación</span><p id="dAnim"></p></div><div><span>Dato curioso</span><p id="dFact"></p></div></div>
     <div class="dacts"><button class="btn" id="dClose" type="button">Cerrar</button><button class="btn primary" id="dUse" type="button">Usar esta insignia</button></div>
   </section>
+</div>
+<div class="overlay" id="hist" hidden>
+  <section class="panel" role="dialog" aria-modal="true" aria-label="Historial de versiones">
+    <div class="sheethead"><strong>Historial</strong><button class="btn small" id="histClose" type="button">Cerrar</button></div>
+    <p class="hint">Tronx guarda una versión de la nota cada vez que terminás de editarla (hasta 10). Al restaurar, lo que tenías ahora también queda en el historial.</p>
+    <div id="histBody"></div>
+  </section>
+</div>
+<div class="lock" id="lock" role="dialog" aria-modal="true" aria-label="Bloqueo con PIN" hidden>
+  <div class="lockbox">
+    <h2 id="lockT">Tronx bloqueado</h2>
+    <p id="lockS"></p>
+    <div class="lockdots" id="lockDots" aria-hidden="true"></div>
+    <div class="lockpad" id="lockPad"></div>
+    <button class="btn small" id="lockCancel" type="button" hidden>Cancelar</button>
+  </div>
 </div>
 <div class="overlay" id="news" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Novedades">
@@ -1243,7 +1287,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.28.0";
+  var APP_VERSION = "1.29.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1429,6 +1473,17 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     });
     return out;
   }
+  function cleanVersions(a) {
+    var out = [];
+    (Array.isArray(a) ? a : []).slice(0, 10).forEach(function (v) {
+      if (!v || typeof v !== "object") return;
+      out.push({
+        t: Number(v.t) || Date.now(), title: String(v.title || "").slice(0, 300), body: String(v.body || "").slice(0, 60000),
+        items: (Array.isArray(v.items) ? v.items : []).slice(0, 300).map(function (i) { return { id: String((i && i.id) || uid()), t: String((i && i.t) || "").slice(0, 2000), done: !!(i && i.done) }; })
+      });
+    });
+    return out;
+  }
   function normalize(x) {
     if (!x || typeof x !== "object") return null;
     var type = x.type === "list" ? "list" : "text";
@@ -1448,6 +1503,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       tags: tags,
       folder: cleanFolder(x.folder),
       images: cleanImages(x.images),
+      versions: cleanVersions(x.versions),
       parent: x.parent && String(x.parent) !== String(x.id) ? String(x.parent) : "",
       icon: cleanIcon(x.icon),
       bg: cleanBg(x.bg),
@@ -2058,6 +2114,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("moreBtn").hidden = !has || readOnly();
     $("trashbar").hidden = !(has && readOnly());
     if (!has) { selImg = null; imgsEl.textContent = ""; $("imgrow").hidden = true; $("imgPanel").hidden = true; contentEl.classList.remove("imgs"); $("rel").hidden = true; $("crumb").hidden = true; $("sugg").hidden = true; titleEl.value = ""; bodyEl.value = ""; itemsEl.textContent = ""; renderTint(); renderBg(); renderProg(); renderTpls(); $("fmt").hidden = true; renderTaglines(); renderIconBtn(); updateMeta(); return; }
+    if (!baseline || baseline.id !== n.id) baseline = snapOf(n);
     var ro = readOnly(), isList = n.type === "list";
     $("fmt").hidden = isList || ro;
     titleEl.value = n.title; titleEl.readOnly = ro;
@@ -2587,7 +2644,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (n && !n.trashedAt && isEmptyNote(n)) { notes.delete(n.id); persistNow(); }
   }
   function openNote(id) {
-    if (id !== activeId) { if (saveTimer) persistNow(); discardIfEmpty(); }
+    if (id !== activeId) { commitVersion(); if (saveTimer) persistNow(); discardIfEmpty(); }
     activeId = id;
     setStatus("");
     renderEditor(); renderAll();
@@ -2596,7 +2653,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (window.TronxMap) window.TronxMap.suspend();
   }
   function leaveEditorUI() {
-    if (saveTimer) persistNow(); discardIfEmpty();
+    commitVersion(); if (saveTimer) persistNow(); discardIfEmpty();
     activeId = null; setStatus("");
     $("sheet").hidden = true; $("iconSheet").hidden = true; $("scrim").hidden = true;
     $("app").dataset.view = "list";
@@ -2605,7 +2662,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function createNote(type, opts) {
     opts = opts || {};
-    persistNow(); discardIfEmpty();
+    commitVersion(); persistNow(); discardIfEmpty();
     tab = "notes"; query = ""; $("q").value = "";
     var now = Date.now();
     var n = normalize({
@@ -2986,6 +3043,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* ---------- ajustes ---------- */
   function renderSettings() {
+    try { renderPinUI(); } catch (e) {}
     $("themeSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.theme ? "true" : "false"); });
     $("fontSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.font ? "true" : "false"); });
     var soundOn = !window.TronxSound || window.TronxSound.isEnabled();
@@ -3014,6 +3072,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.29.0", d: "8 nov 2026", t: "Compartir y proteger", l: ["Guardá cualquier nota como PDF o como Markdown (.md) desde Personalizar. El PDF lleva el texto, sin imágenes.","Historial de versiones: Tronx guarda una versión cada vez que terminás de editar una nota (hasta 10) y podés restaurar cualquiera desde Personalizar > Historial.","Bloqueo con PIN de 4 dígitos en Ajustes: se pide al abrir la app y al volver después de unos segundos. Es un candado para curiosos, no cifra las notas, y si lo olvidás no se puede recuperar."] },
     { v: "1.28.0", d: "8 nov 2026", t: "Imágenes en tus notas", l: ["Agregá una o varias imágenes con el botón Imagen de la barra de formato.","Ponelas donde quieras: arrastralas, cambiá el tamaño con el punto de abajo a la derecha, girá con el punto de abajo a la izquierda o con dos dedos.","Personalizalas: tamaño, giro, opacidad, forma (cuadrada, 4:3, 16:9, círculo), borde, sombra, espejo y filtros (B/N, sepia, cálido, frío, desvaído, vivo).","Podés ponerlas delante o detrás del texto, traerlas al frente o al fondo, bloquearlas, duplicarlas o eliminarlas.","Las imágenes entran en las copias de seguridad."] },
     { v: "1.27.0", d: "8 nov 2026", t: "Más contenido en tus notas", l: ["Enlaces entre notas: escribí [[ y elegí una nota, o usá el botón Enlace. En modo Leer se tocan para abrir la nota; si no existe, se crea.","Cada nota muestra abajo desde qué otras notas está enlazada.","Subnotas: con + Subnota, dentro de cualquier nota. En la lista aparecen dentro de su nota principal.","Tablas sencillas: botón Tabla, Enter agrega filas y en modo Leer se ven como tabla."] },
     { v: "1.26.0", d: "8 nov 2026", t: "Organizar mejor", l: ["Carpetas: asigná una carpeta a cada nota desde Personalizar y filtrá la lista con un toque.","Selección múltiple: tocá el botón de casilla o mantené apretada una nota para elegir varias y fijarlas, archivarlas, moverlas de carpeta o mandarlas a la papelera, con Deshacer.","Nuevo filtro por tipo: solo notas, solo listas, listas sin terminar, fijadas o con color.","La búsqueda ahora resalta lo que encontró dentro de cada tarjeta."] },
@@ -3406,10 +3465,11 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   // Entrega un archivo: en el teléfono abre el menú de compartir; en el navegador lo descarga.
   // Devuelve una promesa: true si se entregó, false si la persona canceló.
-  function shareFile(name, data, mime, title) {
+  function shareFile(name, data, mime, title, b64) {
     var fs = capPlugin("Filesystem"), share = capPlugin("Share");
     if (fs && share) {
-      return fs.writeFile({ path: name, data: data, directory: "CACHE", encoding: "utf8" }).then(function (r) {
+      var wo = { path: name, data: data, directory: "CACHE" }; if (!b64) wo.encoding = "utf8";
+      return fs.writeFile(wo).then(function (r) {
         return share.share({ title: title, url: r.uri, dialogTitle: title }).then(function () { return true; });
       }).catch(function (err) {
         if (err && /cancel/i.test(String(err.message || err))) return false;
@@ -3418,7 +3478,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }
     return new Promise(function (resolve, reject) {
       try {
-        var blob = new Blob([data], { type: mime });
+        var raw = data;
+        if (b64) { var bin = atob(data), u8 = new Uint8Array(bin.length); for (var q = 0; q < bin.length; q++) u8[q] = bin.charCodeAt(q); raw = u8; }
+        var blob = new Blob([raw], { type: mime });
         var a = el("a"); a.href = URL.createObjectURL(blob); a.download = name;
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
@@ -3494,6 +3556,226 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     r.onerror = function () { toast("No se pudo leer el archivo"); };
     r.readAsText(f);
   });
+
+  /* ---------- historial de versiones ---------- */
+  var baseline = null;
+  function snapOf(n) { return { id: n.id, title: n.title, body: n.body, items: n.items.map(function (i) { return { id: i.id, t: i.t, done: i.done }; }) }; }
+  function sameContent(a, b) { return a.title === b.title && a.body === b.body && JSON.stringify(a.items.map(function (i) { return [i.t, i.done]; })) === JSON.stringify(b.items.map(function (i) { return [i.t, i.done]; })); }
+  function pushVersion(n, snap) {
+    if (!snap || (!snap.title.trim() && !snap.body.trim() && !snap.items.some(function (i) { return i.t.trim(); }))) return false;
+    if (n.versions.length && sameContent(n.versions[0], snap)) return false;
+    n.versions.unshift({ t: Date.now(), title: snap.title, body: snap.body, items: snap.items });
+    n.versions = cleanVersions(n.versions);
+    return true;
+  }
+  function commitVersion() {
+    var n = cur();
+    if (!n || n.trashedAt || !baseline || baseline.id !== n.id) return;
+    if (!sameContent(baseline, n) && pushVersion(n, baseline)) schedulePersist();
+    baseline = snapOf(n);
+  }
+  function openHist() {
+    var n = cur(); if (!n) return;
+    commitVersion();
+    var box = $("histBody"); box.textContent = "";
+    if (!n.versions.length) { var e = el("p", "hint"); e.textContent = "Todavía no hay versiones anteriores. Aparecen después de editar la nota y salir de ella."; box.appendChild(e); }
+    n.versions.forEach(function (v) {
+      var row = el("div", "verrow"), vt = el("div", "vt"), b = el("b"), sp = el("span");
+      b.textContent = when(v.t);
+      sp.textContent = (v.title.trim() ? v.title.trim() + " — " : "") + (n.type === "list" ? v.items.map(function (i) { return i.t; }).join(", ") : v.body.replace(/\s+/g, " ")).slice(0, 90);
+      vt.appendChild(b); vt.appendChild(sp); row.appendChild(vt);
+      var rb = el("button", "btn small"); rb.type = "button"; rb.textContent = "Restaurar";
+      rb.addEventListener("click", function () {
+        pushVersion(n, snapOf(n));
+        n.title = v.title; n.body = v.body; n.items = v.items.map(function (i) { return { id: uid(), t: i.t, done: i.done }; });
+        baseline = snapOf(n); changed(n); persistNow();
+        closeLayer("sheet"); renderEditor(); toast("Versión restaurada");
+      });
+      row.appendChild(rb); box.appendChild(row);
+    });
+    $("hist").hidden = false; pushLayer("hist");
+  }
+  registerLayer("hist", function () { $("hist").hidden = true; });
+  $("histBtn").addEventListener("click", openHist);
+  $("histClose").addEventListener("click", function () { closeLayer("hist"); });
+  $("hist").addEventListener("click", function (e) { if (e.target === $("hist")) closeLayer("hist"); });
+
+  /* ---------- exportar: Markdown y PDF ---------- */
+  function noteMarkdown(n) {
+    var out = n.title.trim() ? "# " + n.title.trim() + "\n\n" : "";
+    if (n.type === "list") out += n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return "- [" + (i.done ? "x" : " ") + "] " + i.t; }).join("\n");
+    else out += n.body;
+    if (n.tags.length) out += "\n\n" + n.tags.map(function (t) { return "#" + t; }).join(" ");
+    return out.replace(/\s+$/, "") + "\n";
+  }
+  var WIN = { "€": 128, "…": 133, "‘": 145, "’": 146, "“": 147, "”": 148, "•": 149, "–": 150, "—": 151, "™": 153 };
+  function latin1(str) {
+    var o = "";
+    for (var i = 0; i < str.length; i++) {
+      var c = str.charCodeAt(i), ch = str.charAt(i);
+      if (c === 9) o += "    "; else if (c < 32) continue;
+      else if (c < 256 && !(c >= 127 && c < 160)) o += ch; else if (WIN[ch]) o += String.fromCharCode(WIN[ch]);
+      else if (c >= 0xD800 && c <= 0xDFFF) continue; else o += "?";
+    }
+    return o;
+  }
+  function pdfEsc(t) { return t.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)"); }
+  function buildPdf(n) {
+    var cv = document.createElement("canvas").getContext("2d"), PW = 595, PH = 842, M = 56, MAXW = PW - 2 * M;
+    function wid(t, size, bold) { cv.font = (bold ? "bold " : "") + size + "px Arial, Helvetica, sans-serif"; return cv.measureText(t).width * 1.04; }
+    function wrap(t, size, bold, maxw) {
+      var words = t.split(" "), lines = [], cur = "";
+      words.forEach(function (w) {
+        var tryL = cur ? cur + " " + w : w;
+        if (wid(tryL, size, bold) <= maxw || !cur) {
+          if (wid(tryL, size, bold) > maxw) { var piece = ""; for (var k = 0; k < tryL.length; k++) { if (wid(piece + tryL[k], size, bold) > maxw && piece) { lines.push(piece); piece = ""; } piece += tryL[k]; } cur = piece; } else cur = tryL;
+        } else { lines.push(cur); cur = w; }
+      });
+      lines.push(cur); return lines;
+    }
+    var blocks = [];
+    blocks.push({ t: n.title.trim() || (n.type === "list" ? "Lista" : "Nota"), size: 20, bold: true, gap: 10 });
+    var src = n.type === "list" ? n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "[x] " : "[ ] ") + i.t; }) : n.body.split("\n");
+    src.forEach(function (ln) {
+      var size = 11, bold = false, ind = 0, t = latin1(ln), m;
+      if ((m = t.match(/^(#{1,2})\s+(.*)$/))) { size = m[1].length === 1 ? 16 : 13.5; bold = true; t = m[2]; }
+      else if ((m = t.match(/^>\s?(.*)$/))) { ind = 16; t = m[1]; }
+      t = t.replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2");
+      blocks.push({ t: t, size: size, bold: bold, ind: ind, gap: 0 });
+    });
+    if (n.tags.length) blocks.push({ t: n.tags.map(function (x) { return "#" + latin1(x); }).join(" "), size: 10, bold: false, gap: 10 });
+    var pages = [[]], y = PH - M;
+    blocks.forEach(function (b) {
+      var lh = b.size * 1.4, lines = wrap(latin1(b.t), b.size, b.bold, MAXW - (b.ind || 0));
+      if (b.gap && pages[pages.length - 1].length) y -= 0;
+      lines.forEach(function (ln) {
+        if (y - lh < M) { pages.push([]); y = PH - M; }
+        y -= lh; pages[pages.length - 1].push({ x: M + (b.ind || 0), y: y + b.size * 0.25, size: b.size, bold: b.bold, t: ln });
+      });
+      y -= b.gap || 0;
+    });
+    var objs = [], np = pages.length;
+    objs[1] = "<< /Type /Catalog /Pages 2 0 R >>";
+    objs[2] = "<< /Type /Pages /Kids [" + pages.map(function (_, i) { return (5 + i * 2) + " 0 R"; }).join(" ") + "] /Count " + np + " >>";
+    objs[3] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
+    objs[4] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
+    pages.forEach(function (pg, i) {
+      var stream = pg.map(function (l) { return "BT /" + (l.bold ? "F2" : "F1") + " " + l.size + " Tf " + l.x.toFixed(1) + " " + l.y.toFixed(1) + " Td (" + pdfEsc(l.t) + ") Tj ET"; }).join("\n");
+      objs[5 + i * 2] = "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + PW + " " + PH + "] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents " + (6 + i * 2) + " 0 R >>";
+      objs[6 + i * 2] = "<< /Length " + stream.length + " >>\nstream\n" + stream + "\nendstream";
+    });
+    var out = "%PDF-1.4\n", offs = [];
+    for (var k = 1; k < objs.length; k++) { offs[k] = out.length; out += k + " 0 obj\n" + objs[k] + "\nendobj\n"; }
+    var xr = out.length;
+    out += "xref\n0 " + objs.length + "\n0000000000 65535 f \n";
+    for (k = 1; k < objs.length; k++) out += String(offs[k]).padStart(10, "0") + " 00000 n \n";
+    out += "trailer\n<< /Size " + objs.length + " /Root 1 0 R >>\nstartxref\n" + xr + "\n%%EOF";
+    return out;
+  }
+  function exportMd() {
+    var n = cur(); if (!n) return;
+    shareFile(safeName(n.title) + ".md", noteMarkdown(n), "text/markdown", n.title.trim() || "Nota de Tronx").then(function (ok) {
+      if (ok && !capPlugin("Share")) toast("Archivo .md descargado");
+    }).catch(function () { toast("No se pudo guardar el archivo"); });
+  }
+  function exportPdf() {
+    var n = cur(); if (!n) return;
+    var bin; try { bin = buildPdf(n); } catch (e) { toast("No se pudo crear el PDF"); return; }
+    shareFile(safeName(n.title) + ".pdf", btoa(bin), "application/pdf", n.title.trim() || "Nota de Tronx", true).then(function (ok) {
+      if (ok && !capPlugin("Share")) toast("PDF descargado");
+    }).catch(function () { toast("No se pudo guardar el PDF"); });
+  }
+  $("mdBtn").addEventListener("click", exportMd);
+  $("pdfBtn").addEventListener("click", exportPdf);
+
+  /* ---------- bloqueo con PIN ---------- */
+  var PINKEY = "tronx.pin.v1", lockMode = "unlock", lockBuf = "", lockTmp = "", lockOk = null, lockBusy = false, lockFails = 0, lockUntil = 0, lockTimer = 0, hiddenAt = 0;
+  function pinData() { try { var d = JSON.parse(lsGet(PINKEY) || "null"); return d && d.h && d.s ? d : null; } catch (e) { return null; } }
+  function pinHash(pin, salt) {
+    var txt = "tronx|" + salt + "|" + pin;
+    if (window.crypto && crypto.subtle && window.TextEncoder) {
+      return crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt)).then(function (b) { return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, "0"); }).join(""); });
+    }
+    var h = 5381; for (var i = 0; i < txt.length; i++) h = ((h << 5) + h + txt.charCodeAt(i)) | 0;
+    return Promise.resolve("f" + (h >>> 0).toString(16));
+  }
+  function renderPinUI() {
+    var on = !!pinData();
+    $("pinSetBtn").hidden = on; $("pinChgBtn").hidden = !on; $("pinOffBtn").hidden = !on;
+    $("pinHint").textContent = on ? "El PIN está activado: Tronx pide el código al abrirla y al volver después de unos segundos. Si lo olvidás no hay forma de recuperarlo, salvo borrar los datos de la app (se pierden las notas sin copia)." : "Protegé la app con un PIN de 4 dígitos. Es un candado para curiosos: no cifra tus notas.";
+  }
+  function lockDraw() {
+    var d = $("lockDots"); d.textContent = "";
+    for (var i = 0; i < 4; i++) d.appendChild(el("i", i < lockBuf.length ? "on" : ""));
+  }
+  function lockPadBuild() {
+    var pad = $("lockPad"); if (pad.firstChild) return;
+    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "⌫"].forEach(function (k) {
+      var b = el("button", k ? "" : "nil"); b.type = "button"; b.textContent = k; b.dataset.k = k; if (!k) b.disabled = true;
+      b.setAttribute("aria-label", k === "⌫" ? "Borrar" : k || ""); pad.appendChild(b);
+    });
+  }
+  function openLock(mode, onOk) {
+    lockMode = mode; lockOk = onOk || null; lockBuf = ""; lockTmp = ""; lockBusy = false; lockPadBuild();
+    var t = { unlock: ["Tronx bloqueado", "Ingresá tu PIN"], verify: ["Confirmá tu PIN", "Ingresá el PIN actual"], set1: ["Nuevo PIN", "Elegí 4 dígitos"], set2: ["Repetí el PIN", "Escribilo otra vez"] }[mode];
+    $("lockT").textContent = t[0]; $("lockS").textContent = t[1];
+    $("lockCancel").hidden = mode === "unlock"; $("lock").hidden = false; lockDraw();
+    lockPadState();
+  }
+  function lockPadState() {
+    var cool = Date.now() < lockUntil;
+    $("lockPad").querySelectorAll("button").forEach(function (b) { b.disabled = cool || !b.dataset.k; });
+    if (cool) {
+      clearInterval(lockTimer);
+      lockTimer = setInterval(function () {
+        var s = Math.ceil((lockUntil - Date.now()) / 1000);
+        if (s <= 0) { clearInterval(lockTimer); $("lockS").textContent = "Ingresá tu PIN"; lockPadState(); } else $("lockS").textContent = "Demasiados intentos. Esperá " + s + " s";
+      }, 500);
+    }
+  }
+  function lockFail(msg) {
+    var box = document.querySelector(".lockbox"); box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
+    lockBuf = ""; lockDraw(); lockBusy = false;
+    if (lockMode === "unlock" || lockMode === "verify") {
+      lockFails++;
+      if (lockFails >= 5) { lockFails = 0; lockUntil = Date.now() + 30000; lockPadState(); return; }
+    }
+    $("lockS").textContent = msg;
+  }
+  function lockDone() { $("lock").hidden = true; lockBuf = ""; lockFails = 0; var f = lockOk; lockOk = null; if (f) f(); }
+  function lockEnter(k) {
+    if (lockBusy || Date.now() < lockUntil) return;
+    if (k === "⌫") { lockBuf = lockBuf.slice(0, -1); lockDraw(); return; }
+    if (lockBuf.length >= 4) return;
+    lockBuf += k; lockDraw();
+    if (lockBuf.length < 4) return;
+    lockBusy = true;
+    var pin = lockBuf, d = pinData();
+    if (lockMode === "unlock" || lockMode === "verify") {
+      pinHash(pin, d ? d.s : "").then(function (h) { if (d && h === d.h) { lockBusy = false; lockDone(); } else lockFail("PIN incorrecto"); });
+    } else if (lockMode === "set1") {
+      lockTmp = pin; lockMode = "set2"; lockBuf = ""; lockBusy = false; $("lockT").textContent = "Repetí el PIN"; $("lockS").textContent = "Escribilo otra vez"; lockDraw();
+    } else if (lockMode === "set2") {
+      if (pin !== lockTmp) { lockMode = "set1"; lockFail("No coinciden. Elegí uno nuevo"); $("lockT").textContent = "Nuevo PIN"; return; }
+      var salt = uid() + uid();
+      pinHash(pin, salt).then(function (h) { lsSet(PINKEY, JSON.stringify({ s: salt, h: h })); lockBusy = false; lockDone(); renderPinUI(); toast("PIN activado"); });
+    }
+  }
+  $("lockPad").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b && b.dataset.k) lockEnter(b.dataset.k); });
+  $("lockCancel").addEventListener("click", function () { $("lock").hidden = true; lockOk = null; });
+  document.addEventListener("keydown", function (e) {
+    if ($("lock").hidden) return;
+    if (/^[0-9]$/.test(e.key)) lockEnter(e.key); else if (e.key === "Backspace") lockEnter("⌫");
+  });
+  $("pinSetBtn").addEventListener("click", function () { openLock("set1"); });
+  $("pinChgBtn").addEventListener("click", function () { openLock("verify", function () { openLock("set1"); }); });
+  $("pinOffBtn").addEventListener("click", function () { openLock("verify", function () { try { localStorage.removeItem(PINKEY); } catch (e) {} renderPinUI(); toast("PIN quitado"); }); });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { hiddenAt = Date.now(); commitVersion(); return; }
+    if (pinData() && hiddenAt && Date.now() - hiddenAt > 20000 && $("lock").hidden) openLock("unlock");
+  });
+  renderPinUI();
+  if (pinData()) openLock("unlock");
 
   /* ---------- eventos globales ---------- */
   document.addEventListener("visibilitychange", function () { if (document.hidden) persistNow(); });
