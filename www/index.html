@@ -756,6 +756,12 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .pimg.sel { touch-action: none; outline: 2px dashed var(--accent); outline-offset: 2px; z-index: 50 !important; }
 .pimg.lock { cursor: default; }
 .pimgs.ro .pimg { pointer-events: none; }
+.pimgs.reading .pimg.wrapped { display: none; }
+.pimg.sel.wrapped::after { content: "Texto alrededor: se ve en Leer"; position: absolute; left: 0; top: -24px; font-size: 11px; line-height: 1; padding: 4px 7px; border-radius: 7px; background: var(--accent); color: var(--accent-ink); white-space: nowrap; pointer-events: none; }
+.read { display: flow-root; position: relative; }
+.pfloat { box-sizing: border-box; }
+.pfloat img { display: block; width: 100%; height: 100%; box-sizing: border-box; border: 0 solid var(--accent); }
+.pfloat.shadow img { box-shadow: 0 10px 24px -6px rgba(0,0,0,0.55); }
 .pimg .hs, .pimg .hr { position: absolute; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); border: 2px solid var(--solid); touch-action: none; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
 .pimg .hs { right: -15px; bottom: -15px; cursor: nwse-resize; }
 .pimg .hr { left: -15px; bottom: -15px; cursor: grab; }
@@ -773,12 +779,12 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .content { min-height: 150px; }
 .content.imgs .pimg img.f-bw { filter: grayscale(1); } 
-.pimg img.f-bw { filter: grayscale(1) contrast(1.1); }
-.pimg img.f-sepia { filter: sepia(0.85); }
-.pimg img.f-warm { filter: sepia(0.35) saturate(1.3) hue-rotate(-12deg); }
-.pimg img.f-cool { filter: saturate(1.1) hue-rotate(18deg) brightness(1.03); }
-.pimg img.f-fade { filter: contrast(0.82) brightness(1.12) saturate(0.8); }
-.pimg img.f-vivid { filter: saturate(1.6) contrast(1.1); }
+.pimg img.f-bw, .pfloat img.f-bw { filter: grayscale(1) contrast(1.1); }
+.pimg img.f-sepia, .pfloat img.f-sepia { filter: sepia(0.85); }
+.pimg img.f-warm, .pfloat img.f-warm { filter: sepia(0.35) saturate(1.3) hue-rotate(-12deg); }
+.pimg img.f-cool, .pfloat img.f-cool { filter: saturate(1.1) hue-rotate(18deg) brightness(1.03); }
+.pimg img.f-fade, .pfloat img.f-fade { filter: contrast(0.82) brightness(1.12) saturate(0.8); }
+.pimg img.f-vivid, .pfloat img.f-vivid { filter: saturate(1.6) contrast(1.1); }
 .pimg.shadow img { box-shadow: 0 10px 24px -6px rgba(0,0,0,0.55); }
 .lock { position: fixed; inset: 0; z-index: 100000; display: grid; place-items: center; background: var(--solid); padding: 20px; }
 .lock[hidden] { display: none; }
@@ -1287,7 +1293,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.29.0";
+  var APP_VERSION = "1.30.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1467,7 +1473,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       out.push({
         id: String(i.id), src: String(i.src || i.id), cx: numIn(i.cx, 0, 1, 0.5), cy: numIn(i.cy, 0, 30000, 80), w: numIn(i.w, 0.05, 1.5, 0.6),
         nar: nar, ar: numIn(i.ar, 0.1, 10, nar), r: numIn(i.r, -180, 180, 0), op: numIn(i.op, 0.1, 1, 1),
-        rad: numIn(i.rad, 0, 50, 0), fl: !!i.fl, bd: Math.round(numIn(i.bd, 0, 3, 0)), sh: !!i.sh,
+        rad: numIn(i.rad, 0, 50, 0), wrap: !!i.wrap, fl: !!i.fl, bd: Math.round(numIn(i.bd, 0, 3, 0)), sh: !!i.sh,
         ft: IMG_FT.indexOf(i.ft) >= 0 ? i.ft : "", z: Math.round(numIn(i.z, 0, 999, 0)), back: !!i.back, lock: !!i.lock
       });
     });
@@ -2257,19 +2263,40 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var st = node.style;
     st.left = (it.cx * 100) + "%"; st.top = it.cy + "px"; st.width = (it.w * 100) + "%"; st.aspectRatio = String(it.ar);
     st.transform = "translate(-50%,-50%) rotate(" + it.r + "deg)"; st.opacity = it.op; st.zIndex = it.back ? 0 : 4 + it.z;
-    node.classList.toggle("shadow", it.sh); node.classList.toggle("lock", it.lock);
+    node.classList.toggle("shadow", it.sh); node.classList.toggle("lock", it.lock); node.classList.toggle("wrapped", !!it.wrap);
     var im = node.querySelector("img");
-    if (im) {
-      im.className = it.ft ? "f-" + it.ft : "";
-      im.style.transform = it.fl ? "scaleX(-1)" : ""; im.style.objectFit = Math.abs(it.ar - it.nar) < 0.01 ? "fill" : "cover";
-      im.style.borderRadius = it.rad + "%"; im.style.borderWidth = (it.bd * 2) + "px";
-    }
+    if (im) styleImgEl(it, im);
+  }
+  function styleImgEl(it, im) {
+    im.className = it.ft ? "f-" + it.ft : "";
+    im.style.transform = it.fl ? "scaleX(-1)" : ""; im.style.objectFit = Math.abs(it.ar - it.nar) < 0.01 ? "fill" : "cover";
+    im.style.borderRadius = it.rad + "%"; im.style.borderWidth = (it.bd * 2) + "px";
+  }
+  /* vista de lectura: las imágenes con "texto alrededor" pasan a flotar y el texto las rodea */
+  function renderRead() {
+    readEl.innerHTML = mdHtml(bodyEl.value);
+    var n = cur(); if (!n) return;
+    var ws = n.images.filter(function (i) { return i.wrap; }).sort(function (a, b) { return a.cy - b.cy; });
+    if (!ws.length) return;
+    var W = readEl.clientWidth || imgsEl.clientWidth || 300, blocks = Array.from(readEl.children), tops = blocks.map(function (b) { return b.offsetTop; });
+    ws.forEach(function (it) {
+      var f = el("div", "pfloat"), im = el("img"); im.alt = ""; f.appendChild(im);
+      var left = it.cx < 0.5;
+      f.style.width = (Math.min(it.w, 0.6) * W) + "px"; f.style.aspectRatio = String(it.ar); f.style.opacity = it.op;
+      f.style.float = left ? "left" : "right"; f.style.margin = left ? "4px 14px 8px 0" : "4px 0 8px 14px";
+      if (it.rad >= 49) f.style.shapeOutside = "circle(50%)";
+      f.classList.toggle("shadow", it.sh); styleImgEl(it, im);
+      imgUrl(it.src).then(function (u) { if (u) im.src = u; });
+      var top = it.cy - (it.w * W / it.ar) / 2, ref = null;
+      for (var k = 0; k < blocks.length; k++) if (tops[k] >= top - 2) { ref = blocks[k]; break; }
+      readEl.insertBefore(f, ref);
+    });
   }
   function imgNode(id) { return imgsEl.querySelector('.pimg[data-id="' + id + '"]'); }
   function fitBody() {
     var n = cur(), on = !!(n && n.type === "text" && n.images.length);
     contentEl.classList.toggle("imgs", on);
-    imgsEl.classList.toggle("ro", !!(readMode || !n || n.trashedAt));
+    imgsEl.classList.toggle("ro", !!(readMode || !n || n.trashedAt)); imgsEl.classList.toggle("reading", readMode);
     bodyEl.style.height = ""; readEl.style.minHeight = "";
     if (!on) return;
     var W = imgsEl.clientWidth || 300, bottom = 0;
@@ -2327,7 +2354,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     grp("Forma", [["orig", "Original"], ["sq", "Cuadrada"], ["43", "4:3"], ["169", "16:9"], ["circ", "Círculo"], ["round", "Redonda"]], "shape");
     grp("Borde", [["0", "Sin borde"], ["1", "Fino"], ["2", "Medio"], ["3", "Grueso"]], "bd");
     grp("Filtro", [["", "Normal"], ["bw", "B/N"], ["sepia", "Sepia"], ["warm", "Cálido"], ["cool", "Frío"], ["fade", "Desvaído"], ["vivid", "Vivo"]], "ft");
-    grp("Opciones", [["sh", "Sombra"], ["fl", "Espejo"], ["back", "Detrás del texto"], ["lock", "Bloquear"]], "tog");
+    grp("Opciones", [["sh", "Sombra"], ["fl", "Espejo"], ["wrap", "Texto alrededor"], ["back", "Detrás del texto"], ["lock", "Bloquear"]], "tog");
     grp("Acciones", [["front", "Al frente"], ["bottom", "Al fondo"], ["dup", "Duplicar"], ["del", "Eliminar"], ["done", "Listo"]], "act");
   }
   function renderPanel() {
@@ -2521,7 +2548,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var b = $("fmt").querySelector('[data-ins="read"]');
     b.setAttribute("aria-pressed", readMode ? "true" : "false"); b.textContent = readMode ? "Editar" : "Leer";
     $("fmt").classList.toggle("reading", readMode);
-    if (readMode) readEl.innerHTML = mdHtml(bodyEl.value);
+    if (readMode) renderRead();
     if (selImg) selectImg(null);
     $("imgrow").hidden = !n || !n.images.length || !!n.trashedAt || readMode;
     fitBody();
@@ -2539,7 +2566,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var ls = n.body.split("\n"), i = Number(c.dataset.line);
     ls[i] = /^\s*\[ \]/.test(ls[i]) ? ls[i].replace("[ ]", "[x]") : ls[i].replace(/\[[xX]\]/, "[ ]");
     bodyEl.value = n.body = ls.join("\n"); changed(n); histNow();
-    readEl.innerHTML = mdHtml(n.body);
+    renderRead();
   });
 
   /* Barra de formato: viñeta, casilla, fecha y hora en el punto donde estás escribiendo */
@@ -3072,6 +3099,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.30.0", d: "8 nov 2026", t: "Texto alrededor de las imágenes", l: ["Nueva opción \"Texto alrededor\" en el panel de cada imagen.","En modo Leer la imagen se acomoda a un lado (según de qué lado la dejaste) y el texto la rodea; con forma de círculo el texto sigue la curva.","Mientras editás, la imagen se sigue viendo en el lugar donde la dejaste."] },
     { v: "1.29.0", d: "8 nov 2026", t: "Compartir y proteger", l: ["Guardá cualquier nota como PDF o como Markdown (.md) desde Personalizar. El PDF lleva el texto, sin imágenes.","Historial de versiones: Tronx guarda una versión cada vez que terminás de editar una nota (hasta 10) y podés restaurar cualquiera desde Personalizar > Historial.","Bloqueo con PIN de 4 dígitos en Ajustes: se pide al abrir la app y al volver después de unos segundos. Es un candado para curiosos, no cifra las notas, y si lo olvidás no se puede recuperar."] },
     { v: "1.28.0", d: "8 nov 2026", t: "Imágenes en tus notas", l: ["Agregá una o varias imágenes con el botón Imagen de la barra de formato.","Ponelas donde quieras: arrastralas, cambiá el tamaño con el punto de abajo a la derecha, girá con el punto de abajo a la izquierda o con dos dedos.","Personalizalas: tamaño, giro, opacidad, forma (cuadrada, 4:3, 16:9, círculo), borde, sombra, espejo y filtros (B/N, sepia, cálido, frío, desvaído, vivo).","Podés ponerlas delante o detrás del texto, traerlas al frente o al fondo, bloquearlas, duplicarlas o eliminarlas.","Las imágenes entran en las copias de seguridad."] },
     { v: "1.27.0", d: "8 nov 2026", t: "Más contenido en tus notas", l: ["Enlaces entre notas: escribí [[ y elegí una nota, o usá el botón Enlace. En modo Leer se tocan para abrir la nota; si no existe, se crea.","Cada nota muestra abajo desde qué otras notas está enlazada.","Subnotas: con + Subnota, dentro de cualquier nota. En la lista aparecen dentro de su nota principal.","Tablas sencillas: botón Tabla, Enter agrega filas y en modo Leer se ven como tabla."] },
