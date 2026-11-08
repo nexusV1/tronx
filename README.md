@@ -178,5 +178,7 @@ Pasos, una sola vez:
 **1.23.3**: optimización de la lista tras las Insignias detalladas: de las insignias que se ven en las tarjetas solo 4 se animan a la vez (van rotando) y todas se congelan mientras se desplaza la lista. Sin migración de datos.
 
 **1.24.0**: **guía de bienvenida** de 8 pasos (con insignias animadas, deslizable, con Saltar y Atrás) que explica qué hay en la app; por ahora se muestra una vez a todos los usuarios (clave `tronx.tour`) y se puede volver a ver desde el menú → Guía de Tronx. **Menú mejorado**: nivel de explorador según la cantidad de notas con barra de progreso, atajos (Nota, Lista, Buscar, Papelera) y consejos del día. Sin migración de datos.
+
+**1.24.1**: arreglo de compilación: `package.json` había quedado vacío en las versiones 1.22.1 a 1.24.0 y Codemagic fallaba en "Instalar dependencias" (EJSONPARSE). Se restauró. Sin cambios visibles en la app.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.

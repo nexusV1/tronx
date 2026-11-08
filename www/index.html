@@ -1117,7 +1117,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.24.0";
+  var APP_VERSION = "1.24.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2291,6 +2291,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.24.1", d: "8 nov 2026", t: "Arreglo de compilación", l: ["Se corrigió el archivo de configuración del proyecto que impedía compilar el APK. No cambia nada de lo que ves en la app."] },
     { v: "1.24.0", d: "7 nov 2026", t: "Guía de bienvenida y menú mejorado", l: ["Nueva guía de bienvenida de 8 pasos que explica todo lo que hay en Tronx. Por ahora se muestra una vez a todos; podés volver a verla desde el menú, en Guía de Tronx.", "El menú ahora tiene niveles según tus notas (Polvo estelar, Tripulante, Navegante, Cartógrafo, Astrónomo y Capitán estelar) con una barra de progreso.", "Atajos rápidos en el menú: Nota, Lista, Buscar y Papelera.", "Consejos que cambian cada día, y también al tocarlos."] },
     { v: "1.23.3", d: "7 nov 2026", t: "Lista más fluida", l: ["Las insignias de las tarjetas se mueven de a 4 a la vez y se congelan mientras te desplazás, así la lista vuelve a ser tan fluida como antes."] },
     { v: "1.23.2", d: "7 nov 2026", t: "Brújula más limpia", l: ["La brújula ahora usa el borde del medallón como aro: se quitaron los círculos extra que la hacían parecer dos brújulas en una."] },
