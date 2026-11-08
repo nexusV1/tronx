@@ -1,7 +1,7 @@
 // Ajusta android/app/build.gradle después de `cap add android`:
 //  - versionCode creciente (ver abajo) y versionName con la versión de package.json
 //  - firma de release si Codemagic entrega un keystore (CM_KEYSTORE_PATH y relacionadas)
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 
 const file = "android/app/build.gradle";
 let gradle = readFileSync(file, "utf8");
@@ -65,4 +65,22 @@ try {
   console.log("Permisos de notificaciones listos:", perms.join(", "));
 } catch (e) {
   console.warn("No se pudieron agregar los permisos de notificaciones:", e.message);
+}
+
+// Ícono de las notificaciones: silueta blanca de una nota (Android lo pinta con el color de acento).
+try {
+  mkdirSync("android/app/src/main/res/drawable", { recursive: true });
+  writeFileSync(
+    "android/app/src/main/res/drawable/ic_stat_tronx.xml",
+    `<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd"
+        android:pathData="M6,2h8l6,6v12a2,2 0 0,1 -2,2H6a2,2 0 0,1 -2,-2V4a2,2 0 0,1 2,-2zM7.5,11h9v1.5h-9zM7.5,14.5h9V16h-9zM7.5,7.5h4V9h-4z"/>
+</vector>
+`
+  );
+  console.log("Ícono de notificación creado.");
+} catch (e) {
+  console.warn("No se pudo crear el ícono de notificación:", e.message);
 }

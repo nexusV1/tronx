@@ -1331,7 +1331,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.33.1";
+  var APP_VERSION = "1.33.2";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -3243,6 +3243,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.33.2", d: "8 nov 2026", t: "Notificaciones más lindas", l: ["El título de la notificación es el de tu nota, sin el reloj ni los dos puntos sobrantes.","El texto se muestra limpio (sin símbolos de formato) y, al desplegar la notificación, se ve más de la nota con sus casillas y líneas.","Ícono propio de Tronx en la barra de estado y un canal llamado \"Recordatorios\", que podés ajustar desde los ajustes de Android (sonido, vibración, importancia)."] },
     { v: "1.33.1", d: "8 nov 2026", t: "Permiso de notificaciones", l: ["En Personalizar > Recordatorio ahora se ve el estado real del permiso de notificaciones y hay un botón \"Permitir notificaciones\" para pedirlo.","Si Android lo tiene bloqueado, Tronx te dice dónde activarlo. Si esta versión se compiló sin el componente de avisos, también lo indica."] },
     { v: "1.33.0", d: "8 nov 2026", t: "Cámara, dibujo y PDF con imágenes", l: ["Botón Foto: sacá una foto y se agrega a la nota como imagen.","Botón Dibujo: dibujá a mano alzada con colores, tres grosores, goma y fondo transparente, blanco, papel u oscuro. El dibujo queda como una imagen más que podés mover, escalar y girar.","El PDF ahora incluye las imágenes (con su forma, filtro y opacidad).","Si buscás algo que está en una subnota, también aparece la nota principal."] },
     { v: "1.32.0", d: "8 nov 2026", t: "Limpieza interna", l: ["Se quitó código y dibujos que ya no se usaban. La app pesa un poco menos y queda más ordenada por dentro.","No cambia nada de lo que ves: las insignias se comprobaron idénticas pixel por pixel."] },
@@ -3739,17 +3740,35 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function nidOf(id) { var h = 7; for (var i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0; return (Math.abs(h) % 2000000000) + 1; }
   function localInput(ts) { var d = new Date(ts), p2 = function (x) { return String(x).padStart(2, "0"); }; return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) + "T" + p2(d.getHours()) + ":" + p2(d.getMinutes()); }
   var LN = null; function ln() { return LN || (LN = capPlugin("LocalNotifications")); }
-  var remSigLast = "", remTimer = 0;
+  var remSigLast = "", remTimer = 0, REM_CH = "recordatorios", chPromise = null;
+  /* texto de la notificación: sin símbolos de formato, con el título de la nota y un resumen legible */
+  function notifText(n) {
+    var title = n.title.trim(), lines;
+    if (n.type === "list") lines = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "☑ " : "☐ ") + i.t.trim(); });
+    else lines = n.body.split("\n").map(function (l) {
+      return l.replace(/^\s*#{1,2}\s+/, "").replace(/^\s*>\s?/, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2")
+        .replace(/\[\[([^\]]+)\]\]/g, "$1").replace(/^\s*\[[xX]\]\s*/, "☑ ").replace(/^\s*\[ \]\s*/, "☐ ").replace(/^\s*\|?\s*-{3,}.*$/, "").replace(/\s*\|\s*/g, " · ").replace(/^ · | · $/g, "").trim();
+    }).filter(Boolean);
+    if (!title) title = lines.length ? lines.shift().slice(0, 60) : "Recordatorio";
+    else if (lines.length && lines[0].replace(/:$/, "") === title.replace(/:$/, "")) lines.shift();
+    var body = lines.length ? lines[0].slice(0, 100) : (n.images.length ? "Nota con " + n.images.length + (n.images.length === 1 ? " imagen" : " imágenes") : "Tenés un recordatorio pendiente");
+    var large = lines.join("\n").slice(0, 500) || body;
+    return { title: title.replace(/:$/, "").slice(0, 80), body: body, large: large };
+  }
+  function ensureChannel(plug) {
+    if (chPromise) return chPromise;
+    chPromise = (plug.createChannel ? plug.createChannel({ id: REM_CH, name: "Recordatorios", description: "Avisos de las notas con recordatorio", importance: 4, visibility: 1, vibration: true, lights: true, lightColor: "#7c5cff" }) : Promise.resolve()).catch(function () {});
+    return chPromise;
+  }
   function syncReminders() {
     var plug = ln(); if (!plug) return;
     var want = [], sig = [];
     notes.forEach(function (n) {
       if (!n.remind || n.trashedAt) return;
       var r = n.remind; if (!r.rep && r.at <= Date.now()) return;
-      var at = nextAt(r), title = n.title.trim() || "Nota de Tronx";
-      var body = (n.type === "list" ? n.items.map(function (i) { return i.t; }).join(", ") : n.body).replace(/\s+/g, " ").trim().slice(0, 120) || "Tenés un recordatorio";
-      var o = { id: nidOf(n.id), title: "⏰ " + title, body: body, extra: { noteId: n.id }, schedule: r.rep ? { at: new Date(r.at > Date.now() ? r.at : at), every: r.rep, allowWhileIdle: true } : { at: new Date(at), allowWhileIdle: true } };
-      want.push(o); sig.push(o.id + ":" + at + ":" + r.rep + ":" + title + ":" + body);
+      var at = nextAt(r), tx = notifText(n);
+      var o = { id: nidOf(n.id), title: tx.title, body: tx.body, largeBody: tx.large, summaryText: "Recordatorio de Tronx", channelId: REM_CH, smallIcon: "ic_stat_tronx", iconColor: "#7c5cff", autoCancel: true, extra: { noteId: n.id }, schedule: r.rep ? { at: new Date(r.at > Date.now() ? r.at : at), every: r.rep, allowWhileIdle: true } : { at: new Date(at), allowWhileIdle: true } };
+      want.push(o); sig.push(o.id + ":" + at + ":" + r.rep + ":" + tx.title + ":" + tx.large);
     });
     sig = sig.sort().join("|");
     if (sig === remSigLast) return; remSigLast = sig;
@@ -3758,7 +3777,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var drop = ((res && res.notifications) || []).filter(function (x) { return !keep[x.id]; }).map(function (x) { return { id: x.id }; });
       return (drop.length ? plug.cancel({ notifications: drop }) : Promise.resolve()).then(function () {
         if (!want.length) return;
-        return plug.cancel({ notifications: want.map(function (o) { return { id: o.id }; }) }).then(function () { return plug.schedule({ notifications: want }); });
+        return ensureChannel(plug).then(function () { return plug.cancel({ notifications: want.map(function (o) { return { id: o.id }; }) }); }).then(function () { return plug.schedule({ notifications: want }); });
       });
     }).catch(function () { remSigLast = ""; });
   }
