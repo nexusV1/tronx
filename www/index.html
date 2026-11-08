@@ -181,6 +181,21 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 
 .chips { display: flex; gap: 6px; padding: 8px 12px 2px; overflow-x: auto; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
+.chips.folders { padding-top: 6px; }
+.chips.folders .chip::before { content: "▣ "; opacity: 0.6; }
+mark { background: var(--accent-soft); color: inherit; border-radius: 3px; padding: 0 1px; box-shadow: 0 0 0 1px var(--accent); }
+.item .fold { color: var(--accent); }
+.item.selected { box-shadow: inset 0 0 0 2px var(--accent); }
+.item .selmark { position: absolute; top: 8px; right: 8px; z-index: 2; width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--muted); display: grid; place-items: center; font-size: 14px; line-height: 1; background: var(--solid); }
+.item.selected .selmark { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.bulk { position: sticky; bottom: 0; z-index: 5; background: var(--solid); border-top: 1px solid var(--line); padding: 8px 10px; }
+.bulk[hidden] { display: none; }
+.bulkrow { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.bulkrow[hidden] { display: none; }
+.bulkrow strong { min-width: 22px; text-align: center; }
+.bulkrow input, .folderin { flex: 1; min-width: 0; font: inherit; color: inherit; background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+.folderin { width: 100%; box-sizing: border-box; }
+#selBtn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
 .chip {
   flex: none;
   border: 1px solid var(--line);
@@ -831,6 +846,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       <button class="tab" role="tab" data-tab="archive" type="button" aria-selected="false">Archivo<span class="n" id="nArchive"></span></button>
       <button class="tab" role="tab" data-tab="trash" type="button" aria-selected="false">Papelera<span class="n" id="nTrash"></span></button>
     </nav>
+    <div class="chips folders" id="folders" aria-label="Carpetas" hidden></div>
     <div class="chips" id="chips" aria-label="Filtrar por etiqueta" hidden></div>
     <div class="opts">
       <select id="sort" aria-label="Ordenar notas">
@@ -839,9 +855,34 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
         <option value="title">Título A–Z</option>
         <option value="color">Por color</option>
       </select>
+      <select id="kind" aria-label="Filtrar por tipo">
+        <option value="all">Todo</option>
+        <option value="text">Solo notas</option>
+        <option value="list">Solo listas</option>
+        <option value="open">Listas sin terminar</option>
+        <option value="pinned">Fijadas</option>
+        <option value="color">Con color</option>
+      </select>
+      <button class="btn icon" id="selBtn" type="button" title="Seleccionar notas" aria-label="Seleccionar notas" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/></svg></button>
       <button class="btn icon" id="viewBtn" type="button"></button>
     </div>
     <ul class="list" id="list" data-view="list"></ul>
+    <div class="bulk" id="bulk" hidden>
+      <div class="bulkrow" id="bulkMain">
+        <strong id="bulkN">0</strong>
+        <button class="btn small" id="bAll" type="button">Todas</button>
+        <button class="btn small" id="bPin" type="button">Fijar</button>
+        <button class="btn small" id="bFolder" type="button">Carpeta</button>
+        <button class="btn small" id="bArch" type="button">Archivar</button>
+        <button class="btn small danger" id="bTrash" type="button">Papelera</button>
+        <button class="btn small" id="bDone" type="button">Listo</button>
+      </div>
+      <div class="bulkrow" id="bulkFolder" hidden>
+        <input id="bFolderIn" list="folderlist" maxlength="30" placeholder="Nombre de la carpeta (vacío = sin carpeta)" aria-label="Carpeta">
+        <button class="btn small primary" id="bFolderOk" type="button">Mover</button>
+        <button class="btn small" id="bFolderNo" type="button">Cancelar</button>
+      </div>
+    </div>
     <div class="bkbar" id="bkbar" hidden>
       <span id="bkTxt"></span>
       <button class="btn small" id="bkGo" type="button">Hacer copia</button>
@@ -926,6 +967,9 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       <div class="swatches" id="swatches"></div>
       <h3>Fondo</h3>
       <div class="bgpick" id="bgPick"></div>
+      <h3>Carpeta</h3>
+      <input class="folderin" id="folderIn" list="folderlist" maxlength="30" placeholder="Sin carpeta" aria-label="Carpeta de la nota" autocomplete="off">
+      <datalist id="folderlist"></datalist>
       <h3>Etiquetas</h3>
       <div class="tagedit" id="tagedit"></div>
       <datalist id="taglist"></datalist>
@@ -1141,7 +1185,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.25.0";
+  var APP_VERSION = "1.26.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1229,7 +1273,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 
   /* ---------- datos ---------- */
   var notes = new Map();
-  var tab = "notes", tagFilter = null, query = "", activeId = null;
+  var tab = "notes", tagFilter = null, query = "", activeId = null, folderFilter = null, kindFilter = "all", selMode = false, sel = new Set();
   var saveTimer = null, statusTimer = null, listRaf = 0;
 
   /* ---------- iconos de las notas (emoji o sticker) ---------- */
@@ -1310,6 +1354,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   ];
 
   function cleanTag(t) { return String(t || "").replace(/^#+/, "").trim().toLowerCase().replace(/\s+/g, "-").slice(0, 24); }
+  function cleanFolder(f) { return String(f || "").replace(/\s+/g, " ").trim().slice(0, 30); }
   function normalize(x) {
     if (!x || typeof x !== "object") return null;
     var type = x.type === "list" ? "list" : "text";
@@ -1327,6 +1372,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       items: items,
       color: colorOf(x.color).k,
       tags: tags,
+      folder: cleanFolder(x.folder),
       icon: cleanIcon(x.icon),
       bg: cleanBg(x.bg),
       pinned: !!x.pinned,
@@ -1450,6 +1496,13 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var q = query.trim().toLowerCase();
     var arr = Array.from(notes.values()).filter(function (n) { return inTab(n, tab); });
     if (tagFilter) arr = arr.filter(function (n) { return n.tags.indexOf(tagFilter) >= 0; });
+    if (folderFilter !== null) arr = arr.filter(function (n) { return n.folder === folderFilter; });
+    if (kindFilter !== "all") arr = arr.filter(function (n) {
+      if (kindFilter === "text" || kindFilter === "list") return n.type === kindFilter;
+      if (kindFilter === "open") return n.type === "list" && n.items.some(function (i) { return i.t.trim() && !i.done; });
+      if (kindFilter === "pinned") return n.pinned;
+      return n.color !== "none" && n.color !== COLORS[0].k;
+    });
     if (q) arr = arr.filter(function (n) { return haystack(n).indexOf(q) >= 0; });
     var by = settings.sort;
     arr.sort(function (a, b) {
@@ -1461,7 +1514,24 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     });
     return arr;
   }
+  function hlText(parent, text, q) {
+    var low = text.toLowerCase(), i = q ? low.indexOf(q) : -1, pos = 0;
+    if (i < 0) { parent.appendChild(document.createTextNode(text)); return; }
+    while (i >= 0) {
+      if (i > pos) parent.appendChild(document.createTextNode(text.slice(pos, i)));
+      var m = el("mark"); m.textContent = text.slice(i, i + q.length); parent.appendChild(m);
+      pos = i + q.length; i = low.indexOf(q, pos);
+    }
+    if (pos < text.length) parent.appendChild(document.createTextNode(text.slice(pos)));
+  }
+  function snippet(text, q) {
+    var flat = text.replace(/\s+/g, " ").trim(), i = q ? flat.toLowerCase().indexOf(q) : -1;
+    if (i < 0) return flat.slice(0, 260);
+    var a = Math.max(0, i - 60);
+    return (a > 0 ? "…" : "") + flat.slice(a, a + 260);
+  }
   function makeItem(n) {
+    var hq = query.trim().toLowerCase();
     var li = el("li"), b = el("button", "item");
     b.type = "button";
     if (n.id === activeId) b.setAttribute("aria-current", "true");
@@ -1472,7 +1542,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var top = el("span", "top");
     var ic = cardIcon(n.icon); if (ic) top.appendChild(ic);
     var t = el("span", "t" + (n.title.trim() ? "" : " empty"));
-    t.textContent = n.title.trim() || (n.type === "list" ? "Lista sin título" : "Sin título");
+    if (n.title.trim()) hlText(t, n.title.trim(), hq); else t.textContent = n.type === "list" ? "Lista sin título" : "Sin título";
     top.appendChild(t);
     b.appendChild(top);
     if (n.type === "list") {
@@ -1481,7 +1551,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       n.items.filter(function (i) { return i.t.trim(); }).slice(0, 4).forEach(function (i) {
         var r = el("span", "pi" + (i.done ? " done" : ""));
         r.appendChild(el("span", "box" + (i.done ? " on" : "")));
-        var tx = el("span"); tx.textContent = i.t; r.appendChild(tx);
+        var tx = el("span"); hlText(tx, i.t, hq); r.appendChild(tx);
         box.appendChild(r);
       });
       if (!box.firstChild) { box.className = "p"; box.style.display = ""; box.textContent = "Sin elementos"; }
@@ -1494,7 +1564,8 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
       }
     } else {
       var p = el("span", "p");
-      p.textContent = n.body.replace(/\s+/g, " ").trim().slice(0, 260) || "Sin texto";
+      var sn = snippet(n.body, hq);
+      if (sn) hlText(p, sn, hq); else p.textContent = "Sin texto";
       b.appendChild(p);
     }
     if (n.tags.length) {
@@ -1504,10 +1575,16 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     }
     var m = el("span", "m");
     if (n.pinned) { var pin = el("span", "pin"); pin.textContent = "fijada"; m.appendChild(pin); }
+    if (n.folder) { var fo = el("span", "fold"); fo.textContent = "▣ " + n.folder; m.appendChild(fo); }
     if (c.rgb) m.appendChild(el("span", "dot"));
     var w = el("span"); w.textContent = when(n.trashedAt || n.updatedAt); m.appendChild(w);
     b.appendChild(m);
-    b.addEventListener("click", function () { openNote(n.id); });
+    if (selMode) { b.classList.toggle("selected", sel.has(n.id)); var sm = el("span", "selmark"); sm.textContent = sel.has(n.id) ? "✓" : ""; b.appendChild(sm); }
+    b.addEventListener("click", function () {
+      if (b.dataset.lp === "1") { b.dataset.lp = ""; return; }
+      if (selMode) toggleSel(n.id); else openNote(n.id);
+    });
+    bindLongPress(b, function () { if (!selMode && !n.trashedAt) { enterSel(); toggleSel(n.id); } });
     li.appendChild(b);
     return li;
   }
@@ -1562,7 +1639,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     for (var i = 0; i < n.items.length; i++) { k++; if (n.items[i].done) d++; }
     return n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
       (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n) + "|" + (n.id === activeId ? 1 : 0) + "|" +
-      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt);
+      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
   }
   function renderList() {
     var listEl = $("list"), rows = visibleNotes();
@@ -1580,7 +1657,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     if (!rows.length) {
       var li0 = listEl.querySelector(".nores");
       if (!li0) { li0 = el("li", "nores"); }
-      li0.textContent = (query.trim() || tagFilter) ? "Ninguna nota coincide con lo que buscás." : EMPTY[tab];
+      li0.textContent = filtering() ? "Ninguna nota coincide con lo que buscás." : EMPTY[tab];
       want.push(li0);
     }
     /* quitar lo que ya no va */
@@ -1598,10 +1675,11 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var total = 0;
     notes.forEach(function (n) { if (inTab(n, tab)) total++; });
     var label = total === 1 ? " nota" : " notas";
-    $("count").textContent = (query.trim() || tagFilter) ? rows.length + " de " + total + label : total + label;
+    $("count").textContent = filtering() ? rows.length + " de " + total + label : total + label;
     $("emptyTrash").hidden = !(tab === "trash" && total > 0);
     renderBkBar();
   }
+  function filtering() { return !!(query.trim() || tagFilter || folderFilter !== null || kindFilter !== "all"); }
   function renderListSoon() {
     if (listRaf) return;
     listRaf = requestAnimationFrame(function () { listRaf = 0; renderList(); });
@@ -1646,7 +1724,74 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
     var label = settings.view === "grid" ? "Ver como lista" : "Ver como cuadrícula";
     b.title = label; b.setAttribute("aria-label", label);
   }
-  function renderAll() { renderTabs(); renderChips(); renderList(); }
+  function allFolders() {
+    var map = {};
+    notes.forEach(function (n) { if (!n.trashedAt && n.folder) map[n.folder] = (map[n.folder] || 0) + 1; });
+    return Object.keys(map).sort(function (a, b) { return a.localeCompare(b, "es"); });
+  }
+  function renderFolders() {
+    var box = $("folders"), fs = allFolders();
+    if (folderFilter && fs.indexOf(folderFilter) < 0) folderFilter = null;
+    box.textContent = ""; box.hidden = fs.length === 0;
+    var dl = $("folderlist"); dl.textContent = "";
+    fs.forEach(function (f) { var o = el("option"); o.value = f; dl.appendChild(o); });
+    if (!fs.length) return;
+    function chip(label, val) {
+      var c = el("button", "chip"); c.type = "button"; c.textContent = label;
+      c.setAttribute("aria-pressed", folderFilter === val ? "true" : "false");
+      c.addEventListener("click", function () { folderFilter = (folderFilter === val && val !== null) ? null : val; renderFolders(); renderList(); });
+      box.appendChild(c);
+    }
+    chip("Todas", null); chip("Sin carpeta", "");
+    fs.forEach(function (f) { chip(f, f); });
+  }
+  /* selección múltiple */
+  function bulkUI() {
+    $("bulk").hidden = !selMode;
+    $("selBtn").setAttribute("aria-pressed", selMode ? "true" : "false");
+    $("bulkN").textContent = sel.size;
+    $("bulkMain").hidden = false; $("bulkFolder").hidden = true;
+    var any = Array.from(sel).map(function (id) { return notes.get(id); }).filter(Boolean);
+    $("bArch").textContent = tab === "archive" ? "Desarchivar" : "Archivar";
+    $("bPin").textContent = any.length && any.every(function (n) { return n.pinned; }) ? "Desfijar" : "Fijar";
+    ["bPin", "bFolder", "bArch", "bTrash"].forEach(function (k) { $(k).disabled = !sel.size; });
+    $("bPin").hidden = tab !== "notes";
+  }
+  function enterSel() {
+    if (selMode || tab === "trash") return;
+    selMode = true; sel.clear(); pushLayer("select"); bulkUI(); renderList();
+  }
+  function exitSelUI() { selMode = false; sel.clear(); bulkUI(); renderList(); }
+  registerLayer("select", exitSelUI);
+  function toggleSel(id) {
+    if (sel.has(id)) sel.delete(id); else sel.add(id);
+    var c = cards.get(id); if (c) c.sig = "";
+    bulkUI(); renderList();
+  }
+  function selNotes() { return Array.from(sel).map(function (id) { return notes.get(id); }).filter(Boolean); }
+  function bulkDo(fn, msg) {
+    var arr = selNotes(); if (!arr.length) return;
+    var prev = arr.map(function (n) { return { n: n, p: n.pinned, a: n.archived, t: n.trashedAt, f: n.folder }; });
+    arr.forEach(fn); arr.forEach(function (n) { n.updatedAt = Date.now(); });
+    persistNow(); closeLayer("select"); renderAll();
+    toast(msg + " (" + arr.length + ")", "Deshacer", function () {
+      prev.forEach(function (x) { x.n.pinned = x.p; x.n.archived = x.a; x.n.trashedAt = x.t; x.n.folder = x.f; });
+      persistNow(); renderAll();
+    });
+  }
+  $("selBtn").addEventListener("click", function () { if (selMode) closeLayer("select"); else enterSel(); });
+  $("bDone").addEventListener("click", function () { closeLayer("select"); });
+  $("bAll").addEventListener("click", function () {
+    var rows = visibleNotes(); if (sel.size === rows.length) sel.clear(); else rows.forEach(function (n) { sel.add(n.id); });
+    cards.forEach(function (c) { c.sig = ""; }); bulkUI(); renderList();
+  });
+  $("bPin").addEventListener("click", function () { var all = selNotes().every(function (n) { return n.pinned; }); bulkDo(function (n) { n.pinned = !all; }, all ? "Notas desfijadas" : "Notas fijadas"); });
+  $("bArch").addEventListener("click", function () { var un = tab === "archive"; bulkDo(function (n) { n.archived = !un; n.pinned = false; }, un ? "Notas desarchivadas" : "Notas archivadas"); });
+  $("bTrash").addEventListener("click", function () { bulkDo(function (n) { n.trashedAt = Date.now(); n.pinned = false; }, "Notas a la papelera"); });
+  $("bFolder").addEventListener("click", function () { $("bulkMain").hidden = true; $("bulkFolder").hidden = false; $("bFolderIn").value = ""; $("bFolderIn").focus(); });
+  $("bFolderNo").addEventListener("click", bulkUI);
+  $("bFolderOk").addEventListener("click", function () { var f = cleanFolder($("bFolderIn").value); bulkDo(function (n) { n.folder = f; }, f ? "Movidas a " + f : "Sacadas de la carpeta"); });
+  function renderAll() { renderTabs(); renderFolders(); renderChips(); renderList(); }
 
   /* ---------- editor ---------- */
   var titleEl = $("title"), bodyEl = $("body"), itemsEl = $("items");
@@ -2255,7 +2400,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   }
   function openSheet() {
     if (!cur() || readOnly()) return;
-    renderSheet();
+    renderSheet(); $("folderIn").value = cur().folder || "";
     $("scrim").hidden = false; $("sheet").hidden = false;
     pushLayer("sheet");
   }
@@ -2376,9 +2521,15 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("q").addEventListener("input", function () { query = $("q").value; renderListSoon(); });
   document.querySelectorAll(".tab").forEach(function (b) {
     b.addEventListener("click", function () {
-      tab = b.dataset.tab; tagFilter = null;
+      if (selMode) closeLayer("select");
+      tab = b.dataset.tab; tagFilter = null; folderFilter = null;
       renderAll();
     });
+  });
+  $("kind").addEventListener("change", function () { kindFilter = $("kind").value; renderList(); });
+  $("folderIn").addEventListener("change", function () {
+    var n = cur(); if (!n || n.trashedAt) return;
+    n.folder = cleanFolder($("folderIn").value); $("folderIn").value = n.folder; changed(n); renderFolders();
   });
   $("sort").value = settings.sort;
   $("sort").addEventListener("change", function () { settings.sort = $("sort").value; saveSettings(); renderList(); });
@@ -2416,6 +2567,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.26.0", d: "8 nov 2026", t: "Organizar mejor", l: ["Carpetas: asigná una carpeta a cada nota desde Personalizar y filtrá la lista con un toque.","Selección múltiple: tocá el botón de casilla o mantené apretada una nota para elegir varias y fijarlas, archivarlas, moverlas de carpeta o mandarlas a la papelera, con Deshacer.","Nuevo filtro por tipo: solo notas, solo listas, listas sin terminar, fijadas o con color.","La búsqueda ahora resalta lo que encontró dentro de cada tarjeta."] },
     { v: "1.25.0", d: "8 nov 2026", t: "Escribir mejor", l: ["Barra de formato nueva: negrita, cursiva, título, cita, viñetas, lista numerada y casillas.","Deshacer y rehacer propios, que también deshacen los cambios de la barra.","Modo Leer: muestra la nota con formato y podés tildar las casillas tocándolas.","El contador ahora indica el tiempo de lectura y la barra queda fija abajo, sobre el teclado."] },
     { v: "1.24.1", d: "8 nov 2026", t: "Arreglo de compilación", l: ["Se corrigió el archivo de configuración del proyecto que impedía compilar el APK. No cambia nada de lo que ves en la app."] },
     { v: "1.24.0", d: "7 nov 2026", t: "Guía de bienvenida y menú mejorado", l: ["Nueva guía de bienvenida de 8 pasos que explica todo lo que hay en Tronx. Por ahora se muestra una vez a todos; podés volver a verla desde el menú, en Guía de Tronx.", "El menú ahora tiene niveles según tus notas (Polvo estelar, Tripulante, Navegante, Cartógrafo, Astrónomo y Capitán estelar) con una barra de progreso.", "Atajos rápidos en el menú: Nota, Lista, Buscar y Papelera.", "Consejos que cambian cada día, y también al tocarlos."] },
