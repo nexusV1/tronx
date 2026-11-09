@@ -868,6 +868,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .findbar .fcount { flex: none; font-size: 12px; color: var(--muted); min-width: 52px; text-align: right; }
 .findbar .btn.ic { min-width: 34px; padding: 4px 8px; }
 .findbar .btn[aria-pressed="true"] { background: var(--accent) !important; color: var(--accent-ink) !important; border-color: var(--accent) !important; }
+.remdays { display: flex; gap: 6px; padding: 6px 0; }
+.remdays[hidden] { display: none; }
+.remdays button { flex: 1; min-height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--raised); color: inherit; font: inherit; font-size: 13px; }
+.remdays button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.remlist { display: grid; gap: 6px; margin-top: 6px; }
+.remlist .rrow { display: flex; align-items: center; gap: 8px; font-size: 13px; background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; }
+.remlist .rrow span { flex: 1; min-width: 0; }
 .hlrow { display: flex; gap: 10px; align-items: center; padding: 8px 2px 2px; flex: none; }
 .hlrow[hidden] { display: none; }
 .hlrow .hlsw { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); padding: 0; }
@@ -1116,8 +1123,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <div class="bgpick" id="bgPick"></div>
       <h3>Recordatorio</h3>
       <div class="remquick" id="remQuick"></div>
-      <div class="remrow"><input type="datetime-local" id="remAt" aria-label="Fecha y hora del aviso"><select id="remRep" aria-label="Repetir"><option value="">Una vez</option><option value="day">Cada día</option><option value="week">Cada semana</option></select></div>
-      <div class="actions"><button class="btn primary" id="remSet" type="button">Programar aviso</button><button class="btn danger" id="remOff" type="button" hidden>Quitar aviso</button></div>
+      <div class="remrow"><input type="datetime-local" id="remAt" aria-label="Fecha y hora del aviso"><select id="remRep" aria-label="Repetir"><option value="">Una vez</option><option value="day">Cada día</option><option value="week">Cada semana</option><option value="month">Cada mes</option><option value="days">Días elegidos…</option></select></div>
+      <div class="remdays" id="remDays" hidden role="group" aria-label="Días de la semana"></div>
+      <div class="actions"><button class="btn primary" id="remSet" type="button">Programar aviso</button><button class="btn" id="remAdd" type="button" hidden>Agregar otro aviso</button><button class="btn danger" id="remOff" type="button" hidden>Quitar aviso</button></div>
+      <div class="remlist" id="remList"></div>
       <p class="hint" id="remHint"></p>
       <div class="actions"><button class="btn" id="remPermBtn" type="button">Permitir notificaciones</button></div>
       <p class="hint" id="remPerm"></p>
@@ -1390,7 +1399,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.40.0";
+  var APP_VERSION = "1.41.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1590,7 +1599,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function cleanRemind(r) {
     if (!r || typeof r !== "object") return null;
     var at = Number(r.at); if (!isFinite(at) || at <= 0) return null;
-    return { at: at, rep: r.rep === "day" || r.rep === "week" ? r.rep : "", seen: !!r.seen, snz: Number(r.snz) > 0 ? Number(r.snz) : 0 };
+    var rp = r.rep === "day" || r.rep === "week" || r.rep === "month" || r.rep === "days" ? r.rep : "";
+    var wd = Array.isArray(r.wd) ? r.wd.map(Number).filter(function (d, i, a) { return d >= 0 && d <= 6 && a.indexOf(d) === i; }).sort() : [];
+    if (rp === "days" && !wd.length) rp = "week";
+    return { at: at, rep: rp, wd: rp === "days" ? wd : [], seen: !!r.seen, snz: Number(r.snz) > 0 ? Number(r.snz) : 0 };
   }
   function cleanLock(l) {
     if (!l || typeof l !== "object") return null;
@@ -1621,6 +1633,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       versions: cleanVersions(x.versions),
       remind: cleanRemind(x.remind),
       lock: cleanLock(x.lock),
+      rems: Array.isArray(x.rems) ? x.rems.map(cleanRemind).filter(Boolean).slice(0, 4) : [],
       parent: x.parent && String(x.parent) !== String(x.id) ? String(x.parent) : "",
       icon: cleanIcon(x.icon),
       bg: cleanBg(x.bg),
@@ -1838,7 +1851,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }
     var m = el("span", "m");
     if (n.pinned) { var pin = el("span", "pin"); pin.textContent = "fijada"; m.appendChild(pin); }
-    if (n.remind) { var rm = el("span", "fold"); rm.textContent = "⏰ " + remText(n.remind); m.appendChild(rm); }
+    if (n.remind) { var rm = el("span", "fold"); rm.textContent = "⏰ " + remText(n.remind) + (n.rems.length ? " · +" + n.rems.length : ""); m.appendChild(rm); }
     if (n.images.length && !n.lock) { var im = el("span"); im.textContent = "🖼 " + n.images.length; m.appendChild(im); }
     if (kidCount[n.id]) { var ki = el("span", "fold"); ki.textContent = "↳ " + kidCount[n.id]; m.appendChild(ki); }
     if (hq && haystack(n).indexOf(hq) < 0) {
@@ -1909,7 +1922,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     for (var i = 0; i < n.items.length; i++) { k++; if (n.items[i].done) d++; }
     return n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
       (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n) + "|" + (n.id === activeId ? 1 : 0) + "|" +
-      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + (n.remind ? n.remind.at + n.remind.rep + n.remind.seen + n.remind.snz : "") + "|" + (n.lock ? n.lock.m : "") + "|" + n.images.length + "|" + (kidCount[n.id] || 0) + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
+      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + (n.remind ? n.remind.at + n.remind.rep + n.remind.seen + n.remind.snz + (n.remind.wd || []).join("") : "") + "|" + n.rems.map(function (r) { return r.at + r.rep + r.seen; }).join(",") + "|" + (n.lock ? n.lock.m : "") + "|" + n.images.length + "|" + (kidCount[n.id] || 0) + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
   }
   function renderList() {
     var listEl = $("list"), rows = visibleNotes();
@@ -3472,6 +3485,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.41.0", d: "9 nov 2026", t: "Recordatorios más completos", l: ["Nuevas repeticiones: \"Cada mes\" (si el día no existe, usa el último del mes) y \"Días elegidos…\" (por ejemplo lunes, miércoles y viernes).", "Podés agregar hasta 5 avisos por nota con \"Agregar otro aviso\" y quitarlos de a uno.", "Los avisos mensuales y por días se programan por adelantado (6 meses o 14 ocurrencias); se renuevan cada vez que abrís la app.", "En la lista, la tarjeta muestra \"+N\" si la nota tiene más avisos."] },
     { v: "1.40.0", d: "9 nov 2026", t: "Buscar y reemplazar", l: ["Nuevo botón \"🔎 Buscar\" en la barra de la nota: cuenta las coincidencias y te lleva de una a otra con ▲ ▼.", "Podés distinguir mayúsculas con el botón Aa.", "Reemplazar de a una o \"Todo\", con aviso y botón Deshacer.", "Si tenías un texto seleccionado, se usa como búsqueda."] },
     { v: "1.39.0", d: "9 nov 2026", t: "Notas protegidas (PIN y huella)", l: ["Nuevo en Personalizar → Protección: protegé una nota con un PIN propio, con la huella del teléfono, o con cualquiera de los dos. Es opcional y nota por nota.", "Una nota protegida muestra 🔒 en la lista, sin vista previa, y no se puede buscar por su contenido.", "Se vuelve a pedir si la app estuvo más de 20 segundos en segundo plano o al cerrar la nota.", "Los recordatorios de una nota protegida no muestran su contenido en la notificación.", "Es un candado para curiosos: no cifra la nota."] },
     { v: "1.38.0", d: "9 nov 2026", t: "Resaltado de colores", l: ["Nuevo botón \"🖍 Resaltar\" en la barra de la nota: elegí amarillo, verde, rosa, celeste o naranja.","Seleccioná un texto y tocá un color. Con el cursor dentro de un texto resaltado podés cambiarle el color o tocar Quitar.","Se ve en el modo Leer. En el PDF y en las notificaciones sale como texto normal."] },
@@ -3971,8 +3985,28 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   /* ---------- recordatorios ---------- */
   var REMDT = new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   var PERIOD = { day: 86400000, week: 604800000 };
-  function nextAt(r) { var t = r.at; if (r.rep && t <= Date.now()) { var k = Math.ceil((Date.now() - t) / PERIOD[r.rep]); t += k * PERIOD[r.rep]; if (t <= Date.now()) t += PERIOD[r.rep]; } return t; }
-  function remText(r) { var t = nextAt(r); return (t < Date.now() ? "venció " : "") + REMDT.format(new Date(t)).replace(",", "") + (r.rep === "day" ? " · diario" : r.rep === "week" ? " · semanal" : ""); }
+  var DIAS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+  function occurrences(r, count) {
+    var out = [], now = Date.now(), d0 = new Date(r.at), hh = d0.getHours(), mm = d0.getMinutes();
+    if (r.rep === "month") {
+      for (var k = 0; k < 400 && out.length < count; k++) {
+        var f = new Date(d0.getFullYear(), d0.getMonth() + k, 1, hh, mm), dim = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+        f.setDate(Math.min(d0.getDate(), dim)); var t = f.getTime(); if (t > now && t >= r.at) out.push(t);
+      }
+    } else if (r.rep === "days") {
+      var s = new Date(Math.max(r.at, now)); s.setHours(0, 0, 0, 0);
+      for (var j = 0; j < 800 && out.length < count; j++) {
+        var dd = new Date(s.getFullYear(), s.getMonth(), s.getDate() + j, hh, mm), tt = dd.getTime();
+        if (r.wd.indexOf(dd.getDay()) >= 0 && tt > now && tt >= r.at) out.push(tt);
+      }
+    }
+    return out;
+  }
+  function nextAt(r) {
+    if (r.rep === "month" || r.rep === "days") { var o = occurrences(r, 1); return o.length ? o[0] : r.at; }
+    var t = r.at; if (r.rep && t <= Date.now()) { var k = Math.ceil((Date.now() - t) / PERIOD[r.rep]); t += k * PERIOD[r.rep]; if (t <= Date.now()) t += PERIOD[r.rep]; } return t; }
+  function remText(r) { var t = nextAt(r); return (t < Date.now() ? "venció " : "") + REMDT.format(new Date(t)).replace(",", "") + (r.rep === "day" ? " · diario" : r.rep === "week" ? " · semanal" : r.rep === "month" ? " · mensual" : r.rep === "days" ? " · " + r.wd.map(function (d) { return DIAS[d]; }).join(", ") : ""); }
+  function remsOf(n) { return n.remind ? [n.remind].concat(n.rems || []) : []; }
   function nidOf(id) { var h = 7; for (var i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0; return (Math.abs(h) % 2000000000) + 1; }
   function localInput(ts) { var d = new Date(ts), p2 = function (x) { return String(x).padStart(2, "0"); }; return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) + "T" + p2(d.getHours()) + ":" + p2(d.getMinutes()); }
   var LN = null; function ln() { return LN || (LN = capPlugin("LocalNotifications")); }
@@ -4014,15 +4048,20 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var want = [], sig = [];
     notes.forEach(function (n) {
       if (!n.remind || n.trashedAt) return;
-      var r = n.remind, tx0 = notifText(n);
-      if (r.snz && r.snz > Date.now()) {
-        var z = { id: nidOf(n.id + "z"), title: tx0.title, body: tx0.body, largeBody: tx0.large, summaryText: "Pospuesto · Tronx", channelId: REM_CH, smallIcon: "ic_stat_tronx", iconColor: "#7c5cff", autoCancel: true, actionTypeId: REM_ACT, extra: { noteId: n.id, snoozed: true }, schedule: { at: new Date(r.snz), allowWhileIdle: true } };
-        want.push(z); sig.push(z.id + ":" + r.snz + ":" + tx0.title + ":" + tx0.large);
-      }
-      if (!r.rep && r.at <= Date.now()) return;
-      var at = nextAt(r), tx = tx0;
-      var o = { id: nidOf(n.id), title: tx.title, body: tx.body, largeBody: tx.large, summaryText: "Recordatorio de Tronx", channelId: REM_CH, smallIcon: "ic_stat_tronx", iconColor: "#7c5cff", autoCancel: true, actionTypeId: REM_ACT, extra: { noteId: n.id }, schedule: r.rep ? { at: new Date(r.at > Date.now() ? r.at : at), every: r.rep, allowWhileIdle: true } : { at: new Date(at), allowWhileIdle: true } };
-      want.push(o); sig.push(o.id + ":" + at + ":" + r.rep + ":" + tx.title + ":" + tx.large);
+      var tx0 = notifText(n);
+      function mk(id, t, extra, sched) { return { id: id, title: tx0.title, body: tx0.body, largeBody: tx0.large, summaryText: extra || "Recordatorio de Tronx", channelId: REM_CH, smallIcon: "ic_stat_tronx", iconColor: "#7c5cff", autoCancel: true, actionTypeId: REM_ACT, extra: { noteId: n.id, snoozed: extra === "Pospuesto · Tronx" }, schedule: sched || { at: new Date(t), allowWhileIdle: true } }; }
+      remsOf(n).forEach(function (r, ri) {
+        if (ri === 0 && r.snz && r.snz > Date.now()) {
+          var z = mk(nidOf(n.id + "z"), r.snz, "Pospuesto · Tronx"); want.push(z); sig.push(z.id + ":" + r.snz + ":" + tx0.title + ":" + tx0.large);
+        }
+        if (!r.rep && r.at <= Date.now()) return;
+        if (r.rep === "month" || r.rep === "days") {
+          occurrences(r, r.rep === "month" ? 6 : 14).forEach(function (t, j) { var o = mk(nidOf(n.id + "#" + ri + "." + j), t); want.push(o); sig.push(o.id + ":" + t + ":" + tx0.title + ":" + tx0.large); });
+          return;
+        }
+        var at = nextAt(r), o2 = mk(ri ? nidOf(n.id + "#" + ri) : nidOf(n.id), at, null, r.rep ? { at: new Date(r.at > Date.now() ? r.at : at), every: r.rep, allowWhileIdle: true } : { at: new Date(at), allowWhileIdle: true });
+        want.push(o2); sig.push(o2.id + ":" + at + ":" + r.rep + ":" + tx0.title + ":" + tx0.large);
+      });
     });
     sig = sig.sort().join("|");
     if (sig === remSigLast) return; remSigLast = sig;
@@ -4071,6 +4110,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var r = n.remind;
     $("remOff").hidden = !r; $("remSet").textContent = r ? "Cambiar aviso" : "Programar aviso";
     $("remAt").value = r ? localInput(nextAt(r)) : ""; $("remRep").value = r ? r.rep : "";
+    buildDays(r && r.rep === "days" ? r.wd : []); $("remDays").hidden = $("remRep").value !== "days";
+    $("remAdd").hidden = !r || n.rems.length >= 4;
+    var rl = $("remList"); rl.textContent = "";
+    n.rems.forEach(function (x, i) {
+      var row = el("div", "rrow"), sp = el("span"); sp.textContent = "⏰ " + remText(x); row.appendChild(sp);
+      var rb = el("button", "btn small danger"); rb.type = "button"; rb.textContent = "Quitar"; rb.setAttribute("aria-label", "Quitar este aviso");
+      rb.addEventListener("click", function () { n.rems.splice(i, 1); changed(n); renderRem(); syncReminders(); }); row.appendChild(rb); rl.appendChild(row);
+    });
     $("remHint").textContent = r ? "Aviso: " + remText(r) + "." : (ln() ? "Tronx te avisa con una notificación aunque la app esté cerrada." : "Los avisos con la app cerrada funcionan solo en la app de Android. Acá solo se muestra un aviso si la app está abierta.");
     renderPerm();
     var q = $("remQuick"); if (!q.firstChild) {
@@ -4081,15 +4128,43 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       });
     }
   }
+  function buildDays(sel) {
+    var box = $("remDays"); box.textContent = "";
+    [1, 2, 3, 4, 5, 6, 0].forEach(function (d) {
+      var b = el("button"); b.type = "button"; b.dataset.d = d; b.textContent = DIAS[d].slice(0, 3); b.setAttribute("aria-pressed", sel.indexOf(d) >= 0 ? "true" : "false"); b.setAttribute("aria-label", ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"][d]);
+      b.addEventListener("click", function () { b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); }); box.appendChild(b);
+    });
+  }
+  $("remRep").addEventListener("change", function () {
+    var on = $("remRep").value === "days"; $("remDays").hidden = !on;
+    if (on && !$("remDays").querySelector('[aria-pressed="true"]')) { var d = new Date($("remAt").value || Date.now()).getDay(); var bt = $("remDays").querySelector('[data-d="' + d + '"]'); bt && bt.setAttribute("aria-pressed", "true"); }
+  });
+  function readRemForm() {
+    var v = $("remAt").value, t = v ? new Date(v).getTime() : NaN;
+    if (!isFinite(t)) { toast("Elegí una fecha y hora"); return null; }
+    var rep = $("remRep").value, wd = [];
+    if (rep === "days") {
+      $("remDays").querySelectorAll('[aria-pressed="true"]').forEach(function (b) { wd.push(Number(b.dataset.d)); });
+      if (!wd.length) { toast("Elegí al menos un día"); return null; }
+    }
+    if (!rep && t <= Date.now()) { toast("Esa hora ya pasó"); return null; }
+    return { at: t, rep: rep, wd: wd.sort(), seen: false, snz: 0 };
+  }
+  $("remAdd").addEventListener("click", function () {
+    var n = cur(); if (!n || n.trashedAt || !n.remind) return;
+    if (n.rems.length >= 4) { toast("Hasta 5 avisos por nota"); return; }
+    var r = readRemForm(); if (!r) return;
+    remPermission().then(function (st) {
+      n.rems.push(cleanRemind(r)); changed(n); renderRem(); syncReminders();
+      toast(st === "denied" ? "Activá las notificaciones de Tronx en los ajustes de Android" : "Aviso agregado");
+    });
+  });
   $("remSet").addEventListener("click", function () {
     var n = cur(); if (!n || n.trashedAt) return;
-    var v = $("remAt").value, t = v ? new Date(v).getTime() : NaN;
-    if (!isFinite(t)) { toast("Elegí una fecha y hora"); return; }
-    var rep = $("remRep").value;
-    if (!rep && t <= Date.now()) { toast("Esa hora ya pasó"); return; }
+    var f = readRemForm(); if (!f) return;
     remPermission().then(function (st) {
       if (st === "denied") { toast("Activá las notificaciones de Tronx en los ajustes de Android para recibir avisos"); }
-      n.remind = { at: t, rep: rep, seen: false, snz: 0 }; changed(n); renderRem(); syncReminders();
+      n.remind = cleanRemind(f); changed(n); renderRem(); syncReminders();
       if (st === "granted" && ln() && ln().checkExactNotificationSetting) {
         ln().checkExactNotificationSetting().then(function (e) {
           if (e && e.exact_alarm === "denied") toast("Para que suene a la hora exacta, permití \"Alarmas y recordatorios\"", "Permitir", function () { ln().changeExactNotificationSetting().catch(function () {}); });
@@ -4099,7 +4174,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     });
   });
   $("remOff").addEventListener("click", function () {
-    var n = cur(); if (!n) return; n.remind = null; changed(n); renderRem(); syncReminders(); toast("Aviso quitado");
+    var n = cur(); if (!n) return;
+    if (n.rems.length) { n.remind = n.rems.shift(); toast("Aviso quitado. El siguiente pasó a ser el principal"); } else { n.remind = null; toast("Aviso quitado"); }
+    changed(n); renderRem(); syncReminders();
   });
   /* avisos con la app abierta (y los que vencieron mientras estaba cerrada) */
   function checkDue() {
@@ -4107,8 +4184,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     notes.forEach(function (n) {
       var rz = n.remind;
       if (rz && rz.snz && rz.snz <= Date.now() && !n.trashedAt) { rz.snz = 0; fired++; schedulePersist(); toast("⏰ " + (n.title.trim() || "Recordatorio"), "Abrir", function () { openNote(n.id); }); return; }
-      var r = n.remind; if (!r || r.rep || r.seen || n.trashedAt || r.at > Date.now()) return;
-      r.seen = true; fired++; schedulePersist();
+      var hit = false;
+      remsOf(n).forEach(function (r) { if (!r || r.rep || r.seen || n.trashedAt || r.at > Date.now()) return; r.seen = true; hit = true; });
+      if (!hit) return;
+      fired++; schedulePersist();
       toast("⏰ " + (n.title.trim() || "Recordatorio"), "Abrir", function () { openNote(n.id); });
     });
     if (fired) renderListSoon();
@@ -4118,7 +4197,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     try { ln().addListener("localNotificationActionPerformed", function (ev) {
       var id = ev && ev.notification && ev.notification.extra && ev.notification.extra.noteId, n = id && notes.get(id);
       if (n && !n.trashedAt && ev.actionId === "snooze") { snoozeNote(id); return; }
-      if (n && !n.trashedAt) { n.remind && !n.remind.rep && (n.remind.seen = true); if (n.remind && n.remind.snz && n.remind.snz <= Date.now() + 60000) { n.remind.snz = 0; changed(n); } openNote(id); }
+      if (n && !n.trashedAt) { remsOf(n).forEach(function (r) { if (!r.rep && r.at <= Date.now() + 60000) r.seen = true; }); if (n.remind && n.remind.snz && n.remind.snz <= Date.now() + 60000) { n.remind.snz = 0; changed(n); } openNote(id); }
     }); } catch (e) {}
   }
   setTimeout(syncReminders, 2500);
