@@ -861,6 +861,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .read mark.hl-rosa, .hlsw.hl-rosa { background: rgba(244, 114, 182, 0.42); }
 .read mark.hl-celeste, .hlsw.hl-celeste { background: rgba(56, 189, 248, 0.42); }
 .read mark.hl-naranja, .hlsw.hl-naranja { background: rgba(251, 146, 60, 0.45); }
+.findbar { display: grid; gap: 6px; padding: 8px 2px 2px; flex: none; }
+.findbar[hidden] { display: none; }
+.findbar .frow { display: flex; gap: 6px; align-items: center; }
+.findbar input { flex: 1; min-width: 0; font: inherit; color: inherit; background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; }
+.findbar .fcount { flex: none; font-size: 12px; color: var(--muted); min-width: 52px; text-align: right; }
+.findbar .btn.ic { min-width: 34px; padding: 4px 8px; }
+.findbar .btn[aria-pressed="true"] { background: var(--accent) !important; color: var(--accent-ink) !important; border-color: var(--accent) !important; }
 .hlrow { display: flex; gap: 10px; align-items: center; padding: 8px 2px 2px; flex: none; }
 .hlrow[hidden] { display: none; }
 .hlrow .hlsw { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); padding: 0; }
@@ -1048,6 +1055,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn ic" type="button" data-ins="bold" aria-label="Negrita"><b>B</b></button>
         <button class="btn ic" type="button" data-ins="italic" aria-label="Cursiva"><i>I</i></button>
         <button class="btn" type="button" data-ins="hl" aria-pressed="false">🖍 Resaltar</button>
+        <button class="btn" type="button" data-ins="find" aria-pressed="false">🔎 Buscar</button>
         <button class="btn" type="button" data-ins="head">Título</button>
         <button class="btn" type="button" data-ins="quote">❝ Cita</button>
         <button class="btn" type="button" data-ins="bullet">• Viñeta</button>
@@ -1070,6 +1078,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <button class="hlsw hl-celeste" type="button" data-c="celeste" aria-label="Resaltar en celeste"></button>
       <button class="hlsw hl-naranja" type="button" data-c="naranja" aria-label="Resaltar en naranja"></button>
       <button class="btn small hlx" type="button" data-c="" aria-label="Quitar resaltado">Quitar</button>
+    </div>
+    <div class="findbar" id="findBar" hidden>
+      <div class="frow"><input id="findIn" type="search" placeholder="Buscar en la nota" aria-label="Buscar en la nota" autocomplete="off" enterkeyhint="search"><span class="fcount" id="findCount" aria-live="polite"></span><button class="btn small ic" id="findPrev" type="button" aria-label="Anterior">▲</button><button class="btn small ic" id="findNext" type="button" aria-label="Siguiente">▼</button><button class="btn small" id="findCase" type="button" aria-pressed="false" aria-label="Distinguir mayúsculas">Aa</button><button class="btn small ic" id="findClose" type="button" aria-label="Cerrar búsqueda">✕</button></div>
+      <div class="frow"><input id="replIn" type="text" placeholder="Reemplazar con" aria-label="Reemplazar con" autocomplete="off"><button class="btn small" id="replOne" type="button">Reemplazar</button><button class="btn small" id="replAll" type="button">Todo</button></div>
     </div>
     <div class="meta" id="meta"></div>
     <div class="trashbar" id="trashbar" hidden>
@@ -1378,7 +1390,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.39.0";
+  var APP_VERSION = "1.40.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2243,6 +2255,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("pinBtn").hidden = !has || readOnly();
     $("moreBtn").hidden = !has || readOnly();
     $("trashbar").hidden = !(has && readOnly());
+    $("findBar").hidden = true; var fb0 = document.querySelector('[data-ins="find"]'); fb0 && fb0.setAttribute("aria-pressed", "false"); findIdx = -1;
     $("hlRow").hidden = true; var hb0 = document.querySelector('[data-ins="hl"]'); hb0 && hb0.setAttribute("aria-pressed", "false");
     if (!has) { selImg = null; imgsEl.textContent = ""; $("imgrow").hidden = true; $("imgPanel").hidden = true; contentEl.classList.remove("imgs"); $("rel").hidden = true; $("crumb").hidden = true; $("sugg").hidden = true; titleEl.value = ""; bodyEl.value = ""; itemsEl.textContent = ""; renderTint(); renderBg(); renderProg(); renderTpls(); $("fmt").hidden = true; renderTaglines(); renderIconBtn(); updateMeta(); return; }
     if (!baseline || baseline.id !== n.id) baseline = snapOf(n);
@@ -2822,7 +2835,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var b = $("fmt").querySelector('[data-ins="read"]');
     b.setAttribute("aria-pressed", readMode ? "true" : "false"); b.textContent = readMode ? "Editar" : "Leer";
     $("fmt").classList.toggle("reading", readMode);
-    if (readMode) { $("hlRow").hidden = true; var hb = document.querySelector('[data-ins="hl"]'); hb && hb.setAttribute("aria-pressed", "false"); }
+    if (readMode) { $("hlRow").hidden = true; $("findBar").hidden = true; var hb = document.querySelector('[data-ins="hl"]'); hb && hb.setAttribute("aria-pressed", "false"); }
     if (readMode) renderRead();
     if (selImg) selectImg(null);
     $("imgrow").hidden = !n || !n.images.length || !!n.trashedAt || readMode;
@@ -2874,6 +2887,61 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }
     bodyEl.setRangeText(w + v.slice(s, e) + w, s, e, "preserve"); bodyEl.setSelectionRange(s + L, e + L);
   }
+  /* buscar y reemplazar */
+  var findIdx = -1;
+  function findRe() {
+    var q = $("findIn").value; if (!q) return null;
+    return new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $("findCase").getAttribute("aria-pressed") === "true" ? "g" : "gi");
+  }
+  function findAll() {
+    var re = findRe(), out = [], m; if (!re) return out;
+    var v = bodyEl.value;
+    while ((m = re.exec(v))) { out.push({ a: m.index, b: m.index + m[0].length }); if (!m[0].length) re.lastIndex++; if (out.length > 5000) break; }
+    return out;
+  }
+  function findCountUI(all) {
+    all = all || findAll();
+    $("findCount").textContent = !$("findIn").value ? "" : !all.length ? "0" : (findIdx >= 0 ? (findIdx + 1) + " de " + all.length : String(all.length));
+    return all;
+  }
+  function findGo(dir) {
+    var all = findCountUI(); if (!all.length) { findIdx = -1; findCountUI(all); return; }
+    var pos = bodyEl.selectionEnd, s0 = bodyEl.selectionStart, k;
+    if (dir > 0) { k = all.findIndex(function (m) { return m.a >= (findIdx >= 0 && all[findIdx] && s0 === all[findIdx].a ? s0 + 1 : s0); }); if (k < 0) k = 0; }
+    else { k = -1; for (var i = all.length - 1; i >= 0; i--) if (all[i].b <= s0 && !(s0 === all[i].a)) { k = i; break; } if (k < 0) k = all.length - 1; }
+    findIdx = k; var m = all[k];
+    bodyEl.blur(); bodyEl.focus({ preventScroll: false }); bodyEl.setSelectionRange(m.a, m.b);
+    /* llevar la coincidencia a la vista: textarea con alto fijo o con scroll del contenedor */
+    var before = bodyEl.value.slice(0, m.a), lines = before.split("\n").length - 1, lh = parseFloat(getComputedStyle(bodyEl).lineHeight) || 24;
+    if (bodyEl.scrollHeight > bodyEl.clientHeight + 4) bodyEl.scrollTop = Math.max(0, lines * lh - bodyEl.clientHeight / 3);
+    findCountUI(all);
+  }
+  function replOne() {
+    var n = cur(); if (!n || readMode) return; var all = findAll(); if (!all.length) return;
+    var s = bodyEl.selectionStart, e = bodyEl.selectionEnd, hit = all.filter(function (m) { return m.a === s && m.b === e; })[0];
+    if (!hit) { findGo(1); return; }
+    histNow(); bodyEl.setRangeText($("replIn").value, hit.a, hit.b, "end"); fireInput(); histNow();
+    findIdx = -1; findGo(1);
+  }
+  function replAll() {
+    var n = cur(); if (!n || readMode) return; var re = findRe(); if (!re) return; var cnt = findAll().length; if (!cnt) { toast("No hay coincidencias"); return; }
+    var rv = $("replIn").value;
+    histNow(); bodyEl.value = bodyEl.value.replace(re, function () { return rv; }); fireInput(); histNow(); findIdx = -1; findCountUI();
+    toast(cnt + (cnt === 1 ? " reemplazo" : " reemplazos"), "Deshacer", function () { bodyEl.focus(); histGo(-1); findCountUI(); });
+  }
+  function findOpen(on) {
+    var bar = $("findBar"); bar.hidden = !on; document.querySelector('[data-ins="find"]').setAttribute("aria-pressed", on ? "true" : "false");
+    if (on) { $("hlRow").hidden = true; var sel = bodyEl.value.slice(bodyEl.selectionStart, bodyEl.selectionEnd); if (sel && sel.indexOf("\n") < 0 && sel.length < 60) $("findIn").value = sel; findIdx = -1; findCountUI(); $("findIn").focus(); }
+    fitBody();
+  }
+  $("findIn").addEventListener("input", function () { findIdx = -1; findCountUI(); });
+  $("findIn").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); findGo(e.shiftKey ? -1 : 1); } });
+  $("findNext").addEventListener("click", function () { findGo(1); });
+  $("findPrev").addEventListener("click", function () { findGo(-1); });
+  $("findCase").addEventListener("click", function () { var b = $("findCase"); b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); findIdx = -1; findCountUI(); });
+  $("findClose").addEventListener("click", function () { findOpen(false); });
+  $("replOne").addEventListener("click", replOne);
+  $("replAll").addEventListener("click", replAll);
   /* resaltado de colores: ==texto== (amarillo) o =={verde}texto== */
   function applyHl(c) {
     var v = bodyEl.value, s = bodyEl.selectionStart, e = bodyEl.selectionEnd;
@@ -2911,7 +2979,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (k === "image") { $("imgFile").click(); return; }
     if (k === "photo") { $("imgCam").click(); return; }
     if (k === "draw") { openDraw(); return; }
-    if (k === "hl") { var hr = $("hlRow"); hr.hidden = !hr.hidden; b.setAttribute("aria-pressed", hr.hidden ? "false" : "true"); fitBody(); return; }
+    if (k === "find") { findOpen($("findBar").hidden); return; }
+    if (k === "hl") { var hr = $("hlRow"); if (hr.hidden) findOpen(false); hr.hidden = !hr.hidden; b.setAttribute("aria-pressed", hr.hidden ? "false" : "true"); fitBody(); return; }
     if (k === "undo") { bodyEl.focus(); histGo(-1); return; }
     if (k === "redo") { bodyEl.focus(); histGo(1); return; }
     histNow();
@@ -3403,6 +3472,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.40.0", d: "9 nov 2026", t: "Buscar y reemplazar", l: ["Nuevo botón \"🔎 Buscar\" en la barra de la nota: cuenta las coincidencias y te lleva de una a otra con ▲ ▼.", "Podés distinguir mayúsculas con el botón Aa.", "Reemplazar de a una o \"Todo\", con aviso y botón Deshacer.", "Si tenías un texto seleccionado, se usa como búsqueda."] },
     { v: "1.39.0", d: "9 nov 2026", t: "Notas protegidas (PIN y huella)", l: ["Nuevo en Personalizar → Protección: protegé una nota con un PIN propio, con la huella del teléfono, o con cualquiera de los dos. Es opcional y nota por nota.", "Una nota protegida muestra 🔒 en la lista, sin vista previa, y no se puede buscar por su contenido.", "Se vuelve a pedir si la app estuvo más de 20 segundos en segundo plano o al cerrar la nota.", "Los recordatorios de una nota protegida no muestran su contenido en la notificación.", "Es un candado para curiosos: no cifra la nota."] },
     { v: "1.38.0", d: "9 nov 2026", t: "Resaltado de colores", l: ["Nuevo botón \"🖍 Resaltar\" en la barra de la nota: elegí amarillo, verde, rosa, celeste o naranja.","Seleccioná un texto y tocá un color. Con el cursor dentro de un texto resaltado podés cambiarle el color o tocar Quitar.","Se ve en el modo Leer. En el PDF y en las notificaciones sale como texto normal."] },
     { v: "1.37.0", d: "8 nov 2026", t: "Posponer avisos y más plantillas", l: ["La notificación de un recordatorio ahora tiene el botón \"Posponer 10 min\".","Cinco plantillas nuevas: Receta, Estudio, Película, Gastos y Hábitos.","Los avisos pospuestos se guardan con la nota y siguen vivos si cerrás la app."] },
