@@ -53,6 +53,7 @@ try {
     "android.permission.RECEIVE_BOOT_COMPLETED",
     "android.permission.VIBRATE",
     "android.permission.CAMERA",
+    "android.permission.USE_BIOMETRIC",
   ];
   const missing = perms.filter((p) => !xml.includes(`"${p}"`));
   if (missing.length) {

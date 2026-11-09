@@ -801,6 +801,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .pimg.shadow img { box-shadow: 0 10px 24px -6px rgba(0,0,0,0.55); }
 .lock { position: fixed; inset: 0; z-index: 100000; display: grid; place-items: center; background: var(--solid); padding: 20px; }
 .lock[hidden] { display: none; }
+.lockpad[hidden], .lockdots[hidden], #lockBio[hidden] { display: none; }
 .lockbox { text-align: center; width: min(320px, 100%); display: grid; gap: 12px; justify-items: center; }
 .lockbox h2 { margin: 0; font-size: 24px; letter-spacing: -0.02em; }
 .lockbox p { margin: 0; color: var(--muted); min-height: 1.3em; font-size: 14px; }
@@ -1108,6 +1109,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <p class="hint" id="remHint"></p>
       <div class="actions"><button class="btn" id="remPermBtn" type="button">Permitir notificaciones</button></div>
       <p class="hint" id="remPerm"></p>
+      <h3>Protección</h3>
+      <p class="hint" id="nlHint"></p>
+      <div class="actions"><button class="btn" id="nlSet" type="button">Proteger esta nota</button><button class="btn danger" id="nlOff" type="button" hidden>Quitar protección</button></div>
+      <div class="seg" id="nlPick" hidden>
+        <button type="button" data-m="pin">PIN propio</button>
+        <button type="button" data-m="bio" id="nlBio">Huella</button>
+        <button type="button" data-m="both" id="nlBoth">Huella o PIN</button>
+      </div>
       <h3>Carpeta</h3>
       <input class="folderin" id="folderIn" list="folderlist" maxlength="30" placeholder="Sin carpeta" aria-label="Carpeta de la nota" autocomplete="off">
       <datalist id="folderlist"></datalist>
@@ -1211,6 +1220,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <p id="lockS"></p>
     <div class="lockdots" id="lockDots" aria-hidden="true"></div>
     <div class="lockpad" id="lockPad"></div>
+    <button class="btn" id="lockBio" type="button" hidden>Usar huella</button>
     <button class="btn small" id="lockCancel" type="button" hidden>Cancelar</button>
   </div>
 </div>
@@ -1368,7 +1378,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.38.0";
+  var APP_VERSION = "1.39.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1570,6 +1580,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var at = Number(r.at); if (!isFinite(at) || at <= 0) return null;
     return { at: at, rep: r.rep === "day" || r.rep === "week" ? r.rep : "", seen: !!r.seen, snz: Number(r.snz) > 0 ? Number(r.snz) : 0 };
   }
+  function cleanLock(l) {
+    if (!l || typeof l !== "object") return null;
+    var m = l.m === "bio" || l.m === "pin" || l.m === "both" ? l.m : "";
+    if (!m) return null;
+    if (m !== "bio" && !(typeof l.s === "string" && typeof l.h === "string" && l.s && l.h)) return null;
+    return { m: m, s: m === "bio" ? "" : l.s, h: m === "bio" ? "" : l.h };
+  }
   function normalize(x) {
     if (!x || typeof x !== "object") return null;
     var type = x.type === "list" ? "list" : "text";
@@ -1591,6 +1608,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       images: cleanImages(x.images),
       versions: cleanVersions(x.versions),
       remind: cleanRemind(x.remind),
+      lock: cleanLock(x.lock),
       parent: x.parent && String(x.parent) !== String(x.id) ? String(x.parent) : "",
       icon: cleanIcon(x.icon),
       bg: cleanBg(x.bg),
@@ -1710,6 +1728,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var h = haystackRaw(n); hayCache.set(n.id, { n: n, k: k, h: h }); return h;
   }
   function haystackRaw(n) {
+    if (n.lock) return (n.title + "\n" + n.tags.join(" ")).toLowerCase().split("\n")[0];
     return (n.title + "\n" + n.body + "\n" + n.items.map(function (i) { return i.t; }).join("\n") + "\n" + n.tags.join(" ")).toLowerCase();
   }
   function colorIndex(k) { for (var i = 0; i < COLORS.length; i++) if (COLORS[i].k === k) return i; return 0; }
@@ -1775,7 +1794,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (n.title.trim()) hlText(t, n.title.trim(), hq); else t.textContent = n.type === "list" ? "Lista sin título" : "Sin título";
     top.appendChild(t);
     b.appendChild(top);
-    if (n.type === "list") {
+    if (n.lock) {
+      var lp = el("span", "p"); lp.textContent = "🔒 Nota protegida"; b.appendChild(lp);
+    } else if (n.type === "list") {
       var box = el("span", "p");
       box.style.display = "block";
       n.items.filter(function (i) { return i.t.trim(); }).slice(0, 4).forEach(function (i) {
@@ -1798,7 +1819,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       if (sn) hlText(p, sn, hq); else p.textContent = "Sin texto";
       b.appendChild(p);
     }
-    if (n.tags.length) {
+    if (n.tags.length && !n.lock) {
       var tg = el("span", "tg");
       n.tags.slice(0, 3).forEach(function (x) { var s = el("span", "tag"); s.textContent = "#" + x; tg.appendChild(s); });
       b.appendChild(tg);
@@ -1806,7 +1827,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var m = el("span", "m");
     if (n.pinned) { var pin = el("span", "pin"); pin.textContent = "fijada"; m.appendChild(pin); }
     if (n.remind) { var rm = el("span", "fold"); rm.textContent = "⏰ " + remText(n.remind); m.appendChild(rm); }
-    if (n.images.length) { var im = el("span"); im.textContent = "🖼 " + n.images.length; m.appendChild(im); }
+    if (n.images.length && !n.lock) { var im = el("span"); im.textContent = "🖼 " + n.images.length; m.appendChild(im); }
     if (kidCount[n.id]) { var ki = el("span", "fold"); ki.textContent = "↳ " + kidCount[n.id]; m.appendChild(ki); }
     if (hq && haystack(n).indexOf(hq) < 0) {
       var km = null; notes.forEach(function (k) { if (!km && k.parent === n.id && !k.trashedAt && haystack(k).indexOf(hq) >= 0) km = k; });
@@ -1876,7 +1897,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     for (var i = 0; i < n.items.length; i++) { k++; if (n.items[i].done) d++; }
     return n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
       (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n) + "|" + (n.id === activeId ? 1 : 0) + "|" +
-      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + (n.remind ? n.remind.at + n.remind.rep + n.remind.seen + n.remind.snz : "") + "|" + n.images.length + "|" + (kidCount[n.id] || 0) + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
+      (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + (n.remind ? n.remind.at + n.remind.rep + n.remind.seen + n.remind.snz : "") + "|" + (n.lock ? n.lock.m : "") + "|" + n.images.length + "|" + (kidCount[n.id] || 0) + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
   }
   function renderList() {
     var listEl = $("list"), rows = visibleNotes();
@@ -2259,7 +2280,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var kids = Array.from(notes.values()).filter(function (k) { return k.parent === n.id && !k.trashedAt; }).sort(function (a, b) { return a.createdAt - b.createdAt; });
     var back = [], tl = n.title.trim().toLowerCase();
     if (tl) notes.forEach(function (o) {
-      if (o.id === n.id || o.trashedAt) return;
+      if (o.id === n.id || o.trashedAt || o.lock) return;
       var txt = o.type === "list" ? o.items.map(function (i) { return i.t; }).join("\n") : o.body;
       if (txt.toLowerCase().indexOf("[[" + tl + "]]") >= 0) back.push(o);
     });
@@ -2945,7 +2966,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var n = cur();
     if (n && !n.trashedAt && isEmptyNote(n)) { notes.delete(n.id); persistNow(); }
   }
+  /* notas protegidas: se desbloquean una vez por sesión de lectura */
+  var unlocked = new Set();
   function openNote(id) {
+    var n0 = notes.get(id);
+    if (n0 && n0.lock && !unlocked.has(id) && !n0.trashedAt) { askNote(n0, function () { unlocked.add(id); openNoteRaw(id); }); return; }
+    openNoteRaw(id);
+  }
+  function openNoteRaw(id) {
     if (id !== activeId) { commitVersion(); if (saveTimer) persistNow(); discardIfEmpty(); }
     activeId = id;
     setStatus("");
@@ -2956,6 +2984,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function leaveEditorUI() {
     commitVersion(); if (saveTimer) persistNow(); discardIfEmpty();
+    if (activeId) unlocked.delete(activeId);
     activeId = null; setStatus("");
     $("sheet").hidden = true; $("iconSheet").hidden = true; $("scrim").hidden = true;
     $("app").dataset.view = "list";
@@ -3206,7 +3235,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function openSheet() {
     if (!cur() || readOnly()) return;
-    renderSheet(); $("folderIn").value = cur().folder || ""; renderRem();
+    renderSheet(); $("folderIn").value = cur().folder || ""; renderRem(); $("nlPick").hidden = true; renderNoteLock();
     $("scrim").hidden = false; $("sheet").hidden = false;
     pushLayer("sheet");
   }
@@ -3374,6 +3403,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.39.0", d: "9 nov 2026", t: "Notas protegidas (PIN y huella)", l: ["Nuevo en Personalizar → Protección: protegé una nota con un PIN propio, con la huella del teléfono, o con cualquiera de los dos. Es opcional y nota por nota.", "Una nota protegida muestra 🔒 en la lista, sin vista previa, y no se puede buscar por su contenido.", "Se vuelve a pedir si la app estuvo más de 20 segundos en segundo plano o al cerrar la nota.", "Los recordatorios de una nota protegida no muestran su contenido en la notificación.", "Es un candado para curiosos: no cifra la nota."] },
     { v: "1.38.0", d: "9 nov 2026", t: "Resaltado de colores", l: ["Nuevo botón \"🖍 Resaltar\" en la barra de la nota: elegí amarillo, verde, rosa, celeste o naranja.","Seleccioná un texto y tocá un color. Con el cursor dentro de un texto resaltado podés cambiarle el color o tocar Quitar.","Se ve en el modo Leer. En el PDF y en las notificaciones sale como texto normal."] },
     { v: "1.37.0", d: "8 nov 2026", t: "Posponer avisos y más plantillas", l: ["La notificación de un recordatorio ahora tiene el botón \"Posponer 10 min\".","Cinco plantillas nuevas: Receta, Estudio, Película, Gastos y Hábitos.","Los avisos pospuestos se guardan con la nota y siguen vivos si cerrás la app."] },
     { v: "1.36.0", d: "8 nov 2026", t: "Más fluido con muchas imágenes", l: ["Las miniaturas de las imágenes ahora son chiquitas y se guardan aparte: abrir una nota con muchas fotos pesa mucho menos.","Las imágenes se decodifican de a poco y solo cuando hacen falta.","Las notas y copias de seguridad no cambian."] },
@@ -3891,6 +3921,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   /* texto de la notificación: sin símbolos de formato, con el título de la nota y un resumen legible */
   function notifText(n) {
+    if (n.lock) return { title: "🔒 Nota protegida", body: "Tocá para abrirla", large: "Tocá para abrirla" };
     var title = n.title.trim(), lines;
     if (n.type === "list") lines = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "☑ " : "☐ ") + i.t.trim(); });
     else lines = n.body.split("\n").map(function (l) {
@@ -4288,7 +4319,53 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("mdBtn").addEventListener("click", exportMd);
   $("pdfBtn").addEventListener("click", exportPdf);
 
+  /* ---------- huella ---------- */
+  var bioAvailCache = null;
+  function bioPlug() { return capPlugin("BiometricAuth"); }
+  function bioAvail() {
+    if (bioAvailCache !== null) return Promise.resolve(bioAvailCache);
+    var pl = bioPlug(); if (!pl || !pl.checkBiometry) { return Promise.resolve(false); }
+    return pl.checkBiometry().then(function (r) { bioAvailCache = !!(r && r.isAvailable); return bioAvailCache; }).catch(function () { return false; });
+  }
+  function bioAuth(reason) {
+    var pl = bioPlug(); if (!pl || !pl.authenticate) return Promise.reject(new Error("no-bio"));
+    return pl.authenticate({ reason: reason, cancelTitle: "Cancelar", allowDeviceCredential: true, androidTitle: "Tronx", androidSubtitle: reason });
+  }
+  /* pide PIN/huella para una nota protegida */
+  function askNote(n, ok, cancel) {
+    var l = n.lock; if (!l) { ok(); return; }
+    var bio = l.m === "bio" || l.m === "both";
+    openLock("unlock", ok, { target: l.m === "bio" ? { m: "bio", s: "", h: "" } : l, title: "Nota protegida", sub: "Ingresá el PIN de esta nota", cancelable: true, bio: bio, onlyBio: l.m === "bio", onCancel: cancel });
+  }
+  function renderNoteLock() {
+    var n = cur(); if (!n) return;
+    var l = n.lock, names = { pin: "un PIN propio", bio: "la huella", both: "huella o PIN" };
+    $("nlSet").textContent = l ? "Cambiar protección" : "Proteger esta nota";
+    $("nlOff").hidden = !l;
+    $("nlHint").textContent = l ? "Esta nota se abre con " + names[l.m] + ". Es un candado para curiosos: no cifra la nota, y las copias de seguridad la incluyen. Si olvidás el PIN y no tenés huella, no se puede recuperar." : "Opcional. Podés pedir un PIN propio, la huella del teléfono o cualquiera de los dos para abrir esta nota.";
+    bioAvail().then(function (a) { $("nlBio").hidden = $("nlBoth").hidden = !a; });
+  }
+  function setNoteLock(n, lock) {
+    n.lock = lock; changed(n); persistNow(); renderNoteLock(); renderAll(); syncReminders();
+    if (lock) unlocked.add(n.id); else unlocked.delete(n.id);
+  }
+  $("nlSet").addEventListener("click", function () { var pk = $("nlPick"); pk.hidden = !pk.hidden; });
+  $("nlPick").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return; var n = cur(); if (!n) return; var m = b.dataset.m;
+    function go() {
+      $("nlPick").hidden = true;
+      if (m === "bio") {
+        bioAuth("Confirmá con tu huella para proteger la nota").then(function () { setNoteLock(n, { m: "bio", s: "", h: "" }); toast("Nota protegida con huella"); }).catch(function () { toast("No se pudo confirmar la huella"); });
+        return;
+      }
+      openLock("set1", null, { setCb: function (s, h) { setNoteLock(n, { m: m, s: s, h: h }); toast(m === "both" ? "Nota protegida: huella o PIN" : "Nota protegida con PIN"); }, title: "PIN de la nota", sub: "Elegí 4 dígitos", cancelable: true, onCancel: function () {} });
+    }
+    if (n.lock) askNote(n, go); else go();
+  });
+  $("nlOff").addEventListener("click", function () { var n = cur(); if (!n) return; askNote(n, function () { setNoteLock(n, null); toast("Protección quitada"); }); });
+
   /* ---------- bloqueo con PIN ---------- */
+  var lockTarget = null, lockSetCb = null, lockCancelCb = null, lockBioOn = false;
   var PINKEY = "tronx.pin.v1", lockMode = "unlock", lockBuf = "", lockTmp = "", lockOk = null, lockBusy = false, lockFails = 0, lockUntil = 0, lockTimer = 0, hiddenAt = 0;
   function pinData() { try { var d = JSON.parse(lsGet(PINKEY) || "null"); return d && d.h && d.s ? d : null; } catch (e) { return null; } }
   function pinHash(pin, salt) {
@@ -4315,12 +4392,21 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       b.setAttribute("aria-label", k === "⌫" ? "Borrar" : k || ""); pad.appendChild(b);
     });
   }
-  function openLock(mode, onOk) {
+  function openLock(mode, onOk, o) {
+    o = o || {};
     lockMode = mode; lockOk = onOk || null; lockBuf = ""; lockTmp = ""; lockBusy = false; lockPadBuild();
+    lockTarget = o.target || null; lockSetCb = o.setCb || null; lockCancelCb = o.onCancel || null;
+    var bioMode = !!o.bio;
     var t = { unlock: ["Tronx bloqueado", "Ingresá tu PIN"], verify: ["Confirmá tu PIN", "Ingresá el PIN actual"], set1: ["Nuevo PIN", "Elegí 4 dígitos"], set2: ["Repetí el PIN", "Escribilo otra vez"] }[mode];
-    $("lockT").textContent = t[0]; $("lockS").textContent = t[1];
-    $("lockCancel").hidden = mode === "unlock"; $("lock").hidden = false; lockDraw();
+    $("lockT").textContent = o.title || t[0]; $("lockS").textContent = bioMode && o.onlyBio ? "Usá tu huella para abrirla" : (o.sub || t[1]);
+    $("lockCancel").hidden = mode === "unlock" && !o.cancelable; $("lock").hidden = false; lockDraw();
+    $("lockPad").hidden = $("lockDots").hidden = !!o.onlyBio;
+    $("lockBio").hidden = !bioMode; lockBioOn = bioMode;
     lockPadState();
+    if (bioMode) setTimeout(function () { if (!$("lock").hidden) lockBioTry(); }, 250);
+  }
+  function lockBioTry() {
+    bioAuth("Abrir nota protegida").then(function () { lockBusy = false; lockDone(); }).catch(function () { $("lockS").textContent = lockTarget && lockTarget.m === "bio" ? "No se reconoció. Tocá \"Usar huella\"" : "No se reconoció. Ingresá el PIN"; });
   }
   function lockPadState() {
     var cool = Date.now() < lockUntil;
@@ -4342,7 +4428,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }
     $("lockS").textContent = msg;
   }
-  function lockDone() { $("lock").hidden = true; lockBuf = ""; lockFails = 0; var f = lockOk; lockOk = null; if (f) f(); }
+  function lockDone() { $("lock").hidden = true; lockBuf = ""; lockFails = 0; lockTarget = null; lockCancelCb = null; var f = lockOk; lockOk = null; if (f) f(); }
   function lockEnter(k) {
     if (lockBusy || Date.now() < lockUntil) return;
     if (k === "⌫") { lockBuf = lockBuf.slice(0, -1); lockDraw(); return; }
@@ -4350,7 +4436,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     lockBuf += k; lockDraw();
     if (lockBuf.length < 4) return;
     lockBusy = true;
-    var pin = lockBuf, d = pinData();
+    var pin = lockBuf, d = lockTarget || pinData();
     if (lockMode === "unlock" || lockMode === "verify") {
       pinHash(pin, d ? d.s : "").then(function (h) { if (d && h === d.h) { lockBusy = false; lockDone(); } else lockFail("PIN incorrecto"); });
     } else if (lockMode === "set1") {
@@ -4358,11 +4444,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     } else if (lockMode === "set2") {
       if (pin !== lockTmp) { lockMode = "set1"; lockFail("No coinciden. Elegí uno nuevo"); $("lockT").textContent = "Nuevo PIN"; return; }
       var salt = uid() + uid();
+      if (lockSetCb) { pinHash(pin, salt).then(function (h) { var cb = lockSetCb; lockSetCb = null; lockBusy = false; $("lock").hidden = true; lockBuf = ""; lockOk = null; lockCancelCb = null; cb(salt, h); }); return; }
       pinHash(pin, salt).then(function (h) { lsSet(PINKEY, JSON.stringify({ s: salt, h: h })); lockBusy = false; lockDone(); renderPinUI(); toast("PIN activado"); });
     }
   }
   $("lockPad").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b && b.dataset.k) lockEnter(b.dataset.k); });
-  $("lockCancel").addEventListener("click", function () { $("lock").hidden = true; lockOk = null; });
+  $("lockCancel").addEventListener("click", function () { $("lock").hidden = true; lockOk = null; lockSetCb = null; lockTarget = null; var f = lockCancelCb; lockCancelCb = null; if (f) f(); });
+  $("lockBio").addEventListener("click", lockBioTry);
   document.addEventListener("keydown", function (e) {
     if ($("lock").hidden) return;
     if (/^[0-9]$/.test(e.key)) lockEnter(e.key); else if (e.key === "Backspace") lockEnter("⌫");
@@ -4373,6 +4461,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) { hiddenAt = Date.now(); commitVersion(); return; }
     if (pinData() && hiddenAt && Date.now() - hiddenAt > 20000 && $("lock").hidden) openLock("unlock");
+    else if (hiddenAt && Date.now() - hiddenAt > 20000) {
+      unlocked.clear(); var cn = cur();
+      if (cn && cn.lock && $("lock").hidden) askNote(cn, function () { unlocked.add(cn.id); }, function () { closeLayer("editor"); });
+    }
   });
   renderPinUI();
   if (pinData()) openLock("unlock");
