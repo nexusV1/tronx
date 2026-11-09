@@ -875,6 +875,20 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .remlist { display: grid; gap: 6px; margin-top: 6px; }
 .remlist .rrow { display: flex; align-items: center; gap: 8px; font-size: 13px; background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; }
 .remlist .rrow span { flex: 1; min-width: 0; }
+.lmwrap { position: relative; border: 1px solid var(--line); border-radius: 14px; background: var(--raised); overflow: hidden; touch-action: none; }
+.lmsvg { display: block; width: 100%; height: 46vh; min-height: 280px; cursor: grab; user-select: none; -webkit-user-select: none; }
+.lmsvg line { stroke: var(--muted); stroke-opacity: 0.45; stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+.lmsvg line.sub { stroke-dasharray: 4 4; }
+.lmsvg line.hi { stroke: var(--accent); stroke-opacity: 1; stroke-width: 2.4; }
+.lmsvg circle { stroke: var(--solid); stroke-width: 2; vector-effect: non-scaling-stroke; cursor: pointer; }
+.lmsvg g.dim { opacity: 0.25; }
+.lmsvg g.sel circle { stroke: var(--accent); stroke-width: 4; }
+.lmsvg text { fill: currentColor; font-size: 11px; text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: var(--solid); stroke-width: 3px; }
+.lmzoom { position: absolute; right: 8px; top: 8px; display: flex; gap: 6px; }
+.lmsel { display: flex; gap: 10px; align-items: center; margin-top: 8px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--raised); }
+.lmsel strong { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lmsel span { color: var(--muted); font-size: 12px; flex: none; }
+.lmchips { display: flex; flex-wrap: wrap; gap: 6px; }
 .orglist { display: grid; gap: 6px; }
 .orglist .orow { display: flex; gap: 6px; align-items: center; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px 6px 12px; }
 .orglist .orow .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1270,6 +1284,20 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <button class="btn small" id="lockCancel" type="button" hidden>Cancelar</button>
   </div>
 </div>
+<div class="overlay" id="linkMap" hidden>
+  <section class="panel lmpanel" role="dialog" aria-modal="true" aria-label="Mapa de enlaces">
+    <div class="sheethead"><strong>Mapa de enlaces</strong><button class="btn small" id="lmClose" type="button">Listo</button></div>
+    <p class="hint" id="lmHint"></p>
+    <div class="lmwrap"><svg id="lmSvg" class="lmsvg" role="img" aria-label="Notas conectadas por enlaces [[ ]] y subnotas"></svg>
+      <div class="lmzoom"><button class="btn small ic" id="lmIn" type="button" aria-label="Acercar">+</button><button class="btn small ic" id="lmOut" type="button" aria-label="Alejar">−</button><button class="btn small" id="lmFit" type="button">Ajustar</button></div>
+    </div>
+    <div class="lmsel" id="lmSel" hidden><strong id="lmSelT"></strong><span id="lmSelC"></span><button class="btn small primary" id="lmOpen" type="button">Abrir</button></div>
+    <h3 id="lmOrphT">Sin conexiones</h3>
+    <div class="chips lmchips" id="lmOrph"></div>
+    <h3 id="lmMissT">Enlaces a notas que no existen</h3>
+    <div class="chips lmchips" id="lmMiss"></div>
+  </section>
+</div>
 <div class="overlay" id="orgMgr" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Etiquetas y carpetas">
     <div class="sheethead"><strong>Etiquetas y carpetas</strong><button class="btn small" id="orgClose" type="button">Listo</button></div>
@@ -1383,6 +1411,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <li class="mn-sec" style="--i:1" aria-hidden="true">Tu espacio</li>
       <li><button class="mn-item" id="mnProfile" type="button" style="--i:2;--c1:#a78bfa;--c2:#4c1d95"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.6-6 7.5-6s6.7 2 7.5 6"/></svg></span><span class="mn-tx"><b>Perfil</b><span class="mn-soon">En desarrollo</span></span></button></li>
       <li><button class="mn-item" id="mnCalendar" type="button" style="--i:3;--c1:#fbbf24;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></span><span class="mn-tx"><b>Calendario</b><i>Tus avisos y notas por día</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnLinkMap" type="button" style="--i:3;--c1:#34d399;--c2:#065f46"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8 7.4l8 -1M7 9l4 7M17 8l-4 8"/></svg></span><span class="mn-tx"><b>Mapa de enlaces</b><i>Cómo se conectan tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnCustom" type="button" style="--i:3;--c1:#f472b6;--c2:#831843"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Personalización</b><i id="mnSubCustom">Tema, colores, letra y fondos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:4" aria-hidden="true">Explorar</li>
       <li><button class="mn-item" id="mnLink" type="button" style="--i:5;--c1:#34d399;--c2:#064e3b"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="mn-tx"><b>Vinculación</b><span class="mn-soon">En desarrollo</span></span></button></li>
@@ -1447,7 +1476,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.43.0";
+  var APP_VERSION = "1.44.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -3540,6 +3569,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.44.0", d: "9 nov 2026", t: "Mapa de enlaces", l: ["Nueva opción \"Mapa de enlaces\" en el menú: un gráfico con tus notas conectadas por [[enlaces]] y por subnotas (línea punteada).", "Tocá una nota para resaltar con quién se conecta y abrirla. Se mueve con el dedo y se acerca con pellizco o con + y −.", "Abajo ves las notas sin conexiones y los enlaces a notas que no existen: tocá uno y se crea esa nota.", "Las notas protegidas no revelan sus enlaces."] },
     { v: "1.43.0", d: "9 nov 2026", t: "Orden y etiquetas", l: ["Más formas de ordenar la lista: más antiguas, título Z–A, próximo aviso y más largas.", "Nuevo gestor de etiquetas y carpetas (botón ⚙ junto a los filtros): renombrá, juntá o quitá una etiqueta o carpeta de todas tus notas de una vez.", "Si le ponés a una etiqueta el nombre de otra, se juntan. Todo tiene botón Deshacer."] },
     { v: "1.42.0", d: "9 nov 2026", t: "Calendario", l: ["Nueva opción \"Calendario\" en el menú: un mes completo con puntos naranjas en los días con avisos y grises en los días en que creaste notas.", "Tocá un día para ver sus avisos con la hora (incluye los que se repiten: diario, semanal, mensual y días elegidos) y abrir la nota.", "\"Nueva nota con aviso este día\" crea una nota con el aviso ya puesto a las 9:00.", "Las notas protegidas aparecen con 🔒."] },
     { v: "1.41.0", d: "9 nov 2026", t: "Recordatorios más completos", l: ["Nuevas repeticiones: \"Cada mes\" (si el día no existe, usa el último del mes) y \"Días elegidos…\" (por ejemplo lunes, miércoles y viernes).", "Podés agregar hasta 5 avisos por nota con \"Agregar otro aviso\" y quitarlos de a uno.", "Los avisos mensuales y por días se programan por adelantado (6 meses o 14 ocurrencias); se renuevan cada vez que abrís la app.", "En la lista, la tarjeta muestra \"+N\" si la nota tiene más avisos."] },
@@ -3597,6 +3627,127 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   $("newsClose").addEventListener("click", function () { closeLayer("news"); });
   $("news").addEventListener("click", function (e) { if (e.target === $("news")) closeLayer("news"); });
+  /* ---------- mapa de enlaces ---------- */
+  var LM = { nodes: [], edges: [], vb: null, sel: null, w: 1000, h: 1000 };
+  function lmBuild() {
+    var byTitle = {}, list = [], missing = {};
+    notes.forEach(function (n) { if (n.trashedAt) return; list.push(n); var t = n.title.trim().toLowerCase(); if (t && !byTitle[t]) byTitle[t] = n; });
+    var edges = [], seen = {};
+    function add(a, b, kind) { if (a === b) return; var k = a < b ? a + "|" + b : b + "|" + a; if (seen[k]) { if (kind === "link") seen[k].kind = "link"; return; } seen[k] = { a: a, b: b, kind: kind }; edges.push(seen[k]); }
+    list.forEach(function (n) {
+      if (n.parent && notes.has(n.parent) && !notes.get(n.parent).trashedAt) add(n.id, n.parent, "sub");
+      if (n.lock) return; // no se lee el contenido de una nota protegida
+      var txt = n.type === "list" ? n.items.map(function (i) { return i.t; }).join("\n") : n.body, re = /\[\[([^\]\n]+?)\]\]/g, m;
+      while ((m = re.exec(txt))) {
+        var t = m[1].trim().toLowerCase(), tgt = byTitle[t];
+        if (tgt) add(n.id, tgt.id, "link"); else if (t) missing[m[1].trim()] = (missing[m[1].trim()] || 0) + 1;
+      }
+    });
+    var deg = {}; edges.forEach(function (e) { deg[e.a] = (deg[e.a] || 0) + 1; deg[e.b] = (deg[e.b] || 0) + 1; });
+    var conn = list.filter(function (n) { return deg[n.id]; }).sort(function (a, b) { return deg[b.id] - deg[a.id]; }).slice(0, 150);
+    var keep = {}; conn.forEach(function (n) { keep[n.id] = 1; });
+    return { conn: conn, edges: edges.filter(function (e) { return keep[e.a] && keep[e.b]; }), deg: deg, orph: list.filter(function (n) { return !deg[n.id]; }), missing: missing, total: list.length };
+  }
+  function lmLayout(nodes, edges) {
+    var n = nodes.length, W = 1000, H = 1000, k = Math.min(130, Math.sqrt(W * H / Math.max(1, n)) * 0.75), idx = {};
+    nodes.forEach(function (d, i) { idx[d.id] = i; var a = i / n * Math.PI * 2, r = 120 + (i % 7) * 55; d.x = W / 2 + Math.cos(a) * r; d.y = H / 2 + Math.sin(a) * r; d.dx = d.dy = 0; });
+    var es = edges.map(function (e) { return [idx[e.a], idx[e.b]]; });
+    var iters = n > 100 ? 90 : 160, t = W / 8;
+    for (var it = 0; it < iters; it++) {
+      var i, j;
+      for (i = 0; i < n; i++) { nodes[i].dx = nodes[i].dy = 0; }
+      for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) {
+        var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y, d2 = dx * dx + dy * dy + 0.01, d = Math.sqrt(d2), f = k * k / d / d;
+        nodes[i].dx += dx * f; nodes[i].dy += dy * f; nodes[j].dx -= dx * f; nodes[j].dy -= dy * f;
+      }
+      es.forEach(function (e) {
+        var A = nodes[e[0]], B = nodes[e[1]], dx = A.x - B.x, dy = A.y - B.y, d = Math.sqrt(dx * dx + dy * dy) + 0.01, f = d / k;
+        A.dx -= dx * f; A.dy -= dy * f; B.dx += dx * f; B.dy += dy * f;
+      });
+      for (i = 0; i < n; i++) {
+        var N = nodes[i]; N.dx += (W / 2 - N.x) * 0.02; N.dy += (H / 2 - N.y) * 0.02;
+        var l = Math.sqrt(N.dx * N.dx + N.dy * N.dy) + 0.01, s = Math.min(l, t) / l; N.x += N.dx * s; N.y += N.dy * s;
+      }
+      t *= 0.97;
+    }
+  }
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function sv(tag, attrs) { var e = document.createElementNS(SVGNS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function lmApplyVB() {
+    var v = LM.vb, svg = $("lmSvg"), sc = v.w / (svg.getBoundingClientRect().width || 360);
+    svg.setAttribute("viewBox", v.x + " " + v.y + " " + v.w + " " + v.h);
+    svg.querySelectorAll("g.nd").forEach(function (g) {
+      var c = g.firstChild, t = g.lastChild, r = Number(c.dataset.r) * sc, cy = Number(c.getAttribute("cy"));
+      c.setAttribute("r", r); t.style.fontSize = (12 * sc) + "px"; t.setAttribute("y", cy + r + 14 * sc); t.style.strokeWidth = (3 * sc) + "px";
+    });
+  }
+  function lmFit() {
+    var ns = LM.nodes; if (!ns.length) { LM.vb = { x: 0, y: 0, w: 1000, h: 1000 }; lmApplyVB(); return; }
+    var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; ns.forEach(function (d) { x0 = Math.min(x0, d.x); y0 = Math.min(y0, d.y); x1 = Math.max(x1, d.x); y1 = Math.max(y1, d.y); });
+    var pad = 70, w = Math.max(200, x1 - x0 + pad * 2), h = Math.max(200, y1 - y0 + pad * 2), box = $("lmSvg").getBoundingClientRect(), ar = (box.width || 360) / (box.height || 300);
+    if (w / h < ar) { var nw = h * ar; x0 -= (nw - (x1 - x0 + pad * 2)) / 2; w = nw; } else { var nh = w / ar; y0 -= (nh - (y1 - y0 + pad * 2)) / 2; h = nh; }
+    LM.vb = { x: x0 - pad, y: y0 - pad, w: w, h: h }; lmApplyVB();
+  }
+  function lmSelect(id) {
+    LM.sel = id; var svg = $("lmSvg"), nb = {};
+    if (id) LM.edges.forEach(function (e) { if (e.a === id) nb[e.b] = 1; if (e.b === id) nb[e.a] = 1; });
+    svg.querySelectorAll("g.nd").forEach(function (g) { var gid = g.dataset.id; g.classList.toggle("sel", gid === id); g.classList.toggle("dim", !!id && gid !== id && !nb[gid]); var t = g.querySelector("text"); t.style.display = (!id && !LM.many) || gid === id || nb[gid] ? "" : "none"; });
+    svg.querySelectorAll("line").forEach(function (l) { l.classList.toggle("hi", !!id && (l.dataset.a === id || l.dataset.b === id)); });
+    var box = $("lmSel"); box.hidden = !id;
+    if (id) { var n = notes.get(id); $("lmSelT").textContent = (n.lock ? "🔒 " : "") + noteLabel(n); var c = Object.keys(nb).length; $("lmSelC").textContent = c + (c === 1 ? " conexión" : " conexiones"); }
+  }
+  function renderLinkMap() {
+    var d = lmBuild(), svg = $("lmSvg"); svg.textContent = "";
+    LM.nodes = d.conn.map(function (n) { return { id: n.id, n: n }; });
+    LM.edges = d.edges; LM.many = LM.nodes.length > 40;
+    lmLayout(LM.nodes, LM.edges);
+    var pos = {}; LM.nodes.forEach(function (o) { pos[o.id] = o; });
+    LM.edges.forEach(function (e) { var A = pos[e.a], B = pos[e.b]; svg.appendChild(sv("line", { x1: A.x, y1: A.y, x2: B.x, y2: B.y, "class": e.kind === "sub" ? "sub" : "", "data-a": e.a, "data-b": e.b })); });
+    LM.nodes.forEach(function (o) {
+      var g = sv("g", { "class": "nd", "data-id": o.id }), c = colorOf(o.n.color), r = Math.min(18, 7 + (d.deg[o.id] || 0) * 2);
+      var ci = sv("circle", { cx: o.x, cy: o.y, r: r, "data-r": r }); ci.style.fill = c.rgb ? "rgb(" + c.rgb.join(",") + ")" : "var(--accent)";
+      var tx = sv("text", { x: o.x, y: o.y + r + 13 }); tx.textContent = (o.n.lock ? "🔒 " : "") + noteLabel(o.n).slice(0, 18);
+      g.appendChild(ci); g.appendChild(tx); g.addEventListener("click", function (ev) { ev.stopPropagation(); lmSelect(LM.sel === o.id ? null : o.id); }); svg.appendChild(g);
+    });
+    var nl = d.edges.filter(function (e) { return e.kind === "link"; }).length;
+    $("lmHint").textContent = d.total ? LM.nodes.length + " notas conectadas · " + nl + " enlaces [[ ]] · " + (d.edges.length - nl) + " subnotas (línea punteada). Tocá una nota para ver con quién se conecta." : "Todavía no tenés notas.";
+    if (!LM.nodes.length && d.total) $("lmHint").textContent = "Todavía no hay notas conectadas. Escribí [[Título de otra nota]] en una nota, o creá una subnota, y aparecerán acá.";
+    svg.parentNode.hidden = !LM.nodes.length;
+    var oc = $("lmOrph"); oc.textContent = ""; $("lmOrphT").hidden = !d.orph.length; oc.hidden = !d.orph.length;
+    d.orph.slice(0, 60).forEach(function (n) { var b = el("button", "chip"); b.type = "button"; b.textContent = (n.lock ? "🔒 " : "") + noteLabel(n).slice(0, 28); b.addEventListener("click", function () { closeTo(0); setTimeout(function () { openNote(n.id); }, 380); }); oc.appendChild(b); });
+    if (d.orph.length > 60) { var more = el("span", "hint"); more.textContent = "y " + (d.orph.length - 60) + " más"; oc.appendChild(more); }
+    var mc = $("lmMiss"), mk = Object.keys(d.missing); mc.textContent = ""; $("lmMissT").hidden = mc.hidden = !mk.length;
+    mk.slice(0, 40).forEach(function (t) { var b = el("button", "chip"); b.type = "button"; b.textContent = "[[" + t.slice(0, 26) + "]]"; b.setAttribute("aria-label", "Crear la nota " + t); b.addEventListener("click", function () { closeTo(0); setTimeout(function () { createNote("text", { title: t }); }, 380); }); mc.appendChild(b); });
+    LM.sel = null; $("lmSel").hidden = true; lmSelect(null); lmFit();
+  }
+  function openLinkMap() { $("linkMap").hidden = false; pushLayer("linkMap"); renderLinkMap(); }
+  registerLayer("linkMap", function () { $("linkMap").hidden = true; });
+  $("lmClose").addEventListener("click", function () { closeLayer("linkMap"); });
+  $("linkMap").addEventListener("click", function (e) { if (e.target === $("linkMap")) closeLayer("linkMap"); });
+  $("lmOpen").addEventListener("click", function () { var id = LM.sel; if (!id) return; closeTo(0); setTimeout(function () { openNote(id); }, 380); });
+  function lmZoom(f) { var v = LM.vb; if (!v) return; var cx = v.x + v.w / 2, cy = v.y + v.h / 2; v.w *= f; v.h *= f; v.x = cx - v.w / 2; v.y = cy - v.h / 2; lmApplyVB(); }
+  $("lmIn").addEventListener("click", function () { lmZoom(0.75); });
+  $("lmOut").addEventListener("click", function () { lmZoom(1.33); });
+  $("lmFit").addEventListener("click", lmFit);
+  (function () {
+    var svg = $("lmSvg"), drag = null, pts = {}, pinch = 0;
+    svg.addEventListener("pointerdown", function (e) { pts[e.pointerId] = { x: e.clientX, y: e.clientY }; drag = { x: e.clientX, y: e.clientY, moved: false }; if (Object.keys(pts).length === 2) { var k = Object.keys(pts); pinch = Math.hypot(pts[k[0]].x - pts[k[1]].x, pts[k[0]].y - pts[k[1]].y); } });
+    svg.addEventListener("pointermove", function (e) {
+      if (!pts[e.pointerId]) return;
+      var prev = pts[e.pointerId]; pts[e.pointerId] = { x: e.clientX, y: e.clientY };
+      var ks = Object.keys(pts), box = svg.getBoundingClientRect();
+      if (ks.length === 2 && pinch) { var nd = Math.hypot(pts[ks[0]].x - pts[ks[1]].x, pts[ks[0]].y - pts[ks[1]].y); if (nd > 0) { lmZoom(pinch / nd); pinch = nd; } return; }
+      if (!drag || !LM.vb) return;
+      if (!drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 6) return;
+      if (!drag.moved) { drag.moved = true; try { svg.setPointerCapture(e.pointerId); } catch (x) {} }
+      var sc = LM.vb.w / (box.width || 1); LM.vb.x -= (e.clientX - prev.x) * sc; LM.vb.y -= (e.clientY - prev.y) * sc; lmApplyVB();
+    });
+    function up(e) { delete pts[e.pointerId]; pinch = 0; if (drag && !drag.moved && !Object.keys(pts).length && e.target === svg) lmSelect(null); if (!Object.keys(pts).length) drag = null; }
+    svg.addEventListener("pointerup", up); svg.addEventListener("pointercancel", up);
+    svg.addEventListener("wheel", function (e) { e.preventDefault(); lmZoom(e.deltaY > 0 ? 1.15 : 0.87); }, { passive: false });
+  })();
+  $("mnLinkMap").addEventListener("click", function () { closeMenuThen(openLinkMap); });
+
   /* ---------- etiquetas y carpetas ---------- */
   function orgCounts(kind) {
     var map = {};
