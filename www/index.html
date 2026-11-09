@@ -854,6 +854,16 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .read h1, .read h2 { margin: 0.7em 0 0.3em; line-height: 1.25; letter-spacing: -0.02em; }
 .read h1 { font-size: 1.5em; } .read h2 { font-size: 1.22em; }
 .read p { margin: 0.15em 0; min-height: 1.2em; }
+.read mark { color: inherit; border-radius: 4px; padding: 0 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.read mark.hl-amarillo, .hlsw.hl-amarillo { background: rgba(250, 204, 21, 0.45); }
+.read mark.hl-verde, .hlsw.hl-verde { background: rgba(74, 222, 128, 0.4); }
+.read mark.hl-rosa, .hlsw.hl-rosa { background: rgba(244, 114, 182, 0.42); }
+.read mark.hl-celeste, .hlsw.hl-celeste { background: rgba(56, 189, 248, 0.42); }
+.read mark.hl-naranja, .hlsw.hl-naranja { background: rgba(251, 146, 60, 0.45); }
+.hlrow { display: flex; gap: 10px; align-items: center; padding: 8px 2px 2px; flex: none; }
+.hlrow[hidden] { display: none; }
+.hlrow .hlsw { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); padding: 0; }
+.hlrow .hlx { margin-left: auto; }
 .read blockquote { margin: 0.4em 0; padding: 2px 0 2px 12px; border-left: 3px solid var(--accent); color: var(--muted); }
 .read ul, .read ol { margin: 0.3em 0; padding-left: 1.3em; }
 .read hr { border: 0; border-top: 1px solid var(--line); margin: 0.8em 0; }
@@ -1036,6 +1046,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn ic" type="button" data-ins="redo" aria-label="Rehacer" disabled>↷</button>
         <button class="btn ic" type="button" data-ins="bold" aria-label="Negrita"><b>B</b></button>
         <button class="btn ic" type="button" data-ins="italic" aria-label="Cursiva"><i>I</i></button>
+        <button class="btn" type="button" data-ins="hl" aria-pressed="false">🖍 Resaltar</button>
         <button class="btn" type="button" data-ins="head">Título</button>
         <button class="btn" type="button" data-ins="quote">❝ Cita</button>
         <button class="btn" type="button" data-ins="bullet">• Viñeta</button>
@@ -1050,6 +1061,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn" type="button" data-ins="time">Hora</button>
         <button class="btn" type="button" data-ins="read" aria-pressed="false">Leer</button>
       </div>
+    </div>
+    <div class="hlrow" id="hlRow" hidden>
+      <button class="hlsw hl-amarillo" type="button" data-c="amarillo" aria-label="Resaltar en amarillo"></button>
+      <button class="hlsw hl-verde" type="button" data-c="verde" aria-label="Resaltar en verde"></button>
+      <button class="hlsw hl-rosa" type="button" data-c="rosa" aria-label="Resaltar en rosa"></button>
+      <button class="hlsw hl-celeste" type="button" data-c="celeste" aria-label="Resaltar en celeste"></button>
+      <button class="hlsw hl-naranja" type="button" data-c="naranja" aria-label="Resaltar en naranja"></button>
+      <button class="btn small hlx" type="button" data-c="" aria-label="Quitar resaltado">Quitar</button>
     </div>
     <div class="meta" id="meta"></div>
     <div class="trashbar" id="trashbar" hidden>
@@ -1349,7 +1368,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.37.0";
+  var APP_VERSION = "1.38.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2203,6 +2222,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("pinBtn").hidden = !has || readOnly();
     $("moreBtn").hidden = !has || readOnly();
     $("trashbar").hidden = !(has && readOnly());
+    $("hlRow").hidden = true; var hb0 = document.querySelector('[data-ins="hl"]'); hb0 && hb0.setAttribute("aria-pressed", "false");
     if (!has) { selImg = null; imgsEl.textContent = ""; $("imgrow").hidden = true; $("imgPanel").hidden = true; contentEl.classList.remove("imgs"); $("rel").hidden = true; $("crumb").hidden = true; $("sugg").hidden = true; titleEl.value = ""; bodyEl.value = ""; itemsEl.textContent = ""; renderTint(); renderBg(); renderProg(); renderTpls(); $("fmt").hidden = true; renderTaglines(); renderIconBtn(); updateMeta(); return; }
     if (!baseline || baseline.id !== n.id) baseline = snapOf(n);
     var ro = readOnly(), isList = n.type === "list";
@@ -2739,6 +2759,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function inline(t) {
     t = esc(t);
     t = t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<i>$2</i>");
+    t = t.replace(/==(?:\{(amarillo|verde|rosa|celeste|naranja)\})?(.+?)==/g, function (all, c, s) { return '<mark class="hl-' + (c || "amarillo") + '">' + s + "</mark>"; });
     t = t.replace(/\[\[([^\]\n]+?)\]\]/g, function (all, name) { return '<a class="wl' + (findByTitle(name.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")) ? "" : " missing") + '" data-t="' + name + '">' + name + "</a>"; });
     return t.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   }
@@ -2780,6 +2801,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var b = $("fmt").querySelector('[data-ins="read"]');
     b.setAttribute("aria-pressed", readMode ? "true" : "false"); b.textContent = readMode ? "Editar" : "Leer";
     $("fmt").classList.toggle("reading", readMode);
+    if (readMode) { $("hlRow").hidden = true; var hb = document.querySelector('[data-ins="hl"]'); hb && hb.setAttribute("aria-pressed", "false"); }
     if (readMode) renderRead();
     if (selImg) selectImg(null);
     $("imgrow").hidden = !n || !n.images.length || !!n.trashedAt || readMode;
@@ -2831,6 +2853,27 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }
     bodyEl.setRangeText(w + v.slice(s, e) + w, s, e, "preserve"); bodyEl.setSelectionRange(s + L, e + L);
   }
+  /* resaltado de colores: ==texto== (amarillo) o =={verde}texto== */
+  function applyHl(c) {
+    var v = bodyEl.value, s = bodyEl.selectionStart, e = bodyEl.selectionEnd;
+    var ls = v.lastIndexOf("\n", s - 1) + 1, le = v.indexOf("\n", e); if (le < 0) le = v.length;
+    var re = /==(?:\{(?:amarillo|verde|rosa|celeste|naranja)\})?(.+?)==/g, line = v.slice(ls, le), m, hit = null;
+    while ((m = re.exec(line))) { var a = ls + m.index, b = a + m[0].length; if (s <= b && e >= a) { hit = { a: a, b: b, txt: m[1] }; break; } }
+    var open = c && c !== "amarillo" ? "=={" + c + "}" : "==";
+    if (hit) {
+      var neu = c ? open + hit.txt + "==" : hit.txt;
+      bodyEl.setRangeText(neu, hit.a, hit.b, "preserve"); bodyEl.setSelectionRange(hit.a, hit.a + neu.length); return;
+    }
+    if (!c) return;
+    if (s === e) { bodyEl.setRangeText(open + "==", s, e, "end"); bodyEl.setSelectionRange(s + open.length, s + open.length); return; }
+    bodyEl.setRangeText(open + v.slice(s, e) + "==", s, e, "preserve"); bodyEl.setSelectionRange(s, e + open.length + 2);
+  }
+  $("hlRow").addEventListener("mousedown", function (e) { e.preventDefault(); });
+  $("hlRow").addEventListener("click", function (e) {
+    var b = e.target.closest("button"), n = cur(); if (!b || !n || n.trashedAt || readMode) return;
+    histNow(); bodyEl.focus(); applyHl(b.dataset.c); fireInput(); histNow();
+    $("hlRow").hidden = true; document.querySelector('[data-ins="hl"]').setAttribute("aria-pressed", "false"); fitBody();
+  });
   var dlong = new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "long", year: "numeric" });
   function insertAtCaret(text) {
     var s = bodyEl.selectionStart, e = bodyEl.selectionEnd, prev = s > 0 ? bodyEl.value.charAt(s - 1) : "";
@@ -2847,6 +2890,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (k === "image") { $("imgFile").click(); return; }
     if (k === "photo") { $("imgCam").click(); return; }
     if (k === "draw") { openDraw(); return; }
+    if (k === "hl") { var hr = $("hlRow"); hr.hidden = !hr.hidden; b.setAttribute("aria-pressed", hr.hidden ? "false" : "true"); fitBody(); return; }
     if (k === "undo") { bodyEl.focus(); histGo(-1); return; }
     if (k === "redo") { bodyEl.focus(); histGo(1); return; }
     histNow();
@@ -3330,6 +3374,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.38.0", d: "9 nov 2026", t: "Resaltado de colores", l: ["Nuevo botón \"🖍 Resaltar\" en la barra de la nota: elegí amarillo, verde, rosa, celeste o naranja.","Seleccioná un texto y tocá un color. Con el cursor dentro de un texto resaltado podés cambiarle el color o tocar Quitar.","Se ve en el modo Leer. En el PDF y en las notificaciones sale como texto normal."] },
     { v: "1.37.0", d: "8 nov 2026", t: "Posponer avisos y más plantillas", l: ["La notificación de un recordatorio ahora tiene el botón \"Posponer 10 min\".","Cinco plantillas nuevas: Receta, Estudio, Película, Gastos y Hábitos.","Los avisos pospuestos se guardan con la nota y siguen vivos si cerrás la app."] },
     { v: "1.36.0", d: "8 nov 2026", t: "Más fluido con muchas imágenes", l: ["Las miniaturas de las imágenes ahora son chiquitas y se guardan aparte: abrir una nota con muchas fotos pesa mucho menos.","Las imágenes se decodifican de a poco y solo cuando hacen falta.","Las notas y copias de seguridad no cambian."] },
     { v: "1.35.0", d: "8 nov 2026", t: "Copia automática", l: ["Tronx guarda solo una copia de tus notas cuando cambian (como máximo cada 6 horas) y conserva las últimas 7 dentro de la app.","También intenta guardar un archivo en Documentos/Tronx (tronx-copia-auto.json) para que sobreviva a una reinstalación.","En Ajustes ves el estado, podés copiar ahora, activar o apagar, y recuperar cualquier copia."] },
@@ -3849,7 +3894,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var title = n.title.trim(), lines;
     if (n.type === "list") lines = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "☑ " : "☐ ") + i.t.trim(); });
     else lines = n.body.split("\n").map(function (l) {
-      return l.replace(/^\s*#{1,2}\s+/, "").replace(/^\s*>\s?/, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2")
+      return l.replace(/^\s*#{1,2}\s+/, "").replace(/^\s*>\s?/, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2").replace(/==(?:\{[a-z]+\})?(.+?)==/g, "$1")
         .replace(/\[\[([^\]]+)\]\]/g, "$1").replace(/^\s*\[[xX]\]\s*/, "☑ ").replace(/^\s*\[ \]\s*/, "☐ ").replace(/^\s*\|?\s*-{3,}.*$/, "").replace(/\s*\|\s*/g, " · ").replace(/^ · | · $/g, "").trim();
     }).filter(Boolean);
     if (!title) title = lines.length ? lines.shift().slice(0, 60) : "Recordatorio";
@@ -4171,7 +4216,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var size = 11, bold = false, ind = 0, t = latin1(ln), m;
       if ((m = t.match(/^(#{1,2})\s+(.*)$/))) { size = m[1].length === 1 ? 16 : 13.5; bold = true; t = m[2]; }
       else if ((m = t.match(/^>\s?(.*)$/))) { ind = 16; t = m[1]; }
-      t = t.replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2");
+      t = t.replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2").replace(/==(?:\{[a-z]+\})?(.+?)==/g, "$1");
       blocks.push({ t: t, size: size, bold: bold, ind: ind, gap: 0, ey: ey });
       ey += Math.max(1, Math.ceil(ln.length / 34)) * 29;
     });
