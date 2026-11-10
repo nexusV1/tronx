@@ -211,5 +211,6 @@ Pasos, una sola vez:
 **1.50.0**: Listas con subtareas, reordenar arrastrando, fecha por elemento y ocultar hechos. Los campos nuevos son opcionales, así que las listas anteriores siguen igual.
 **1.51.0**: Desbloqueo del PIN general con huella (opcional), con el PIN como respaldo siempre disponible.
 **1.52.0**: Exportación masiva a Markdown (.zip) e importación de .md/.txt/.zip, sin dependencias externas.
+**1.53.0**: Botón flotante de nueva nota y gestos de deslizar en las tarjetas (vista de lista), configurables.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.
