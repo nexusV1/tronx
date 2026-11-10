@@ -152,6 +152,12 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .brand h1 span { color: var(--accent); }
 .brand h1 { text-shadow: 0 0 18px var(--card-glow); }
 .tools { display: flex; gap: 4px; align-items: center; }
+.chrome { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.26s ease; }
+.chromein { overflow: hidden; min-height: 0; }
+.chrome.hide { grid-template-rows: 0fr; }
+.chromein > .viewseg { margin: 0 12px 8px; }
+.chrome.hide .chromein { visibility: hidden; transition: visibility 0s 0.26s; }
+@media (prefers-reduced-motion: reduce) { .chrome { transition: none; } }
 .search { padding: 0 12px 8px; }
 .search input {
   width: 100%;
@@ -263,7 +269,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .list[data-view="grid"] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 12px; align-content: start; }
 .list[data-view="grid"] > li { min-width: 0; }
 .list[data-view="grid"] .item {
-  position: relative; overflow: hidden; aspect-ratio: 1 / 1.08; height: auto;
+  position: relative; overflow: hidden; aspect-ratio: 1 / 1; height: auto;
   border: 1px solid var(--card-bd); border-radius: 20px;
   background: linear-gradient(var(--tint, transparent), var(--tint, transparent)), var(--card-bg);
   padding: 12px 13px 11px; gap: 4px;
@@ -275,7 +281,8 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .list[data-view="grid"] .ic { width: 38px; height: 38px; font-size: 28px; }
 .list[data-view="grid"] .item .t { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--font-display); font-size: 16px; line-height: 1.2; letter-spacing: -0.01em; overflow-wrap: anywhere; }
 .list[data-view="grid"] .item .p { -webkit-line-clamp: 4; flex: 1 1 0; min-height: 0; position: relative; z-index: 1; -webkit-mask-image: linear-gradient(#000 65%, transparent); mask-image: linear-gradient(#000 65%, transparent); }
-.list[data-view="grid"] .item .tg { display: none; }
+.list[data-view="grid"] .item .tg { flex-wrap: nowrap; overflow: hidden; margin-top: 2px; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+.list[data-view="grid"] .item .tg .tag { white-space: nowrap; font-size: 10.5px; background: rgba(255, 255, 255, 0.07); border-color: transparent; border-radius: 99px; padding: 0 7px; }
 .list[data-view="grid"] .item .m { margin-top: auto; position: relative; z-index: 1; }
 .list[data-view="grid"] .wm { width: 78%; right: -14%; bottom: -14%; opacity: 0.16; }
 .list[data-view="grid"] .wm.emo { font-size: 84px; width: auto; right: -2px; bottom: -8px; opacity: 0.14; }
@@ -1016,6 +1023,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn primary" id="newBtn" type="button">Nueva nota</button>
       </div>
     </header>
+<div class="chrome" id="chrome"><div class="chromein">
 <div class="viewseg" role="group" aria-label="Vista"><button type="button" data-mode="notes" aria-pressed="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="3"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/></svg>Notas</button><button type="button" data-mode="map" aria-pressed="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg>Constelaciones</button></div>
     <div class="search">
       <input id="q" type="search" placeholder="Buscar en tus notas" autocomplete="off" aria-label="Buscar en tus notas">
@@ -1050,6 +1058,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <button class="btn icon" id="selBtn" type="button" title="Seleccionar notas" aria-label="Seleccionar notas" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/></svg></button>
       <button class="btn icon" id="viewBtn" type="button"></button>
     </div>
+    </div></div>
     <ul class="list" id="list" data-view="list"></ul>
     <div class="bulk" id="bulk" hidden>
       <div class="bulkrow" id="bulkMain">
@@ -1518,7 +1527,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.48.0";
+  var APP_VERSION = "1.49.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -2013,6 +2022,20 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       if (!document.body.classList.contains("scrolling")) document.body.classList.add("scrolling");
       clearTimeout(t); t = setTimeout(function () { document.body.classList.remove("scrolling"); }, 160);
     }, { capture: true, passive: true });
+  })();
+  /* al bajar por la lista se esconden los controles para ver más notas; al subir vuelven */
+  (function () {
+    var lst = document.getElementById("list"), ch = document.getElementById("chrome"), last = 0, narrow = window.matchMedia("(max-width:760px)");
+    function show() { ch.classList.remove("hide"); }
+    lst.addEventListener("scroll", function () {
+      var y = lst.scrollTop, dy = y - last;
+      if (!narrow.matches || document.activeElement === $("q")) { show(); last = y; return; }
+      if (y < 24 || dy < -10) { show(); last = y; }
+      else if (dy > 12 && y > 140 && !ch.classList.contains("hide") && lst.scrollHeight - lst.clientHeight > ch.offsetHeight + 260) { ch.classList.add("hide"); last = y; }
+      else if (dy > 0 || dy < 0) { if (Math.abs(dy) > 12) last = y; }
+    }, { passive: true });
+    $("q").addEventListener("focus", show);
+    document.addEventListener("tronx:chrome", show);
   })();
   var iconIO = null, preIO = null, iconTimer = 0, iconWin = 0, visIcons = new Set();
   function applyIconWin() {
@@ -3637,6 +3660,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.49.0", d: "9 nov 2026", t: "Home más limpio y con más espacio", l: ["Los controles (vista, búsqueda, pestañas, filtros) se esconden al bajar por la lista y vuelven al subir o al tocar la búsqueda", "Las tarjetas muestran sus etiquetas", "Tarjetas un poco más compactas: caben más notas por pantalla"] },
     { v: "1.48.0", d: "9 nov 2026", t: "Estadísticas, rachas y logros", l: ["El Perfil vuelve a estar disponible desde el menú (estaba «En desarrollo»)", "Nueva sección «Tu escritura»: racha actual, mejor racha, palabras escritas, últimos 7 días, días activos y tu día fuerte", "Mapa de actividad de las últimas 12 semanas", "16 logros con barra de progreso y aviso al desbloquearlos", "El menú muestra tu racha en Perfil"] },
     { v: "1.47.0", d: "9 nov 2026", t: "Compartir como imagen", l: ["Nuevo botón «Compartir como imagen» en Personalizar", "Tres estilos: Universo, Papel y Color de la nota", "Respeta títulos, listas, citas, resaltados e imágenes con sus ajustes", "Opción de incluir o quitar la marca Tronx"] },
     { v: "1.46.0", d: "9 nov 2026", t: "Papelera sin vencimiento y copias programables", l: ["La papelera ya no borra nada sola: las notas quedan ahí hasta que las elimines o vacíes la papelera.", "Copia automática personalizable (Ajustes → Copia automática): elegí cada cuánto (6 h, 12 h, todos los días, cada 2 o 3 días, una vez por semana) y a qué hora del día.", "Opción \"Al salir de la app\" para hacer una copia cada vez que salís, y \"Solo si hubo cambios\" para no copiar de más.", "Elegí cuántas copias guardar dentro de la app: 3, 7, 14 o 30.", "Las copias programadas se hacen con la app abierta; si estaba cerrada, se hacen apenas la abrís."] },
