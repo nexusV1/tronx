@@ -617,6 +617,19 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .pf-stat { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px 6px; text-align: center; display: grid; gap: 2px; }
 .pf-stat b { font-family: var(--font-display); font-size: 22px; line-height: 1.1; }
 .pf-stat span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.pf-heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 4px; margin: 12px 0 0; }
+.pf-heat i { aspect-ratio: 1; border-radius: 4px; background: var(--line); }
+.pf-heat i.l1 { background: var(--accent); opacity: 0.3; } .pf-heat i.l2 { background: var(--accent); opacity: 0.5; }
+.pf-heat i.l3 { background: var(--accent); opacity: 0.75; } .pf-heat i.l4 { background: var(--accent); }
+.pf-heat i.today { outline: 2px solid var(--text); outline-offset: 1px; }
+.pf-ach-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-left: 6px; }
+.pf-ach { display: grid; gap: 8px; }
+.pf-a { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px 12px; }
+.pf-a .md { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; background: var(--line); color: var(--muted); }
+.pf-a.on .md { background: radial-gradient(circle at 50% 35%, #ffd76a, #d99a1d); color: #3a2400; box-shadow: 0 0 14px -2px #f5b82e; }
+.pf-a b { display: block; font-size: 14px; } .pf-a span { display: block; font-size: 12px; color: var(--muted); }
+.pf-a:not(.on) b { color: var(--muted); }
+.pf-a .pb2 { height: 4px; border-radius: 2px; background: var(--line); margin-top: 6px; overflow: hidden; } .pf-a .pb2 i { display: block; height: 100%; background: var(--accent); }
 .pf-since { margin: 10px 0 0; text-align: center; font-size: 13px; color: var(--muted); }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1392,6 +1405,12 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <h3>Tu universo</h3>
     <div class="pf-stats" id="pfStats"></div>
     <p class="pf-since" id="pfSince"></p>
+    <h3>Tu escritura</h3>
+    <div class="pf-stats" id="pfWrite"></div>
+    <div class="pf-heat" id="pfHeat" role="img" aria-label="Actividad de las últimas 12 semanas"></div>
+    <p class="pf-since" id="pfBest"></p>
+    <h3>Logros <span class="pf-ach-n" id="pfAchN"></span></h3>
+    <div class="pf-ach" id="pfAch"></div>
     <p class="hint">Tu perfil vive solo en este teléfono, igual que tus notas. No hace falta cuenta ni internet.</p>
   </section>
 </div>
@@ -1432,7 +1451,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <ul class="mn-list">
       <li><button class="mn-item feat" id="mnMap" type="button" style="--i:0;--c1:#60a5fa;--c2:#1e3a8a"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg></span><span class="mn-tx"><b>Constelaciones</b><i id="mnSubMap">El mapa galáctico de tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:1" aria-hidden="true">Tu espacio</li>
-      <li><button class="mn-item" id="mnProfile" type="button" style="--i:2;--c1:#a78bfa;--c2:#4c1d95"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.6-6 7.5-6s6.7 2 7.5 6"/></svg></span><span class="mn-tx"><b>Perfil</b><span class="mn-soon">En desarrollo</span></span></button></li>
+      <li><button class="mn-item" id="mnProfile" type="button" style="--i:2;--c1:#a78bfa;--c2:#4c1d95"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.6-6 7.5-6s6.7 2 7.5 6"/></svg></span><span class="mn-tx"><b>Perfil</b><i id="mnSubPf">Tu avatar, rachas y logros</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnCalendar" type="button" style="--i:3;--c1:#fbbf24;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></span><span class="mn-tx"><b>Calendario</b><i>Tus avisos y notas por día</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnLinkMap" type="button" style="--i:3;--c1:#34d399;--c2:#065f46"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8 7.4l8 -1M7 9l4 7M17 8l-4 8"/></svg></span><span class="mn-tx"><b>Mapa de enlaces</b><i>Cómo se conectan tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnCustom" type="button" style="--i:3;--c1:#f472b6;--c2:#831843"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Personalización</b><i id="mnSubCustom">Tema, colores, letra y fondos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
@@ -1499,7 +1518,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.47.0";
+  var APP_VERSION = "1.48.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1532,7 +1551,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   };
 
   /* ---------- ajustes ---------- */
-  var settings = { theme: "dark", accent: "violet", font: "sans", size: 16, view: "grid", sort: "updated", skin: 0, noteBg: "nebula", bgAnim: true, firstRun: 0, lastBackup: 0, bkNag: 0, autoBk: true, autoBkAt: 0, autoBkSig: "", autoBkWhere: "", autoBkEvery: 6, autoBkTime: "", autoBkExit: false, autoBkChg: true, autoBkKeep: 7, autoBkChk: 0 };
+  var settings = { theme: "dark", accent: "violet", font: "sans", size: 16, view: "grid", sort: "updated", skin: 0, noteBg: "nebula", bgAnim: true, firstRun: 0, lastBackup: 0, bkNag: 0, autoBk: true, autoBkAt: 0, autoBkSig: "", autoBkWhere: "", autoBkEvery: 6, autoBkTime: "", autoBkExit: false, autoBkChg: true, autoBkKeep: 7, autoBkChk: 0, act: {}, wTot: 0, streakBest: 0, ach: {}, statsInit: false };
   try { var sraw = lsGet(SKEY); if (sraw) Object.assign(settings, JSON.parse(sraw)); } catch (e) {}
   if (!ACCENTS[settings.accent]) settings.accent = "ember";
   settings.size = Math.min(24, Math.max(14, Number(settings.size) || 16));
@@ -1548,6 +1567,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function cleanBg(v) { v = String(v || ""); return v === "none" || bgOk(v) ? v : ""; }
   if (settings.noteBg !== "none" && !bgOk(settings.noteBg)) settings.noteBg = "nebula";
   settings.bgAnim = settings.bgAnim !== false; settings.autoBk = settings.autoBk !== false;
+  if (!settings.act || typeof settings.act !== "object" || Array.isArray(settings.act)) settings.act = {};
+  if (!settings.ach || typeof settings.ach !== "object" || Array.isArray(settings.ach)) settings.ach = {};
+  settings.wTot = Math.max(0, Number(settings.wTot) || 0); settings.streakBest = Math.max(0, Number(settings.streakBest) || 0);
   var hadFirstRun = !!settings.firstRun;
   if (!hadFirstRun) settings.firstRun = Date.now();
   // El fondo que se ve de verdad: el de la nota si lo eligió, si no el de Ajustes.
@@ -1781,6 +1803,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function changed(n) {
     syncSoon();
     n.updatedAt = Date.now();
+    statsTick(n);
     schedulePersist(); updateMeta();
     if (!listHidden()) renderListSoon(); // en pantallas angostas la lista está oculta: se actualiza al volver
 
@@ -3614,6 +3637,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.48.0", d: "9 nov 2026", t: "Estadísticas, rachas y logros", l: ["El Perfil vuelve a estar disponible desde el menú (estaba «En desarrollo»)", "Nueva sección «Tu escritura»: racha actual, mejor racha, palabras escritas, últimos 7 días, días activos y tu día fuerte", "Mapa de actividad de las últimas 12 semanas", "16 logros con barra de progreso y aviso al desbloquearlos", "El menú muestra tu racha en Perfil"] },
     { v: "1.47.0", d: "9 nov 2026", t: "Compartir como imagen", l: ["Nuevo botón «Compartir como imagen» en Personalizar", "Tres estilos: Universo, Papel y Color de la nota", "Respeta títulos, listas, citas, resaltados e imágenes con sus ajustes", "Opción de incluir o quitar la marca Tronx"] },
     { v: "1.46.0", d: "9 nov 2026", t: "Papelera sin vencimiento y copias programables", l: ["La papelera ya no borra nada sola: las notas quedan ahí hasta que las elimines o vacíes la papelera.", "Copia automática personalizable (Ajustes → Copia automática): elegí cada cuánto (6 h, 12 h, todos los días, cada 2 o 3 días, una vez por semana) y a qué hora del día.", "Opción \"Al salir de la app\" para hacer una copia cada vez que salís, y \"Solo si hubo cambios\" para no copiar de más.", "Elegí cuántas copias guardar dentro de la app: 3, 7, 14 o 30.", "Las copias programadas se hacen con la app abierta; si estaba cerrada, se hacen apenas la abrís."] },
     { v: "1.45.1", d: "9 nov 2026", t: "Correcciones", l: ["Notas protegidas: ahora también piden PIN o huella al abrirse desde la papelera, y se vuelven a bloquear tras 20 segundos en segundo plano aunque tengas el PIN general.", "Resaltado de colores: una comparación como \"x == y\" ya no se interpreta como resaltado; solo se resalta cuando el texto va pegado a los ==.", "Sin cambios en tus notas ni en las copias de seguridad."] },
@@ -3937,6 +3961,118 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     settings.profile = p; saveSettings();
   }
   function paintAvatar(box, icon) { box.textContent = ""; var ic = iconSpan(icon, "pf"); if (ic) box.appendChild(ic); }
+  /* ---------- escritura: palabras, rachas y logros ---------- */
+  var wcMap = null, statsSaveT = 0;
+  function dayKey(ts) { var d = new Date(ts); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dayShift(ts, k) { var d = new Date(ts); return new Date(d.getFullYear(), d.getMonth(), d.getDate() + k, 12).getTime(); }
+  function noteWords(n) {
+    if (n.type === "list") { var c = 0; n.items.forEach(function (i) { c += (String(i.t || "").match(/\S+/g) || []).length; }); return c; }
+    return (String(n.body || "").match(/\S+/g) || []).length;
+  }
+  function statsBoot() {
+    wcMap = new Map(); notes.forEach(function (n) { wcMap.set(n.id, noteWords(n)); });
+    if (!settings.statsInit) {
+      var t = 0; notes.forEach(function (n) {
+        if (n.trashedAt) return; t += noteWords(n);
+        [n.createdAt, n.updatedAt].forEach(function (ts) { if (ts > 0) { var k = dayKey(ts); if (settings.act[k] == null) settings.act[k] = 0; } });
+      });
+      settings.wTot = Math.max(settings.wTot, t); settings.statsInit = true;
+      var s = streakInfo(); settings.streakBest = Math.max(settings.streakBest, s.best);
+      achCheck(true); saveSettings();
+    } else achCheck(true);
+  }
+  function statsTick(n) {
+    if (!wcMap) return;
+    var c = noteWords(n), prev = wcMap.get(n.id);
+    if (prev == null) prev = Date.now() - n.createdAt < 60000 ? 0 : c;
+    wcMap.set(n.id, c);
+    var k = dayKey(Date.now()), d = Math.max(0, c - prev);
+    settings.act[k] = (settings.act[k] || 0) + d; settings.wTot += d;
+    var keys = Object.keys(settings.act);
+    if (keys.length > 430) { keys.sort(); keys.slice(0, keys.length - 400).forEach(function (x) { delete settings.act[x]; }); }
+    var s = streakInfo(); if (s.best > settings.streakBest) settings.streakBest = s.best;
+    achCheck(false);
+    clearTimeout(statsSaveT); statsSaveT = setTimeout(saveSettings, 1500);
+  }
+  function streakInfo() {
+    var a = settings.act, now = Date.now(), d = a[dayKey(now)] != null ? now : dayShift(now, -1), cur = 0;
+    while (a[dayKey(d)] != null && cur < 4000) { cur++; d = dayShift(d, -1); }
+    var keys = Object.keys(a).sort(), best = 0, run = 0, prevT = 0;
+    keys.forEach(function (k) {
+      var p = k.split("-"), t = new Date(+p[0], +p[1] - 1, +p[2], 12).getTime();
+      run = prevT && Math.round((t - prevT) / 86400000) === 1 ? run + 1 : 1; prevT = t; if (run > best) best = run;
+    });
+    return { cur: cur, best: Math.max(best, cur) };
+  }
+  function writeStats() {
+    var now = Date.now(), w7 = 0, act7 = 0, wd = [0, 0, 0, 0, 0, 0, 0], cnt = [0, 0, 0, 0, 0, 0, 0], a = settings.act;
+    for (var i = 0; i < 7; i++) { var v = a[dayKey(dayShift(now, -i))]; if (v != null) { w7 += v; act7++; } }
+    Object.keys(a).forEach(function (k) { var p = k.split("-"), g = new Date(+p[0], +p[1] - 1, +p[2], 12).getDay(); wd[g] += a[k]; cnt[g]++; });
+    var top = -1, tv = 0; for (var g = 0; g < 7; g++) { var sc = wd[g] * 1000 + cnt[g]; if (sc > tv) { tv = sc; top = g; } }
+    var s = streakInfo();
+    return { cur: s.cur, best: Math.max(s.best, settings.streakBest), total: settings.wTot, w7: w7, act7: act7, topDay: top };
+  }
+  var DAYS_ES = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  var ACH = [
+    { id: "n1", n: "Primera nota", d: "Creá tu primera nota", g: function (s) { return s.notes; }, t: 1 },
+    { id: "n10", n: "Diez notas", d: "Tené 10 notas en tu universo", g: function (s) { return s.notes; }, t: 10 },
+    { id: "n50", n: "Medio centenar", d: "Tené 50 notas", g: function (s) { return s.notes; }, t: 50 },
+    { id: "n100", n: "Centenario", d: "Tené 100 notas", g: function (s) { return s.notes; }, t: 100 },
+    { id: "l1", n: "Lista en marcha", d: "Creá tu primera lista", g: function (s) { return s.lists; }, t: 1 },
+    { id: "t5", n: "Coleccionista de etiquetas", d: "Usá 5 etiquetas distintas", g: function (s) { return s.tags; }, t: 5 },
+    { id: "c1", n: "Primera constelación", d: "Agrupá notas en una constelación", g: function (s) { return s.groups; }, t: 1 },
+    { id: "v5", n: "Tejedor de vínculos", d: "Hacé 5 vínculos entre notas", g: function (s) { return s.links; }, t: 5 },
+    { id: "w1k", n: "Mil palabras", d: "Escribí 1.000 palabras", g: function (s) { return s.w.total; }, t: 1000 },
+    { id: "w10k", n: "Diez mil palabras", d: "Escribí 10.000 palabras", g: function (s) { return s.w.total; }, t: 10000 },
+    { id: "w50k", n: "Novelista", d: "Escribí 50.000 palabras", g: function (s) { return s.w.total; }, t: 50000 },
+    { id: "s3", n: "Tres días seguidos", d: "Escribí 3 días seguidos", g: function (s) { return s.w.best; }, t: 3 },
+    { id: "s7", n: "Semana completa", d: "Escribí 7 días seguidos", g: function (s) { return s.w.best; }, t: 7 },
+    { id: "s30", n: "Hábito de un mes", d: "Escribí 30 días seguidos", g: function (s) { return s.w.best; }, t: 30 },
+    { id: "bk", n: "Resguardo", d: "Hacé tu primera copia de seguridad", g: function (s) { return settings.lastBackup ? 1 : 0; }, t: 1 },
+    { id: "lk", n: "Bajo llave", d: "Protegé una nota con PIN o huella", g: function (s) { return s.locked; }, t: 1 }
+  ];
+  function achState() {
+    var st = universeStats(); st.w = writeStats(); st.locked = 0; notes.forEach(function (n) { if (!n.trashedAt && n.lock) st.locked++; });
+    return st;
+  }
+  function achCheck(silent) {
+    var st = achState(), fresh = [];
+    ACH.forEach(function (a) { if (!settings.ach[a.id] && a.g(st) >= a.t) { settings.ach[a.id] = Date.now(); fresh.push(a); } });
+    if (fresh.length) {
+      if (!silent && typeof toast === "function") toast("Logro desbloqueado: " + fresh[0].n + (fresh.length > 1 ? " (+" + (fresh.length - 1) + ")" : ""));
+      clearTimeout(statsSaveT); statsSaveT = setTimeout(saveSettings, 800);
+    }
+    return fresh;
+  }
+  function renderWriting() {
+    var w = writeStats(), sx = $("pfWrite"); sx.textContent = "";
+    var fmt = function (n) { return n.toLocaleString("es"); };
+    [[w.cur, w.cur === 1 ? "Día de racha" : "Días de racha"], [w.best, "Mejor racha"], [fmt(w.total), "Palabras"], [fmt(w.w7), "Últimos 7 días"], [w.act7 + "/7", "Días activos"], [w.topDay >= 0 ? DAYS_ES[w.topDay].slice(0, 3) : "–", "Día fuerte"]].forEach(function (a) {
+      var t = el("div", "pf-stat"), b = el("b"), sp = el("span"); b.textContent = String(a[0]); sp.textContent = a[1]; t.appendChild(b); t.appendChild(sp); sx.appendChild(t);
+    });
+    var hm = $("pfHeat"); hm.textContent = "";
+    var now = Date.now(), dow = (new Date(now).getDay() + 6) % 7, start = dayShift(now, -(11 * 7 + dow)), todayK = dayKey(now);
+    for (var i = 0; i < 84; i++) {
+      var ts = dayShift(start, i), k = dayKey(ts), c = el("i"), v = settings.act[k];
+      if (ts > now + 43200000) { c.style.visibility = "hidden"; }
+      else if (v != null) c.className = v >= 500 ? "l4" : v >= 200 ? "l3" : v >= 50 ? "l2" : "l1";
+      if (k === todayK) c.classList.add("today");
+      c.title = k + (v != null ? " · " + v + " palabras" : "");
+      hm.appendChild(c);
+    }
+    $("pfBest").textContent = w.cur > 0 ? (w.cur === 1 ? "Escribiste hoy o ayer: sumá otro día para armar una racha." : "Llevás " + w.cur + " días seguidos escribiendo. ¡Seguí así!") : "Escribí algo hoy para empezar una racha.";
+    var st = achState(), box = $("pfAch"), done = 0; box.textContent = "";
+    ACH.forEach(function (a) {
+      var on = !!settings.ach[a.id]; if (on) done++;
+      var r = el("div", "pf-a" + (on ? " on" : "")), md = el("div", "md"), tx = el("div"), b = el("b"), s = el("span");
+      md.textContent = on ? "★" : "☆"; b.textContent = a.n; s.textContent = on ? "Conseguido el " + new Date(settings.ach[a.id]).toLocaleDateString("es", { day: "numeric", month: "short", year: "numeric" }) : a.d;
+      tx.appendChild(b); tx.appendChild(s);
+      if (!on) { var pb = el("div", "pb2"), pi = el("i"); pi.style.width = Math.min(100, Math.round(a.g(st) / a.t * 100)) + "%"; pb.appendChild(pi); tx.appendChild(pb); }
+      r.appendChild(md); r.appendChild(tx); box.appendChild(r);
+    });
+    $("pfAchN").textContent = done + "/" + ACH.length;
+  }
+  setTimeout(statsBoot, 0);
   function universeStats() {
     var total = 0, lists = 0, first = 0, tg = {};
     notes.forEach(function (n) {
@@ -3973,6 +4109,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var t = el("div", "pf-stat"), b = el("b"), sp = el("span"); b.textContent = String(a[0]); sp.textContent = a[1]; t.appendChild(b); t.appendChild(sp); sx.appendChild(t);
     });
     var sc = $("pfSince");
+    renderWriting();
     sc.textContent = st.first ? "Explorando tu universo desde el " + new Date(st.first).toLocaleDateString("es", { day: "numeric", month: "long", year: "numeric" }) : "Tu universo está por empezar.";
   }
   $("profileClose").addEventListener("click", function () { closeLayer("profile"); });
@@ -4003,6 +4140,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("mnTipT").textContent = TIPS[tipI];
     $("mnSub").textContent = "Tu universo de notas";
     $("mnStN").textContent = st.notes; $("mnStC").textContent = st.groups; $("mnStL").textContent = st.links;
+    var sk = streakInfo().cur; $("mnSubPf").textContent = sk > 0 ? "Racha de " + sk + (sk === 1 ? " día" : " días") : "Tu avatar, rachas y logros";
     $("mnSubMap").textContent = st.groups || st.links ? st.groups + (st.groups === 1 ? " constelación" : " constelaciones") + " · " + st.links + (st.links === 1 ? " vínculo" : " vínculos") : "El mapa galáctico de tus notas";
     $("mnSubSet").textContent = "Sonido del agujero negro: " + (window.TronxSound && !window.TronxSound.isEnabled() ? "silenciado" : "activado");
     $("mnSubBk").textContent = settings.lastBackup ? "Última copia: " + relTime(settings.lastBackup) : "Todavía no hiciste una copia";
@@ -4147,8 +4285,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("mnClose").addEventListener("click", function () { closeLayer("menu"); });
   $("mnScrim").addEventListener("click", function () { closeLayer("menu"); });
   function soon(name) { toast(name + " está en desarrollo"); }
-  $("mnMe").addEventListener("click", function () { soon("El perfil"); });
-  $("mnProfile").addEventListener("click", function () { soon("El perfil"); });
+  function openProfile() { renderProfile(); $("profile").hidden = false; pushLayer("profile"); }
+  $("mnMe").addEventListener("click", function () { closeMenuThen(openProfile); });
+  $("mnProfile").addEventListener("click", function () { closeMenuThen(openProfile); });
   $("mnMax").addEventListener("click", function () { soon("MAX"); });
   $("mnCustom").addEventListener("click", openCustom);
   $("mnNews").addEventListener("click", openNews);
