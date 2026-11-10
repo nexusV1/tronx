@@ -1479,7 +1479,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.45.0";
+  var APP_VERSION = "1.45.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -2918,7 +2918,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function inline(t) {
     t = esc(t);
     t = t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<i>$2</i>");
-    t = t.replace(/==(?:\{(amarillo|verde|rosa|celeste|naranja)\})?(.+?)==/g, function (all, c, s) { return '<mark class="hl-' + (c || "amarillo") + '">' + s + "</mark>"; });
+    t = t.replace(/==(?:\{(amarillo|verde|rosa|celeste|naranja)\})?(?=\S)(.+?)(?<=\S)==/g, function (all, c, s) { return '<mark class="hl-' + (c || "amarillo") + '">' + s + "</mark>"; });
     t = t.replace(/\[\[([^\]\n]+?)\]\]/g, function (all, name) { return '<a class="wl' + (findByTitle(name.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")) ? "" : " missing") + '" data-t="' + name + '">' + name + "</a>"; });
     return t.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   }
@@ -3071,7 +3071,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function applyHl(c) {
     var v = bodyEl.value, s = bodyEl.selectionStart, e = bodyEl.selectionEnd;
     var ls = v.lastIndexOf("\n", s - 1) + 1, le = v.indexOf("\n", e); if (le < 0) le = v.length;
-    var re = /==(?:\{(?:amarillo|verde|rosa|celeste|naranja)\})?(.+?)==/g, line = v.slice(ls, le), m, hit = null;
+    var re = /==(?:\{(?:amarillo|verde|rosa|celeste|naranja)\})?(?=\S)(.+?)(?<=\S)==/g, line = v.slice(ls, le), m, hit = null;
     while ((m = re.exec(line))) { var a = ls + m.index, b = a + m[0].length; if (s <= b && e >= a) { hit = { a: a, b: b, txt: m[1] }; break; } }
     var open = c && c !== "amarillo" ? "=={" + c + "}" : "==";
     if (hit) {
@@ -3164,7 +3164,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   var unlocked = new Set();
   function openNote(id) {
     var n0 = notes.get(id);
-    if (n0 && n0.lock && !unlocked.has(id) && !n0.trashedAt) { askNote(n0, function () { unlocked.add(id); openNoteRaw(id); }); return; }
+    if (n0 && n0.lock && !unlocked.has(id)) { askNote(n0, function () { unlocked.add(id); openNoteRaw(id); }); return; }
     openNoteRaw(id);
   }
   function openNoteRaw(id) {
@@ -3597,6 +3597,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.45.1", d: "9 nov 2026", t: "Correcciones", l: ["Notas protegidas: ahora también piden PIN o huella al abrirse desde la papelera, y se vuelven a bloquear tras 20 segundos en segundo plano aunque tengas el PIN general.", "Resaltado de colores: una comparación como \"x == y\" ya no se interpreta como resaltado; solo se resalta cuando el texto va pegado a los ==.", "Sin cambios en tus notas ni en las copias de seguridad."] },
     { v: "1.45.0", d: "9 nov 2026", t: "Ajustes de imagen", l: ["Recorte y encuadre: zoom de 100% a 400% y dos deslizadores para elegir qué parte de la imagen se ve. La imagen se recorta dentro de su marco.", "Ajustes finos: brillo, contraste, saturación y desenfoque, que se suman al filtro que elijas.", "Botón \"Restablecer ajustes\" para volver todo a cero.", "El PDF respeta el recorte y los ajustes (el desenfoque es aproximado)."] },
     { v: "1.44.0", d: "9 nov 2026", t: "Mapa de enlaces", l: ["Nueva opción \"Mapa de enlaces\" en el menú: un gráfico con tus notas conectadas por [[enlaces]] y por subnotas (línea punteada).", "Tocá una nota para resaltar con quién se conecta y abrirla. Se mueve con el dedo y se acerca con pellizco o con + y −.", "Abajo ves las notas sin conexiones y los enlaces a notas que no existen: tocá uno y se crea esa nota.", "Las notas protegidas no revelan sus enlaces."] },
     { v: "1.43.0", d: "9 nov 2026", t: "Orden y etiquetas", l: ["Más formas de ordenar la lista: más antiguas, título Z–A, próximo aviso y más largas.", "Nuevo gestor de etiquetas y carpetas (botón ⚙ junto a los filtros): renombrá, juntá o quitá una etiqueta o carpeta de todas tus notas de una vez.", "Si le ponés a una etiqueta el nombre de otra, se juntan. Todo tiene botón Deshacer."] },
@@ -4389,7 +4390,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var title = n.title.trim(), lines;
     if (n.type === "list") lines = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "☑ " : "☐ ") + i.t.trim(); });
     else lines = n.body.split("\n").map(function (l) {
-      return l.replace(/^\s*#{1,2}\s+/, "").replace(/^\s*>\s?/, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2").replace(/==(?:\{[a-z]+\})?(.+?)==/g, "$1")
+      return l.replace(/^\s*#{1,2}\s+/, "").replace(/^\s*>\s?/, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2").replace(/==(?:\{[a-z]+\})?(?=\S)(.+?)(?<=\S)==/g, "$1")
         .replace(/\[\[([^\]]+)\]\]/g, "$1").replace(/^\s*\[[xX]\]\s*/, "☑ ").replace(/^\s*\[ \]\s*/, "☐ ").replace(/^\s*\|?\s*-{3,}.*$/, "").replace(/\s*\|\s*/g, " · ").replace(/^ · | · $/g, "").trim();
     }).filter(Boolean);
     if (!title) title = lines.length ? lines.shift().slice(0, 60) : "Recordatorio";
@@ -4756,7 +4757,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var size = 11, bold = false, ind = 0, t = latin1(ln), m;
       if ((m = t.match(/^(#{1,2})\s+(.*)$/))) { size = m[1].length === 1 ? 16 : 13.5; bold = true; t = m[2]; }
       else if ((m = t.match(/^>\s?(.*)$/))) { ind = 16; t = m[1]; }
-      t = t.replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2").replace(/==(?:\{[a-z]+\})?(.+?)==/g, "$1");
+      t = t.replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2").replace(/==(?:\{[a-z]+\})?(?=\S)(.+?)(?<=\S)==/g, "$1");
       blocks.push({ t: t, size: size, bold: bold, ind: ind, gap: 0, ey: ey });
       ey += Math.max(1, Math.ceil(ln.length / 34)) * 29;
     });
@@ -4969,10 +4970,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("pinOffBtn").addEventListener("click", function () { openLock("verify", function () { try { localStorage.removeItem(PINKEY); } catch (e) {} renderPinUI(); toast("PIN quitado"); }); });
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) { hiddenAt = Date.now(); commitVersion(); return; }
-    if (pinData() && hiddenAt && Date.now() - hiddenAt > 20000 && $("lock").hidden) openLock("unlock");
-    else if (hiddenAt && Date.now() - hiddenAt > 20000) {
-      unlocked.clear(); var cn = cur();
-      if (cn && cn.lock && $("lock").hidden) askNote(cn, function () { unlocked.add(cn.id); }, function () { closeLayer("editor"); });
+    if (hiddenAt && Date.now() - hiddenAt > 20000) {
+      unlocked.clear(); var cn = cur(), again = function () { if (cn && cn.lock && cur() === cn) askNote(cn, function () { unlocked.add(cn.id); }, function () { closeLayer("editor"); }); };
+      if (pinData() && $("lock").hidden) openLock("unlock", again);
+      else if ($("lock").hidden) again();
     }
   });
   renderPinUI();
