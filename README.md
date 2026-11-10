@@ -24,7 +24,7 @@ Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK 
 
 - Notas de texto y listas con casillas (Enter agrega un elemento, las casillas se tachan).
 - Colores por nota (8 colores) y etiquetas, con filtro por etiqueta arriba de la lista.
-- Fijar notas, archivarlas y papelera con 30 días para recuperarlas (con Deshacer).
+- Fijar notas, archivarlas y papelera sin vencimiento, hasta que la vacíes (con Deshacer).
 - Buscar por título, texto, elementos de lista y etiquetas.
 - Ordenar (recientes, nuevas, título, color) y ver como lista o cuadrícula.
 - Duplicar, compartir y copiar el texto de una nota.
@@ -204,5 +204,6 @@ Pasos, una sola vez:
 **1.44.0**: mapa de enlaces. Overlay `#linkMap` con SVG y layout de fuerzas (Fruchterman-Reingold, hasta 150 nodos conectados), aristas por `[[título]]` y `parent`, huérfanas, enlaces rotos con creación, pan/zoom por pointer events; no lee notas protegidas.
 **1.45.0**: ajustes de imagen. Campos zm/px/py/br/co/sa/bl; la imagen va dentro de un contenedor `.pclip` que recorta (overflow hidden) y recibe borde/radio/sombra; filtro compuesto `imgFilter` compartido con el PDF, que recorta el área fuente con zoom y encuadre.
 **1.45.1**: correcciones: gate de bloqueo también para notas en la papelera, re-bloqueo por inactividad con PIN general, y regex de resaltado exige texto pegado a los `==`.
+**1.46.0**: papelera sin vencimiento (se quita la purga a los 30 días) y copia automática programable: frecuencia (`autoBkEvery`), hora fija (`autoBkTime`), al salir (`autoBkExit`), solo con cambios (`autoBkChg`), cuántas conservar (`autoBkKeep`); motor `bkDue()` con recuperación al abrir y chequeo cada minuto.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.
