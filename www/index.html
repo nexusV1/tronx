@@ -892,6 +892,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .lmsel strong { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lmsel span { color: var(--muted); font-size: 12px; flex: none; }
 .lmchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.sipreview { border: 1px solid var(--line); border-radius: 14px; background: var(--raised); max-height: 52vh; overflow: auto; padding: 8px; margin: 6px 0; }
+.sipreview img { display: block; width: 100%; height: auto; border-radius: 8px; }
 .orglist { display: grid; gap: 6px; }
 .orglist .orow { display: flex; gap: 6px; align-items: center; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px 6px 12px; }
 .orglist .orow .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1200,6 +1202,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn" id="txtBtn" type="button">Guardar como .txt</button>
         <button class="btn" id="mdBtn" type="button">Guardar como .md</button>
         <button class="btn" id="pdfBtn" type="button">Guardar como PDF</button>
+        <button class="btn" id="imgBtn" type="button">Compartir como imagen</button>
         <button class="btn" id="histBtn" type="button">Historial</button>
         <button class="btn danger" id="trashBtn" type="button">A la papelera</button>
       </div>
@@ -1277,6 +1280,15 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   </div>
   <div class="drawwrap" id="drWrap"><canvas id="drCanvas"></canvas></div>
   <div class="drawtools" id="drTools"></div>
+</div>
+<div class="overlay" id="shareImg" hidden>
+  <section class="panel" role="dialog" aria-modal="true" aria-label="Compartir como imagen">
+    <div class="sheethead"><strong>Compartir como imagen</strong><button class="btn small" id="siClose" type="button">Cerrar</button></div>
+    <div class="grp" id="siStyles" role="group" aria-label="Estilo"><button class="chip" type="button" data-s="universo" aria-pressed="true">Universo</button><button class="chip" type="button" data-s="papel" aria-pressed="false">Papel</button><button class="chip" type="button" data-s="color" aria-pressed="false">Color de la nota</button></div>
+    <div class="grp" style="margin:6px 0"><button class="chip" type="button" id="siImgs" aria-pressed="true">Con imágenes</button><button class="chip" type="button" id="siBrand" aria-pressed="true">Marca Tronx</button></div>
+    <div class="sipreview" id="siPrev"><p class="hint" id="siMsg">Preparando la imagen…</p><img id="siImg" alt="Vista previa de la nota como imagen" hidden></div>
+    <div class="actions"><button class="btn primary" id="siShare" type="button">Compartir</button></div>
+  </section>
 </div>
 <div class="overlay" id="hist" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Historial de versiones">
@@ -1487,7 +1499,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.46.0";
+  var APP_VERSION = "1.47.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -3602,6 +3614,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.47.0", d: "9 nov 2026", t: "Compartir como imagen", l: ["Nuevo botón «Compartir como imagen» en Personalizar", "Tres estilos: Universo, Papel y Color de la nota", "Respeta títulos, listas, citas, resaltados e imágenes con sus ajustes", "Opción de incluir o quitar la marca Tronx"] },
     { v: "1.46.0", d: "9 nov 2026", t: "Papelera sin vencimiento y copias programables", l: ["La papelera ya no borra nada sola: las notas quedan ahí hasta que las elimines o vacíes la papelera.", "Copia automática personalizable (Ajustes → Copia automática): elegí cada cuánto (6 h, 12 h, todos los días, cada 2 o 3 días, una vez por semana) y a qué hora del día.", "Opción \"Al salir de la app\" para hacer una copia cada vez que salís, y \"Solo si hubo cambios\" para no copiar de más.", "Elegí cuántas copias guardar dentro de la app: 3, 7, 14 o 30.", "Las copias programadas se hacen con la app abierta; si estaba cerrada, se hacen apenas la abrís."] },
     { v: "1.45.1", d: "9 nov 2026", t: "Correcciones", l: ["Notas protegidas: ahora también piden PIN o huella al abrirse desde la papelera, y se vuelven a bloquear tras 20 segundos en segundo plano aunque tengas el PIN general.", "Resaltado de colores: una comparación como \"x == y\" ya no se interpreta como resaltado; solo se resalta cuando el texto va pegado a los ==.", "Sin cambios en tus notas ni en las copias de seguridad."] },
     { v: "1.45.0", d: "9 nov 2026", t: "Ajustes de imagen", l: ["Recorte y encuadre: zoom de 100% a 400% y dos deslizadores para elegir qué parte de la imagen se ve. La imagen se recorta dentro de su marco.", "Ajustes finos: brillo, contraste, saturación y desenfoque, que se suman al filtro que elijas.", "Botón \"Restablecer ajustes\" para volver todo a cero.", "El PDF respeta el recorte y los ajustes (el desenfoque es aproximado)."] },
@@ -4069,7 +4082,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     { k: "Insignias detalladas", i: "galaxia", t: "21 insignias animadas", d: "Elegí una para cada nota. Mantené pulsada una insignia para ver qué es y cómo se mueve.", c: ["Planetas", "Criaturas", "Instrumentos"] },
     { k: "Constelaciones", i: "constelacion", t: "Tus notas, un mapa", d: "Agrupá notas por tema y unilas con líneas. Recorré el mapa con zoom y buscá cualquier estrella.", c: ["Grupos", "Vínculos", "Búsqueda"] },
     { k: "Buscar y ordenar", i: "brujula", t: "Encontrá lo que quieras", d: "Buscá en todo el texto, ordená por fecha, título o color y cambiá entre lista y cuadrícula.", c: ["Búsqueda", "Orden", "Vistas"] },
-    { k: "Tus datos", i: "satelite", t: "Siempre a salvo", d: "Exportá una copia cuando quieras e importala en otro teléfono. Lo que borrás queda en la papelera hasta que la vacíes.", c: ["Copia", "Papelera 30 días"] },
+    { k: "Tus datos", i: "satelite", t: "Siempre a salvo", d: "Exportá una copia cuando quieras e importala en otro teléfono. Lo que borrás queda en la papelera hasta que la vacíes.", c: ["Copia", "Papelera"] },
     { k: "Estilo", i: "luna", t: "Hacela tuya", d: "Elegí el tema Universo o Blanco, el color de acento y la tipografía desde Ajustes y Personalizar.", c: ["Universo", "Blanco", "Acentos"] },
     { k: "Lo que viene", i: "nebulosa", t: "Esto recién empieza", d: "Perfil, Vinculación y MAX están en desarrollo. Mirá Novedades en el menú para ver qué trae cada versión.", c: ["Perfil", "Vinculación", "MAX"] }
   ];
@@ -4670,6 +4683,182 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   setTimeout(function () { autoBackup(false); renderAutoBk(); }, 7000);
   document.addEventListener("visibilitychange", function () { if (document.hidden) autoBackup(false, "exit"); else autoBackup(false); });
   setInterval(function () { if (!document.hidden) autoBackup(false); }, 60000);
+
+  /* ---------- compartir como imagen ---------- */
+  var SI = { style: "universo", imgs: true, brand: true, tok: 0, canvas: null, url: "" };
+  var SI_FAM = "'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif", SI_DISP = "'Bricolage Grotesque', " + SI_FAM;
+  var SI_HL = { amarillo: "rgba(250,204,21,.5)", verde: "rgba(74,222,128,.45)", rosa: "rgba(244,114,182,.48)", celeste: "rgba(56,189,248,.48)", naranja: "rgba(251,146,60,.5)" };
+  function siTheme(n) {
+    if (SI.style === "papel") return { bg: ["#fbf8f2", "#f1eadb"], ink: "#27233a", mute: "#7a7690", accent: "#6d4aff", soft: "rgba(0,0,0,.06)" };
+    if (SI.style === "color") {
+      var rgb = colorOf(n.color).rgb || [109, 74, 255], lum = rgb[0] * 0.3 + rgb[1] * 0.59 + rgb[2] * 0.11, dk = lum < 165;
+      function sh(k) { return "rgb(" + rgb.map(function (v) { return Math.max(0, Math.min(255, Math.round(v * k))); }).join(",") + ")"; }
+      return { bg: [sh(1.0), sh(0.72)], ink: dk ? "#ffffff" : "#1d1a2b", mute: dk ? "rgba(255,255,255,.75)" : "rgba(29,26,43,.65)", accent: dk ? "#ffffff" : "#1d1a2b", soft: dk ? "rgba(255,255,255,.18)" : "rgba(0,0,0,.1)" };
+    }
+    return { bg: ["#15132e", "#241f4d"], ink: "#f2f0ff", mute: "#a9a5d6", accent: "#b39cff", soft: "rgba(255,255,255,.08)", stars: true };
+  }
+  function siRuns(t) {
+    var out = [], re = /\*\*(.+?)\*\*|(^|\s)\*([^*]+)\*|==(?:\{(amarillo|verde|rosa|celeste|naranja)\})?(?=\S)(.+?)(?<=\S)==|\[\[([^\]\n]+?)\]\]/g, last = 0, m;
+    while ((m = re.exec(t))) {
+      if (m.index > last) out.push({ t: t.slice(last, m.index) });
+      if (m[1] !== undefined) out.push({ t: m[1], b: 1 });
+      else if (m[3] !== undefined) { if (m[2]) out.push({ t: m[2] }); out.push({ t: m[3], i: 1 }); }
+      else if (m[5] !== undefined) out.push({ t: m[5], hl: m[4] || "amarillo" });
+      else out.push({ t: m[6], ln: 1 });
+      last = m.index + m[0].length;
+    }
+    if (last < t.length) out.push({ t: t.slice(last) });
+    return out;
+  }
+  function siFont(sz, st, base) { return (st.b || base ? "700 " : "400 ") + (st.i ? "italic " : "") + sz + "px " + (base ? SI_DISP : SI_FAM); }
+  function siLayout(ctx, runs, maxW, sz, base) {
+    var lines = [], line = { segs: [], w: 0 };
+    function push() { lines.push(line); line = { segs: [], w: 0 }; }
+    runs.forEach(function (r) {
+      r.t.split(/(\s+)/).forEach(function (tok) {
+        if (!tok) return; ctx.font = siFont(sz, r, base); var w = ctx.measureText(tok).width, sp = /^\s+$/.test(tok);
+        if (sp) { if (line.segs.length) { line.segs.push({ t: " ", w: ctx.measureText(" ").width, r: r }); line.w += ctx.measureText(" ").width; } return; }
+        if (line.w + w > maxW && line.segs.length) { while (line.segs.length && line.segs[line.segs.length - 1].t === " ") { line.w -= line.segs.pop().w; } push(); }
+        if (w > maxW) { /* palabra más larga que la línea: se corta */
+          var piece = ""; for (var k = 0; k < tok.length; k++) { var cw = ctx.measureText(piece + tok[k]).width; if (cw > maxW - line.w && piece) { line.segs.push({ t: piece, w: ctx.measureText(piece).width, r: r }); push(); piece = ""; } piece += tok[k]; }
+          tok = piece; w = ctx.measureText(tok).width;
+        }
+        line.segs.push({ t: tok, w: w, r: r }); line.w += w;
+      });
+    });
+    if (line.segs.length || !lines.length) push();
+    return lines;
+  }
+  function siImage(it, cw) {
+    return imgGet(it.src).then(function (blob) {
+      if (!blob) return null;
+      return new Promise(function (res) {
+        var u = URL.createObjectURL(blob), im = new Image();
+        im.onload = function () {
+          try {
+            var ch = Math.max(1, Math.round(cw / it.ar)), cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+            var c = cv.getContext("2d");
+            if (it.rad > 0) { var r = Math.min(cw, ch) * it.rad / 100; c.beginPath(); c.moveTo(r, 0); c.arcTo(cw, 0, cw, ch, r); c.arcTo(cw, ch, 0, ch, r); c.arcTo(0, ch, 0, 0, r); c.arcTo(0, 0, cw, 0, r); c.closePath(); c.clip(); }
+            var fcss = imgFilter(it, cw / 360); if (fcss && "filter" in c) c.filter = fcss;
+            c.globalAlpha = it.op; if (it.fl) { c.translate(cw, 0); c.scale(-1, 1); }
+            var nw = im.naturalWidth, nh = im.naturalHeight, sa = nw / nh, sx = 0, sy = 0, sw = nw, sh = nh;
+            if (sa > it.ar) { sw = nh * it.ar; sx = (nw - sw) * it.px; } else if (sa < it.ar) { sh = nw / it.ar; sy = (nh - sh) * it.py; }
+            if (it.zm > 1.001) { var sw2 = sw / it.zm, sh2 = sh / it.zm; sx += (sw - sw2) * it.px; sy += (sh - sh2) * it.py; sw = sw2; sh = sh2; }
+            c.drawImage(im, sx, sy, sw, sh, 0, 0, cw, ch); res(cv);
+          } catch (e) { res(null); }
+          URL.revokeObjectURL(u);
+        };
+        im.onerror = function () { URL.revokeObjectURL(u); res(null); };
+        im.src = u;
+      });
+    });
+  }
+  function renderNoteImage(n) {
+    var W = 1080, PAD = 76, CW = W - PAD * 2, MAXH = 9000, T = siTheme(n), mc = document.createElement("canvas").getContext("2d");
+    var fonts = [document.fonts && document.fonts.load ? document.fonts.load("700 40px 'Bricolage Grotesque'").catch(function () {}) : null, document.fonts && document.fonts.load ? document.fonts.load("400 40px 'IBM Plex Sans'").catch(function () {}) : null];
+    var imgsP = SI.imgs && n.type === "text" && n.images.length ? Promise.all(n.images.slice(0, 12).map(function (it) { var w = Math.round(CW * Math.max(0.45, Math.min(1, it.w || 1))); return siImage(it, w).then(function (cv) { return cv ? { it: it, cv: cv } : null; }); })).then(function (a) { return a.filter(Boolean); }) : Promise.resolve([]);
+    return Promise.all(fonts).then(function () { return imgsP; }).then(function (pimgs) {
+      var ops = [], y = 90, cut = false;
+      function add(h) { y += h; }
+      /* título */
+      var title = (n.title || "").trim() || (n.type === "list" ? "Lista" : "Nota");
+      siLayout(mc, [{ t: title }], CW, 64, true).forEach(function (ln) { ops.push({ k: "line", ln: ln, x: PAD, y: y, sz: 64, base: 1, color: T.ink }); add(80); });
+      add(8); ops.push({ k: "rule", y: y, x: PAD, w: 96, color: T.accent }); add(44);
+      var src = n.type === "list" ? n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "[x] " : "[ ] ") + i.t; }) : n.body.split("\n");
+      for (var si = 0; si < src.length; si++) {
+        if (y > MAXH - 400) { cut = true; break; }
+        var raw = src[si], t = raw, sz = 40, lh = 58, ind = 0, deco = null, base = 0, m;
+        if (!t.trim()) { add(26); continue; }
+        if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(t)) { add(14); ops.push({ k: "hr", y: y, x: PAD, w: CW }); add(40); continue; }
+        if ((m = t.match(/^(#{1,2})\s+(.*)$/))) { sz = m[1].length === 1 ? 54 : 46; lh = sz * 1.3; base = 1; t = m[2]; add(m[1].length === 1 ? 18 : 10); }
+        else if ((m = t.match(/^>\s?(.*)$/))) { ind = 40; deco = { k: "quote" }; t = m[1]; }
+        else if ((m = t.match(/^(\s*)\[( |x|X)\]\s*(.*)$/))) { ind = 62 + m[1].length * 14; deco = { k: "box", done: m[2] !== " " }; t = m[3]; }
+        else if ((m = t.match(/^(\s*)[-*•]\s+(.*)$/))) { ind = 48 + m[1].length * 14; deco = { k: "dot" }; t = m[2]; }
+        else if ((m = t.match(/^(\s*)(\d+)[.)]\s+(.*)$/))) { ind = 62 + m[1].length * 14; deco = { k: "num", n: m[2] }; t = m[3]; }
+        else if (/^\s*\|/.test(t)) { if (/^\s*\|[\s:|-]+\|?\s*$/.test(t)) continue; t = t.replace(/^\s*\||\|\s*$/g, "").split("|").map(function (c) { return c.trim(); }).join("   ·   "); }
+        var lines = siLayout(mc, siRuns(t), CW - ind, sz, base), y0 = y;
+        lines.forEach(function (ln, li) { ops.push({ k: "line", ln: ln, x: PAD + ind, y: y, sz: sz, base: base, color: T.ink }); add(lh); });
+        if (deco) ops.push({ k: deco.k, x: PAD, y: y0, h: lh, d: deco, hgt: y - y0 });
+        add(base ? 8 : 4);
+      }
+      if (cut) { add(10); ops.push({ k: "line", ln: { segs: [{ t: "… la nota sigue en Tronx", w: 600, r: { i: 1 } }], w: 600 }, x: PAD, y: y, sz: 36, base: 0, color: T.mute }); add(60); }
+      /* imágenes */
+      pimgs.forEach(function (p) {
+        if (y > MAXH - 300) return;
+        add(24); var iw = p.cv.width, ih = p.cv.height, x = PAD + (CW - iw) / 2;
+        ops.push({ k: "img", cv: p.cv, x: x, y: y, w: iw, h: ih }); add(ih);
+        if (p.it.info && p.it.info.trim()) { add(14); siLayout(mc, [{ t: p.it.info.trim() }], CW, 32, false).forEach(function (ln) { ops.push({ k: "line", ln: ln, x: PAD, y: y, sz: 32, base: 0, color: T.mute, center: true }); add(44); }); }
+        add(10);
+      });
+      /* pie */
+      add(30);
+      if (n.tags.length) {
+        var tx = PAD; n.tags.slice(0, 8).forEach(function (g) { var label = "#" + g; mc.font = siFont(30, {}, 0); var w = mc.measureText(label).width + 36; if (tx + w > W - PAD) return; ops.push({ k: "tag", x: tx, y: y, w: w, t: label }); tx += w + 12; }); add(70);
+      }
+      var foot = new Date(n.updatedAt).toLocaleDateString("es", { day: "numeric", month: "long", year: "numeric" });
+      ops.push({ k: "foot", y: y + 30, t: foot, brand: SI.brand }); add(90);
+      var H = Math.min(Math.max(y, 420), MAXH + 400), cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+      var c = cv.getContext("2d"), g = c.createLinearGradient(0, 0, W * 0.4, H); g.addColorStop(0, T.bg[0]); g.addColorStop(1, T.bg[1]); c.fillStyle = g; c.fillRect(0, 0, W, H);
+      if (T.stars) { var s = 7; c.fillStyle = "#fff"; for (var q = 0; q < Math.min(90, Math.round(H / 40)); q++) { s = (s * 1664525 + 1013904223) >>> 0; var sx = s / 4294967296 * W; s = (s * 1664525 + 1013904223) >>> 0; var sy = s / 4294967296 * H; s = (s * 1664525 + 1013904223) >>> 0; c.globalAlpha = 0.15 + (s / 4294967296) * 0.45; c.beginPath(); c.arc(sx, sy, 1 + (s % 3) * 0.6, 0, 6.2832); c.fill(); } c.globalAlpha = 1; }
+      c.textBaseline = "alphabetic";
+      ops.forEach(function (o) {
+        if (o.k === "line") {
+          var x = o.x; if (o.center) x = (W - o.ln.w) / 2;
+          o.ln.segs.forEach(function (sg) {
+            c.font = siFont(o.sz, sg.r, o.base); var by = o.y + o.sz * 0.95;
+            if (sg.r.hl) { c.fillStyle = SI_HL[sg.r.hl]; c.fillRect(x - 3, o.y + o.sz * 0.08, sg.w + 6, o.sz * 1.16); }
+            c.fillStyle = sg.r.ln ? T.accent : o.color; c.fillText(sg.t, x, by);
+            if (sg.r.ln && sg.t !== " ") { c.fillRect(x, by + 5, sg.w, 2.5); }
+            x += sg.w;
+          });
+        } else if (o.k === "rule") { c.fillStyle = o.color; c.fillRect(o.x, o.y, o.w, 8); }
+        else if (o.k === "hr") { c.fillStyle = T.soft; c.fillRect(o.x, o.y, o.w, 3); }
+        else if (o.k === "quote") { c.fillStyle = T.accent; c.globalAlpha = 0.7; c.fillRect(o.x, o.y + 4, 8, o.hgt - 8); c.globalAlpha = 1; }
+        else if (o.k === "dot") { c.fillStyle = T.accent; c.beginPath(); c.arc(o.x + 22, o.y + 33, 7, 0, 6.2832); c.fill(); }
+        else if (o.k === "num") { c.font = siFont(36, { b: 1 }, 0); c.fillStyle = T.accent; c.fillText(o.d.n + ".", o.x + 4, o.y + 40); }
+        else if (o.k === "box") {
+          c.lineWidth = 4; c.strokeStyle = T.accent; c.fillStyle = o.d.done ? T.accent : "transparent";
+          var bx = o.x + 4, by2 = o.y + 12, bs = 36, r = 9; c.beginPath(); c.moveTo(bx + r, by2); c.arcTo(bx + bs, by2, bx + bs, by2 + bs, r); c.arcTo(bx + bs, by2 + bs, bx, by2 + bs, r); c.arcTo(bx, by2 + bs, bx, by2, r); c.arcTo(bx, by2, bx + bs, by2, r); c.closePath(); if (o.d.done) c.fill(); c.stroke();
+          if (o.d.done) { c.strokeStyle = SI.style === "universo" ? "#15132e" : (SI.style === "papel" ? "#fff" : T.bg[1]); c.lineWidth = 5; c.lineCap = "round"; c.beginPath(); c.moveTo(bx + 9, by2 + 19); c.lineTo(bx + 16, by2 + 27); c.lineTo(bx + 28, by2 + 10); c.stroke(); }
+        }
+        else if (o.k === "img") { c.drawImage(o.cv, o.x, o.y); }
+        else if (o.k === "tag") { c.fillStyle = T.soft; var rr = 22; c.beginPath(); c.moveTo(o.x + rr, o.y); c.arcTo(o.x + o.w, o.y, o.x + o.w, o.y + 52, rr); c.arcTo(o.x + o.w, o.y + 52, o.x, o.y + 52, rr); c.arcTo(o.x, o.y + 52, o.x, o.y, rr); c.arcTo(o.x, o.y, o.x + o.w, o.y, rr); c.fill(); c.font = siFont(30, {}, 0); c.fillStyle = T.ink; c.fillText(o.t, o.x + 18, o.y + 36); }
+        else if (o.k === "foot") { c.font = siFont(28, {}, 0); c.fillStyle = T.mute; c.fillText(o.t, PAD, o.y); if (o.brand) { c.font = siFont(30, { b: 1 }, 1); c.textAlign = "right"; c.fillStyle = T.accent; c.fillText("Tronx", W - PAD, o.y); c.textAlign = "left"; } }
+      });
+      return cv;
+    });
+  }
+  function siRender() {
+    var n = cur(); if (!n) return; var tok = ++SI.tok;
+    $("siMsg").hidden = false; $("siMsg").textContent = "Preparando la imagen…"; $("siImg").hidden = true; $("siShare").disabled = true;
+    renderNoteImage(n).then(function (cv) {
+      if (tok !== SI.tok) return;
+      SI.canvas = cv;
+      cv.toBlob(function (b) {
+        if (tok !== SI.tok || !b) return;
+        if (SI.url) URL.revokeObjectURL(SI.url); SI.url = URL.createObjectURL(b);
+        $("siImg").src = SI.url; $("siImg").hidden = false; $("siMsg").hidden = true; $("siShare").disabled = false;
+      }, "image/jpeg", 0.9);
+    }).catch(function () { if (tok === SI.tok) $("siMsg").textContent = "No se pudo preparar la imagen."; });
+  }
+  function openShareImg() {
+    var n = cur(); if (!n) return;
+    $("siImgs").hidden = !(n.type === "text" && n.images.length);
+    closeLayer("sheet");
+    setTimeout(function () { $("shareImg").hidden = false; pushLayer("shareImg"); siRender(); }, 240);
+  }
+  registerLayer("shareImg", function () { $("shareImg").hidden = true; SI.tok++; SI.canvas = null; if (SI.url) { URL.revokeObjectURL(SI.url); SI.url = ""; } $("siImg").removeAttribute("src"); });
+  $("imgBtn").addEventListener("click", openShareImg);
+  $("siClose").addEventListener("click", function () { closeLayer("shareImg"); });
+  $("shareImg").addEventListener("click", function (e) { if (e.target === $("shareImg")) closeLayer("shareImg"); });
+  $("siStyles").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SI.style = b.dataset.s; $("siStyles").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); }); siRender(); });
+  $("siImgs").addEventListener("click", function () { SI.imgs = !SI.imgs; $("siImgs").setAttribute("aria-pressed", SI.imgs ? "true" : "false"); siRender(); });
+  $("siBrand").addEventListener("click", function () { SI.brand = !SI.brand; $("siBrand").setAttribute("aria-pressed", SI.brand ? "true" : "false"); siRender(); });
+  $("siShare").addEventListener("click", function () {
+    var n = cur(), cv = SI.canvas; if (!n || !cv) return;
+    var big = cv.height > 6000, data = cv.toDataURL(big ? "image/jpeg" : "image/png", 0.92).split(",")[1];
+    shareFile(safeName(n.title) + (big ? ".jpg" : ".png"), data, big ? "image/jpeg" : "image/png", n.title.trim() || "Nota de Tronx", true).then(function (ok) { if (ok) toast("Imagen lista"); }).catch(function () { toast("No se pudo compartir la imagen"); });
+  });
 
   /* ---------- historial de versiones ---------- */
   var baseline = null;
