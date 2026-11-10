@@ -208,5 +208,6 @@ Pasos, una sola vez:
 **1.47.0**: Compartir una nota como imagen PNG con estilo (Universo, Papel o Color de la nota), con imágenes y marca opcional.
 **1.48.0**: Perfil activado con estadísticas de escritura (palabras, rachas, mapa de actividad de 12 semanas) y 16 logros. Los datos se guardan en los ajustes (act, wTot, streakBest, ach) y se calculan solos al actualizar desde tus notas existentes.
 **1.49.0**: Home renovado: controles que se esconden al desplazar, etiquetas visibles en las tarjetas y tarjetas más compactas.
+**1.50.0**: Listas con subtareas, reordenar arrastrando, fecha por elemento y ocultar hechos. Los campos nuevos son opcionales, así que las listas anteriores siguen igual.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.

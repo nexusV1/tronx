@@ -362,6 +362,25 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .row .itext { flex: 1; min-width: 0; display: block; resize: none; overflow: hidden; border: 0; outline: none; background: transparent; padding: 8px 0; line-height: 1.5; font-family: var(--note-font); font-size: var(--note-size); }
 .row.done .itext { text-decoration: line-through; color: var(--muted); }
 .row .x { flex: none; width: 34px; height: 40px; border: 0; background: transparent; color: var(--muted); font-size: 20px; line-height: 1; }
+.row { position: relative; flex-wrap: wrap; }
+.row.lv1 { padding-left: 30px; }
+.row .grip { flex: none; width: 22px; height: 40px; display: grid; place-items: center; color: var(--muted); opacity: 0.55; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; font-size: 16px; letter-spacing: -2px; }
+.row .grip:active { cursor: grabbing; }
+.row.dragging { opacity: 0.55; background: var(--accent-soft); border-radius: 10px; z-index: 2; }
+.row.dropline::before { content: ""; position: absolute; left: 0; right: 0; top: -2px; height: 3px; border-radius: 2px; background: var(--accent); }
+.row.dropend::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 3px; border-radius: 2px; background: var(--accent); }
+.row .due { flex: none; align-self: center; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); background: var(--raised); color: var(--muted); border-radius: 99px; font-family: var(--font-mono); font-size: 11px; padding: 2px 4px 2px 9px; min-height: 26px; }
+.row .due button { border: 0; background: transparent; color: inherit; font: inherit; padding: 0 4px; }
+.row .due.today { color: var(--accent); border-color: var(--accent); } .row .due.soon { color: var(--accent); }
+.row .due.late { color: #ff7a8a; border-color: #ff7a8a; }
+.row.done .due { opacity: 0.55; }
+.row .mv { flex-direction: row !important; }
+.row:focus-within .mv { flex: 1 0 100%; order: 9; justify-content: flex-end; margin-bottom: 4px; }
+.row .mv button { height: 36px; width: 38px; font-size: 16px; color: var(--ink); }
+.row .mv button:disabled { color: var(--muted); }
+.row .mv .sep { width: 1px; background: var(--line); margin: 4px 3px; }
+.row .dpick { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.hiddenN { color: var(--muted); font-size: 12px; padding: 6px 4px 0; }
 .itemtools { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; }
 .meta { padding: 6px 22px 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em; color: var(--muted); }
 .trashbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line); background: var(--panel); }
@@ -1527,7 +1546,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.49.0";
+  var APP_VERSION = "1.50.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1723,7 +1742,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       if (!v || typeof v !== "object") return;
       out.push({
         t: Number(v.t) || Date.now(), title: String(v.title || "").slice(0, 300), body: String(v.body || "").slice(0, 60000),
-        items: (Array.isArray(v.items) ? v.items : []).slice(0, 300).map(function (i) { return { id: String((i && i.id) || uid()), t: String((i && i.t) || "").slice(0, 2000), done: !!(i && i.done) }; })
+        items: (Array.isArray(v.items) ? v.items : []).slice(0, 300).map(function (i) { return cleanItem(i, 2000); })
       });
     });
     return out;
@@ -1743,12 +1762,30 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (m !== "bio" && !(typeof l.s === "string" && typeof l.h === "string" && l.s && l.h)) return null;
     return { m: m, s: m === "bio" ? "" : l.s, h: m === "bio" ? "" : l.h };
   }
+  function cleanItem(i, max) {
+    var o = { id: String((i && i.id) || uid()), t: String((i && i.t) || "").slice(0, max), done: !!(i && i.done) };
+    if (i && i.lv === 1) o.lv = 1;
+    var d = Number(i && i.due); if (d > 0 && isFinite(d)) o.due = Math.floor(d);
+    return o;
+  }
+  function copyItem(i, fresh) { var o = cleanItem(i, 1e9); if (fresh) o.id = uid(); return o; }
+  function dueLabel(ts) { return new Date(ts).toLocaleDateString("es", { weekday: "short", day: "numeric", month: "short" }).replace(/\./g, ""); }
+  function dueStatus(it) {
+    if (!it.due) return "";
+    var t0 = new Date(); t0.setHours(0, 0, 0, 0); var diff = Math.round((new Date(it.due).setHours(0, 0, 0, 0) - t0.getTime()) / 86400000);
+    return it.done ? "" : diff < 0 ? "late" : diff === 0 ? "today" : diff === 1 ? "soon" : "";
+  }
+  function dueText(ts) {
+    var t0 = new Date(); t0.setHours(0, 0, 0, 0); var diff = Math.round((new Date(ts).setHours(0, 0, 0, 0) - t0.getTime()) / 86400000);
+    return diff === 0 ? "hoy" : diff === 1 ? "mañana" : diff === -1 ? "ayer" : dueLabel(ts);
+  }
+  function itemInd(i) { return i.lv === 1 ? "  " : ""; }
+  function itemMeta(i) { return i.due ? " (vence " + dueLabel(i.due) + ")" : ""; }
   function normalize(x) {
     if (!x || typeof x !== "object") return null;
     var type = x.type === "list" ? "list" : "text";
-    var items = Array.isArray(x.items) ? x.items.map(function (i) {
-      return { id: String((i && i.id) || uid()), t: String((i && i.t) || ""), done: !!(i && i.done) };
-    }) : [];
+    var items = Array.isArray(x.items) ? x.items.map(function (i) { return cleanItem(i, 1e9); }) : [];
+    if (items.length) items[0].lv = 0;
     var tags = [];
     (Array.isArray(x.tags) ? x.tags : []).forEach(function (t) { t = cleanTag(t); if (t && tags.indexOf(t) < 0 && tags.length < 8) tags.push(t); });
     var now = Date.now();
@@ -1758,6 +1795,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       title: String(x.title || ""),
       body: String(x.body || ""),
       items: items,
+      hideDone: !!x.hideDone,
       color: colorOf(x.color).k,
       tags: tags,
       folder: cleanFolder(x.folder),
@@ -2324,60 +2362,147 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     box.hidden = n.tags.length === 0;
   }
   function focusItem(i) {
-    var inputs = itemsEl.querySelectorAll(".itext");
-    if (inputs[i]) { inputs[i].focus(); var v = inputs[i].value; inputs[i].setSelectionRange(v.length, v.length); }
+    var inp = itemsEl.querySelector('.row[data-i="' + i + '"] .itext');
+    if (inp) { inp.focus(); var v = inp.value; inp.setSelectionRange(v.length, v.length); }
   }
   function autosize(t) { t.style.height = "auto"; t.style.height = t.scrollHeight + "px"; }
   var CHECK = '<span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>';
+  function blockEnd(items, i) { var e = i + 1; if (items[i].lv !== 1) while (e < items.length && items[e].lv === 1) e++; return e; }
   function moveItem(n, idx, d) {
-    var to = idx + d;
-    if (to < 0 || to >= n.items.length) return;
-    var it = n.items.splice(idx, 1)[0];
-    n.items.splice(to, 0, it);
-    changed(n); renderItems(); focusItem(to);
+    var L = n.items, it = L[idx], to;
+    if (it.lv === 1) {
+      to = idx + d; if (to < 1 || to >= L.length || L[to].lv !== 1) return;
+      L.splice(idx, 1); L.splice(to, 0, it);
+    } else {
+      var e = blockEnd(L, idx), blk;
+      if (d < 0) {
+        if (idx === 0) return; var q = idx - 1; while (q > 0 && L[q].lv === 1) q--;
+        blk = L.splice(idx, e - idx); L.splice.apply(L, [q, 0].concat(blk)); to = q;
+      } else {
+        if (e >= L.length) return; var e2 = blockEnd(L, e);
+        blk = L.splice(idx, e - idx); to = e2 - blk.length; L.splice.apply(L, [to, 0].concat(blk));
+      }
+    }
+    L[0].lv = 0; changed(n); renderItems(); focusItem(to);
+  }
+  function setLevel(n, idx, lv) {
+    var it = n.items[idx]; if (lv === 1 && idx === 0) return false;
+    if ((it.lv === 1 ? 1 : 0) === lv) return false;
+    if (lv === 1) it.lv = 1; else delete it.lv;
+    changed(n); renderItems(); focusItem(idx); return true;
+  }
+  function pickDate(n, it, row) {
+    var inp = el("input", "dpick"); inp.type = "date"; inp.tabIndex = -1; inp.setAttribute("aria-label", "Fecha del elemento");
+    if (it.due) inp.value = dayKey(it.due);
+    inp.addEventListener("change", function () {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(inp.value);
+      if (m) it.due = new Date(+m[1], +m[2] - 1, +m[3], 12).getTime(); else delete it.due;
+      changed(n); renderItems();
+    });
+    inp.addEventListener("blur", function () { setTimeout(function () { if (inp.parentNode) inp.remove(); }, 300); });
+    row.appendChild(inp);
+    try { if (inp.showPicker) inp.showPicker(); else inp.click(); } catch (e) { inp.click(); }
+  }
+  function dragItem(e, n, idx, row) {
+    if (e.button > 0) return; e.preventDefault();
+    var grip = e.currentTarget, rows = [].slice.call(itemsEl.querySelectorAll(".row[data-i]")), L = n.items, s = idx, en = blockEnd(L, idx), target = null;
+    try { grip.setPointerCapture(e.pointerId); } catch (x) { /* sin captura */ }
+    row.classList.add("dragging");
+    rows.forEach(function (r) { var k = +r.dataset.i; if (k > s && k < en) r.classList.add("dragging"); });
+    function clear() { rows.forEach(function (r) { r.classList.remove("dropline", "dropend"); }); }
+    function over(ev) {
+      var y = ev.clientY, box = itemsEl.getBoundingClientRect(), pick = null, last = null;
+      if (y < box.top + 36) itemsEl.scrollTop -= 14; else if (y > box.bottom - 36) itemsEl.scrollTop += 14;
+      clear();
+      for (var i = 0; i < rows.length; i++) {
+        var k = +rows[i].dataset.i; if (k >= s && k < en) continue;
+        if (L[k].lv === 1 && L[s].lv !== 1) { last = rows[i]; continue; }
+        var r = rows[i].getBoundingClientRect(); last = rows[i];
+        if (y < r.top + r.height / 2) { pick = rows[i]; break; }
+      }
+      if (pick) { pick.classList.add("dropline"); target = +pick.dataset.i; }
+      else { target = L.length; var lastTop = last; if (lastTop) lastTop.classList.add("dropend"); }
+    }
+    function done(ev, cancel) {
+      grip.removeEventListener("pointermove", over); grip.removeEventListener("pointerup", up); grip.removeEventListener("pointercancel", cn);
+      rows.forEach(function (r) { r.classList.remove("dragging"); }); clear();
+      if (cancel || target == null || (target >= s && target <= en)) return;
+      var blk = L.splice(s, en - s), t = target >= en ? target - blk.length : target;
+      L.splice.apply(L, [t, 0].concat(blk)); L[0].lv = 0;
+      changed(n); renderItems();
+    }
+    function up(ev) { done(ev, false); } function cn(ev) { done(ev, true); }
+    grip.addEventListener("pointermove", over); grip.addEventListener("pointerup", up); grip.addEventListener("pointercancel", cn);
   }
   function renderItems() {
     var n = cur(); itemsEl.textContent = "";
     if (!n || n.type !== "list") return;
-    var ro = readOnly();
+    var ro = readOnly(), hide = !!n.hideDone && !ro;
     n.items.forEach(function (it, idx) {
-      var row = el("div", "row" + (it.done ? " done" : ""));
+      if (hide && it.done) return;
+      var row = el("div", "row" + (it.done ? " done" : "") + (it.lv === 1 ? " lv1" : "")); row.dataset.i = idx;
+      if (!ro) {
+        var gr = el("span", "grip"); gr.textContent = "⋮⋮"; gr.setAttribute("role", "button"); gr.setAttribute("aria-label", "Arrastrar para reordenar");
+        gr.addEventListener("pointerdown", function (e) { dragItem(e, n, idx, row); });
+        row.appendChild(gr);
+      }
       var cb = el("button", "check"); cb.type = "button"; cb.innerHTML = CHECK;
       cb.setAttribute("role", "checkbox"); cb.setAttribute("aria-checked", it.done ? "true" : "false");
       cb.setAttribute("aria-label", "Marcar como hecho"); cb.disabled = ro;
-      cb.addEventListener("click", function () { it.done = !it.done; changed(n); renderItems(); });
-      var inp = el("textarea", "itext"); inp.rows = 1; inp.value = it.t; inp.placeholder = "Elemento";
-      inp.readOnly = ro; inp.setAttribute("enterkeyhint", "next"); inp.setAttribute("aria-label", "Texto del elemento");
+      cb.addEventListener("click", function () {
+        it.done = !it.done;
+        if (it.lv !== 1) for (var k = idx + 1; k < n.items.length && n.items[k].lv === 1; k++) n.items[k].done = it.done;
+        changed(n); renderItems();
+      });
+      var inp = el("textarea", "itext"); inp.rows = 1; inp.value = it.t; inp.placeholder = it.lv === 1 ? "Subtarea" : "Elemento";
+      inp.readOnly = ro; inp.setAttribute("enterkeyhint", "next"); inp.setAttribute("aria-label", it.lv === 1 ? "Texto de la subtarea" : "Texto del elemento");
       inp.addEventListener("input", function () { it.t = inp.value.replace(/\n/g, " "); autosize(inp); changed(n); });
       inp.addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
           e.preventDefault();
-          n.items.splice(idx + 1, 0, { id: uid(), t: "", done: false });
+          var ni = { id: uid(), t: "", done: false }; if (it.lv === 1) ni.lv = 1;
+          n.items.splice(idx + 1, 0, ni);
           changed(n); renderItems(); focusItem(idx + 1);
+        } else if (e.key === "Backspace" && inp.value === "" && it.lv === 1) {
+          e.preventDefault(); setLevel(n, idx, 0);
         } else if (e.key === "Backspace" && inp.value === "" && n.items.length > 1) {
           e.preventDefault();
-          n.items.splice(idx, 1);
+          n.items.splice(idx, 1); if (n.items.length) n.items[0].lv = 0;
           changed(n); renderItems(); focusItem(Math.max(0, idx - 1));
+        } else if (e.key === "Tab" && !ro) {
+          if (e.shiftKey ? setLevel(n, idx, 0) : setLevel(n, idx, 1)) e.preventDefault();
         }
       });
       var del = el("button", "x"); del.type = "button"; del.textContent = "×"; del.setAttribute("aria-label", "Quitar elemento"); del.disabled = ro;
       del.addEventListener("click", function () {
         n.items.splice(idx, 1);
-        if (!n.items.length) n.items.push({ id: uid(), t: "", done: false });
+        if (!n.items.length) n.items.push({ id: uid(), t: "", done: false }); else n.items[0].lv = 0;
         changed(n); renderItems();
       });
       row.appendChild(cb); row.appendChild(inp);
+      if (it.due) {
+        var dc = el("span", "due " + dueStatus(it)), db = el("button"), dx = el("button");
+        db.type = "button"; db.textContent = dueText(it.due); db.setAttribute("aria-label", "Cambiar fecha: " + dueText(it.due)); db.disabled = ro;
+        db.addEventListener("click", function () { pickDate(n, it, row); });
+        dx.type = "button"; dx.textContent = "×"; dx.setAttribute("aria-label", "Quitar fecha"); dx.disabled = ro;
+        dx.addEventListener("click", function () { delete it.due; changed(n); renderItems(); });
+        dc.appendChild(db); dc.appendChild(dx); row.appendChild(dc);
+      }
       if (!ro) {
-        // Subir / bajar: aparecen solo en el elemento que estás editando
+        row.appendChild(del);
+        // acciones del elemento que estás editando: nivel, subir / bajar y fecha
         var mv = el("span", "mv");
-        var up = el("button"), dn = el("button");
-        up.type = "button"; up.textContent = "▲"; up.setAttribute("aria-label", "Subir elemento"); up.disabled = idx === 0;
-        dn.type = "button"; dn.textContent = "▼"; dn.setAttribute("aria-label", "Bajar elemento"); dn.disabled = idx === n.items.length - 1;
-        up.addEventListener("click", function () { moveItem(n, idx, -1); });
-        dn.addEventListener("click", function () { moveItem(n, idx, 1); });
+        function mb(txt, label, dis, fn) { var b = el("button"); b.type = "button"; b.textContent = txt; b.setAttribute("aria-label", label); b.disabled = dis; b.addEventListener("click", fn); mv.appendChild(b); return b; }
+        mb("⇤", "Sacar de la subtarea", it.lv !== 1, function () { setLevel(n, idx, 0); });
+        mb("⇥", "Convertir en subtarea", idx === 0 || it.lv === 1, function () { setLevel(n, idx, 1); });
+        var sp = el("span", "sep"); mv.appendChild(sp);
+        var upDis = idx === 0 || (it.lv === 1 && n.items[idx - 1].lv !== 1), dnDis = it.lv === 1 ? !(n.items[idx + 1] && n.items[idx + 1].lv === 1) : blockEnd(n.items, idx) >= n.items.length;
+        mb("▲", "Subir elemento", upDis, function () { moveItem(n, idx, -1); });
+        mb("▼", "Bajar elemento", dnDis, function () { moveItem(n, idx, 1); });
+        sp = el("span", "sep"); mv.appendChild(sp);
+        var dbn = mb("Fecha", "Poner fecha al elemento", false, function () { pickDate(n, it, row); }); dbn.style.width = "auto"; dbn.style.padding = "0 8px"; dbn.style.fontSize = "13px"; dbn.classList.add("datebtn");
         mv.addEventListener("mousedown", function (e) { e.preventDefault(); });
-        mv.appendChild(up); mv.appendChild(dn);
-        row.appendChild(mv); row.appendChild(del);
+        row.appendChild(mv);
       }
       itemsEl.appendChild(row);
     });
@@ -2399,11 +2524,17 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         tools.appendChild(all);
       }
       var doneCount = n.items.filter(function (i) { return i.done; }).length;
+      if (doneCount || n.hideDone) {
+        var hb = el("button", "btn small hidebtn"); hb.type = "button"; hb.setAttribute("aria-pressed", n.hideDone ? "true" : "false");
+        hb.textContent = n.hideDone ? "Mostrar hechos (" + doneCount + ")" : "Ocultar hechos";
+        hb.addEventListener("click", function () { n.hideDone = !n.hideDone; changed(n); renderItems(); });
+        tools.appendChild(hb);
+      }
       if (doneCount) {
         var clr = el("button", "btn small"); clr.type = "button"; clr.textContent = "Quitar hechos (" + doneCount + ")";
         clr.addEventListener("click", function () {
           n.items = n.items.filter(function (i) { return !i.done; });
-          if (!n.items.length) n.items.push({ id: uid(), t: "", done: false });
+          if (!n.items.length) n.items.push({ id: uid(), t: "", done: false }); else n.items[0].lv = 0;
           changed(n); renderItems();
         });
         tools.appendChild(clr);
@@ -3499,22 +3630,23 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function convertType(t) {
     var n = cur(); if (!n || n.type === t) return;
     if (t === "list") {
-      var lines = n.body.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
-      n.items = lines.map(function (l) {
-        var done = /^[-*]?\s*\[(x|X)\]\s*/.test(l);
-        return { id: uid(), t: l.replace(/^[-*•]?\s*(\[[ xX]?\]\s*)?/, ""), done: done };
+      var lines = n.body.split(/\r?\n/).filter(function (l) { return l.trim(); });
+      n.items = lines.map(function (l0, k) {
+        var sub = k > 0 && /^(\s{2,}|\t)/.test(l0), l = l0.trim();
+        var done = /^[-*]?\s*\[(x|X)\]\s*/.test(l), o = { id: uid(), t: l.replace(/^[-*•]?\s*(\[[ xX]?\]\s*)?/, ""), done: done };
+        if (sub) o.lv = 1; return o;
       });
       if (!n.items.length) n.items.push({ id: uid(), t: "", done: false });
       n.body = ""; n.type = "list";
     } else {
-      n.body = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "[x] " : "[ ] ") + i.t; }).join("\n");
+      n.body = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return itemInd(i) + (i.done ? "[x] " : "[ ] ") + i.t + itemMeta(i); }).join("\n");
       n.items = []; n.type = "text";
     }
     changed(n); renderEditor(); renderSheet(); renderAll();
   }
   function noteText(n) {
     var head = n.title.trim() ? n.title.trim() + "\n\n" : "";
-    if (n.type === "list") return head + n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "☑ " : "☐ ") + i.t; }).join("\n");
+    if (n.type === "list") return head + n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return itemInd(i) + (i.done ? "☑ " : "☐ ") + i.t + itemMeta(i); }).join("\n");
     return head + n.body;
   }
   function capPlugin(name) {
@@ -3550,7 +3682,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var c = normalize(JSON.parse(JSON.stringify(n)));
     c.id = uid(); c.pinned = false; c.createdAt = now; c.updatedAt = now;
     c.title = (n.title.trim() || (n.type === "list" ? "Lista" : "Nota")) + " (copia)";
-    c.items = c.items.map(function (i) { return { id: uid(), t: i.t, done: i.done }; });
+    c.items = c.items.map(function (i) { return copyItem(i, true); });
     notes.set(c.id, c); persistNow(); renderAll();
     toast("Nota duplicada", "Abrir", function () { closeLayer("sheet"); setTimeout(function () { openNote(c.id); }, 200); });
   }
@@ -3660,6 +3792,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.50.0", d: "9 nov 2026", t: "Listas mejoradas", l: ["Subtareas: sangra un elemento con ⇥ (o Tab); al marcar el padre se marcan sus subtareas", "Reordenar arrastrando desde el asa ⋮⋮, o con ▲▼; los bloques con subtareas se mueven juntos", "Fecha por elemento con aviso visual (hoy, mañana, atrasada)", "Botón para ocultar o mostrar los elementos hechos", "Subtareas y fechas incluidas en copias, historial, duplicar y exportaciones (texto, Markdown, imagen)"] },
     { v: "1.49.0", d: "9 nov 2026", t: "Home más limpio y con más espacio", l: ["Los controles (vista, búsqueda, pestañas, filtros) se esconden al bajar por la lista y vuelven al subir o al tocar la búsqueda", "Las tarjetas muestran sus etiquetas", "Tarjetas un poco más compactas: caben más notas por pantalla"] },
     { v: "1.48.0", d: "9 nov 2026", t: "Estadísticas, rachas y logros", l: ["El Perfil vuelve a estar disponible desde el menú (estaba «En desarrollo»)", "Nueva sección «Tu escritura»: racha actual, mejor racha, palabras escritas, últimos 7 días, días activos y tu día fuerte", "Mapa de actividad de las últimas 12 semanas", "16 logros con barra de progreso y aviso al desbloquearlos", "El menú muestra tu racha en Perfil"] },
     { v: "1.47.0", d: "9 nov 2026", t: "Compartir como imagen", l: ["Nuevo botón «Compartir como imagen» en Personalizar", "Tres estilos: Universo, Papel y Color de la nota", "Respeta títulos, listas, citas, resaltados e imágenes con sus ajustes", "Opción de incluir o quitar la marca Tronx"] },
@@ -4570,7 +4703,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function notifText(n) {
     if (n.lock) return { title: "🔒 Nota protegida", body: "Tocá para abrirla", large: "Tocá para abrirla" };
     var title = n.title.trim(), lines;
-    if (n.type === "list") lines = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "☑ " : "☐ ") + i.t.trim(); });
+    if (n.type === "list") lines = n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return itemInd(i) + (i.done ? "☑ " : "☐ ") + i.t + itemMeta(i).trim(); });
     else lines = n.body.split("\n").map(function (l) {
       return l.replace(/^\s*#{1,2}\s+/, "").replace(/^\s*>\s?/, "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|\s)\*([^*]+)\*/g, "$1$2").replace(/==(?:\{[a-z]+\})?(?=\S)(.+?)(?<=\S)==/g, "$1")
         .replace(/\[\[([^\]]+)\]\]/g, "$1").replace(/^\s*\[[xX]\]\s*/, "☑ ").replace(/^\s*\[ \]\s*/, "☐ ").replace(/^\s*\|?\s*-{3,}.*$/, "").replace(/\s*\|\s*/g, " · ").replace(/^ · | · $/g, "").trim();
@@ -4927,7 +5060,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var title = (n.title || "").trim() || (n.type === "list" ? "Lista" : "Nota");
       siLayout(mc, [{ t: title }], CW, 64, true).forEach(function (ln) { ops.push({ k: "line", ln: ln, x: PAD, y: y, sz: 64, base: 1, color: T.ink }); add(80); });
       add(8); ops.push({ k: "rule", y: y, x: PAD, w: 96, color: T.accent }); add(44);
-      var src = n.type === "list" ? n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "[x] " : "[ ] ") + i.t; }) : n.body.split("\n");
+      var src = n.type === "list" ? n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return itemInd(i) + (i.done ? "[x] " : "[ ] ") + i.t + itemMeta(i); }) : n.body.split("\n");
       for (var si = 0; si < src.length; si++) {
         if (y > MAXH - 400) { cut = true; break; }
         var raw = src[si], t = raw, sz = 40, lh = 58, ind = 0, deco = null, base = 0, m;
@@ -5025,8 +5158,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* ---------- historial de versiones ---------- */
   var baseline = null;
-  function snapOf(n) { return { id: n.id, title: n.title, body: n.body, items: n.items.map(function (i) { return { id: i.id, t: i.t, done: i.done }; }) }; }
-  function sameContent(a, b) { return a.title === b.title && a.body === b.body && JSON.stringify(a.items.map(function (i) { return [i.t, i.done]; })) === JSON.stringify(b.items.map(function (i) { return [i.t, i.done]; })); }
+  function snapOf(n) { return { id: n.id, title: n.title, body: n.body, items: n.items.map(function (i) { return copyItem(i); }) }; }
+  function sameContent(a, b) { return a.title === b.title && a.body === b.body && JSON.stringify(a.items.map(function (i) { return [i.t, i.done, i.lv || 0, i.due || 0]; })) === JSON.stringify(b.items.map(function (i) { return [i.t, i.done, i.lv || 0, i.due || 0]; })); }
   function pushVersion(n, snap) {
     if (!snap || (!snap.title.trim() && !snap.body.trim() && !snap.items.some(function (i) { return i.t.trim(); }))) return false;
     if (n.versions.length && sameContent(n.versions[0], snap)) return false;
@@ -5053,7 +5186,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var rb = el("button", "btn small"); rb.type = "button"; rb.textContent = "Restaurar";
       rb.addEventListener("click", function () {
         pushVersion(n, snapOf(n));
-        n.title = v.title; n.body = v.body; n.items = v.items.map(function (i) { return { id: uid(), t: i.t, done: i.done }; });
+        n.title = v.title; n.body = v.body; n.items = v.items.map(function (i) { return copyItem(i, true); });
         baseline = snapOf(n); changed(n); persistNow();
         closeLayer("sheet"); renderEditor(); toast("Versión restaurada");
       });
@@ -5069,7 +5202,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   /* ---------- exportar: Markdown y PDF ---------- */
   function noteMarkdown(n) {
     var out = n.title.trim() ? "# " + n.title.trim() + "\n\n" : "";
-    if (n.type === "list") out += n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return "- [" + (i.done ? "x" : " ") + "] " + i.t; }).join("\n");
+    if (n.type === "list") out += n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return itemInd(i) + "- [" + (i.done ? "x" : " ") + "] " + i.t + itemMeta(i); }).join("\n");
     else out += n.body;
     if (n.tags.length) out += "\n\n" + n.tags.map(function (t) { return "#" + t; }).join(" ");
     return out.replace(/\s+$/, "") + "\n";
@@ -5140,7 +5273,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var blocks = [];
     var ey = 120;
     blocks.push({ t: n.title.trim() || (n.type === "list" ? "Lista" : "Nota"), size: 20, bold: true, gap: 10, ey: 0 });
-    var src = n.type === "list" ? n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return (i.done ? "[x] " : "[ ] ") + i.t; }) : n.body.split("\n");
+    var src = n.type === "list" ? n.items.filter(function (i) { return i.t.trim(); }).map(function (i) { return itemInd(i) + (i.done ? "[x] " : "[ ] ") + i.t + itemMeta(i); }) : n.body.split("\n");
     src.forEach(function (ln) {
       var size = 11, bold = false, ind = 0, t = latin1(ln), m;
       if ((m = t.match(/^(#{1,2})\s+(.*)$/))) { size = m[1].length === 1 ? 16 : 13.5; bold = true; t = m[2]; }
