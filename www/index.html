@@ -750,6 +750,8 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .content.imgs #read { flex: none; overflow: visible; position: relative; z-index: 1; min-height: 40vh; }
 .pimgs { position: absolute; left: 0; top: 0; width: 100%; height: 0; pointer-events: none; }
 .pimg { position: absolute; pointer-events: auto; touch-action: pan-y; user-select: none; -webkit-user-select: none; transform-origin: center; }
+.pclip { display: block; position: relative; width: 100%; box-sizing: border-box; overflow: hidden; border: 0 solid var(--accent); pointer-events: none; }
+.pclip img { position: absolute; left: 0; top: 0; }
 .pimg img { display: block; width: 100%; height: 100%; box-sizing: border-box; pointer-events: none; -webkit-user-drag: none; border: 0 solid var(--accent); }
 .pimg.miss { background: var(--raised); border: 1px dashed var(--line); display: grid; place-items: center; color: var(--muted); font-size: 12px; }
 .pimg.miss::after { content: "Imagen no disponible"; }
@@ -774,7 +776,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .read { display: flow-root; position: relative; }
 .pfloat { box-sizing: border-box; }
 .pfloat img { display: block; width: 100%; height: 100%; box-sizing: border-box; border: 0 solid var(--accent); }
-.pfloat.shadow img { box-shadow: 0 10px 24px -6px rgba(0,0,0,0.55); }
+
 .pimg .hs, .pimg .hr { position: absolute; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); border: 2px solid var(--solid); touch-action: none; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
 .pimg .hs { right: -15px; bottom: -15px; cursor: nwse-resize; }
 .pimg .hr { left: -15px; bottom: -15px; cursor: grab; }
@@ -798,7 +800,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .pimg img.f-cool, .pfloat img.f-cool { filter: saturate(1.1) hue-rotate(18deg) brightness(1.03); }
 .pimg img.f-fade, .pfloat img.f-fade { filter: contrast(0.82) brightness(1.12) saturate(0.8); }
 .pimg img.f-vivid, .pfloat img.f-vivid { filter: saturate(1.6) contrast(1.1); }
-.pimg.shadow img { box-shadow: 0 10px 24px -6px rgba(0,0,0,0.55); }
+.pimg.shadow .pclip, .pfloat.shadow .pclip { box-shadow: 0 10px 24px -6px rgba(0,0,0,0.55); }
+
 .lock { position: fixed; inset: 0; z-index: 100000; display: grid; place-items: center; background: var(--solid); padding: 20px; }
 .lock[hidden] { display: none; }
 .lockpad[hidden], .lockdots[hidden], #lockBio[hidden] { display: none; }
@@ -1476,7 +1479,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.44.0";
+  var APP_VERSION = "1.45.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
   var TRASH_DAYS = 30;
 
@@ -1656,7 +1659,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         id: String(i.id), src: String(i.src || i.id), cx: numIn(i.cx, 0, 1, 0.5), cy: numIn(i.cy, 0, 30000, 80), w: numIn(i.w, 0.05, 1.5, 0.6),
         nar: nar, ar: numIn(i.ar, 0.1, 10, nar), r: numIn(i.r, -180, 180, 0), op: numIn(i.op, 0.1, 1, 1),
         rad: numIn(i.rad, 0, 50, 0), wrap: !!i.wrap, fl: !!i.fl, bd: Math.round(numIn(i.bd, 0, 3, 0)), sh: !!i.sh,
-        ft: IMG_FT.indexOf(i.ft) >= 0 ? i.ft : "", z: Math.round(numIn(i.z, 0, 999, 0)), back: !!i.back, lock: !!i.lock,
+        ft: IMG_FT.indexOf(i.ft) >= 0 ? i.ft : "", zm: numIn(i.zm, 1, 4, 1), px: numIn(i.px, 0, 1, 0.5), py: numIn(i.py, 0, 1, 0.5),
+        br: Math.round(numIn(i.br, 40, 160, 100)), co: Math.round(numIn(i.co, 40, 160, 100)), sa: Math.round(numIn(i.sa, 0, 200, 100)), bl: Math.round(numIn(i.bl, 0, 10, 0)),
+        z: Math.round(numIn(i.z, 0, 999, 0)), back: !!i.back, lock: !!i.lock,
         info: String(i.info || "").slice(0, 600), ip: ["below", "above", "in-bottom", "in-top"].indexOf(i.ip) >= 0 ? i.ip : "below", show: i.show === "always" ? "always" : "tap"
       });
     });
@@ -2537,10 +2542,25 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     else { if (!inf) { inf = el("div"); node.appendChild(inf); } inf.className = "pinfo " + it.ip; inf.textContent = it.info; }
     node.classList.toggle("hasinfo", !!it.info); node.classList.toggle("always", !!it.info && it.show === "always");
   }
+  var FT_CSS = { bw: "grayscale(1) contrast(1.1)", sepia: "sepia(.85)", warm: "sepia(.35) saturate(1.3) hue-rotate(-12deg)", cool: "saturate(1.1) hue-rotate(18deg) brightness(1.03)", fade: "contrast(.82) brightness(1.12) saturate(.8)", vivid: "saturate(1.6) contrast(1.1)" };
+  function imgFilter(it, k) {
+    k = k || 1; var f = [];
+    if (it.ft && FT_CSS[it.ft]) f.push(FT_CSS[it.ft]);
+    if (it.br !== 100) f.push("brightness(" + it.br / 100 + ")"); if (it.co !== 100) f.push("contrast(" + it.co / 100 + ")"); if (it.sa !== 100) f.push("saturate(" + it.sa / 100 + ")");
+    if (it.bl > 0) f.push("blur(" + (it.bl * k) + "px)");
+    return f.join(" ");
+  }
   function styleImgEl(it, im) {
     im.className = it.ft ? "f-" + it.ft : "";
-    im.style.transform = it.fl ? "scaleX(-1)" : ""; im.style.objectFit = Math.abs(it.ar - it.nar) < 0.01 ? "fill" : "cover";
-    im.style.borderRadius = it.rad + "%"; im.style.borderWidth = (it.bd * 2) + "px";
+    var zoomed = it.zm > 1.001, moved = Math.abs(it.px - 0.5) > 0.001 || Math.abs(it.py - 0.5) > 0.001;
+    var tx = zoomed ? (0.5 - it.px) * (it.zm - 1) * 100 * (it.fl ? -1 : 1) : 0, ty = zoomed ? (0.5 - it.py) * (it.zm - 1) * 100 : 0;
+    im.style.transform = zoomed ? "translate(" + tx + "%," + ty + "%) scale(" + (it.fl ? -it.zm : it.zm) + "," + it.zm + ")" : it.fl ? "scaleX(-1)" : "";
+    im.style.filter = imgFilter(it);
+    im.style.objectPosition = (it.px * 100) + "% " + (it.py * 100) + "%";
+    im.style.objectFit = Math.abs(it.ar - it.nar) < 0.01 && !zoomed && !moved ? "fill" : "cover";
+    var cl = im.parentNode && im.parentNode.classList && im.parentNode.classList.contains("pclip") ? im.parentNode : im;
+    if (cl !== im) cl.style.aspectRatio = String(it.ar);
+    cl.style.borderRadius = it.rad + "%"; cl.style.borderWidth = (it.bd * 2) + "px";
   }
   /* vista de lectura: las imágenes con "texto alrededor" pasan a flotar y el texto las rodea */
   function renderRead() {
@@ -2550,7 +2570,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (!ws.length) return;
     var W = readEl.clientWidth || imgsEl.clientWidth || 300, blocks = Array.from(readEl.children), tops = blocks.map(function (b) { return b.offsetTop; });
     ws.forEach(function (it) {
-      var f = el("div", "pfloat"), box = el("div", "pfimg"), im = el("img"); im.alt = ""; im.decoding = "async"; im.loading = "lazy"; box.appendChild(im); box.style.aspectRatio = String(it.ar);
+      var f = el("div", "pfloat"), box = el("div", "pfimg"), im = el("img"); im.alt = ""; im.decoding = "async"; im.loading = "lazy"; var cl0 = el("div", "pclip"); cl0.appendChild(im); box.appendChild(cl0); box.style.aspectRatio = String(it.ar);
       if (it.info) {
         var inf = el("div", "pinfo " + it.ip); inf.textContent = it.info;
         if (it.ip === "above") f.appendChild(inf);
@@ -2589,7 +2609,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (selImg && !imgOf(selImg)) selImg = null;
     n.images.forEach(function (it) {
       var node = el("div", "pimg"); node.dataset.id = it.id;
-      var im = el("img"); im.alt = ""; im.draggable = false; im.decoding = "async"; im.loading = "lazy"; node.appendChild(im);
+      var im = el("img"); im.alt = ""; im.draggable = false; im.decoding = "async"; im.loading = "lazy"; var cl1 = el("div", "pclip"); cl1.appendChild(im); node.appendChild(cl1);
       imgUrl(it.src).then(function (u) { if (u) im.src = u; else node.classList.add("miss"); });
       applyImg(it, node); imgsEl.appendChild(node);
       if (!n.trashedAt) {
@@ -2633,15 +2653,19 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     grp("Forma", [["orig", "Original"], ["sq", "Cuadrada"], ["43", "4:3"], ["169", "16:9"], ["circ", "Círculo"], ["round", "Redonda"]], "shape");
     grp("Borde", [["0", "Sin borde"], ["1", "Fino"], ["2", "Medio"], ["3", "Grueso"]], "bd");
     grp("Filtro", [["", "Normal"], ["bw", "B/N"], ["sepia", "Sepia"], ["warm", "Cálido"], ["cool", "Frío"], ["fade", "Desvaído"], ["vivid", "Vivo"]], "ft");
+    var hd = el("span", "lbl"); hd.textContent = "Recorte y encuadre"; P.appendChild(hd);
+    ctl("zm", "Zoom", 100, 400, 5); ctl("px", "Izquierda ↔ derecha", 0, 100, 1); ctl("py", "Arriba ↕ abajo", 0, 100, 1);
+    var hd2 = el("span", "lbl"); hd2.textContent = "Ajustes de imagen"; P.appendChild(hd2);
+    ctl("br", "Brillo", 40, 160, 1); ctl("co", "Contraste", 40, 160, 1); ctl("sa", "Saturación", 0, 200, 1); ctl("bl", "Desenfoque", 0, 10, 1);
     grp("Opciones", [["sh", "Sombra"], ["fl", "Espejo"], ["wrap", "Texto alrededor"], ["back", "Detrás del texto"], ["lock", "Bloquear"]], "tog");
-    grp("Acciones", [["front", "Al frente"], ["bottom", "Al fondo"], ["dup", "Duplicar"], ["del", "Eliminar"], ["done", "Listo"]], "act");
+    grp("Acciones", [["front", "Al frente"], ["bottom", "Al fondo"], ["dup", "Duplicar"], ["del", "Eliminar"], ["reset", "Restablecer ajustes"], ["done", "Listo"]], "act");
   }
   function renderPanel() {
     var P = $("imgPanel"), it = selImg && imgOf(selImg), n = cur();
     if (!it || !n || n.trashedAt) { P.hidden = true; return; }
     buildPanel(); P.hidden = false;
-    var vals = { w: Math.round(it.w * 100), r: Math.round(it.r), op: Math.round(it.op * 100) };
-    P.querySelectorAll("input[type=range]").forEach(function (i) { i.value = vals[i.dataset.k]; i.nextSibling.textContent = i.dataset.k === "r" ? vals.r + "°" : vals[i.dataset.k] + "%"; });
+    var vals = { w: Math.round(it.w * 100), r: Math.round(it.r), op: Math.round(it.op * 100), zm: Math.round(it.zm * 100), px: Math.round(it.px * 100), py: Math.round(it.py * 100), br: it.br, co: it.co, sa: it.sa, bl: it.bl };
+    P.querySelectorAll("input[type=range]").forEach(function (i) { var k = i.dataset.k; i.value = vals[k]; i.nextSibling.textContent = vals[k] + (k === "r" ? "°" : k === "bl" ? " px" : "%"); i.disabled = (k === "px" || k === "py") && it.zm <= 1.001 && Math.abs(it.ar - it.nar) < 0.01; });
     var shape = it.rad >= 49 ? "circ" : Math.abs(it.ar - it.nar) < 0.01 ? (it.rad > 0 ? "round" : "orig") : Math.abs(it.ar - 1) < 0.01 ? "sq" : Math.abs(it.ar - 4 / 3) < 0.01 ? "43" : Math.abs(it.ar - 16 / 9) < 0.01 ? "169" : "";
     var ta = P.querySelector(".infoin"); if (ta && document.activeElement !== ta) ta.value = it.info || "";
     P.querySelectorAll(".chip").forEach(function (c) {
@@ -2658,13 +2682,16 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (n) changed(n);
     if (relayout) fitBody();
   }
+  function P_refreshPan(it) { $("imgPanel").querySelectorAll('input[data-k="px"],input[data-k="py"]').forEach(function (i) { i.disabled = it.zm <= 1.001 && Math.abs(it.ar - it.nar) < 0.01; }); }
   $("imgPanel").addEventListener("input", function (e) {
     var i = e.target.closest("input[type=range]"), it = selImg && imgOf(selImg); if (!i || !it) return;
     var v = Number(i.value);
-    if (i.dataset.k === "w") { it.w = v / 100; i.nextSibling.textContent = v + "%"; }
-    else if (i.dataset.k === "r") { it.r = v; i.nextSibling.textContent = v + "°"; }
-    else { it.op = v / 100; i.nextSibling.textContent = v + "%"; }
+    var k = i.dataset.k;
+    if (k === "w") it.w = v / 100; else if (k === "r") it.r = v; else if (k === "op") it.op = v / 100;
+    else if (k === "zm") it.zm = v / 100; else if (k === "px" || k === "py") it[k] = v / 100; else it[k] = v;
+    i.nextSibling.textContent = v + (k === "r" ? "°" : k === "bl" ? " px" : "%");
     imgChanged(it, true);
+    if (k === "zm") P_refreshPan(it);
   });
   $("imgPanel").addEventListener("input", function (e) {
     var ta = e.target.closest(".infoin"), it = selImg && imgOf(selImg); if (!ta || !it) return;
@@ -2693,7 +2720,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         n.images = n.images.filter(function (x) { return x.id !== it.id; }); selImg = null; changed(n);
         if (!usedImageIds().has(it.src)) imgDel(it.src);
         renderImages(); return;
-      } else if (v === "done") { selectImg(null); return; }
+      } else if (v === "reset") { it.ft = ""; it.zm = 1; it.px = 0.5; it.py = 0.5; it.br = 100; it.co = 100; it.sa = 100; it.bl = 0; }
+      else if (v === "done") { selectImg(null); return; }
     }
     imgChanged(it, true); renderPanel();
   });
@@ -3569,6 +3597,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.45.0", d: "9 nov 2026", t: "Ajustes de imagen", l: ["Recorte y encuadre: zoom de 100% a 400% y dos deslizadores para elegir qué parte de la imagen se ve. La imagen se recorta dentro de su marco.", "Ajustes finos: brillo, contraste, saturación y desenfoque, que se suman al filtro que elijas.", "Botón \"Restablecer ajustes\" para volver todo a cero.", "El PDF respeta el recorte y los ajustes (el desenfoque es aproximado)."] },
     { v: "1.44.0", d: "9 nov 2026", t: "Mapa de enlaces", l: ["Nueva opción \"Mapa de enlaces\" en el menú: un gráfico con tus notas conectadas por [[enlaces]] y por subnotas (línea punteada).", "Tocá una nota para resaltar con quién se conecta y abrirla. Se mueve con el dedo y se acerca con pellizco o con + y −.", "Abajo ves las notas sin conexiones y los enlaces a notas que no existen: tocá uno y se crea esa nota.", "Las notas protegidas no revelan sus enlaces."] },
     { v: "1.43.0", d: "9 nov 2026", t: "Orden y etiquetas", l: ["Más formas de ordenar la lista: más antiguas, título Z–A, próximo aviso y más largas.", "Nuevo gestor de etiquetas y carpetas (botón ⚙ junto a los filtros): renombrá, juntá o quitá una etiqueta o carpeta de todas tus notas de una vez.", "Si le ponés a una etiqueta el nombre de otra, se juntan. Todo tiene botón Deshacer."] },
     { v: "1.42.0", d: "9 nov 2026", t: "Calendario", l: ["Nueva opción \"Calendario\" en el menú: un mes completo con puntos naranjas en los días con avisos y grises en los días en que creaste notas.", "Tocá un día para ver sus avisos con la hora (incluye los que se repiten: diario, semanal, mensual y días elegidos) y abrir la nota.", "\"Nueva nota con aviso este día\" crea una nota con el aviso ya puesto a las 9:00.", "Las notas protegidas aparecen con 🔒."] },
@@ -4682,11 +4711,11 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
               if (it.rad > 0) {
                 var r = Math.min(cw, ch) * it.rad / 100; c.beginPath(); c.moveTo(r, 0); c.arcTo(cw, 0, cw, ch, r); c.arcTo(cw, ch, 0, ch, r); c.arcTo(0, ch, 0, 0, r); c.arcTo(0, 0, cw, 0, r); c.closePath(); c.clip();
               }
-              var FL = { bw: "grayscale(1) contrast(1.1)", sepia: "sepia(.85)", warm: "sepia(.35) saturate(1.3) hue-rotate(-12deg)", cool: "saturate(1.1) hue-rotate(18deg) brightness(1.03)", fade: "contrast(.82) brightness(1.12) saturate(.8)", vivid: "saturate(1.6) contrast(1.1)" };
-              if (it.ft && "filter" in c) c.filter = FL[it.ft];
+              var fcss = imgFilter(it, cw / 360); if (fcss && "filter" in c) c.filter = fcss;
               c.globalAlpha = it.op; if (it.fl) { c.translate(cw, 0); c.scale(-1, 1); }
               var nw = im.naturalWidth, nh = im.naturalHeight, sa = nw / nh, sx = 0, sy = 0, sw = nw, sh = nh;
-              if (sa > it.ar) { sw = nh * it.ar; sx = (nw - sw) / 2; } else if (sa < it.ar) { sh = nw / it.ar; sy = (nh - sh) / 2; }
+              if (sa > it.ar) { sw = nh * it.ar; sx = (nw - sw) * it.px; } else if (sa < it.ar) { sh = nw / it.ar; sy = (nh - sh) * it.py; }
+              if (it.zm > 1.001) { var sw2 = sw / it.zm, sh2 = sh / it.zm; sx += (sw - sw2) * it.px; sy += (sh - sh2) * it.py; sw = sw2; sh = sh2; }
               c.drawImage(im, sx, sy, sw, sh, 0, 0, cw, ch);
               c.restore();
               /* dibujos con fondo transparente: si el trazo es claro se apoya sobre fondo oscuro para que se vea en el PDF */
