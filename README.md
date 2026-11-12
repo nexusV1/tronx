@@ -217,5 +217,6 @@ Pasos, una sola vez:
 **1.55.1**: Limpieza de código sin cambios funcionales.
 **1.56.0**: Sistema de novedades: aviso tras actualizar, marcas de nuevo, versiones plegadas y búsqueda.
 **1.57.0**: Ajustes: accesos rápidos, sección Espacio con limpieza de imágenes, atajos y restablecer apariencia.
+**1.58.0**: Constelaciones: sugerencias de conexión, filtro por etiqueta y compartir el mapa como imagen.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.

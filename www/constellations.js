@@ -304,7 +304,7 @@
   var mapOpen = false, shown = false, active = false;
   var raf = 0, lastT = 0, lastDraw = 0, fly = null, inertia = null, tweening = false, tweenStart = 0;
   var perf = 0, perfAcc = 0, frAcc = 0, frN = 0, lastBusyDraw = 0;
-  var sel = null, linkFrom = null, hover = null, pulse = null, query = "", matchSet = null;
+  var sel = null, linkFrom = null, hover = null, pulse = null, query = "", matchSet = null, filterTag = "";
   var ptrs = {}, nPtr = 0, pinch = null, pan = null, downInfo = null;
   var reduceMQ = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
 
@@ -903,6 +903,18 @@
       ch.appendChild(go); ch.appendChild(rm); cr.appendChild(ch);
     });
     cs.appendChild(cr); card.appendChild(cs);
+    var sug = suggestions(nd);
+    if (sug.length) {
+      var ss = el("div", "cm-csec cm-sug");
+      ss.appendChild(el("div", "flabel", "Quizás se relacionan"));
+      var sr = el("div", "cm-chips");
+      sug.forEach(function (o) {
+        var b = el("button", "chip cm-sugchip", "+ " + o.label); b.type = "button"; b.dataset.id = o.id; b.title = "Conectar con esta nota";
+        b.addEventListener("click", function () { addLink(nd.id, o.id); renderCard(); cmap.style.setProperty("--cardh", card.offsetHeight + "px"); });
+        sr.appendChild(b);
+      });
+      ss.appendChild(sr); card.appendChild(ss);
+    }
     // constelaciones de esta nota
     var gs = el("div", "cm-csec");
     gs.appendChild(el("div", "flabel", "Constelaciones"));
@@ -1106,8 +1118,12 @@
     var raw = $("cmQ").value; query = raw.trim().toLowerCase();
     $("cmQx").hidden = !raw;
     var res = $("cmRes"); res.textContent = "";
-    if (!query) { matchSet = null; res.hidden = true; kick(); return; }
-    var found = nodes.filter(function (nd) { return hay(nd.n).indexOf(query) >= 0; });
+    function inTag(nd) { return !filterTag || nd.n.tags.indexOf(filterTag) >= 0; }
+    if (!query) {
+      if (filterTag) { matchSet = {}; nodes.forEach(function (nd) { if (inTag(nd)) matchSet[nd.id] = 1; }); } else matchSet = null;
+      res.hidden = true; kick(); return;
+    }
+    var found = nodes.filter(function (nd) { return inTag(nd) && hay(nd.n).indexOf(query) >= 0; });
     matchSet = {}; found.forEach(function (nd) { matchSet[nd.id] = 1; });
     found.sort(function (a, b) {
       var ta = a.label.toLowerCase().indexOf(query) >= 0 ? 0 : 1, tb = b.label.toLowerCase().indexOf(query) >= 0 ? 0 : 1;
@@ -1131,6 +1147,59 @@
     pulse = { id: id, t0: performance.now() };
     $("cmQ").blur();
     select(id, true);
+  }
+  /* filtro por etiqueta: las demás estrellas se atenúan */
+  function tagCounts() {
+    var c = {}; nodes.forEach(function (nd) { nd.n.tags.forEach(function (t) { c[t] = (c[t] || 0) + 1; }); });
+    return Object.keys(c).sort(function (a, b) { return c[b] - c[a] || (a < b ? -1 : 1); }).map(function (t) { return [t, c[t]]; });
+  }
+  function renderTagRow() {
+    var row = $("cmTagRow"); row.textContent = "";
+    var list = tagCounts();
+    if (filterTag && !list.some(function (x) { return x[0] === filterTag; })) filterTag = "";
+    $("cmFilter").setAttribute("aria-pressed", filterTag ? "true" : "false");
+    $("cmFilter").textContent = filterTag ? "#" + filterTag + " ×" : "Filtrar";
+    if (!list.length) { row.appendChild(el("span", "cm-none", "Todavía no usaste etiquetas")); return; }
+    var all = el("button", "chip", "Todas"); all.type = "button"; all.setAttribute("aria-pressed", filterTag ? "false" : "true");
+    all.addEventListener("click", function () { setTagFilter(""); }); row.appendChild(all);
+    list.forEach(function (x) {
+      var b = el("button", "chip", "#" + x[0] + " · " + x[1]); b.type = "button"; b.dataset.tag = x[0]; b.setAttribute("aria-pressed", filterTag === x[0] ? "true" : "false");
+      b.addEventListener("click", function () { setTagFilter(filterTag === x[0] ? "" : x[0]); }); row.appendChild(b);
+    });
+  }
+  function setTagFilter(t) { filterTag = t; renderTagRow(); runSearch(); updateOverlays(); }
+  /* "Quizás se relacionan": notas sin conexión que comparten etiquetas o palabras */
+  var STOP = {};
+  "para como pero esta este esto esos esas estos entre sobre desde hasta cuando donde porque tambien todo todos todas cada otro otra otros otras mucho muchos poco unos unas algo nada ser son fue era hay tiene tienen hacer hace sin con por que los las del una uno les nos mis tus sus muy mas más ya no si lo la el en de y a o u e se su al".split(" ").forEach(function (w) { STOP[w] = 1; });
+  function wordSet(n) {
+    var txt = ((n.title || "") + " " + (n.title || "") + " " + n.body + " " + n.items.map(function (i) { return i.t; }).join(" ")).toLowerCase(), set = {}, m = txt.match(/[a-záéíóúüñ]{4,}/g) || [];
+    m.forEach(function (w) { if (!STOP[w]) set[w] = 1; });
+    return set;
+  }
+  function suggestions(nd) {
+    var mine = wordSet(nd.n), mk = Object.keys(mine), out = [];
+    if (mk.length < 2 && !nd.n.tags.length) return out;
+    nodes.forEach(function (o) {
+      if (o === nd || linkSet[lk(nd.id, o.id)]) return;
+      var sc = 0, common = 0, other = wordSet(o.n);
+      mk.forEach(function (w) { if (other[w]) common++; });
+      var denom = Math.sqrt(Math.max(1, mk.length) * Math.max(1, Object.keys(other).length));
+      sc += common / denom * 10;
+      nd.n.tags.forEach(function (t) { if (o.n.tags.indexOf(t) >= 0) sc += 1.5; });
+      if (common >= 2 || sc >= 1.5) out.push({ nd: o, sc: sc });
+    });
+    out.sort(function (a, b) { return b.sc - a.sc; });
+    return out.slice(0, 4).map(function (x) { return x.nd; });
+  }
+  function shareMap() {
+    if (!canvas || !api.shareFile) return;
+    try {
+      kick();
+      requestAnimationFrame(function () {
+        var url = canvas.toDataURL("image/png"), b64 = url.slice(url.indexOf(",") + 1);
+        api.shareFile("tronx-constelaciones.png", b64, "image/png", "Mis constelaciones", true).then(function (ok) { if (ok === false) api.toast("No se pudo compartir el mapa"); });
+      });
+    } catch (e) { api.toast("No se pudo compartir el mapa"); }
   }
   function clearSearch() { $("cmQ").value = ""; runSearch(); }
 
@@ -1162,7 +1231,8 @@
     }
     S.sig = sig;
     if (sel && !byId[sel]) { api.closeLayer("mapcard"); }
-    if (query) runSearch();
+    if (filterTag || !$("cmTagRow").hidden) renderTagRow();
+    if (query || filterTag) runSearch();
     saveSoon();
     if (sel && byId[sel] && !$("cmCard").hidden) renderCard();
     updateOverlays();
@@ -1290,6 +1360,11 @@
       refresh(true); fitView(true); api.toast("Mapa reorganizado");
     });
     $("cmFind").addEventListener("click", function () { $("cmQ").focus(); });
+    $("cmFilter").addEventListener("click", function () {
+      if (filterTag) { setTagFilter(""); $("cmTagRow").hidden = true; return; }
+      var row = $("cmTagRow"); row.hidden = !row.hidden; if (!row.hidden) renderTagRow(); updateOverlays();
+    });
+    $("cmShare").addEventListener("click", shareMap);
     $("cmQ").addEventListener("input", runSearch);
     $("cmQ").addEventListener("focus", function () { if (query) runSearch(); });
     $("cmQ").addEventListener("keydown", function (e) {
@@ -1315,7 +1390,7 @@
         open: mapOpen, shown: shown, active: active, view: { x: V.x, y: V.y, k: V.k }, W: W, H: H, dpr: dpr, perf: perf, sel: sel,
         nodes: nodes.map(function (nd) { return { id: nd.id, sx: (nd.x - V.x) * V.k + W / 2, sy: (nd.y - V.y) * V.k + H / 2, x: nd.x, y: nd.y, tx: nd.tx, ty: nd.ty, r: nd.r }; }),
         links: S.links.slice(), groups: JSON.parse(JSON.stringify(S.groups)), tagEdges: tEdges.length, groupEdges: gEdges.length,
-        raf: !!raf
+        raf: !!raf, match: matchSet ? Object.keys(matchSet).length : -1, tag: filterTag
       };
     }
   };

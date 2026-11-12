@@ -1678,8 +1678,11 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <button class="chip" id="cmGroups" type="button"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="6.5" r="1.6"/><circle cx="19" cy="11.5" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/><path d="M5.8 15.4l3.4-7.3M11.5 7.4l6 3.4M18.2 13.2l-2 4.2"/></svg>Mis constelaciones <span class="n" id="cmGn"></span></button>
       <button class="chip" id="cmTags" type="button" aria-pressed="true" title="Mostrar u ocultar las líneas entre notas con la misma etiqueta">Etiquetas</button>
       <button class="chip" id="cmRelayout" type="button" title="Volver a acomodar todas las estrellas">Reorganizar</button>
+      <button class="chip" id="cmFilter" type="button" aria-pressed="false" title="Atenuar las notas que no tienen una etiqueta">Filtrar</button>
       <button class="chip" id="cmFind" type="button" title="Buscar una nota">Buscar</button>
+      <button class="chip" id="cmShare" type="button" title="Compartir el mapa como imagen">Compartir</button>
     </div>
+    <div class="cm-chips cm-tagrow" id="cmTagRow" hidden aria-label="Filtrar por etiqueta"></div>
   </header>
   <div class="cm-count" id="cmCount" aria-live="polite"></div>
   <div class="cm-zoom">
@@ -1714,7 +1717,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.57.0";
+  var APP_VERSION = "1.58.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -4568,6 +4571,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.58.0", d: "12 nov 2026", t: "Constelaciones mejoradas", l: ["«Quizás se relacionan»: en la vista previa de cada estrella, sugerencias de notas parecidas (mismas etiquetas o palabras) para conectar con un toque", "Filtrar por etiqueta: las demás estrellas se atenúan (se combina con el buscador)", "Compartir el mapa como imagen"] },
     { v: "1.57.0", d: "12 nov 2026", t: "Ajustes mejorados", l: ["Chips de acceso rápido arriba de Ajustes (Sonido, Copias, Plantillas, Markdown, PIN, Espacio, Acerca)", "Nueva sección «Espacio»: cuántas notas, imágenes y stickers tenés y cuánto ocupan, con «Liberar espacio» para borrar imágenes sin uso", "«Acerca de Tronx» con atajos a Novedades y a la guía", "«Restablecer ajustes de apariencia» (no toca notas, copias, PIN ni stickers)"] },
     { v: "1.56.0", d: "12 nov 2026", t: "Novedades mejoradas", l: ["Al actualizar, un aviso te lleva directo a lo nuevo (una sola vez por versión)", "Las novedades marcan lo que es nuevo desde tu última visita y pliegan las versiones viejas", "Buscador dentro de las novedades", "Las fechas de cada versión ahora son las reales"] },
     { v: "1.55.1", d: "9 nov 2026", t: "Limpieza de código", l: ["Se eliminó código muerto (variables, estilos y ids sin uso)", "Menos avisos del analizador: 0 advertencias", "Sin cambios visibles: todo funciona igual"] },
@@ -6517,7 +6521,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   if (window.TronxMap) window.TronxMap.init({
     notes: notes, openNote: openNote, createNote: createNote, toast: toast, iconSpan: iconSpan, when: when,
     pushLayer: pushLayer, closeLayer: closeLayer, hasLayer: hasLayer, registerLayer: registerLayer,
-    lsGet: lsGet, lsSet: lsSet, uid: uid,
+    lsGet: lsGet, lsSet: lsSet, uid: uid, shareFile: shareFile,
     colorRGB: function (k) { return colorOf(k).rgb || null; },
     getSettings: function () { return settings; },
     accent: function () { return ACCENTS[settings.accent].dark; }

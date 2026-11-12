@@ -140,3 +140,8 @@ body.cm-open .toast { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 17
 /* Con el mapa a la vista, la app y el fondo no se maquetan ni se pintan ni se les recalculan estilos */
 body.cm-live .app, body.cm-live .bgfx { content-visibility: hidden; visibility: hidden; }
 .cmap #cmCanvas { will-change: transform; transform: translateZ(0); }
+
+.cm-tagrow[hidden] { display: none; }
+.cm-tagrow { grid-column: 1 / -1; padding-bottom: 2px; }
+.cm-tagrow .chip { flex: none; }
+.cm-sugchip { flex: none; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
