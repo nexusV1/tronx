@@ -85,7 +85,6 @@
 
   /* ---------- grafo: estrellas y conexiones ---------- */
   var nodes = [], byId = {}, mEdges = [], tEdges = [], gEdges = [], gInfo = [];
-  var measureCtx = null;
 
   function wordsOf(n) {
     if (n.type === "list") { var c = 0; n.items.forEach(function (i) { c += i.t.length; }); return n.items.length * 4 + c / 6; }

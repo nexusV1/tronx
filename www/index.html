@@ -393,7 +393,6 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .row .mv button:disabled { color: var(--muted); }
 .row .mv .sep { width: 1px; background: var(--line); margin: 4px 3px; }
 .row .dpick { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-.hiddenN { color: var(--muted); font-size: 12px; padding: 6px 4px 0; }
 .itemtools { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; }
 .meta { padding: 6px 22px 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em; color: var(--muted); }
 .trashbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line); background: var(--panel); }
@@ -1352,7 +1351,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <button class="btn" id="mdAllBtn" type="button">Exportar todo (.zip de .md)</button>
       <button class="btn" id="mdImpBtn" type="button">Importar .md, .txt o .zip</button>
     </div>
-    <p class="hint" id="mdHint">Cada nota pasa a un archivo .md (con etiquetas y fechas), ordenado en carpetas. Sirve para abrirlas en otras apps. No incluye las imágenes ni las notas protegidas.</p>
+    <p class="hint">Cada nota pasa a un archivo .md (con etiquetas y fechas), ordenado en carpetas. Sirve para abrirlas en otras apps. No incluye las imágenes ni las notas protegidas.</p>
     <input type="file" id="mdImpFile" accept=".md,.markdown,.txt,.zip,text/markdown,text/plain,application/zip" multiple hidden>
     <h3>Copia automática</h3>
     <div class="seg" id="autoBkSeg" role="group" aria-label="Copia automática"><button type="button" data-v="on">Activada</button><button type="button" data-v="off">Apagada</button></div>
@@ -1407,7 +1406,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <div class="overlay" id="stkEd" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Crear sticker">
     <div class="sheethead"><strong id="seTitle">Crear sticker</strong><button class="btn small" id="seClose" type="button">Cerrar</button></div>
-    <div class="sepv" id="seStage"><canvas id="sePrev" width="512" height="512" aria-label="Vista previa del sticker"></canvas></div>
+    <div class="sepv"><canvas id="sePrev" width="512" height="512" aria-label="Vista previa del sticker"></canvas></div>
     <div class="seg" id="seSrc" role="group" aria-label="Con qué lo hacés"><button type="button" data-k="draw" aria-pressed="true">Dibujar</button><button type="button" data-k="photo" aria-pressed="false">Foto</button><button type="button" data-k="text" aria-pressed="false">Texto / emoji</button></div>
     <div class="setools" id="seTools"></div>
     <input type="file" id="seFile" accept="image/*" hidden>
@@ -1467,7 +1466,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <div class="sheethead"><strong>Compartir como imagen</strong><button class="btn small" id="siClose" type="button">Cerrar</button></div>
     <div class="grp" id="siStyles" role="group" aria-label="Estilo"><button class="chip" type="button" data-s="universo" aria-pressed="true">Universo</button><button class="chip" type="button" data-s="papel" aria-pressed="false">Papel</button><button class="chip" type="button" data-s="color" aria-pressed="false">Color de la nota</button></div>
     <div class="grp" style="margin:6px 0"><button class="chip" type="button" id="siImgs" aria-pressed="true">Con imágenes</button><button class="chip" type="button" id="siBrand" aria-pressed="true">Marca Tronx</button></div>
-    <div class="sipreview" id="siPrev"><p class="hint" id="siMsg">Preparando la imagen…</p><img id="siImg" alt="Vista previa de la nota como imagen" hidden></div>
+    <div class="sipreview"><p class="hint" id="siMsg">Preparando la imagen…</p><img id="siImg" alt="Vista previa de la nota como imagen" hidden></div>
     <div class="actions"><button class="btn primary" id="siShare" type="button">Compartir</button></div>
   </section>
 </div>
@@ -1632,8 +1631,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <li><button class="mn-item" id="mnProfile" type="button" style="--i:2;--c1:#a78bfa;--c2:#4c1d95"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.6-6 7.5-6s6.7 2 7.5 6"/></svg></span><span class="mn-tx"><b>Perfil</b><i id="mnSubPf">Tu avatar, rachas y logros</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnCalendar" type="button" style="--i:3;--c1:#fbbf24;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></span><span class="mn-tx"><b>Calendario</b><i>Tus avisos y notas por día</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnLinkMap" type="button" style="--i:3;--c1:#34d399;--c2:#065f46"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8 7.4l8 -1M7 9l4 7M17 8l-4 8"/></svg></span><span class="mn-tx"><b>Mapa de enlaces</b><i>Cómo se conectan tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-      <li><button class="mn-item" id="mnCustom" type="button" style="--i:3;--c1:#f472b6;--c2:#831843"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Personalización</b><i id="mnSubCustom">Tema, colores, letra y fondos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-      <li><button class="mn-item" id="mnStickers" type="button" style="--i:3;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Mis stickers</b><i id="mnSubStk">Creá los tuyos y usalos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnCustom" type="button" style="--i:3;--c1:#f472b6;--c2:#831843"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Personalización</b><i>Tema, colores, letra y fondos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnStickers" type="button" style="--i:3;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Mis stickers</b><i>Creá los tuyos y usalos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:4" aria-hidden="true">Explorar</li>
       <li><button class="mn-item" id="mnLink" type="button" style="--i:5;--c1:#34d399;--c2:#064e3b"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="mn-tx"><b>Vinculación</b><span class="mn-soon">En desarrollo</span></span></button></li>
       <li><button class="mn-item soon" id="mnMax" type="button" style="--i:6;--c1:#fb923c;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg></span><span class="mn-tx"><b>MAX</b><span class="mn-soon">En desarrollo</span></span></button></li>
@@ -1697,13 +1696,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.55.0";
+  var APP_VERSION = "1.55.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
   function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
-  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch { return false; } }
   function uid() { return "n" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
   /* ---------- paletas ---------- */
@@ -1731,7 +1730,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* ---------- ajustes ---------- */
   var settings = { theme: "dark", accent: "violet", font: "sans", size: 16, view: "grid", sort: "updated", skin: 0, noteBg: "nebula", bgAnim: true, firstRun: 0, lastBackup: 0, bkNag: 0, autoBk: true, autoBkAt: 0, autoBkSig: "", autoBkWhere: "", autoBkEvery: 6, autoBkTime: "", autoBkExit: false, autoBkChg: true, autoBkKeep: 7, autoBkChk: 0, act: {}, pinBio: false, fab: true, swipe: true, wTot: 0, streakBest: 0, ach: {}, statsInit: false };
-  try { var sraw = lsGet(SKEY); if (sraw) Object.assign(settings, JSON.parse(sraw)); } catch (e) {}
+  try { var sraw = lsGet(SKEY); if (sraw) Object.assign(settings, JSON.parse(sraw)); } catch {}
   if (!ACCENTS[settings.accent]) settings.accent = "ember";
   settings.size = Math.min(24, Math.max(14, Number(settings.size) || 16));
 
@@ -1776,7 +1775,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       z: stkNum(x.z, 0.3, 4, 1), px: stkNum(x.px, -1, 1, 0), py: stkNum(x.py, -1, 1, 0), at: stkNum(x.at, 0, 9e15, 0)
     };
   }
-  try { var sa = JSON.parse(lsGet(STK_KEY) || "[]"); if (Array.isArray(sa)) myStk = sa.map(cleanStk).filter(Boolean).slice(0, STK_MAX); } catch (e) { myStk = []; }
+  try { var sa = JSON.parse(lsGet(STK_KEY) || "[]"); if (Array.isArray(sa)) myStk = sa.map(cleanStk).filter(Boolean).slice(0, STK_MAX); } catch { myStk = []; }
   function saveStk() { lsSet(STK_KEY, JSON.stringify(myStk)); }
   function stkOf(id) { for (var i = 0; i < myStk.length; i++) if (myStk[i].id === id) return myStk[i]; return null; }
   function stkLoad(id, force) {
@@ -1785,7 +1784,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var pr = imgGet("stk:" + id).then(function (b) {
       delete stkPend[id];
       if (!b) return null;
-      if (stkUrls[id]) { try { URL.revokeObjectURL(stkUrls[id]); } catch (e) {} }
+      if (stkUrls[id]) { try { URL.revokeObjectURL(stkUrls[id]); } catch {} }
       var u = URL.createObjectURL(b); stkUrls[id] = u;
       [].forEach.call(document.querySelectorAll('img[data-stk="' + id + '"]'), function (im) { im.src = u; });
       return u;
@@ -1855,7 +1854,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         seg = m ? m[0] : "";
       }
       if (!/\p{Extended_Pictographic}|\p{Regional_Indicator}|\u20E3/u.test(seg)) return "";
-    } catch (e) {
+    } catch {
       seg = Array.from(str).slice(0, 2).join("");
       if (/^[\x00-\x7f]+$/.test(seg)) return "";
     }
@@ -2025,7 +2024,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function loadNotes() {
     var arr = [], raw = lsGet(KEY);
     if (!raw) raw = lsGet(KEY1);
-    if (raw) { try { arr = JSON.parse(raw); } catch (e) { arr = []; } }
+    if (raw) { try { arr = JSON.parse(raw); } catch { arr = []; } }
     if (!Array.isArray(arr)) arr = [];
     arr.forEach(function (x) {
       var n = normalize(x);
@@ -2038,7 +2037,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     syncSoon();
     clearTimeout(saveTimer); saveTimer = null;
     var json = JSON.stringify(Array.from(notes.values())), ok = lsSet(KEY, json);
-    if (ok && soft !== true) { try { ok = localStorage.getItem(KEY) === json; } catch (e) { ok = false; } }
+    if (ok && soft !== true) { try { ok = localStorage.getItem(KEY) === json; } catch { ok = false; } }
     setStatus(ok ? "Guardado" : "No se pudo guardar: sin espacio");
     if (window.TronxMap) window.TronxMap.prune();
     return ok;
@@ -2082,7 +2081,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function pushLayer(name) {
     if (layers.indexOf(name) >= 0) return;
     layers.push(name);
-    try { history.pushState({ d: layers.length }, ""); } catch (e) {}
+    try { history.pushState({ d: layers.length }, ""); } catch {}
   }
   function closeLayerUI(name) {
     if (name === "settings") $("settings").hidden = true;
@@ -2105,7 +2104,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function closeTo(n) {
     var k = layers.length - n;
     if (k <= 0) return;
-    try { history.go(-k); } catch (e) {}
+    try { history.go(-k); } catch {}
     setTimeout(function () { while (layers.length > n) closeLayerUI(layers.pop()); }, 160);
   }
   function closeLayer(name) {
@@ -2217,7 +2216,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         if (Math.abs(my) > 12 && Math.abs(my) > Math.abs(mx)) { id = -1; return; }
         if (Math.abs(mx) < 14 || Math.abs(mx) < Math.abs(my) * 1.6) return;
         if (mx > 0 && tab !== "notes") { id = -1; return; }
-        on = true; try { b.setPointerCapture(e.pointerId); } catch (er) { /* sin captura */ }
+        on = true; try { b.setPointerCapture(e.pointerId); } catch { /* sin captura */ }
         b.dataset.sw = "1"; li.classList.add("swiping"); b.classList.add("swdrag");
         bg = el("div", "swbg"); li.insertBefore(bg, b);
       }
@@ -2227,7 +2226,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var right = dx > 0, ready = Math.abs(dx) >= TH;
       bg.className = "swbg " + (right ? "pin" : "arch") + (ready ? "" : " off");
       bg.textContent = right ? (n.pinned ? "Desfijar" : "Fijar") : (tab === "archive" ? "Desarchivar" : "Archivar");
-      if (ready && !hit) { hit = true; try { if (navigator.vibrate) navigator.vibrate(10); } catch (er) { /* sin vibración */ } } else if (!ready) hit = false;
+      if (ready && !hit) { hit = true; try { if (navigator.vibrate) navigator.vibrate(10); } catch { /* sin vibración */ } } else if (!ready) hit = false;
     });
     function end(commit) {
       if (!on) { id = -1; return; }
@@ -2616,7 +2615,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       tags: (Array.isArray(x.tags) ? x.tags : []).map(cleanTag).filter(Boolean).slice(0, 8), icon: x.icon ? cleanIcon(x.icon) : "", color: x.color ? colorOf(x.color).k : "", bg: cleanBg(x.bg) };
     return t;
   }
-  function loadTpls() { try { var a = JSON.parse(lsGet(TPLKEY) || "[]"); myTpls = Array.isArray(a) ? a.map(cleanTpl).filter(Boolean).slice(0, 30) : []; } catch (e) { myTpls = []; } }
+  function loadTpls() { try { var a = JSON.parse(lsGet(TPLKEY) || "[]"); myTpls = Array.isArray(a) ? a.map(cleanTpl).filter(Boolean).slice(0, 30) : []; } catch { myTpls = []; } }
   function saveTpls() { lsSet(TPLKEY, JSON.stringify(myTpls)); tplDirty = true; }
   var tplDirty = true;
   function tplFill(s) {
@@ -2764,12 +2763,12 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     });
     inp.addEventListener("blur", function () { setTimeout(function () { if (inp.parentNode) inp.remove(); }, 300); });
     row.appendChild(inp);
-    try { if (inp.showPicker) inp.showPicker(); else inp.click(); } catch (e) { inp.click(); }
+    try { if (inp.showPicker) inp.showPicker(); else inp.click(); } catch { inp.click(); }
   }
   function dragItem(e, n, idx, row) {
     if (e.button > 0) return; e.preventDefault();
     var grip = e.currentTarget, rows = [].slice.call(itemsEl.querySelectorAll(".row[data-i]")), L = n.items, s = idx, en = blockEnd(L, idx), target = null;
-    try { grip.setPointerCapture(e.pointerId); } catch (x) { /* sin captura */ }
+    try { grip.setPointerCapture(e.pointerId); } catch { /* sin captura */ }
     row.classList.add("dragging");
     rows.forEach(function (r) { var k = +r.dataset.i; if (k > s && k < en) r.classList.add("dragging"); });
     function clear() { rows.forEach(function (r) { r.classList.remove("dropline", "dropend"); }); }
@@ -3295,7 +3294,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var it = imgOf(node.dataset.id); if (!it) return;
     if (selImg !== it.id) selectImg(it.id);
     if (it.lock) return;
-    try { node.setPointerCapture(e.pointerId); } catch (er) {}
+    try { node.setPointerCapture(e.pointerId); } catch {}
     ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
     var h = e.target.closest(".hs, .hr");
     startGest(it, node, ptrs.size > 1 ? "pinch" : h ? (h.classList.contains("hs") ? "resize" : "rotate") : "move");
@@ -3399,7 +3398,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function drPos(e) { var r = drCv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
   drCv.addEventListener("pointerdown", function (e) {
     if (drCur) return;
-    try { drCv.setPointerCapture(e.pointerId); } catch (er) {}
+    try { drCv.setPointerCapture(e.pointerId); } catch {}
     drCur = { c: drColor, w: drErase ? drSize * 2 : drSize, e: drErase, p: [drPos(e)] }; drStrokes.push(drCur); drPaint(drCur, 0);
   });
   drCv.addEventListener("pointermove", function (e) {
@@ -3573,7 +3572,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       im.src = u; se.url = u;
     });
   }
-  registerLayer("stkEd", function () { $("stkEd").hidden = true; if (se && se.url) { try { URL.revokeObjectURL(se.url); } catch (e) {} } se = null; });
+  registerLayer("stkEd", function () { $("stkEd").hidden = true; if (se && se.url) { try { URL.revokeObjectURL(se.url); } catch {} } se = null; });
   function seSetSrc(k) {
     if (!se || se.p.src === k) return; se.p.src = k;
     se.p.z = 1; se.p.px = 0; se.p.py = 0;
@@ -3586,7 +3585,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     shrinkImage(file).then(function (r) {
       if (!se) return;
       var u = URL.createObjectURL(r.blob), im = new Image();
-      im.onload = function () { if (!se) return; if (se.url) { try { URL.revokeObjectURL(se.url); } catch (e) {} } se.url = u; se.img = im; se.photoBlob = r.blob; se.p.src = "photo"; se.p.z = 1; se.p.px = 0; se.p.py = 0; if (se.p.sh === "none") se.p.sh = "round"; seTools(); seStyleUi(); seRender(); };
+      im.onload = function () { if (!se) return; if (se.url) { try { URL.revokeObjectURL(se.url); } catch {} } se.url = u; se.img = im; se.photoBlob = r.blob; se.p.src = "photo"; se.p.z = 1; se.p.px = 0; se.p.py = 0; if (se.p.sh === "none") se.p.sh = "round"; seTools(); seStyleUi(); seRender(); };
       im.src = u;
     }).catch(function () { toast("No se pudo abrir esa foto"); });
   }
@@ -3658,7 +3657,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     function pos(e) { var r = pc.getBoundingClientRect(), B = 512 * 0.76, o = (512 - B) / 2; return [((e.clientX - r.left) / r.width * 512 - o) / B * 512, ((e.clientY - r.top) / r.height * 512 - o) / B * 512]; }
     pc.addEventListener("pointerdown", function (e) {
       if (!se || se.p.src !== "draw" || se.cur) return;
-      try { pc.setPointerCapture(e.pointerId); } catch (er) {}
+      try { pc.setPointerCapture(e.pointerId); } catch {}
       se.cur = { c: se.color, w: (se.erase ? se.size * 1.6 : se.size) * (512 / (512 * 0.76)) * 0.76, e: se.erase, p: [pos(e)] }; se.strokes.push(se.cur);
       sePaint(se.layer.getContext("2d"), se.cur, 0); seSoon(); e.preventDefault();
     });
@@ -3719,7 +3718,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function stkDelete(id) {
     myStk = myStk.filter(function (s) { return s.id !== id; }); saveStk();
     imgDel("stk:" + id); imgDel("stk:" + id + ":s");
-    if (stkUrls[id]) { try { URL.revokeObjectURL(stkUrls[id]); } catch (e) {} delete stkUrls[id]; }
+    if (stkUrls[id]) { try { URL.revokeObjectURL(stkUrls[id]); } catch {} delete stkUrls[id]; }
     var hit = 0;
     notes.forEach(function (n) {
       var ch = false, m = CU_RE.exec(n.bg || "");
@@ -3903,7 +3902,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function findGo(dir) {
     var all = findCountUI(); if (!all.length) { findIdx = -1; findCountUI(all); return; }
-    var pos = bodyEl.selectionEnd, s0 = bodyEl.selectionStart, k;
+    var s0 = bodyEl.selectionStart, k;
     if (dir > 0) { k = all.findIndex(function (m) { return m.a >= (findIdx >= 0 && all[findIdx] && s0 === all[findIdx].a ? s0 + 1 : s0); }); if (k < 0) k = 0; }
     else { k = -1; for (var i = all.length - 1; i >= 0; i--) if (all[i].b <= s0 && !(s0 === all[i].a)) { k = i; break; } if (k < 0) k = all.length - 1; }
     findIdx = k; var m = all[k];
@@ -4131,7 +4130,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var t = 0, sx = 0, sy = 0;
     b.addEventListener("pointerdown", function (e) {
       b.dataset.lp = ""; sx = e.clientX; sy = e.clientY; clearTimeout(t);
-      t = setTimeout(function () { b.dataset.lp = "1"; try { if (navigator.vibrate) navigator.vibrate(14); } catch (er) {} fn(); }, 420);
+      t = setTimeout(function () { b.dataset.lp = "1"; try { if (navigator.vibrate) navigator.vibrate(14); } catch {} fn(); }, 420);
     });
     ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) { b.addEventListener(ev, function () { clearTimeout(t); }); });
     b.addEventListener("pointermove", function (e) { if (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10) clearTimeout(t); });
@@ -4364,7 +4363,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function capPlugin(name) {
     var cap = window.Capacitor;
     if (!cap || !(cap.isNativePlatform && cap.isNativePlatform())) return null;
-    try { return (cap.Plugins && cap.Plugins[name]) || (cap.registerPlugin && cap.registerPlugin(name)) || null; } catch (e) { return null; }
+    try { return (cap.Plugins && cap.Plugins[name]) || (cap.registerPlugin && cap.registerPlugin(name)) || null; } catch { return null; }
   }
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -4376,7 +4375,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     return new Promise(function (resolve, reject) {
       var ta = el("textarea"); ta.value = text; ta.style.cssText = "position:fixed;opacity:0;top:0;left:0";
       document.body.appendChild(ta); ta.select();
-      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      var ok = false; try { ok = document.execCommand("copy"); } catch {}
       document.body.removeChild(ta); ok ? resolve() : reject(new Error("copy"));
     });
   }
@@ -4479,7 +4478,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* ---------- ajustes ---------- */
   function renderSettings() {
-    try { renderPinUI(); renderAutoBk(); } catch (e) {}
+    try { renderPinUI(); renderAutoBk(); } catch {}
     $("themeSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.theme ? "true" : "false"); });
     $("fontSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.font ? "true" : "false"); });
     var soundOn = !window.TronxSound || window.TronxSound.isEnabled();
@@ -4510,6 +4509,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.55.1", d: "9 nov 2026", t: "Limpieza de código", l: ["Se eliminó código muerto (variables, estilos y ids sin uso)", "Menos avisos del analizador: 0 advertencias", "Sin cambios visibles: todo funciona igual"] },
     { v: "1.55.0", d: "9 nov 2026", t: "Stickers propios", l: ["Mis stickers (menú y selector de iconos): creá los tuyos dibujando, con una foto o con un emoji/texto", "Personalizalos: forma, relleno y degradado, borde, brillo y animación (flotar, latir, girar…)", "Usalos como icono de nota, como fondo (mosaico, centro o esquina, con tamaño e intensidad) o dentro de la nota como imagen que se mueve y escala", "Editar, duplicar y borrar; hasta 40; incluidos en la copia de seguridad"] },
     { v: "1.54.0", d: "9 nov 2026", t: "Plantillas propias", l: ["Personalizar → «Guardar como plantilla»: guarda cualquier nota (texto o lista, con subtareas) como plantilla, eligiendo si incluye título, etiquetas y color/icono", "Tus plantillas aparecen primero al crear una nota vacía", "{fecha} y {hora} se completan solos al usarla", "«Mis plantillas» (también en Ajustes): usar, renombrar y borrar con Deshacer", "Hasta 30 plantillas; van incluidas en la copia de seguridad"] },
     { v: "1.53.0", d: "9 nov 2026", t: "Botón flotante y deslizar tarjetas", l: ["Botón flotante + para crear una nota (mantenido pulsado crea una lista); se esconde en la papelera, al seleccionar y al escribir en la búsqueda", "En la vista de lista: desliza una tarjeta a la derecha para fijar o a la izquierda para archivar, con Deshacer", "Ambos se pueden apagar en Personalización → Pantalla de inicio"] },
@@ -4576,7 +4576,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function openNews() {
     renderNews(); $("news").hidden = false; pushLayer("news");
-    if (settings.newsSeen !== APP_VERSION) { settings.newsSeen = APP_VERSION; saveSettings(); updateMenuBadge(); try { renderMenu(); } catch (e) {} }
+    if (settings.newsSeen !== APP_VERSION) { settings.newsSeen = APP_VERSION; saveSettings(); updateMenuBadge(); try { renderMenu(); } catch {} }
   }
   $("newsClose").addEventListener("click", function () { closeLayer("news"); });
   $("news").addEventListener("click", function (e) { if (e.target === $("news")) closeLayer("news"); });
@@ -4692,7 +4692,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       if (ks.length === 2 && pinch) { var nd = Math.hypot(pts[ks[0]].x - pts[ks[1]].x, pts[ks[0]].y - pts[ks[1]].y); if (nd > 0) { lmZoom(pinch / nd); pinch = nd; } return; }
       if (!drag || !LM.vb) return;
       if (!drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 6) return;
-      if (!drag.moved) { drag.moved = true; try { svg.setPointerCapture(e.pointerId); } catch (x) {} }
+      if (!drag.moved) { drag.moved = true; try { svg.setPointerCapture(e.pointerId); } catch {} }
       var sc = LM.vb.w / (box.width || 1); LM.vb.x -= (e.clientX - prev.x) * sc; LM.vb.y -= (e.clientY - prev.y) * sc; lmApplyVB();
     });
     function up(e) { delete pts[e.pointerId]; pinch = 0; if (drag && !drag.moved && !Object.keys(pts).length && e.target === svg) lmSelect(null); if (!Object.keys(pts).length) drag = null; }
@@ -5036,22 +5036,22 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         var t = a.effect && a.effect.target; return a.playState === "running" && t && !(t.closest && t.closest("#menu"));
       });
       pausedAnims.forEach(function (a) { a.pause(); });
-    } catch (e) { pausedAnims = []; }
+    } catch { pausedAnims = []; }
   }
-  function resumeBehind() { pausedAnims.forEach(function (a) { try { a.play(); } catch (e) {} }); pausedAnims = []; }
+  function resumeBehind() { pausedAnims.forEach(function (a) { try { a.play(); } catch {} }); pausedAnims = []; }
   function openMenu() {
     var m = $("menu");
     if (!m.hidden && !m.classList.contains("closing")) return;
     renderMenu();
     clearTimeout(menuTimer); clearTimeout(menuFullTimer);
     m.classList.remove("on", "closing"); m.hidden = false;
-    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) {}
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
     requestAnimationFrame(function () {
       m.classList.add("on");
       $("menuBtn").setAttribute("aria-expanded", "true");
       pushLayer("menu");
       // el trabajo pesado va después de que arranca la animación, no antes
-      menuFullTimer = setTimeout(function () { pauseBehind(); try { $("mnClose").focus({ preventScroll: true }); } catch (e) {} }, 360);
+      menuFullTimer = setTimeout(function () { pauseBehind(); try { $("mnClose").focus({ preventScroll: true }); } catch {} }, 360);
     });
   }
   function closeMenuUI() {
@@ -5063,7 +5063,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("menuBtn").setAttribute("aria-expanded", "false");
     clearTimeout(menuTimer);
     menuTimer = setTimeout(function () { m.hidden = true; m.classList.remove("closing"); }, 260);
-    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
+    try { $("menuBtn").focus({ preventScroll: true }); } catch {}
   }
   // Con teclado, Tab se queda dentro del menú (sin tocar el resto de la app, que sería lento)
   $("menu").addEventListener("keydown", function (e) {
@@ -5130,7 +5130,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (!$("tour").hidden) return;
     tourI = 0; tourDir = 1; renderTour();
     $("tour").hidden = false; pushLayer("tour");
-    try { $("trNext").focus({ preventScroll: true }); } catch (e) {}
+    try { $("trNext").focus({ preventScroll: true }); } catch {}
   }
   $("trNext").addEventListener("click", function () { tourGo(1); });
   $("trBack").addEventListener("click", function () { tourGo(-1); });
@@ -5157,7 +5157,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("mnTip").addEventListener("click", function () { tipI = (tipI + 1) % TIPS.length; $("mnTipT").textContent = TIPS[tipI]; });
   $("qaNote").addEventListener("click", function () { closeMenuThen(function () { $("newBtn").click(); }); });
   $("qaList").addEventListener("click", function () { closeMenuThen(function () { $("newListBtn").click(); }); });
-  $("qaFind").addEventListener("click", function () { closeMenuThen(function () { try { $("q").focus(); $("q").scrollIntoView({ block: "center" }); } catch (e) {} }); });
+  $("qaFind").addEventListener("click", function () { closeMenuThen(function () { try { $("q").focus(); $("q").scrollIntoView({ block: "center" }); } catch {} }); });
   $("qaTrash").addEventListener("click", function () { closeMenuThen(function () { var t = document.querySelector('.tab[data-tab="trash"]'); if (t) t.click(); }); });
 
   function closeMenuThen(fn) { closeLayer("menu"); setTimeout(fn, 300); }
@@ -5175,7 +5175,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("mnSettings").addEventListener("click", openSettings);
   $("mnBackup").addEventListener("click", function () {
     openSettings();
-    setTimeout(function () { try { $("backupH").scrollIntoView({ block: "start", behavior: "smooth" }); } catch (e) {} }, 80);
+    setTimeout(function () { try { $("backupH").scrollIntoView({ block: "start", behavior: "smooth" }); } catch {} }, 80);
   });
   $("mnMap").addEventListener("click", function () { closeMenuThen(function () { if (window.TronxMap) window.TronxMap.open(); }); });
 
@@ -5281,7 +5281,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function blobToDataUrl(b) { return new Promise(function (res) { var r = new FileReader(); r.onload = function () { res(String(r.result)); }; r.onerror = function () { res(null); }; r.readAsDataURL(b); }); }
   function dataUrlToBlob(u) {
     var m = /^data:([^;,]+)(;base64)?,(.*)$/.exec(u || ""); if (!m) return null;
-    try { var bin = atob(decodeURIComponent(m[3])), a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new Blob([a], { type: m[1] }); } catch (e) { return null; }
+    try { var bin = atob(decodeURIComponent(m[3])), a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new Blob([a], { type: m[1] }); } catch { return null; }
   }
   function imagesForBackup() {
     var ids = Array.from(usedImageIds()), out = {};
@@ -5421,7 +5421,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }
     text = text.replace(/^\n+/, "");
     var title = "", tags = [];
-    if (meta.title) { try { title = meta.title.charAt(0) === '"' ? JSON.parse(meta.title) : meta.title.replace(/^'|'$/g, ""); } catch (e) { title = meta.title; } }
+    if (meta.title) { try { title = meta.title.charAt(0) === '"' ? JSON.parse(meta.title) : meta.title.replace(/^'|'$/g, ""); } catch { title = meta.title; } }
     if (!title) { var h1 = /^#\s+(.+)\n?/.exec(text); if (h1) { title = h1[1].trim(); text = text.slice(h1[0].length).replace(/^\n+/, ""); } }
     if (!title) title = String(fname || "").replace(/\.(md|markdown|txt)$/i, "").replace(/^.*\//, "");
     if (meta.tags) meta.tags.replace(/^\[|\]$/g, "").split(/[,\s]+/).forEach(function (t) { t = cleanTag(t.replace(/^#/, "")); if (t && tags.indexOf(t) < 0) tags.push(t); });
@@ -5477,7 +5477,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   var BK_DAYS = 7;
   function renderBkBar() {
     if (settings.newsSeen == null && lsGet(WKEY) !== "1" && !notes.size) { settings.newsSeen = APP_VERSION; saveSettings(); }
-    try { updateMenuBadge(); } catch (e) {}
+    try { updateMenuBadge(); } catch {}
     var real = 0;
     notes.forEach(function (n) { if (!n.trashedAt) real++; });
     var last = Math.max(settings.lastBackup || 0, settings.bkNag || 0, settings.firstRun || 0);
@@ -5491,7 +5491,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("bkX").addEventListener("click", function () { settings.bkNag = Date.now(); saveSettings(); renderBkBar(); });
   function importBackup(text) {
     var data;
-    try { data = JSON.parse(text); } catch (e) { toast("Ese archivo no es una copia de Tronx"); return; }
+    try { data = JSON.parse(text); } catch { toast("Ese archivo no es una copia de Tronx"); return; }
     var arr = Array.isArray(data) ? data : (data && Array.isArray(data.notes) ? data.notes : null);
     if (!arr) { toast("Ese archivo no es una copia de Tronx"); return; }
     var added = 0, updated = 0;
@@ -5744,7 +5744,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var id = ev && ev.notification && ev.notification.extra && ev.notification.extra.noteId, n = id && notes.get(id);
       if (n && !n.trashedAt && ev.actionId === "snooze") { snoozeNote(id); return; }
       if (n && !n.trashedAt) { remsOf(n).forEach(function (r) { if (!r.rep && r.at <= Date.now() + 60000) r.seen = true; }); if (n.remind && n.remind.snz && n.remind.snz <= Date.now() + 60000) { n.remind.snz = 0; changed(n); } openNote(id); }
-    }); } catch (e) {}
+    }); } catch {}
   }
   setTimeout(syncReminders, 2500);
 
@@ -5802,7 +5802,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     }).then(function () {
       settings.autoBkAt = settings.autoBkChk = Date.now(); settings.autoBkSig = notesSig(); settings.autoBkWhere = where;
       if (where.indexOf("ok") === 0) settings.lastBackup = Date.now();
-      saveSettings(); bkBusy = false; renderAutoBk(); try { renderBkBar(); } catch (e) {}
+      saveSettings(); bkBusy = false; renderAutoBk(); try { renderBkBar(); } catch {}
     }).catch(function () { bkBusy = false; });
   }
   var BKDT = new Intl.DateTimeFormat("es-AR", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
@@ -5911,7 +5911,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
             if (sa > it.ar) { sw = nh * it.ar; sx = (nw - sw) * it.px; } else if (sa < it.ar) { sh = nw / it.ar; sy = (nh - sh) * it.py; }
             if (it.zm > 1.001) { var sw2 = sw / it.zm, sh2 = sh / it.zm; sx += (sw - sw2) * it.px; sy += (sh - sh2) * it.py; sw = sw2; sh = sh2; }
             c.drawImage(im, sx, sy, sw, sh, 0, 0, cw, ch); res(cv);
-          } catch (e) { res(null); }
+          } catch { res(null); }
           URL.revokeObjectURL(u);
         };
         im.onerror = function () { URL.revokeObjectURL(u); res(null); };
@@ -6117,7 +6117,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
               c.globalCompositeOperation = "destination-over"; c.fillStyle = bgc; c.fillRect(0, 0, cw, ch);
               var b64 = cv.toDataURL("image/jpeg", 0.82).split(",")[1];
               res({ it: it, bin: atob(b64), w: cw, h: ch });
-            } catch (e) { res(null); }
+            } catch { res(null); }
             URL.revokeObjectURL(u);
           };
           im.onerror = function () { URL.revokeObjectURL(u); res(null); };
@@ -6211,7 +6211,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function exportPdf() {
     var n = cur(); if (!n) return;
     pdfImages(n).catch(function () { return []; }).then(function (pimgs) {
-      var bin; try { bin = buildPdf(n, pimgs); } catch (e) { toast("No se pudo crear el PDF"); return; }
+      var bin; try { bin = buildPdf(n, pimgs); } catch { toast("No se pudo crear el PDF"); return; }
       return shareFile(safeName(n.title) + ".pdf", btoa(bin), "application/pdf", n.title.trim() || "Nota de Tronx", true).then(function (ok) {
         if (ok && !capPlugin("Share")) toast("PDF descargado");
       });
@@ -6268,9 +6268,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("nlOff").addEventListener("click", function () { var n = cur(); if (!n) return; askNote(n, function () { setNoteLock(n, null); toast("Protección quitada"); }); });
 
   /* ---------- bloqueo con PIN ---------- */
-  var lockTarget = null, lockSetCb = null, lockCancelCb = null, lockBioOn = false;
+  var lockTarget = null, lockSetCb = null, lockCancelCb = null;
   var PINKEY = "tronx.pin.v1", lockMode = "unlock", lockBuf = "", lockTmp = "", lockOk = null, lockBusy = false, lockFails = 0, lockUntil = 0, lockTimer = 0, hiddenAt = 0;
-  function pinData() { try { var d = JSON.parse(lsGet(PINKEY) || "null"); return d && d.h && d.s ? d : null; } catch (e) { return null; } }
+  function pinData() { try { var d = JSON.parse(lsGet(PINKEY) || "null"); return d && d.h && d.s ? d : null; } catch { return null; } }
   function pinHash(pin, salt) {
     var txt = "tronx|" + salt + "|" + pin;
     if (window.crypto && crypto.subtle && window.TextEncoder) {
@@ -6306,12 +6306,12 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("lockT").textContent = o.title || t[0]; $("lockS").textContent = bioMode && o.onlyBio ? "Usá tu huella para abrirla" : (o.sub || t[1]);
     $("lockCancel").hidden = mode === "unlock" && !o.cancelable; $("lock").hidden = false; lockDraw();
     $("lockPad").hidden = $("lockDots").hidden = !!o.onlyBio;
-    $("lockBio").hidden = !bioMode; lockBioOn = bioMode;
+    $("lockBio").hidden = !bioMode;
     lockPadState();
     if (mode === "unlock" && !o.target && !bioMode && settings.pinBio && pinData()) {
       bioAvail().then(function (a) {
         if (!a || $("lock").hidden || lockMode !== "unlock" || lockTarget) return;
-        $("lockBio").hidden = false; lockBioOn = true; $("lockS").textContent = "Ingresá tu PIN o usá la huella";
+        $("lockBio").hidden = false; $("lockS").textContent = "Ingresá tu PIN o usá la huella";
         setTimeout(function () { if (!$("lock").hidden && lockMode === "unlock" && !lockTarget) lockBioTry(); }, 200);
       });
     }
@@ -6374,7 +6374,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   });
   $("pinSetBtn").addEventListener("click", function () { openLock("set1"); });
   $("pinChgBtn").addEventListener("click", function () { openLock("verify", function () { openLock("set1"); }); });
-  $("pinOffBtn").addEventListener("click", function () { openLock("verify", function () { try { localStorage.removeItem(PINKEY); } catch (e) {} settings.pinBio = false; saveSettings(); renderPinUI(); toast("PIN quitado"); }); });
+  $("pinOffBtn").addEventListener("click", function () { openLock("verify", function () { try { localStorage.removeItem(PINKEY); } catch {} settings.pinBio = false; saveSettings(); renderPinUI(); toast("PIN quitado"); }); });
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) { if (!bioBusy) hiddenAt = Date.now(); commitVersion(); return; }
     if (bioBusy) return;
