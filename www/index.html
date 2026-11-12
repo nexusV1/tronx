@@ -495,6 +495,10 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .nw h4 { margin: 2px 0 6px; font-family: var(--font-display); font-size: 16px; }
 .nw ul { margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.45; }
 .nw li { margin: 2px 0; }
+.nwhead { margin: 4px 2px 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.nwold { margin: 0 0 8px; border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; background: var(--panel); }
+.nwold summary { cursor: pointer; font-size: 14px; font-weight: 600; }
+.nwold ul { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.45; }
 .igrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; margin-top: 4px; }
 .igrid button { aspect-ratio: 1; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); display: grid; place-items: center; padding: 6px; font-size: 28px; line-height: 1; position: relative; }
 .igrid button .ic { width: 100%; height: 100%; font-size: 28px; }
@@ -1526,6 +1530,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <div class="overlay" id="news" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Novedades">
     <div class="sheethead"><strong>Novedades</strong><button class="btn small" id="newsClose" type="button">Listo</button></div>
+    <input type="search" id="newsSearch" class="pfname" placeholder="Buscar en las novedades…" aria-label="Buscar en las novedades" autocomplete="off" style="margin:0 0 10px">
     <div id="newsBody"></div>
   </section>
 </div>
@@ -1696,7 +1701,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.55.1";
+  var APP_VERSION = "1.56.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -4509,6 +4514,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.56.0", d: "12 nov 2026", t: "Novedades mejoradas", l: ["Al actualizar, un aviso te lleva directo a lo nuevo (una sola vez por versión)", "Las novedades marcan lo que es nuevo desde tu última visita y pliegan las versiones viejas", "Buscador dentro de las novedades", "Las fechas de cada versión ahora son las reales"] },
     { v: "1.55.1", d: "9 nov 2026", t: "Limpieza de código", l: ["Se eliminó código muerto (variables, estilos y ids sin uso)", "Menos avisos del analizador: 0 advertencias", "Sin cambios visibles: todo funciona igual"] },
     { v: "1.55.0", d: "9 nov 2026", t: "Stickers propios", l: ["Mis stickers (menú y selector de iconos): creá los tuyos dibujando, con una foto o con un emoji/texto", "Personalizalos: forma, relleno y degradado, borde, brillo y animación (flotar, latir, girar…)", "Usalos como icono de nota, como fondo (mosaico, centro o esquina, con tamaño e intensidad) o dentro de la nota como imagen que se mueve y escala", "Editar, duplicar y borrar; hasta 40; incluidos en la copia de seguridad"] },
     { v: "1.54.0", d: "9 nov 2026", t: "Plantillas propias", l: ["Personalizar → «Guardar como plantilla»: guarda cualquier nota (texto o lista, con subtareas) como plantilla, eligiendo si incluye título, etiquetas y color/icono", "Tus plantillas aparecen primero al crear una nota vacía", "{fecha} y {hora} se completan solos al usarla", "«Mis plantillas» (también en Ajustes): usar, renombrar y borrar con Deshacer", "Hasta 30 plantillas; van incluidas en la copia de seguridad"] },
@@ -4562,22 +4568,53 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     { v: "1.13.0", d: "6 nov 2026", t: "Perfil, Vinculación y MAX", l: ["Perfil, Vinculación y MAX figuran como \"En desarrollo\"."] },
     { v: "1.11.0", d: "6 nov 2026", t: "Más fluidez", l: ["La lista reutiliza tarjetas, escribir y buscar son mucho más fluidos y se quitaron los sonidos de clic."] }
   ];
+  var newsPrev = null, newsQ = "";
+  function verCmp(a, b) {
+    var x = String(a).split("."), y = String(b).split(".");
+    for (var i = 0; i < 3; i++) { var d = (+x[i] || 0) - (+y[i] || 0); if (d) return d; }
+    return 0;
+  }
+  function newsCard(n, fresh) {
+    var c = el("article", "nw" + (n.v === APP_VERSION ? " cur" : ""));
+    var h = el("header"); var v = el("span", "v"); v.textContent = "v" + n.v; h.appendChild(v);
+    if (fresh) { var nw = el("span", "new"); nw.textContent = "Nuevo"; h.appendChild(nw); }
+    var d = el("span", "dt"); d.textContent = n.d; h.appendChild(d); c.appendChild(h);
+    var t = el("h4"); t.textContent = n.t; c.appendChild(t);
+    var ul = el("ul"); n.l.forEach(function (x) { var li = el("li"); li.textContent = x; ul.appendChild(li); }); c.appendChild(ul);
+    return c;
+  }
   function renderNews() {
     var b = $("newsBody"); b.textContent = "";
+    var q = newsQ.trim().toLowerCase(), prev = newsPrev, fresh = [], old = [];
     NEWS.forEach(function (n) {
-      var c = el("article", "nw" + (n.v === APP_VERSION ? " cur" : ""));
-      var h = el("header"); var v = el("span", "v"); v.textContent = "v" + n.v; h.appendChild(v);
-      if (n.v === APP_VERSION) { var nw = el("span", "new"); nw.textContent = "Nueva"; h.appendChild(nw); }
-      var d = el("span", "dt"); d.textContent = n.d; h.appendChild(d); c.appendChild(h);
-      var t = el("h4"); t.textContent = n.t; c.appendChild(t);
-      var ul = el("ul"); n.l.forEach(function (x) { var li = el("li"); li.textContent = x; ul.appendChild(li); }); c.appendChild(ul);
-      b.appendChild(c);
+      if (q && (n.t + " " + n.l.join(" ") + " v" + n.v).toLowerCase().indexOf(q) < 0) return;
+      (prev && verCmp(n.v, prev) > 0 ? fresh : old).push(n);
     });
+    if (!q && fresh.length) {
+      var hd = el("p", "nwhead"); hd.textContent = fresh.length === 1 ? "Lo nuevo desde tu última visita" : fresh.length + " versiones nuevas desde tu última visita (v" + prev + ")"; b.appendChild(hd);
+    }
+    fresh.forEach(function (n) { b.appendChild(newsCard(n, true)); });
+    if (!q && fresh.length && old.length) { var h2 = el("p", "nwhead"); h2.textContent = "Versiones anteriores"; b.appendChild(h2); }
+    old.forEach(function (n, i) {
+      if (q || i < 3 || fresh.length === 0 && i < 6) { b.appendChild(newsCard(n, false)); return; }
+      var dt = el("details", "nwold"), sm = el("summary"); sm.textContent = "v" + n.v + " · " + n.t; dt.appendChild(sm);
+      var ul = el("ul"); n.l.forEach(function (x) { var li = el("li"); li.textContent = x; ul.appendChild(li); }); dt.appendChild(ul); b.appendChild(dt);
+    });
+    if (!fresh.length && !old.length) { var em = el("p", "hint"); em.textContent = "No hay novedades que coincidan con «" + newsQ.trim() + "»."; b.appendChild(em); }
   }
   function openNews() {
+    newsPrev = settings.newsSeen || null; newsQ = ""; $("newsSearch").value = "";
     renderNews(); $("news").hidden = false; pushLayer("news");
     if (settings.newsSeen !== APP_VERSION) { settings.newsSeen = APP_VERSION; saveSettings(); updateMenuBadge(); try { renderMenu(); } catch {} }
   }
+  $("newsSearch").addEventListener("input", function () { newsQ = $("newsSearch").value; renderNews(); });
+  /* tras actualizar: aviso suave una sola vez por versión */
+  setTimeout(function () {
+    var lk = $("lock"); if (lk && !lk.hidden) return;
+    if (settings.newsSeen && settings.newsSeen !== APP_VERSION && settings.newsToast !== APP_VERSION) {
+      settings.newsToast = APP_VERSION; saveSettings(); toast("Tronx se actualizó a la versión " + APP_VERSION, "Ver novedades", openNews);
+    }
+  }, 2200);
   $("newsClose").addEventListener("click", function () { closeLayer("news"); });
   $("news").addEventListener("click", function (e) { if (e.target === $("news")) closeLayer("news"); });
   /* ---------- mapa de enlaces ---------- */
