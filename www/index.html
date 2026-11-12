@@ -18,23 +18,23 @@
 /* Layout: lista de notas a la izquierda, editor a la derecha; en celular una pantalla por vez. */
 /* Paleta "universo": lavanda clara de día, espacio profundo de noche. */
 :root {
-  --bg: #f3f4f9;
+  --bg: #e9ecfb;
   --panel: #ffffff;
   --raised: #ffffff;
-  --solid: #ffffff;
-  --ink: #14162b;
-  --muted: #5b6078;
-  --line: #e2e4ee;
-  --sel: #eeedff;
+  --solid: #fbfbff;
+  --ink: #0f1230;
+  --muted: #4b5174;
+  --line: #d3d8f0;
+  --sel: #e4e1ff;
   --accent: #6b46d6;
   --accent-ink: #ffffff;
   --accent-soft: rgba(107, 70, 214, 0.14);
   --danger: #c0281f;
   --shadow: rgba(18, 22, 60, 0.28);
-  --card-bg: linear-gradient(170deg, #ffffff 0%, #f8f9fe 100%);
-  --card-bd: #e3e5ef;
-  --card-glow: rgba(30, 36, 100, 0.22);
-  --cosmos: radial-gradient(ellipse 90% 34% at 10% 0%, rgba(140, 110, 255, 0.07), transparent 70%), radial-gradient(ellipse 80% 34% at 100% 100%, rgba(90, 160, 255, 0.06), transparent 70%);
+  --card-bg: linear-gradient(160deg, #ffffff 0%, #eef0ff 100%);
+  --card-bd: #c9cfee;
+  --card-glow: rgba(70, 60, 190, 0.38);
+  --cosmos: radial-gradient(ellipse 90% 40% at 8% 0%, rgba(140, 110, 255, 0.22), transparent 70%), radial-gradient(ellipse 80% 40% at 100% 100%, rgba(90, 160, 255, 0.2), transparent 70%);
   --note-size: 16px;
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -722,7 +722,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 /* Cada fondo define 4 variables: --bgbase (color de base), --bgimg (capas), --bgsize (tamaño de cada capa) y --fl (capa que se mueve).
    Hay una versión clara y otra oscura; JS pone data-dark="1" en <html> según el tema que esté activo. */
 :root {
-  --stars: radial-gradient(1.4px 1.4px at 22px 38px, rgba(120, 90, 220, 0.12), transparent 100%), radial-gradient(1.2px 1.2px at 96px 120px, rgba(90, 140, 230, 0.10), transparent 100%), radial-gradient(1.6px 1.6px at 170px 64px, rgba(150, 100, 230, 0.10), transparent 100%), radial-gradient(1.2px 1.2px at 60px 210px, rgba(90, 160, 230, 0.10), transparent 100%), radial-gradient(1.4px 1.4px at 200px 188px, rgba(120, 90, 220, 0.10), transparent 100%);
+  --stars: radial-gradient(1.4px 1.4px at 22px 38px, rgba(120, 90, 220, 0.312), transparent 100%), radial-gradient(1.2px 1.2px at 96px 120px, rgba(90, 140, 230, 0.26), transparent 100%), radial-gradient(1.6px 1.6px at 170px 64px, rgba(150, 100, 230, 0.26), transparent 100%), radial-gradient(1.2px 1.2px at 60px 210px, rgba(90, 160, 230, 0.26), transparent 100%), radial-gradient(1.4px 1.4px at 200px 188px, rgba(120, 90, 220, 0.26), transparent 100%);
   --stars-size: 230px 260px, 230px 260px, 230px 260px, 230px 260px, 230px 260px;
 }
 :root[data-dark="1"] {
@@ -734,40 +734,40 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 [data-bg] { --bgbase: transparent; --bgimg: none; --bgsize: auto; --fl: none; }
 
 /* Nebulosa */
-[data-bg="nebula"] { --bgbase: #fafaff; --bgimg: var(--stars), radial-gradient(ellipse 80% 55% at 12% 0%, rgba(150, 110, 255, 0.15), transparent 70%), radial-gradient(ellipse 70% 50% at 100% 35%, rgba(255, 140, 210, 0.10), transparent 70%), radial-gradient(ellipse 90% 55% at 70% 108%, rgba(90, 160, 255, 0.13), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 40% 30% at 30% 35%, rgba(170, 120, 255, 0.11), transparent 70%), radial-gradient(ellipse 35% 28% at 72% 62%, rgba(255, 140, 200, 0.09), transparent 70%); }
+[data-bg="nebula"] { --bgbase: #fafaff; --bgimg: var(--stars), radial-gradient(ellipse 80% 55% at 12% 0%, rgba(150, 110, 255, 0.285), transparent 70%), radial-gradient(ellipse 70% 50% at 100% 35%, rgba(255, 140, 210, 0.19), transparent 70%), radial-gradient(ellipse 90% 55% at 70% 108%, rgba(90, 160, 255, 0.247), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 40% 30% at 30% 35%, rgba(170, 120, 255, 0.209), transparent 70%), radial-gradient(ellipse 35% 28% at 72% 62%, rgba(255, 140, 200, 0.171), transparent 70%); }
 :root[data-dark="1"] [data-bg="nebula"] { --bgbase: #080720; --bgimg: var(--stars), radial-gradient(ellipse 85% 55% at 10% 0%, rgba(120, 80, 255, 0.42), transparent 70%), radial-gradient(ellipse 70% 50% at 100% 38%, rgba(220, 80, 200, 0.22), transparent 70%), radial-gradient(ellipse 90% 55% at 65% 110%, rgba(40, 130, 240, 0.3), transparent 70%); --fl: radial-gradient(ellipse 40% 30% at 30% 35%, rgba(150, 100, 255, 0.3), transparent 70%), radial-gradient(ellipse 35% 28% at 72% 62%, rgba(230, 90, 190, 0.2), transparent 70%); }
 /* Aurora */
-[data-bg="aurora"] { --bgbase: #f5fcf9; --bgimg: var(--stars), radial-gradient(ellipse 120% 35% at 30% 16%, rgba(60, 200, 150, 0.12), transparent 70%), radial-gradient(ellipse 100% 30% at 75% 30%, rgba(150, 120, 255, 0.11), transparent 70%), radial-gradient(ellipse 120% 30% at 20% 46%, rgba(80, 180, 255, 0.08), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 55% 14% at 35% 40%, rgba(60, 210, 160, 0.13), transparent 75%), radial-gradient(ellipse 50% 12% at 65% 52%, rgba(150, 120, 255, 0.11), transparent 75%); }
+[data-bg="aurora"] { --bgbase: #f5fcf9; --bgimg: var(--stars), radial-gradient(ellipse 120% 35% at 30% 16%, rgba(60, 200, 150, 0.228), transparent 70%), radial-gradient(ellipse 100% 30% at 75% 30%, rgba(150, 120, 255, 0.209), transparent 70%), radial-gradient(ellipse 120% 30% at 20% 46%, rgba(80, 180, 255, 0.152), transparent 70%); --bgsize: var(--stars-size), 100% 100%, 100% 100%, 100% 100%; --fl: radial-gradient(ellipse 55% 14% at 35% 40%, rgba(60, 210, 160, 0.247), transparent 75%), radial-gradient(ellipse 50% 12% at 65% 52%, rgba(150, 120, 255, 0.209), transparent 75%); }
 :root[data-dark="1"] [data-bg="aurora"] { --bgbase: #04101a; --bgimg: var(--stars), radial-gradient(ellipse 120% 35% at 30% 16%, rgba(60, 235, 170, 0.3), transparent 70%), radial-gradient(ellipse 100% 30% at 75% 30%, rgba(130, 90, 255, 0.32), transparent 70%), radial-gradient(ellipse 120% 30% at 20% 46%, rgba(60, 180, 255, 0.18), transparent 70%); --fl: radial-gradient(ellipse 55% 14% at 35% 40%, rgba(60, 240, 170, 0.34), transparent 75%), radial-gradient(ellipse 50% 12% at 65% 52%, rgba(150, 110, 255, 0.34), transparent 75%); }
 /* Galaxia (la capa que se mueve gira muy despacio) */
-[data-bg="galaxy"] { --bgbase: #f9f8ff; --bgimg: var(--stars), radial-gradient(circle at 50% 44%, rgba(255, 245, 255, 0.90), rgba(190, 150, 255, 0.15) 7%, transparent 38%); --bgsize: var(--stars-size), 100% 100%; --fl: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(150, 110, 255, 0.10) 50deg, transparent 110deg, rgba(80, 160, 255, 0.08) 190deg, transparent 250deg, rgba(235, 110, 220, 0.08) 310deg, transparent 360deg); }
+[data-bg="galaxy"] { --bgbase: #f9f8ff; --bgimg: var(--stars), radial-gradient(circle at 50% 44%, rgba(255, 245, 255, 0.6), rgba(190, 150, 255, 0.285) 7%, transparent 38%); --bgsize: var(--stars-size), 100% 100%; --fl: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(150, 110, 255, 0.19) 50deg, transparent 110deg, rgba(80, 160, 255, 0.152) 190deg, transparent 250deg, rgba(235, 110, 220, 0.152) 310deg, transparent 360deg); }
 :root[data-dark="1"] [data-bg="galaxy"] { --bgbase: #05040f; --bgimg: var(--stars), radial-gradient(circle at 50% 44%, rgba(255, 240, 255, 0.55), rgba(160, 120, 255, 0.22) 7%, transparent 38%); --fl: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(140, 100, 255, 0.3) 50deg, transparent 110deg, rgba(70, 160, 255, 0.24) 190deg, transparent 250deg, rgba(230, 100, 220, 0.24) 310deg, transparent 360deg); }
 /* Estrellas */
 [data-bg="stars"] { --bgbase: #f8f9ff; --bgimg: var(--stars), linear-gradient(180deg, #eff1fb 0%, #fafbff 100%); --bgsize: var(--stars-size), 100% 100%; }
 :root[data-dark="1"] [data-bg="stars"] { --bgbase: #04050f; --bgimg: var(--stars), radial-gradient(ellipse 100% 50% at 50% 0%, rgba(60, 80, 200, 0.28), transparent 70%), linear-gradient(180deg, #080b26 0%, #03040b 100%); --bgsize: var(--stars-size), 100% 100%, 100% 100%; }
 /* Medianoche (con luna) */
-[data-bg="midnight"] { --bgbase: #eef1fb; --bgimg: var(--stars), radial-gradient(circle at 84% 12%, rgba(255, 226, 150, 0.95) 0 2.4%, rgba(255, 230, 160, 0.35) 4%, transparent 22%), linear-gradient(180deg, #e4e8fa 0%, #f7f8ff 100%); --bgsize: var(--stars-size), 100% 100%, 100% 100%; }
+[data-bg="midnight"] { --bgbase: #eef1fb; --bgimg: var(--stars), radial-gradient(circle at 84% 12%, rgba(255, 226, 150, 0.6) 0 2.4%, rgba(255, 230, 160, 0.6) 4%, transparent 22%), linear-gradient(180deg, #e4e8fa 0%, #f7f8ff 100%); --bgsize: var(--stars-size), 100% 100%, 100% 100%; }
 :root[data-dark="1"] [data-bg="midnight"] { --bgbase: #03030b; --bgimg: var(--stars), radial-gradient(circle at 84% 12%, rgba(240, 244, 255, 0.92) 0 2.4%, rgba(190, 205, 255, 0.28) 4%, rgba(120, 140, 255, 0.1) 14%, transparent 34%), linear-gradient(180deg, #0b0e2c 0%, #04040d 70%); }
 /* Atardecer */
-[data-bg="sunset"] { --bgbase: #fff3ec; --bgimg: radial-gradient(ellipse 80% 40% at 50% 106%, rgba(255, 150, 90, 0.36), transparent 70%), linear-gradient(180deg, rgba(255, 190, 120, 0) 0%, rgba(255, 150, 170, 0.28) 58%, rgba(255, 200, 120, 0.42) 100%), linear-gradient(180deg, #fff6f0, #ffeef2); --bgsize: 100% 100%, 100% 100%, 100% 100%; }
+[data-bg="sunset"] { --bgbase: #fff3ec; --bgimg: radial-gradient(ellipse 80% 40% at 50% 106%, rgba(255, 150, 90, 0.6), transparent 70%), linear-gradient(180deg, rgba(255, 190, 120, 0.0) 0%, rgba(255, 150, 170, 0.532) 58%, rgba(255, 200, 120, 0.6) 100%), linear-gradient(180deg, #fff6f0, #ffeef2); --bgsize: 100% 100%, 100% 100%, 100% 100%; }
 :root[data-dark="1"] [data-bg="sunset"] { --bgbase: #14081f; --bgimg: radial-gradient(ellipse 80% 40% at 50% 106%, rgba(255, 170, 90, 0.38), transparent 70%), linear-gradient(180deg, rgba(40, 20, 90, 0) 0%, rgba(150, 50, 120, 0.3) 58%, rgba(255, 120, 70, 0.32) 100%), linear-gradient(180deg, #160a2c, #14081f); }
 /* Océano */
-[data-bg="ocean"] { --bgbase: #eaf7fb; --bgimg: repeating-radial-gradient(circle at 50% 135%, transparent 0 24px, rgba(40, 150, 200, 0.08) 24px 26px), radial-gradient(ellipse 100% 30% at 20% 100%, rgba(40, 190, 210, 0.26), transparent 70%), radial-gradient(ellipse 80% 40% at 90% 18%, rgba(70, 140, 255, 0.18), transparent 70%), linear-gradient(180deg, rgba(120, 200, 240, 0) 0%, rgba(60, 160, 210, 0.22) 100%); --bgsize: 100% 100%, 100% 100%, 100% 100%, 100% 100%; }
+[data-bg="ocean"] { --bgbase: #eaf7fb; --bgimg: repeating-radial-gradient(circle at 50% 135%, transparent 0 24px, rgba(40, 150, 200, 0.152) 24px 26px), radial-gradient(ellipse 100% 30% at 20% 100%, rgba(40, 190, 210, 0.494), transparent 70%), radial-gradient(ellipse 80% 40% at 90% 18%, rgba(70, 140, 255, 0.342), transparent 70%), linear-gradient(180deg, rgba(120, 200, 240, 0.0) 0%, rgba(60, 160, 210, 0.418) 100%); --bgsize: 100% 100%, 100% 100%, 100% 100%, 100% 100%; }
 :root[data-dark="1"] [data-bg="ocean"] { --bgbase: #04121f; --bgimg: repeating-radial-gradient(circle at 50% 135%, transparent 0 24px, rgba(120, 220, 255, 0.06) 24px 26px), radial-gradient(ellipse 100% 30% at 20% 100%, rgba(40, 200, 210, 0.3), transparent 70%), radial-gradient(ellipse 80% 40% at 90% 18%, rgba(60, 130, 255, 0.2), transparent 70%), linear-gradient(180deg, rgba(10, 60, 120, 0) 0%, rgba(10, 100, 160, 0.34) 100%); }
 /* Bosque (con luciérnagas) */
-[data-bg="forest"] { --bgbase: #eefaf1; --bgimg: radial-gradient(1.8px 1.8px at 40px 60px, rgba(120, 170, 40, 0.5), transparent 100%), radial-gradient(1.5px 1.5px at 150px 170px, rgba(100, 160, 60, 0.45), transparent 100%), radial-gradient(ellipse 90% 50% at 0% 0%, rgba(70, 190, 110, 0.22), transparent 70%), radial-gradient(ellipse 80% 45% at 100% 100%, rgba(30, 150, 120, 0.2), transparent 70%); --bgsize: 190px 210px, 190px 210px, 100% 100%, 100% 100%; }
+[data-bg="forest"] { --bgbase: #eefaf1; --bgimg: radial-gradient(1.8px 1.8px at 40px 60px, rgba(120, 170, 40, 0.6), transparent 100%), radial-gradient(1.5px 1.5px at 150px 170px, rgba(100, 160, 60, 0.6), transparent 100%), radial-gradient(ellipse 90% 50% at 0% 0%, rgba(70, 190, 110, 0.418), transparent 70%), radial-gradient(ellipse 80% 45% at 100% 100%, rgba(30, 150, 120, 0.38), transparent 70%); --bgsize: 190px 210px, 190px 210px, 100% 100%, 100% 100%; }
 :root[data-dark="1"] [data-bg="forest"] { --bgbase: #06130d; --bgimg: radial-gradient(1.8px 1.8px at 40px 60px, rgba(220, 255, 150, 0.65), transparent 100%), radial-gradient(1.5px 1.5px at 150px 170px, rgba(200, 255, 160, 0.55), transparent 100%), radial-gradient(ellipse 90% 50% at 0% 0%, rgba(60, 190, 110, 0.28), transparent 70%), radial-gradient(ellipse 80% 45% at 100% 100%, rgba(20, 140, 110, 0.3), transparent 70%); }
 /* Rosa cuarzo */
-[data-bg="rose"] { --bgbase: #fff0f6; --bgimg: radial-gradient(ellipse 80% 50% at 90% 0%, rgba(255, 120, 175, 0.28), transparent 70%), radial-gradient(ellipse 80% 50% at 0% 100%, rgba(180, 120, 255, 0.24), transparent 70%); --bgsize: 100% 100%, 100% 100%; }
+[data-bg="rose"] { --bgbase: #fff0f6; --bgimg: radial-gradient(ellipse 80% 50% at 90% 0%, rgba(255, 120, 175, 0.532), transparent 70%), radial-gradient(ellipse 80% 50% at 0% 100%, rgba(180, 120, 255, 0.456), transparent 70%); --bgsize: 100% 100%, 100% 100%; }
 :root[data-dark="1"] [data-bg="rose"] { --bgbase: #1a0818; --bgimg: radial-gradient(ellipse 80% 50% at 90% 0%, rgba(255, 110, 170, 0.34), transparent 70%), radial-gradient(ellipse 80% 50% at 0% 100%, rgba(170, 100, 255, 0.3), transparent 70%); }
 /* Papel */
-[data-bg="paper"] { --bgbase: #fbf6e9; --bgimg: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(170, 130, 60, 0.16) 100%), linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 240, 200, 0.2)); --bgsize: 100% 100%, 100% 100%; }
+[data-bg="paper"] { --bgbase: #fbf6e9; --bgimg: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(170, 130, 60, 0.304) 100%), linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 240, 200, 0.38)); --bgsize: 100% 100%, 100% 100%; }
 :root[data-dark="1"] [data-bg="paper"] { --bgbase: #181610; --bgimg: radial-gradient(ellipse 120% 90% at 50% 40%, rgba(255, 235, 190, 0.06), rgba(0, 0, 0, 0.35) 100%), linear-gradient(180deg, rgba(255, 230, 170, 0.05), rgba(0, 0, 0, 0)); }
 /* Cuadrícula */
-[data-bg="grid"] { --bgbase: #fbfbff; --bgimg: linear-gradient(rgba(90, 100, 200, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(90, 100, 200, 0.1) 1px, transparent 1px), radial-gradient(ellipse 80% 40% at 50% 0%, rgba(130, 110, 255, 0.16), transparent 70%); --bgsize: 26px 26px, 26px 26px, 100% 100%; }
+[data-bg="grid"] { --bgbase: #fbfbff; --bgimg: linear-gradient(rgba(90, 100, 200, 0.19) 1px, transparent 1px), linear-gradient(90deg, rgba(90, 100, 200, 0.19) 1px, transparent 1px), radial-gradient(ellipse 80% 40% at 50% 0%, rgba(130, 110, 255, 0.304), transparent 70%); --bgsize: 26px 26px, 26px 26px, 100% 100%; }
 :root[data-dark="1"] [data-bg="grid"] { --bgbase: #0a0c1a; --bgimg: linear-gradient(rgba(140, 150, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(140, 150, 255, 0.08) 1px, transparent 1px), radial-gradient(ellipse 80% 40% at 50% 0%, rgba(110, 90, 255, 0.24), transparent 70%); }
 /* Puntos */
-[data-bg="dots"] { --bgbase: #fbfaff; --bgimg: radial-gradient(rgba(110, 90, 200, 0.3) 1.2px, transparent 1.7px), radial-gradient(ellipse 80% 40% at 50% 100%, rgba(130, 110, 255, 0.14), transparent 70%); --bgsize: 22px 22px, 100% 100%; }
+[data-bg="dots"] { --bgbase: #fbfaff; --bgimg: radial-gradient(rgba(110, 90, 200, 0.57) 1.2px, transparent 1.7px), radial-gradient(ellipse 80% 40% at 50% 100%, rgba(130, 110, 255, 0.266), transparent 70%); --bgsize: 22px 22px, 100% 100%; }
 :root[data-dark="1"] [data-bg="dots"] { --bgbase: #0b0b19; --bgimg: radial-gradient(rgba(170, 160, 255, 0.3) 1.2px, transparent 1.7px), radial-gradient(ellipse 80% 40% at 50% 100%, rgba(110, 90, 255, 0.22), transparent 70%); }
 
 .bgfx { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; background-color: var(--bgbase); background-image: var(--bgimg); background-size: var(--bgsize); }
@@ -1099,6 +1099,44 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .cuctl .seg { margin-bottom: 4px; }
 .bgthumb.cuthumb { display: grid; place-items: center; font-size: 26px; background-image: none; }
 .bgthumb.cuthumb img { width: 80%; height: 80%; object-fit: contain; }
+
+/* ===== Tema claro: menú lateral (Explorador) acompaña al tema ===== */
+:root:not([data-dark="1"]) .menu { --ink: #14173a; --muted: #565b82; color: #14173a; }
+:root:not([data-dark="1"]) .mn-scrim { background: rgba(28, 30, 84, 0.4); }
+:root:not([data-dark="1"]) .mn-panel { background: linear-gradient(180deg, #f8f7ff 0%, #e9edff 100%); box-shadow: 18px 0 44px -18px rgba(30, 30, 100, 0.45); }
+:root:not([data-dark="1"]) .mn-stars::before { filter: invert(1) hue-rotate(200deg); opacity: 0.22; }
+:root:not([data-dark="1"]) .mn-stars::after { filter: invert(1) hue-rotate(200deg); opacity: 0.16; }
+:root:not([data-dark="1"]) .mn-x { background: rgba(30, 30, 100, 0.08); color: #1b1d45; }
+:root:not([data-dark="1"]) .mn-rank { color: #6d56d8; }
+:root:not([data-dark="1"]) .mn-sub, :root:not([data-dark="1"]) .mn-lv span, :root:not([data-dark="1"]) .mn-tx i, :root:not([data-dark="1"]) .mn-stats span { color: #565b82; }
+:root:not([data-dark="1"]) .mn-lv i { background: rgba(40, 40, 120, 0.12); }
+:root:not([data-dark="1"]) .mn-stats { background: #fff; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.16), 0 6px 16px -12px rgba(40, 40, 140, 0.5); }
+:root:not([data-dark="1"]) .mn-stats > div + div { box-shadow: -1px 0 0 rgba(90, 70, 200, 0.14); }
+:root:not([data-dark="1"]) .mn-stats b { color: #14173a; }
+:root:not([data-dark="1"]) .mn-qa button { background: #fff; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.18), 0 6px 14px -10px rgba(40, 40, 140, 0.5); color: #1b1d45; }
+:root:not([data-dark="1"]) .mn-qa button:active { background-color: #ece9ff; }
+:root:not([data-dark="1"]) .mn-qa svg { stroke: #6b46d6; }
+:root:not([data-dark="1"]) .mn-tip { color: #3a2a08; background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(139, 108, 246, 0.14)); box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.3); }
+:root:not([data-dark="1"]) .mn-tip small { color: #b45309; }
+:root:not([data-dark="1"]) .mn-tip svg { stroke: #d97706; }
+:root:not([data-dark="1"]) .mn-sec { color: #6b6f9a; }
+:root:not([data-dark="1"]) .mn-sec::after { background: linear-gradient(90deg, rgba(90, 70, 200, 0.28), transparent); }
+:root:not([data-dark="1"]) .mn-item:not(.feat) { color: #14173a; background: #fff; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.14), 0 6px 14px -11px rgba(40, 40, 140, 0.55); }
+:root:not([data-dark="1"]) .mn-item:not(.feat):hover, :root:not([data-dark="1"]) .mn-item:not(.feat):focus-visible { background-color: #f1efff; }
+:root:not([data-dark="1"]) .mn-item:not(.feat):active { background-color: #e7e3ff; }
+:root:not([data-dark="1"]) .mn-item:not(.feat):focus-visible { box-shadow: inset 0 0 0 2px rgba(107, 70, 214, 0.8); }
+:root:not([data-dark="1"]) .mn-item.soon { background: #f3f3fb; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.1); }
+:root:not([data-dark="1"]) .mn-item.soon .mn-tx b { color: #6b6f9a; }
+:root:not([data-dark="1"]) .mn-soon { color: #92400e; background: rgba(245, 158, 11, 0.18); }
+:root:not([data-dark="1"]) .mn-go { stroke: rgba(70, 60, 160, 0.5); }
+:root:not([data-dark="1"]) .mn-item.feat { color: #fff; background-color: #2f2490; box-shadow: inset 0 0 0 1px rgba(170, 150, 255, 0.45), 0 12px 24px -14px rgba(60, 40, 180, 0.8); }
+:root:not([data-dark="1"]) .mn-item.feat .mn-tx i { color: #e0dbff; }
+:root:not([data-dark="1"]) .mn-foot { color: #6b6f9a; }
+:root:not([data-dark="1"]) .mb-dot, :root:not([data-dark="1"]) .mn-dot { border-color: #f4f3ff; }
+/* ===== Tema claro: tarjetas y barra con más presencia ===== */
+:root:not([data-dark="1"]) .list[data-view="grid"] .item { box-shadow: 0 12px 26px -14px var(--card-glow), 0 1px 0 #fff inset; }
+:root:not([data-dark="1"]) .list[data-view="grid"] .item .t { color: var(--ink); }
+:root:not([data-dark="1"]) .menubtn, :root:not([data-dark="1"]) .iconbtn { box-shadow: 0 8px 18px -12px var(--card-glow); }
 </style>
 <link rel="stylesheet" href="universe.css">
 <link rel="stylesheet" href="constellations.css">
@@ -1732,7 +1770,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.58.3";
+  var APP_VERSION = "1.58.4";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -4586,6 +4624,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.58.4", d: "12 nov 2026", t: "Tema claro rediseñado", lv: "Nova", cat: "rediseno", l: ["Tema claro rediseñado: más contraste en textos y tarjetas, fondos con más color y sombras más definidas", "El menú lateral (Explorador) ahora acompaña al tema: en tema claro se muestra claro, en oscuro se mantiene oscuro"] },
     { v: "1.58.3", d: "12 nov 2026", t: "Nombres de versión", lv: "Destello", cat: "mejora", l: ["Cada versión vuelve a mostrar su nombre junto al nivel y la categoría", "Los textos de las novedades usan un lenguaje claro: «Se agregaron niveles según el tamaño de la actualización»"] },
     { v: "1.58.2", d: "12 nov 2026", t: "Textos de novedades revisados", lv: "Destello", cat: "mejora", l: ["Textos de las novedades revisados con un tono más claro y profesional"] },
     { v: "1.58.1", d: "12 nov 2026", t: "Niveles y categorías de versiones", lv: "Nova", cat: "nuevo+mejora", l: ["Se agregaron niveles según el tamaño de cada actualización, con insignia y color propios", "Se agregaron categorías según el contenido de la actualización (funciones nuevas, mejoras, arreglos, rediseño, limpieza, seguridad y datos)", "Leyenda «Niveles y categorías» en las novedades y búsqueda por nivel o categoría", "Nueva numeración: cada novedad suma 1 a la última cifra (1.58.1 … 1.58.9) y después salta de ciclo (1.59.0)"] },
