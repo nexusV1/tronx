@@ -545,6 +545,11 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .preview { margin: 10px 0 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-family: var(--note-font); font-size: var(--note-size); line-height: 1.6; }
 .panel input[type="range"] { width: 100%; accent-color: var(--accent); min-height: 32px; }
 .hint { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+.setjump { position: sticky; top: -17px; z-index: 3; display: flex; gap: 6px; overflow-x: auto; padding: 20px 0 10px; margin: 0 0 4px; background: var(--solid); scrollbar-width: none; }
+.setjump::-webkit-scrollbar { display: none; }
+.setjump .chip { flex: none; }
+.stbox { border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; background: var(--panel); margin-bottom: 8px; }
+.stbox p { margin: 0; line-height: 1.6; }
 .about { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 18px; line-height: 1.7; }
 
 /* ---------- botón de menú y menú cósmico ----------
@@ -1329,7 +1334,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <div class="overlay" id="settings" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Ajustes">
     <div class="sheethead"><strong>Ajustes</strong><button class="btn small" id="settingsClose" type="button">Cerrar</button></div>
-    <h3>Sonido del agujero negro</h3>
+    <nav class="setjump" id="setJump" aria-label="Ir a una sección"><button class="chip" type="button" data-t="secSound">Sonido</button><button class="chip" type="button" data-t="backupH">Copias</button><button class="chip" type="button" data-t="secTpl">Plantillas</button><button class="chip" type="button" data-t="secMd">Markdown</button><button class="chip" type="button" data-t="secPin">PIN</button><button class="chip" type="button" data-t="secStore">Espacio</button><button class="chip" type="button" data-t="secAbout">Acerca</button></nav>
+    <h3 id="secSound">Sonido del agujero negro</h3>
     <div class="seg" id="soundSeg">
       <button type="button" data-v="on">Activado</button>
       <button type="button" data-v="off">Silenciado</button>
@@ -1348,9 +1354,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     </div>
     <p class="hint">Tus notas viven solo en este teléfono. Si desinstalás la app o borrás sus datos, se pierden. Guardá una copia de vez en cuando.</p>
     <input type="file" id="importFile" accept=".json,application/json" hidden>
-    <h3>Plantillas</h3>
+    <h3 id="secTpl">Plantillas</h3>
     <div class="actions"><button class="btn" id="tplOpenBtn" type="button">Mis plantillas</button></div>
-    <h3>Markdown</h3>
+    <h3 id="secMd">Markdown</h3>
     <div class="actions">
       <button class="btn" id="mdAllBtn" type="button">Exportar todo (.zip de .md)</button>
       <button class="btn" id="mdImpBtn" type="button">Importar .md, .txt o .zip</button>
@@ -1370,7 +1376,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <p class="hint" id="autoBkHint"></p>
     <div class="actions"><button class="btn" id="autoBkNow" type="button">Copiar ahora</button><button class="btn" id="autoBkPerm" type="button" hidden>Dar permiso de almacenamiento</button></div>
     <div id="autoBkList"></div>
-    <h3>Bloqueo con PIN</h3>
+    <h3 id="secPin">Bloqueo con PIN</h3>
     <p class="hint" id="pinHint"></p>
     <div class="actions">
       <button class="btn" id="pinSetBtn" type="button">Activar PIN</button>
@@ -1378,7 +1384,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <button class="btn danger" id="pinOffBtn" type="button" hidden>Quitar PIN</button>
     </div>
     <div class="actions"><button class="chip" id="pinBioBtn" type="button" aria-pressed="false" hidden>Abrir también con huella</button></div>
+    <h3 id="secStore">Espacio</h3>
+    <div class="stbox" id="stBox"><p class="hint" id="stTxt">Calculando…</p></div>
+    <div class="actions"><button class="btn" id="stClean" type="button">Liberar espacio (imágenes sin uso)</button></div>
+    <h3 id="secAbout">Acerca de Tronx</h3>
     <p class="about" id="about"></p>
+    <div class="actions"><button class="btn" id="abNews" type="button">Novedades</button><button class="btn" id="abTour" type="button">Ver la guía</button></div>
+    <div class="actions"><button class="btn danger" id="abReset" type="button">Restablecer ajustes de apariencia</button></div>
+    <p class="hint">Restablecer no toca tus notas, copias, PIN ni stickers: solo vuelve a los colores, fondo, letra y vista de fábrica.</p>
   </section>
 </div>
 <section class="tour" id="tour" role="dialog" aria-modal="true" aria-label="Guía de Tronx" hidden>
@@ -1701,7 +1714,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.56.0";
+  var APP_VERSION = "1.57.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -3071,8 +3084,15 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function usedImageIds() { var set = new Set(); notes.forEach(function (n) { n.images.forEach(function (i) { set.add(i.src); }); }); return set; }
   function gcImages() {
-    if (!notes.size) return;
-    imgKeys().then(function (keys) { var used = usedImageIds(); keys.forEach(function (k) { var base = String(k).replace(/:t$/, ""); if (base.indexOf("stk:") === 0) return; if (!used.has(base)) imgDel(base); }); });
+    if (!notes.size) return Promise.resolve({ n: 0, bytes: 0 });
+    return imgKeys().then(function (keys) {
+      var used = usedImageIds(), dead = [];
+      keys.forEach(function (k) { var base = String(k).replace(/:t$/, ""); if (base.indexOf("stk:") === 0) return; if (!used.has(base)) dead.push(k); });
+      return Promise.all(dead.map(function (k) { return imgGet(k).then(function (b) { return b ? b.size : 0; }, function () { return 0; }); })).then(function (sizes) {
+        dead.forEach(function (k) { imgDel(String(k).replace(/:t$/, "")); });
+        return { n: dead.filter(function (k) { return !/:t$/.test(k); }).length, bytes: sizes.reduce(function (a, c) { return a + c; }, 0) };
+      });
+    });
   }
   setTimeout(gcImages, 4000);
   function shrinkImage(file) {
@@ -4510,10 +4530,45 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     notes.forEach(function (n) { if (n.trashedAt) trash++; else total++; });
     $("about").textContent = "Tronx " + APP_VERSION + " · " + total + (total === 1 ? " nota" : " notas") + (trash ? " · " + trash + " en la papelera" : "") + " · funciona sin internet";
   }
-  function openSettings() { renderSettings(); $("settings").hidden = false; pushLayer("settings"); }
+  function fmtBytes(b) { return b < 1024 ? b + " B" : b < 1048576 ? (b / 1024).toFixed(0) + " KB" : (b / 1048576).toFixed(1) + " MB"; }
+  function renderStorage() {
+    var box = $("stTxt"), stamp = ++stSeq;
+    imgKeys().then(function (keys) {
+      var main = keys.filter(function (k) { return !/:t$/.test(k); });
+      return Promise.all(keys.map(function (k) { return imgGet(k).then(function (b) { return b ? b.size : 0; }, function () { return 0; }); })).then(function (sz) {
+        var tot = sz.reduce(function (a, c) { return a + c; }, 0), stk = main.filter(function (k) { return String(k).indexOf("stk:") === 0 && !/:s$/.test(k); }).length;
+        var used = usedImageIds().size, notesN = 0; notes.forEach(function (n) { if (!n.trashedAt) notesN++; });
+        var txt = notesN + (notesN === 1 ? " nota" : " notas") + " · " + used + (used === 1 ? " imagen en notas" : " imágenes en notas") + " · " + stk + (stk === 1 ? " sticker" : " stickers") + "\nImágenes y stickers ocupan " + fmtBytes(tot);
+        return (navigator.storage && navigator.storage.estimate ? navigator.storage.estimate().catch(function () { return null; }) : Promise.resolve(null)).then(function (e) {
+          if (stamp !== stSeq) return;
+          if (e && e.usage) txt += "\nLa app usa " + fmtBytes(e.usage) + (e.quota ? " de " + fmtBytes(e.quota) + " disponibles" : "");
+          box.textContent = txt; box.style.whiteSpace = "pre-line";
+        });
+      });
+    });
+  }
+  var stSeq = 0;
+  $("stClean").addEventListener("click", function () {
+    gcImages().then(function (r) { toast(r.n ? "Se liberaron " + fmtBytes(r.bytes) + " (" + r.n + (r.n === 1 ? " imagen" : " imágenes") + " sin uso)" : "No hay nada que liberar: todo se está usando"); renderStorage(); });
+  });
+  $("setJump").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return; var t = $(b.dataset.t); if (t) t.scrollIntoView({ block: "start", behavior: "smooth" });
+  });
+  $("abNews").addEventListener("click", function () { closeLayer("settings"); setTimeout(openNews, 300); });
+  $("abTour").addEventListener("click", function () { closeLayer("settings"); setTimeout(openTour, 300); });
+  var resetArm = 0;
+  $("abReset").addEventListener("click", function () {
+    var b = $("abReset");
+    if (!resetArm) { resetArm = 1; b.textContent = "¿Seguro? Tocá de nuevo para restablecer"; setTimeout(function () { resetArm = 0; b.textContent = "Restablecer ajustes de apariencia"; }, 3500); return; }
+    resetArm = 0; b.textContent = "Restablecer ajustes de apariencia";
+    Object.assign(settings, { theme: "dark", accent: "violet", font: "sans", size: 16, view: "grid", sort: "updated", skin: 0, noteBg: "nebula", bgAnim: true, fab: true, swipe: true });
+    saveSettings(); applyTheme(); renderAll(); renderBg(); renderSettings(); toast("Ajustes de apariencia restablecidos");
+  });
+  function openSettings() { renderSettings(); renderStorage(); $("settings").hidden = false; pushLayer("settings"); }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.57.0", d: "12 nov 2026", t: "Ajustes mejorados", l: ["Chips de acceso rápido arriba de Ajustes (Sonido, Copias, Plantillas, Markdown, PIN, Espacio, Acerca)", "Nueva sección «Espacio»: cuántas notas, imágenes y stickers tenés y cuánto ocupan, con «Liberar espacio» para borrar imágenes sin uso", "«Acerca de Tronx» con atajos a Novedades y a la guía", "«Restablecer ajustes de apariencia» (no toca notas, copias, PIN ni stickers)"] },
     { v: "1.56.0", d: "12 nov 2026", t: "Novedades mejoradas", l: ["Al actualizar, un aviso te lleva directo a lo nuevo (una sola vez por versión)", "Las novedades marcan lo que es nuevo desde tu última visita y pliegan las versiones viejas", "Buscador dentro de las novedades", "Las fechas de cada versión ahora son las reales"] },
     { v: "1.55.1", d: "9 nov 2026", t: "Limpieza de código", l: ["Se eliminó código muerto (variables, estilos y ids sin uso)", "Menos avisos del analizador: 0 advertencias", "Sin cambios visibles: todo funciona igual"] },
     { v: "1.55.0", d: "9 nov 2026", t: "Stickers propios", l: ["Mis stickers (menú y selector de iconos): creá los tuyos dibujando, con una foto o con un emoji/texto", "Personalizalos: forma, relleno y degradado, borde, brillo y animación (flotar, latir, girar…)", "Usalos como icono de nota, como fondo (mosaico, centro o esquina, con tamaño e intensidad) o dentro de la nota como imagen que se mueve y escala", "Editar, duplicar y borrar; hasta 40; incluidos en la copia de seguridad"] },
