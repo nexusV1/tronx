@@ -1034,6 +1034,48 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   @keyframes rise { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 }
+/* stickers propios */
+#stkEd { z-index: 24; }
+#seShape, #seFill, #seAnim { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ic.cst img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; -webkit-user-drag: none; }
+.wm img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.sepv { width: min(100%, 300px); aspect-ratio: 1; margin: 4px auto 12px; border-radius: 18px; border: 1px solid var(--line); background-color: var(--panel); background-image: linear-gradient(45deg, rgba(128,128,150,0.18) 25%, transparent 25% 75%, rgba(128,128,150,0.18) 75%), linear-gradient(45deg, rgba(128,128,150,0.18) 25%, transparent 25% 75%, rgba(128,128,150,0.18) 75%); background-size: 20px 20px; background-position: 0 0, 10px 10px; overflow: hidden; }
+.sepv canvas { width: 100%; height: 100%; display: block; }
+.semini { width: 72px; height: 72px; margin: 10px auto 0; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); display: grid; place-items: center; }
+.semini canvas { width: 78%; height: 78%; display: block; }
+.sepv canvas.drawing { touch-action: none; cursor: crosshair; }
+.setools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 0; }
+.setools input[type="range"], #seTools input[type="range"] { flex: 1 1 100%; }
+#seTools { display: block; } #seTools .setools { margin: 8px 0 0; } #seTools .flabel { display: block; margin-top: 8px; }
+.setools .sw, #seFill .sw { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--line); padding: 0; }
+.setools .sw[aria-pressed="true"], #seFill .sw[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.serow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.serow input[type="range"] { flex: 1; min-width: 120px; }
+.serow input[type="color"], .setools input[type="color"] { width: 46px; height: 38px; padding: 2px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.serow .flabel { margin: 0; }
+.setools input.pfname { flex: 1; min-width: 0; }
+@keyframes cstfloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9%); } }
+@keyframes cstpulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+@keyframes cstsway { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+@keyframes cstspin { to { transform: rotate(360deg); } }
+@keyframes cstglow { 0%, 100% { filter: brightness(1) drop-shadow(0 0 0 transparent); } 50% { filter: brightness(1.3) drop-shadow(0 0 7px rgba(255,255,255,0.9)); } }
+@keyframes cstbounce { 0%, 100% { transform: translateY(0) scale(1, 1); } 40% { transform: translateY(-14%) scale(0.96, 1.05); } 60% { transform: translateY(0) scale(1.06, 0.94); } }
+@media (prefers-reduced-motion: no-preference) {
+  .ic.cst.anim img.a-float, .semini.a-float canvas { animation: cstfloat 3s ease-in-out infinite; }
+  .ic.cst.anim img.a-pulse, .semini.a-pulse canvas { animation: cstpulse 1.6s ease-in-out infinite; }
+  .ic.cst.anim img.a-sway, .semini.a-sway canvas { animation: cstsway 2.6s ease-in-out infinite; }
+  .ic.cst.anim img.a-spin, .semini.a-spin canvas { animation: cstspin 6s linear infinite; }
+  .ic.cst.anim img.a-glow, .semini.a-glow canvas { animation: cstglow 2.2s ease-in-out infinite; }
+  .ic.cst.anim img.a-bounce, .semini.a-bounce canvas { animation: cstbounce 1.3s ease-in-out infinite; }
+}
+.bgfx .cu { inset: 0; background-image: var(--cuimg, none); background-repeat: var(--cur, no-repeat); background-size: var(--cusize, 60%); background-position: var(--cupos, center); opacity: var(--cuo, 0.7); }
+.bgfx[data-bg="mine"] .cu { display: block; }
+[data-bg="mine"] { --bgbase: #f7f6ff; --bgimg: none; }
+:root[data-dark="1"] [data-bg="mine"] { --bgbase: #0b0b19; --bgimg: none; }
+.cuctl { margin-top: 12px; display: grid; gap: 6px; }
+.cuctl .seg { margin-bottom: 4px; }
+.bgthumb.cuthumb { display: grid; place-items: center; font-size: 26px; background-image: none; }
+.bgthumb.cuthumb img { width: 80%; height: 80%; object-fit: contain; }
 </style>
 <link rel="stylesheet" href="universe.css">
 <link rel="stylesheet" href="constellations.css">
@@ -1128,7 +1170,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   </aside>
 
   <main class="pane" id="pane">
-    <div class="bgfx" id="bgfx" aria-hidden="true"><i class="fl"></i><i class="tw"></i><i class="tn"></i></div>
+    <div class="bgfx" id="bgfx" aria-hidden="true"><i class="fl"></i><i class="tw"></i><i class="cu"></i><i class="tn"></i></div>
     <div class="bar">
       <button class="btn icon ghost back" id="backBtn" type="button" aria-label="Volver a las notas"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
       <span class="status" id="status" role="status" aria-live="polite"></span>
@@ -1177,6 +1219,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn" type="button" data-ins="image">🖼 Imagen</button>
         <button class="btn" type="button" data-ins="photo">📷 Foto</button>
         <button class="btn" type="button" data-ins="draw">✏️ Dibujo</button>
+        <button class="btn" type="button" data-ins="sticker">⭐ Sticker</button>
         <button class="btn" type="button" data-ins="link">[[ ]] Enlace</button>
         <button class="btn" type="button" data-ins="table">▦ Tabla</button>
         <button class="btn" type="button" data-ins="date">Fecha</button>
@@ -1215,8 +1258,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <section class="sheet" id="iconSheet" role="dialog" aria-label="Icono de la nota" hidden>
       <div class="sheethead"><strong>Icono de la nota</strong><button class="btn small" id="iconClose" type="button">Cerrar</button></div>
       <div class="seg" id="iconSeg">
-        <button type="button" data-k="stickers" aria-pressed="true">Insignias detalladas</button>
+        <button type="button" data-k="stickers" aria-pressed="true">Insignias</button>
         <button type="button" data-k="emojis" aria-pressed="false">Emojis</button>
+        <button type="button" data-k="mine" aria-pressed="false">Mis stickers</button>
       </div>
       <div id="iconBody"></div>
       <div class="actions" style="margin-top:12px"><button class="btn" id="iconClear" type="button">Quitar icono</button></div>
@@ -1227,6 +1271,12 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <div class="swatches" id="swatches"></div>
       <h3>Fondo</h3>
       <div class="bgpick" id="bgPick"></div>
+      <div class="cuctl" id="cuCtl" hidden>
+        <div class="seg" id="cuMode" role="group" aria-label="Cómo se ve el sticker de fondo"><button type="button" data-m="t" aria-pressed="false">Mosaico</button><button type="button" data-m="c" aria-pressed="false">Centro</button><button type="button" data-m="e" aria-pressed="false">Esquina</button></div>
+        <label class="flabel" for="cuSize">Tamaño</label><input type="range" id="cuSize" min="10" max="100" step="1">
+        <label class="flabel" for="cuOp">Intensidad</label><input type="range" id="cuOp" min="10" max="100" step="1">
+        <button class="btn" id="cuChange" type="button">Cambiar sticker</button>
+      </div>
       <h3>Recordatorio</h3>
       <div class="remquick" id="remQuick"></div>
       <div class="remrow"><input type="datetime-local" id="remAt" aria-label="Fecha y hora del aviso"><select id="remRep" aria-label="Repetir"><option value="">Una vez</option><option value="day">Cada día</option><option value="week">Cada semana</option><option value="month">Cada mes</option><option value="days">Días elegidos…</option></select></div>
@@ -1353,6 +1403,47 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   </div>
   <div class="drawwrap" id="drWrap"><canvas id="drCanvas"></canvas></div>
   <div class="drawtools" id="drTools"></div>
+</div>
+<div class="overlay" id="stkEd" hidden>
+  <section class="panel" role="dialog" aria-modal="true" aria-label="Crear sticker">
+    <div class="sheethead"><strong id="seTitle">Crear sticker</strong><button class="btn small" id="seClose" type="button">Cerrar</button></div>
+    <div class="sepv" id="seStage"><canvas id="sePrev" width="512" height="512" aria-label="Vista previa del sticker"></canvas></div>
+    <div class="seg" id="seSrc" role="group" aria-label="Con qué lo hacés"><button type="button" data-k="draw" aria-pressed="true">Dibujar</button><button type="button" data-k="photo" aria-pressed="false">Foto</button><button type="button" data-k="text" aria-pressed="false">Texto / emoji</button></div>
+    <div class="setools" id="seTools"></div>
+    <input type="file" id="seFile" accept="image/*" hidden>
+    <input type="file" id="seCamIn" accept="image/*" capture="environment" hidden>
+    <h3>Forma</h3>
+    <div class="grp" id="seShape"></div>
+    <h3>Relleno</h3>
+    <div class="grp" id="seFill"></div>
+    <div class="serow"><label class="flabel" for="seF1">Color 1</label><input type="color" id="seF1" value="#6d5dfc"><label class="flabel" for="seF2">Color 2</label><input type="color" id="seF2" value="#c084fc"><button class="chip" type="button" id="seNoGrad" aria-pressed="true">Sin degradado</button></div>
+    <h3>Borde</h3>
+    <div class="serow"><input type="range" id="seBw" min="0" max="24" step="1" value="0" aria-label="Grosor del borde"><input type="color" id="seBc" value="#ffffff" aria-label="Color del borde"></div>
+    <h3>Brillo</h3>
+    <input type="range" id="seGl" min="0" max="40" step="1" value="0" aria-label="Brillo alrededor">
+    <h3>Animación</h3>
+    <div class="grp" id="seAnim"></div>
+    <div class="semini" id="seMiniBox"><canvas id="seMini" width="128" height="128" aria-label="Así se mueve"></canvas></div>
+    <h3>Nombre</h3>
+    <input type="text" id="seName" class="pfname" maxlength="24" placeholder="Mi sticker" autocomplete="off" aria-label="Nombre del sticker">
+    <div class="actions" style="margin-top:14px"><button class="btn primary" id="seSave" type="button">Guardar sticker</button></div>
+  </section>
+</div>
+<div class="overlay" id="stkMgr" hidden>
+  <section class="panel" role="dialog" aria-modal="true" aria-label="Mis stickers">
+    <div class="sheethead"><strong>Mis stickers</strong><button class="btn small" id="smClose" type="button">Cerrar</button></div>
+    <p class="hintlp" id="smHint" style="text-align:left;margin:0 2px 10px"></p>
+    <div class="igrid stk" id="smGrid"></div>
+    <div class="actions" id="smAct" style="margin-top:12px">
+      <button class="btn" id="smIcon" type="button">Usar de icono</button>
+      <button class="btn" id="smBg" type="button">Usar de fondo</button>
+      <button class="btn" id="smNote" type="button">Poner en la nota</button>
+      <button class="btn" id="smEdit" type="button">Editar</button>
+      <button class="btn" id="smDup" type="button">Duplicar</button>
+      <button class="btn danger" id="smDel" type="button">Borrar</button>
+    </div>
+    <div class="actions" style="margin-top:10px"><button class="btn primary" id="smNew" type="button">＋ Crear sticker</button></div>
+  </section>
 </div>
 <div class="overlay" id="tplSave" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Guardar como plantilla">
@@ -1542,6 +1633,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <li><button class="mn-item" id="mnCalendar" type="button" style="--i:3;--c1:#fbbf24;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></span><span class="mn-tx"><b>Calendario</b><i>Tus avisos y notas por día</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnLinkMap" type="button" style="--i:3;--c1:#34d399;--c2:#065f46"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8 7.4l8 -1M7 9l4 7M17 8l-4 8"/></svg></span><span class="mn-tx"><b>Mapa de enlaces</b><i>Cómo se conectan tus notas</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnCustom" type="button" style="--i:3;--c1:#f472b6;--c2:#831843"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Personalización</b><i id="mnSubCustom">Tema, colores, letra y fondos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+      <li><button class="mn-item" id="mnStickers" type="button" style="--i:3;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Mis stickers</b><i id="mnSubStk">Creá los tuyos y usalos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:4" aria-hidden="true">Explorar</li>
       <li><button class="mn-item" id="mnLink" type="button" style="--i:5;--c1:#34d399;--c2:#064e3b"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="mn-tx"><b>Vinculación</b><span class="mn-soon">En desarrollo</span></span></button></li>
       <li><button class="mn-item soon" id="mnMax" type="button" style="--i:6;--c1:#fb923c;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg></span><span class="mn-tx"><b>MAX</b><span class="mn-soon">En desarrollo</span></span></button></li>
@@ -1605,7 +1697,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.54.0";
+  var APP_VERSION = "1.55.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1651,7 +1743,12 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     { k: "paper", n: "Papel" }, { k: "grid", n: "Cuadrícula" }, { k: "dots", n: "Puntos" }
   ];
   function bgOk(k) { for (var i = 0; i < BGS.length; i++) if (BGS[i].k === k) return true; return false; }
-  function cleanBg(v) { v = String(v || ""); return v === "none" || bgOk(v) ? v : ""; }
+  var CU_RE0 = /^c:([a-z0-9]{3,24}):([tce]):(\d{1,3}):(\d{1,3})$/;
+  function cleanBg(v) {
+    v = String(v || ""); if (v === "none" || bgOk(v)) return v;
+    var m = CU_RE0.exec(v); if (!m) return "";
+    return "c:" + m[1] + ":" + m[2] + ":" + Math.min(100, Math.max(10, +m[3])) + ":" + Math.min(100, Math.max(10, +m[4]));
+  }
   if (settings.noteBg !== "none" && !bgOk(settings.noteBg)) settings.noteBg = "nebula";
   settings.bgAnim = settings.bgAnim !== false; settings.autoBk = settings.autoBk !== false;
   settings.pinBio = !!settings.pinBio; settings.fab = settings.fab !== false; settings.swipe = settings.swipe !== false;
@@ -1661,7 +1758,46 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   var hadFirstRun = !!settings.firstRun;
   if (!hadFirstRun) settings.firstRun = Date.now();
   // El fondo que se ve de verdad: el de la nota si lo eligió, si no el de Ajustes.
-  function resolveBg(n) { var b = n ? cleanBg(n.bg) : ""; return b || settings.noteBg; }
+  function resolveBg(n, card) { var b = n ? cleanBg(n.bg) : ""; if (card && b.slice(0, 2) === "c:") b = ""; return b || settings.noteBg; }
+  /* ---------- stickers propios: biblioteca (la imagen final vive en IndexedDB como "stk:<id>") ---------- */
+  var STK_KEY = "tronx.stk.v1", STK_MAX = 40, myStk = [], stkUrls = {}, stkPend = {};
+  var STK_SHAPES = ["none", "circle", "round", "star", "heart", "hex"], STK_ANIMS = ["none", "float", "pulse", "sway", "spin", "glow", "bounce"], STK_SRC = ["draw", "photo", "text"];
+  var CU_RE = /^c:([a-z0-9]{3,24}):([tce]):(\d{1,3}):(\d{1,3})$/;
+  function stkNum(v, a, b, d) { v = Number(v); return isFinite(v) ? Math.min(b, Math.max(a, v)) : d; }
+  function stkCol(v) { v = String(v || ""); return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toLowerCase() : ""; }
+  function cleanStk(x) {
+    if (!x || typeof x !== "object") return null;
+    var id = String(x.id || ""); if (!/^[a-z0-9]{3,24}$/.test(id)) return null;
+    return {
+      id: id, n: String(x.n || "Sticker").slice(0, 24) || "Sticker", src: STK_SRC.indexOf(x.src) >= 0 ? x.src : "draw",
+      sh: STK_SHAPES.indexOf(x.sh) >= 0 ? x.sh : "none", f1: stkCol(x.f1), f2: stkCol(x.f2),
+      bw: Math.round(stkNum(x.bw, 0, 24, 0)), bc: stkCol(x.bc) || "#ffffff", gl: Math.round(stkNum(x.gl, 0, 40, 0)),
+      an: STK_ANIMS.indexOf(x.an) >= 0 ? x.an : "none", tx: String(x.tx || "").slice(0, 12), tc: stkCol(x.tc) || "#ffffff",
+      z: stkNum(x.z, 0.3, 4, 1), px: stkNum(x.px, -1, 1, 0), py: stkNum(x.py, -1, 1, 0), at: stkNum(x.at, 0, 9e15, 0)
+    };
+  }
+  try { var sa = JSON.parse(lsGet(STK_KEY) || "[]"); if (Array.isArray(sa)) myStk = sa.map(cleanStk).filter(Boolean).slice(0, STK_MAX); } catch (e) { myStk = []; }
+  function saveStk() { lsSet(STK_KEY, JSON.stringify(myStk)); }
+  function stkOf(id) { for (var i = 0; i < myStk.length; i++) if (myStk[i].id === id) return myStk[i]; return null; }
+  function stkLoad(id, force) {
+    if (!force && stkUrls[id]) return Promise.resolve(stkUrls[id]);
+    if (!force && stkPend[id]) return stkPend[id];
+    var pr = imgGet("stk:" + id).then(function (b) {
+      delete stkPend[id];
+      if (!b) return null;
+      if (stkUrls[id]) { try { URL.revokeObjectURL(stkUrls[id]); } catch (e) {} }
+      var u = URL.createObjectURL(b); stkUrls[id] = u;
+      [].forEach.call(document.querySelectorAll('img[data-stk="' + id + '"]'), function (im) { im.src = u; });
+      return u;
+    }, function () { delete stkPend[id]; return null; });
+    stkPend[id] = pr; return pr;
+  }
+  function stkImg(id, anim) {
+    var im = new Image(); im.alt = ""; im.draggable = false; im.dataset.stk = id;
+    var st = stkOf(id); if (anim && st && st.an !== "none") im.classList.add("a-" + st.an);
+    if (stkUrls[id]) im.src = stkUrls[id]; else stkLoad(id);
+    return im;
+  }
   function saveSettings() {
     if (window.TronxSound) { settings.sound = window.TronxSound.isEnabled(); settings.soundLvl = window.TronxSound.getVolume(); }
     lsSet(SKEY, JSON.stringify(settings));
@@ -1729,10 +1865,17 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     v = String(v || "");
     if (v.slice(0, 2) === "s:") return stickerOk(v.slice(2)) ? v : "";
     if (v.slice(0, 2) === "e:") { var e = parseEmoji(v.slice(2)); return e ? "e:" + e : ""; }
+    if (v.slice(0, 2) === "c:") return /^[a-z0-9]{3,24}$/.test(v.slice(2)) ? v : "";
     return "";
   }
   function iconSpan(icon, cls) {
     if (!icon) return null;
+    if (icon.slice(0, 2) === "c:") {
+      var cid = icon.slice(2), cs = el("span", "ic cst" + (cls ? " " + cls : "")), cst = stkOf(cid), live = cls !== "static" && cls !== "wm";
+      cs.setAttribute("aria-hidden", "true"); cs.appendChild(stkImg(cid, live));
+      if (live && cst && cst.an !== "none") cs.classList.add("anim");
+      return cs;
+    }
     var sk = icon.charAt(0) === "s", sp = el("span", "ic " + (sk ? "sk" : "emo") + (cls ? " " + cls : ""));
     sp.setAttribute("aria-hidden", "true");
     if (sk) {
@@ -1761,6 +1904,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function watermark(icon) {
     if (!icon) return null;
+    if (icon.slice(0, 2) === "c:") { var cw = el("span", "wm"); cw.setAttribute("aria-hidden", "true"); cw.appendChild(stkImg(icon.slice(2), false)); return cw; }
     var sk = icon.charAt(0) === "s", w = el("span", "wm" + (sk ? "" : " emo"));
     w.setAttribute("aria-hidden", "true");
     if (sk) w.innerHTML = '<svg viewBox="0 0 64 64"><use href="#st-' + icon.slice(2) + '"/></svg>';
@@ -2103,7 +2247,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (n.id === activeId) b.setAttribute("aria-current", "true");
     var c = colorOf(n.color);
     if (c.rgb) { b.style.setProperty("--tint", rgba(c.rgb, 0.2)); b.style.setProperty("--dot", rgba(c.rgb, 1)); }
-    b.dataset.bg = resolveBg(n);
+    b.dataset.bg = resolveBg(n, true);
     var wm = watermark(n.icon); if (wm) b.appendChild(wm);
     var top = el("span", "top");
     var ic = cardIcon(n.icon); if (ic) top.appendChild(ic);
@@ -2228,7 +2372,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var d = 0, k = 0;
     for (var i = 0; i < n.items.length; i++) { k++; if (n.items[i].done) d++; }
     return n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
-      (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n) + "|" + (n.id === activeId ? 1 : 0) + "|" +
+      (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n, true) + "|" + (n.id === activeId ? 1 : 0) + "|" +
       (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + (n.remind ? n.remind.at + n.remind.rep + n.remind.seen + n.remind.snz + (n.remind.wd || []).join("") : "") + "|" + n.rems.map(function (r) { return r.at + r.rep + r.seen; }).join(",") + "|" + (n.lock ? n.lock.m : "") + "|" + n.images.length + "|" + (kidCount[n.id] || 0) + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
   }
   function renderList() {
@@ -2412,6 +2556,18 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function renderBg() {
     var n = cur(), fx = $("bgfx"), k = n ? resolveBg(n) : "none";
     if (k === "none") { fx.hidden = true; fx.removeAttribute("data-bg"); return; }
+    var cm = CU_RE0.exec(k);
+    if (cm) {
+      fx.hidden = false; fx.setAttribute("data-bg", "mine");
+      var u = stkUrls[cm[1]];
+      if (u) fx.style.setProperty("--cuimg", 'url("' + u + '")'); else { fx.style.removeProperty("--cuimg"); stkLoad(cm[1]).then(function (x) { if (x && cur() === n) renderBg(); }); }
+      var sz = +cm[3], md = cm[2];
+      fx.style.setProperty("--cur", md === "t" ? "repeat" : "no-repeat");
+      fx.style.setProperty("--cusize", md === "t" ? Math.round(sz * 2.2 + 20) + "px" : sz + "%");
+      fx.style.setProperty("--cupos", md === "e" ? "right 4% bottom 3%" : "center");
+      fx.style.setProperty("--cuo", String(+cm[4] / 100));
+      return;
+    }
     fx.hidden = false; fx.setAttribute("data-bg", k);
   }
   /* barra de progreso de las listas */
@@ -2894,7 +3050,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
                 if (!t) { res(null); return; }
                 idbOpen().then(function (db) { db.transaction("i", "readwrite").objectStore("i").put(t, id + ":t"); }).catch(function () {});
                 var u = URL.createObjectURL(t); thUrls.set(id, u); res(u);
-              }, "image/jpeg", 0.7);
+              }, b.type === "image/png" ? "image/png" : "image/jpeg", 0.7);
             };
             im.onerror = function () { URL.revokeObjectURL(u0); res(null); };
             im.src = u0;
@@ -2912,7 +3068,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function usedImageIds() { var set = new Set(); notes.forEach(function (n) { n.images.forEach(function (i) { set.add(i.src); }); }); return set; }
   function gcImages() {
     if (!notes.size) return;
-    imgKeys().then(function (keys) { var used = usedImageIds(); keys.forEach(function (k) { var base = String(k).replace(/:t$/, ""); if (!used.has(base)) imgDel(base); }); });
+    imgKeys().then(function (keys) { var used = usedImageIds(); keys.forEach(function (k) { var base = String(k).replace(/:t$/, ""); if (base.indexOf("stk:") === 0) return; if (!used.has(base)) imgDel(base); }); });
   }
   setTimeout(gcImages, 4000);
   function shrinkImage(file) {
@@ -3289,6 +3445,321 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("drCancel").addEventListener("click", function () { drIntent = "cancel"; closeLayer("draw"); });
   $("drUndo").addEventListener("click", function () { drStrokes.pop(); drRedraw(); });
   $("drClear").addEventListener("click", function () { drStrokes = []; drRedraw(); });
+  /* ---------- editor de stickers propios ---------- */
+  var se = null, SE_PEN = ["#ffffff", "#111111", "#ff4d6d", "#ffb703", "#06d6a0", "#4cc9f0", "#9b5de5", "#f97316"];
+  var SE_FILLS = ["#ffffff", "#ffd166", "#ff7b9c", "#7cf2c8", "#7cc7ff", "#b69cff", "#1b1b3a"];
+  var SE_SHAPE_N = { none: "Sin forma", circle: "Círculo", round: "Cuadrado", star: "Estrella", heart: "Corazón", hex: "Hexágono" };
+  var SE_ANIM_N = { none: "Quieto", float: "Flotar", pulse: "Latir", sway: "Balancear", spin: "Girar", glow: "Brillar", bounce: "Rebotar" };
+  function stkPath(c, sh, x, y, w, h) {
+    var cx = x + w / 2, cy = y + h / 2, i, a, r;
+    c.beginPath();
+    if (sh === "circle") c.ellipse(cx, cy, w / 2, h / 2, 0, 0, 6.2832);
+    else if (sh === "round") { r = w * 0.22; c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+    else if (sh === "star") { for (i = 0; i < 10; i++) { a = -Math.PI / 2 + i * Math.PI / 5; r = (i % 2 ? 0.42 : 1) * w / 2; if (i) c.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); else c.moveTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); } c.closePath(); }
+    else if (sh === "heart") { c.moveTo(cx, y + h * 0.92); c.bezierCurveTo(x - w * 0.1, y + h * 0.58, x + w * 0.02, y + h * 0.04, cx, y + h * 0.3); c.bezierCurveTo(x + w * 0.98, y + h * 0.04, x + w * 1.1, y + h * 0.58, cx, y + h * 0.92); c.closePath(); }
+    else if (sh === "hex") { for (i = 0; i < 6; i++) { a = -Math.PI / 2 + i * Math.PI / 3; if (i) c.lineTo(cx + Math.cos(a) * w / 2, cy + Math.sin(a) * h / 2); else c.moveTo(cx + Math.cos(a) * w / 2, cy + Math.sin(a) * h / 2); } c.closePath(); }
+    else c.rect(x, y, w, h);
+  }
+  /* dibuja el sticker en un canvas de S×S px: caja central del 76% y margen para el brillo */
+  function stkDraw(p, S, img, layer) {
+    var cv = document.createElement("canvas"); cv.width = cv.height = S;
+    var c = cv.getContext("2d"), k = S / 512, B = S * 0.76, o = (S - B) / 2, shape = p.sh !== "none", glow = false, gl = p.gl * k * 1.1;
+    function shadow(col) { if (gl > 0) { c.shadowColor = col; c.shadowBlur = gl; } }
+    function noShadow() { c.shadowColor = "transparent"; c.shadowBlur = 0; }
+    var gcol = p.bc || "#ffffff";
+    if (shape && p.f1) {
+      var g = c.createLinearGradient(o, o, o + B, o + B); g.addColorStop(0, p.f1); g.addColorStop(1, p.f2 || p.f1);
+      stkPath(c, p.sh, o, o, B, B); c.fillStyle = g; shadow(p.f2 || p.f1); c.fill(); noShadow(); glow = true;
+    }
+    c.save();
+    var clip = shape || p.src === "photo";
+    if (clip) { stkPath(c, shape ? p.sh : "none", o, o, B, B); c.clip(); }
+    else if (!glow) shadow(gcol);
+    if (p.src === "draw") { if (layer) c.drawImage(layer, o, o, B, B); }
+    else if (p.src === "photo") {
+      if (img) {
+        var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, sc = Math.max(B / iw, B / ih) * p.z;
+        c.drawImage(img, o + B / 2 - iw * sc / 2 + p.px * B / 2, o + B / 2 - ih * sc / 2 + p.py * B / 2, iw * sc, ih * sc);
+      }
+    } else if (p.tx) {
+      c.font = "700 100px system-ui, 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
+      var ms = Math.max(1, c.measureText(p.tx).width), fs = 100 * Math.min(B * 0.62 * p.z / 100, B * 0.88 * p.z / ms);
+      c.font = "700 " + fs + "px system-ui, 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif"; c.fillStyle = p.tc; c.fillText(p.tx, o + B / 2, o + B / 2 + fs * 0.04);
+    }
+    c.restore(); noShadow();
+    if (shape && p.bw > 0) {
+      stkPath(c, p.sh, o, o, B, B); c.lineWidth = p.bw * k; c.strokeStyle = p.bc; c.lineJoin = "round"; if (!glow) { shadow(p.bc); glow = true; } c.stroke(); noShadow();
+    }
+    return cv;
+  }
+  function seLayerRedraw() {
+    var c = se.layer.getContext("2d"); c.clearRect(0, 0, 512, 512);
+    if (se.base) c.drawImage(se.base, 0, 0, 512, 512);
+    se.strokes.forEach(function (s) { sePaint(c, s, 0); });
+  }
+  function sePaint(c, s, from) {
+    c.globalCompositeOperation = s.e ? "destination-out" : "source-over"; c.strokeStyle = s.c; c.fillStyle = s.c; c.lineWidth = s.w; c.lineCap = "round"; c.lineJoin = "round";
+    if (s.p.length === 1) { c.beginPath(); c.arc(s.p[0][0], s.p[0][1], s.w / 2, 0, 6.2832); c.fill(); }
+    else { c.beginPath(); var f = Math.max(1, from); c.moveTo(s.p[f - 1][0], s.p[f - 1][1]); for (var i = f; i < s.p.length; i++) c.lineTo(s.p[i][0], s.p[i][1]); c.stroke(); }
+    c.globalCompositeOperation = "source-over";
+  }
+  function seRender() {
+    if (!se) return;
+    var pc = $("sePrev"), x = pc.getContext("2d"); x.clearRect(0, 0, 512, 512);
+    var full = stkDraw(se.p, 512, se.img, se.layer); x.drawImage(full, 0, 0);
+    var mc = $("seMini").getContext("2d"); mc.clearRect(0, 0, 128, 128); mc.drawImage(full, 0, 0, 128, 128);
+  }
+  var seRaf = 0;
+  function seSoon() { if (seRaf) return; seRaf = requestAnimationFrame(function () { seRaf = 0; seRender(); }); }
+  function seTools() {
+    var T = $("seTools"), p = se.p; T.textContent = "";
+    function chip(label, attrs, on) { var b = el("button", "chip"); b.type = "button"; b.textContent = label; for (var k in attrs) b.dataset[k] = attrs[k]; b.setAttribute("aria-pressed", on ? "true" : "false"); return b; }
+    $("seSrc").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.k === p.src ? "true" : "false"); });
+    $("sePrev").classList.toggle("drawing", p.src === "draw");
+    var row = el("div", "setools");
+    if (p.src === "draw") {
+      SE_PEN.forEach(function (c0) { var b = el("button", "sw"); b.type = "button"; b.style.background = c0; b.dataset.pen = c0; b.setAttribute("aria-label", "Color " + c0); b.setAttribute("aria-pressed", c0 === se.color && !se.erase ? "true" : "false"); row.appendChild(b); });
+      var r2 = el("div", "setools");
+      [["Fino", 5], ["Medio", 12], ["Grueso", 26]].forEach(function (s) { r2.appendChild(chip(s[0], { sz: s[1] }, se.size === s[1])); });
+      r2.appendChild(chip("Goma", { er: 1 }, se.erase));
+      var u = el("button", "chip"); u.type = "button"; u.id = "seUndo"; u.textContent = "↶ Deshacer"; r2.appendChild(u);
+      var cl = el("button", "chip"); cl.type = "button"; cl.id = "seClear"; cl.textContent = "Borrar todo"; r2.appendChild(cl);
+      T.appendChild(row); T.appendChild(r2);
+    } else if (p.src === "photo") {
+      var pick = el("button", "btn"); pick.type = "button"; pick.id = "sePick"; pick.textContent = "Elegir foto"; row.appendChild(pick);
+      var cam = el("button", "btn"); cam.type = "button"; cam.id = "seCam"; cam.textContent = "Cámara"; row.appendChild(cam);
+      T.appendChild(row);
+      [["Zoom", "seZoom", 1, 4, 0.05, p.z], ["Mover ↔", "sePx", -1, 1, 0.02, p.px], ["Mover ↕", "sePy", -1, 1, 0.02, p.py]].forEach(function (s) {
+        var l = el("label", "flabel"); l.htmlFor = s[1]; l.textContent = s[0]; var i = el("input"); i.type = "range"; i.id = s[1]; i.min = s[2]; i.max = s[3]; i.step = s[4]; i.value = s[5]; i.dataset.rg = s[1];
+        T.appendChild(l); T.appendChild(i);
+      });
+    } else {
+      var t = el("input"); t.type = "text"; t.id = "seTx"; t.maxLength = 12; t.placeholder = "Emoji o texto (hasta 12)"; t.value = p.tx; t.setAttribute("aria-label", "Emoji o texto"); t.autocomplete = "off"; t.className = "pfname"; row.appendChild(t);
+      var tc = el("input"); tc.type = "color"; tc.id = "seTc"; tc.value = p.tc; tc.setAttribute("aria-label", "Color del texto"); row.appendChild(tc);
+      T.appendChild(row);
+      var l2 = el("label", "flabel"); l2.htmlFor = "seTz"; l2.textContent = "Tamaño"; var z = el("input"); z.type = "range"; z.id = "seTz"; z.min = 0.4; z.max = 1.6; z.step = 0.05; z.value = p.z; z.dataset.rg = "seTz";
+      T.appendChild(l2); T.appendChild(z);
+    }
+  }
+  function seStyleUi() {
+    var p = se.p, sh = $("seShape"); sh.textContent = "";
+    STK_SHAPES.forEach(function (s) { var b = el("button", "chip"); b.type = "button"; b.dataset.sh = s; b.textContent = SE_SHAPE_N[s]; b.setAttribute("aria-pressed", p.sh === s ? "true" : "false"); sh.appendChild(b); });
+    var fl = $("seFill"); fl.textContent = "";
+    var no = el("button", "chip"); no.type = "button"; no.dataset.f = ""; no.textContent = "Sin relleno"; no.setAttribute("aria-pressed", p.f1 ? "false" : "true"); fl.appendChild(no);
+    SE_FILLS.forEach(function (c0) { var b = el("button", "sw"); b.type = "button"; b.style.background = c0; b.dataset.f = c0; b.setAttribute("aria-label", "Relleno " + c0); b.setAttribute("aria-pressed", p.f1 === c0 && !p.f2 ? "true" : "false"); fl.appendChild(b); });
+    $("seF1").value = p.f1 || "#6d5dfc"; $("seF2").value = p.f2 || "#c084fc";
+    $("seNoGrad").setAttribute("aria-pressed", p.f2 ? "false" : "true");
+    $("seBw").value = p.bw; $("seBc").value = p.bc; $("seGl").value = p.gl;
+    var an = $("seAnim"); an.textContent = "";
+    STK_ANIMS.forEach(function (s) { var b = el("button", "chip"); b.type = "button"; b.dataset.an = s; b.textContent = SE_ANIM_N[s]; b.setAttribute("aria-pressed", p.an === s ? "true" : "false"); an.appendChild(b); });
+    $("seMiniBox").className = "semini" + (p.an !== "none" ? " a-" + p.an : "");
+  }
+  function openStkEd(id) {
+    if (!id && myStk.length >= STK_MAX) { toast("Ya tenés " + STK_MAX + " stickers: borrá alguno para crear otro"); return; }
+    var base = id ? stkOf(id) : null;
+    se = {
+      id: id || "", p: base ? JSON.parse(JSON.stringify(base)) : cleanStk({ id: "tmp", n: "", src: "draw", sh: "circle", f1: "#6d5dfc", f2: "#c084fc", bw: 6, bc: "#ffffff", gl: 14, an: "float" }),
+      layer: document.createElement("canvas"), base: null, strokes: [], cur: null, color: "#ffffff", size: 12, erase: false, img: null, photoBlob: null, url: ""
+    };
+    se.layer.width = se.layer.height = 512;
+    if (!base) se.p.n = "Sticker " + (myStk.length + 1);
+    $("seTitle").textContent = base ? "Editar sticker" : "Crear sticker";
+    seTools(); seStyleUi(); $("seName").value = se.p.n; seRender();
+    $("stkEd").hidden = false; pushLayer("stkEd");
+    if (base) imgGet("stk:" + id + ":s").then(function (b) {
+      if (!b || !se || se.id !== id) return;
+      var u = URL.createObjectURL(b), im = new Image();
+      im.onload = function () { if (!se || se.id !== id) return; if (se.p.src === "draw") { se.base = im; seLayerRedraw(); } else { se.img = im; se.photoBlob = b; } seRender(); };
+      im.src = u; se.url = u;
+    });
+  }
+  registerLayer("stkEd", function () { $("stkEd").hidden = true; if (se && se.url) { try { URL.revokeObjectURL(se.url); } catch (e) {} } se = null; });
+  function seSetSrc(k) {
+    if (!se || se.p.src === k) return; se.p.src = k;
+    se.p.z = 1; se.p.px = 0; se.p.py = 0;
+    if (k === "text" && !se.p.tx) se.p.tx = "★";
+    if (k === "photo" && se.p.sh === "none") se.p.sh = "round";
+    seTools(); seStyleUi(); seRender();
+  }
+  function sePhoto(file) {
+    if (!file || !se) return;
+    shrinkImage(file).then(function (r) {
+      if (!se) return;
+      var u = URL.createObjectURL(r.blob), im = new Image();
+      im.onload = function () { if (!se) return; if (se.url) { try { URL.revokeObjectURL(se.url); } catch (e) {} } se.url = u; se.img = im; se.photoBlob = r.blob; se.p.src = "photo"; se.p.z = 1; se.p.px = 0; se.p.py = 0; if (se.p.sh === "none") se.p.sh = "round"; seTools(); seStyleUi(); seRender(); };
+      im.src = u;
+    }).catch(function () { toast("No se pudo abrir esa foto"); });
+  }
+  function seSave() {
+    if (!se) return;
+    var p = se.p;
+    if (p.src === "draw" && !se.strokes.some(function (s) { return !s.e; }) && !se.base) { toast("Dibujá algo primero"); return; }
+    if (p.src === "photo" && !se.img) { toast("Elegí una foto primero"); return; }
+    if (p.src === "text" && !p.tx.trim()) { toast("Escribí un emoji o texto primero"); return; }
+    var id = se.id || uid(), name = String($("seName").value || "").trim().slice(0, 24) || "Sticker";
+    var st = cleanStk(Object.assign({}, p, { id: id, n: name, at: Date.now() }));
+    var out = stkDraw(st, 512, se.img, se.layer), s0 = se;
+    out.toBlob(function (blob) {
+      if (!blob) { toast("No se pudo guardar el sticker"); return; }
+      imgPut("stk:" + id, blob).then(function (ok) {
+        if (ok === false && !imgMem.has("stk:" + id)) throw new Error("save");
+        if (st.src === "draw") return new Promise(function (res) { s0.layer.toBlob(function (lb) { res(lb ? imgPut("stk:" + id + ":s", lb) : null); }, "image/png"); });
+        if (st.src === "photo" && s0.photoBlob) return imgPut("stk:" + id + ":s", s0.photoBlob);
+        return imgDel("stk:" + id + ":s");
+      }).then(function () {
+        var i = -1; myStk.forEach(function (m, j) { if (m.id === id) i = j; });
+        if (i >= 0) myStk[i] = st; else myStk.unshift(st);
+        saveStk(); smSel = id; return stkLoad(id, true);
+      }).then(function () {
+        closeLayer("stkEd"); toast("Sticker guardado"); setTimeout(stkChanged, 60);
+      }).catch(function () { toast("No se pudo guardar el sticker. Revisá el espacio del teléfono"); });
+    }, "image/png");
+  }
+  /* eventos del editor */
+  $("stkEd").addEventListener("click", function (e) {
+    if (e.target === $("stkEd")) { closeLayer("stkEd"); return; }
+    if (!se) return;
+    var b = e.target.closest("button"); if (!b) return;
+    var d = b.dataset, p = se.p;
+    if (d.k && b.parentNode.id === "seSrc") { seSetSrc(d.k); return; }
+    if (d.pen) { se.color = d.pen; se.erase = false; seTools(); return; }
+    if (d.sz) { se.size = Number(d.sz); seTools(); return; }
+    if (d.er) { se.erase = !se.erase; seTools(); return; }
+    if (b.id === "seUndo") { se.strokes.pop(); seLayerRedraw(); seRender(); return; }
+    if (b.id === "seClear") { se.strokes = []; se.base = null; seLayerRedraw(); seRender(); return; }
+    if (b.id === "sePick") { $("seFile").click(); return; }
+    if (b.id === "seCam") { $("seCamIn").click(); return; }
+    if (d.sh != null) { p.sh = d.sh; seStyleUi(); seRender(); return; }
+    if (d.f != null) { p.f1 = d.f; if (d.f) p.f2 = ""; else p.f2 = ""; seStyleUi(); seRender(); return; }
+    if (b.id === "seNoGrad") { p.f2 = ""; seStyleUi(); seRender(); return; }
+    if (d.an != null) { p.an = d.an; seStyleUi(); return; }
+    if (b.id === "seSave") { seSave(); return; }
+  });
+  $("stkEd").addEventListener("input", function (e) {
+    if (!se) return;
+    var t = e.target, p = se.p;
+    if (t.id === "seF1") { p.f1 = stkCol(t.value); seStyleUi(); }
+    else if (t.id === "seF2") { p.f2 = stkCol(t.value); if (!p.f1) p.f1 = stkCol($("seF1").value); seStyleUi(); }
+    else if (t.id === "seBw") p.bw = Number(t.value);
+    else if (t.id === "seBc") p.bc = stkCol(t.value) || "#ffffff";
+    else if (t.id === "seGl") p.gl = Number(t.value);
+    else if (t.id === "seTx") p.tx = t.value.slice(0, 12);
+    else if (t.id === "seTc") p.tc = stkCol(t.value) || "#ffffff";
+    else if (t.id === "seZoom" || t.id === "seTz") p.z = Number(t.value);
+    else if (t.id === "sePx") p.px = Number(t.value);
+    else if (t.id === "sePy") p.py = Number(t.value);
+    else return;
+    seSoon();
+  });
+  ["seFile", "seCamIn"].forEach(function (id) { $(id).addEventListener("change", function () { var f = $(id).files && $(id).files[0]; $(id).value = ""; sePhoto(f); }); });
+  $("seClose").addEventListener("click", function () { closeLayer("stkEd"); });
+  (function () {
+    var pc = $("sePrev");
+    function pos(e) { var r = pc.getBoundingClientRect(), B = 512 * 0.76, o = (512 - B) / 2; return [((e.clientX - r.left) / r.width * 512 - o) / B * 512, ((e.clientY - r.top) / r.height * 512 - o) / B * 512]; }
+    pc.addEventListener("pointerdown", function (e) {
+      if (!se || se.p.src !== "draw" || se.cur) return;
+      try { pc.setPointerCapture(e.pointerId); } catch (er) {}
+      se.cur = { c: se.color, w: (se.erase ? se.size * 1.6 : se.size) * (512 / (512 * 0.76)) * 0.76, e: se.erase, p: [pos(e)] }; se.strokes.push(se.cur);
+      sePaint(se.layer.getContext("2d"), se.cur, 0); seSoon(); e.preventDefault();
+    });
+    pc.addEventListener("pointermove", function (e) {
+      if (!se || !se.cur) return;
+      var n0 = se.cur.p.length; se.cur.p.push(pos(e)); sePaint(se.layer.getContext("2d"), se.cur, n0); seSoon();
+    });
+    function end() { if (se) se.cur = null; }
+    pc.addEventListener("pointerup", end); pc.addEventListener("pointercancel", end);
+  })();
+
+  /* ---------- biblioteca "Mis stickers" ---------- */
+  var smSel = "", smIntent = "", smDelArm = 0;
+  function openStkMgr(intent) {
+    smIntent = intent || ""; smSel = myStk.length ? myStk[0].id : "";
+    if (smIntent === "icon" || smIntent === "bg" || smIntent === "note") { var cs = cur() && ((smIntent === "icon" && cur().icon) || ""); if (cs && cs.slice(0, 2) === "c:" && stkOf(cs.slice(2))) smSel = cs.slice(2); }
+    smRender(); $("stkMgr").hidden = false; pushLayer("stkMgr");
+  }
+  registerLayer("stkMgr", function () { $("stkMgr").hidden = true; smDelArm = 0; });
+  function smRender() {
+    var g = $("smGrid"); g.textContent = "";
+    if (smSel && !stkOf(smSel)) smSel = myStk.length ? myStk[0].id : "";
+    myStk.forEach(function (s) {
+      var b = el("button"); b.type = "button"; b.dataset.id = s.id; b.title = s.n; b.setAttribute("aria-label", s.n); b.setAttribute("aria-pressed", s.id === smSel ? "true" : "false");
+      b.appendChild(iconSpan("c:" + s.id, "static")); var cap = el("span", "cap"); cap.textContent = s.n; b.appendChild(cap); g.appendChild(b);
+    });
+    var n = cur(), canUse = !!(n && !n.trashedAt && smSel), isText = !!(n && n.type === "text");
+    $("smHint").textContent = myStk.length ? "Elegí un sticker y usalo como icono, fondo o imagen de la nota. Todo se guarda en este teléfono." : "Todavía no creaste ningún sticker. Dibujalo, hacelo con una foto o con un emoji y personalizalo como quieras.";
+    $("smIcon").disabled = !canUse; $("smBg").disabled = !canUse; $("smNote").disabled = !(canUse && isText);
+    $("smEdit").disabled = !smSel; $("smDup").disabled = !smSel || myStk.length >= STK_MAX; $("smDel").disabled = !smSel;
+    $("smDel").textContent = smDelArm ? "¿Seguro? Tocá de nuevo" : "Borrar";
+    ["smIcon", "smBg", "smNote"].forEach(function (id) { $(id).classList.toggle("primary", id === { icon: "smIcon", bg: "smBg", note: "smNote" }[smIntent]); });
+    $("smAct").hidden = !myStk.length;
+  }
+  $("smGrid").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; smSel = b.dataset.id; smDelArm = 0; smRender(); });
+  $("smClose").addEventListener("click", function () { closeLayer("stkMgr"); });
+  $("stkMgr").addEventListener("click", function (e) { if (e.target === $("stkMgr")) closeLayer("stkMgr"); });
+  $("smNew").addEventListener("click", function () { openStkEd(""); });
+  $("smEdit").addEventListener("click", function () { if (smSel) openStkEd(smSel); });
+  $("smIcon").addEventListener("click", function () { var id = smSel; closeLayer("stkMgr"); setTimeout(function () { setIcon("c:" + id); }, 260); });
+  $("smBg").addEventListener("click", function () { var id = smSel; closeLayer("stkMgr"); setTimeout(function () { stkSetBg(id); }, 260); });
+  $("smNote").addEventListener("click", function () { var id = smSel; closeLayer("stkMgr"); setTimeout(function () { stkInsert(id); }, 260); });
+  $("smDup").addEventListener("click", function () {
+    var s = stkOf(smSel); if (!s || myStk.length >= STK_MAX) return;
+    var nid = uid(), c = cleanStk(Object.assign({}, s, { id: nid, n: (s.n + " 2").slice(0, 24), at: Date.now() }));
+    Promise.all([imgGet("stk:" + s.id), imgGet("stk:" + s.id + ":s")]).then(function (r) {
+      if (!r[0]) throw new Error("x");
+      return imgPut("stk:" + nid, r[0]).then(function () { return r[1] ? imgPut("stk:" + nid + ":s", r[1]) : null; });
+    }).then(function () { myStk.unshift(c); saveStk(); smSel = nid; return stkLoad(nid, true); }).then(function () { stkChanged(); toast("Sticker duplicado"); })
+      .catch(function () { toast("No se pudo duplicar el sticker"); });
+  });
+  $("smDel").addEventListener("click", function () {
+    if (!smSel) return;
+    if (!smDelArm) { smDelArm = 1; smRender(); clearTimeout(smDel.t); smDel.t = setTimeout(function () { smDelArm = 0; if (!$("stkMgr").hidden) smRender(); }, 3500); return; }
+    var id = smSel; smDelArm = 0; stkDelete(id);
+  });
+  var smDel = {};
+  function stkDelete(id) {
+    myStk = myStk.filter(function (s) { return s.id !== id; }); saveStk();
+    imgDel("stk:" + id); imgDel("stk:" + id + ":s");
+    if (stkUrls[id]) { try { URL.revokeObjectURL(stkUrls[id]); } catch (e) {} delete stkUrls[id]; }
+    var hit = 0;
+    notes.forEach(function (n) {
+      var ch = false, m = CU_RE.exec(n.bg || "");
+      if (n.icon === "c:" + id) { n.icon = ""; ch = true; }
+      if (m && m[1] === id) { n.bg = ""; ch = true; }
+      if (ch) { n.updatedAt = Date.now(); hit++; }
+    });
+    if (hit) { persistNow(); renderAll(); }
+    smSel = myStk.length ? myStk[0].id : ""; stkChanged(); toast("Sticker borrado");
+  }
+  function stkChanged() {
+    renderList();
+    if (activeId) { renderIconBtn(); renderBg(); }
+    if (!$("stkMgr").hidden) smRender();
+    if (!$("iconSheet").hidden) renderIconSheet();
+    if (!$("sheet").hidden) renderSheet();
+  }
+  /* como fondo de la nota */
+  function stkSetBg(id) {
+    var n = cur(); if (!n || n.trashedAt || !stkOf(id)) return;
+    n.bg = "c:" + id + ":c:60:70"; changed(n); persistNow(); renderBg(); renderList();
+    if (!$("sheet").hidden) renderSheet(); else toast("Fondo aplicado. Podés ajustarlo en Personalizar");
+  }
+  function cuSet(patch) {
+    var n = cur(); if (!n) return; var m = CU_RE.exec(n.bg || ""); if (!m) return;
+    var mode = patch.m || m[2], size = patch.s != null ? patch.s : m[3], op = patch.o != null ? patch.o : m[4];
+    n.bg = cleanBg("c:" + m[1] + ":" + mode + ":" + size + ":" + op); changed(n); renderBg();
+  }
+  /* dentro de la nota: se copia como imagen (se mueve, escala y gira como cualquier imagen) */
+  function stkInsert(id) {
+    var n = cur(); if (!n || n.type !== "text" || n.trashedAt || !stkOf(id)) return;
+    if (n.images.length >= 30) { toast("Una nota admite hasta 30 imágenes"); return; }
+    imgGet("stk:" + id).then(function (b) {
+      if (!b) throw new Error("x");
+      return addImageBlob(n, b, 512, 512, 0);
+    }).then(function () {
+      var it = n.images[n.images.length - 1]; if (it) { it.w = 0.3; it.cx = 0.5; }
+      if (cur() === n) { renderImages(); persistNow(); toast("Sticker agregado. Arrastralo, escalalo o girarlo con los dedos"); }
+    }).catch(function () { toast("No se pudo poner el sticker"); });
+  }
   bodyEl.addEventListener("input", function () { if (cur() && cur().images.length) fitBody(); });
   bodyEl.addEventListener("focus", function () { if (selImg) selectImg(null); });
   window.addEventListener("resize", function () { fitBody(); });
@@ -3505,6 +3976,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (k === "image") { $("imgFile").click(); return; }
     if (k === "photo") { $("imgCam").click(); return; }
     if (k === "draw") { openDraw(); return; }
+    if (k === "sticker") { openStkMgr("note"); return; }
     if (k === "find") { findOpen($("findBar").hidden); return; }
     if (k === "hl") { var hr = $("hlRow"); if (hr.hidden) findOpen(false); hr.hidden = !hr.hidden; b.setAttribute("aria-pressed", hr.hidden ? "false" : "true"); fitBody(); return; }
     if (k === "undo") { bodyEl.focus(); histGo(-1); return; }
@@ -3518,7 +3990,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     else if (k === "head") cycleHead();
     else if (k === "bold") wrapSel("**");
     else if (k === "italic") wrapSel("*");
-    else if (k === "image" || k === "photo" || k === "draw") return;
+    else if (k === "image" || k === "photo" || k === "draw" || k === "sticker") return;
     else if (k === "link") insertLink();
     else if (k === "table") insertTable();
     else if (k === "date") insertAtCaret(dlong.format(now));
@@ -3715,6 +4187,20 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         clearInterval(stkTimer); stkTimer = setInterval(function () { win += 3; apply(); }, 3000);
       }
       var hint = el("p", "hintlp"); hint.textContent = "Mantené pulsada una insignia para ver su información."; body.appendChild(hint);
+    } else if (iconKind === "mine") {
+      var mg = el("div", "igrid stk");
+      var mk = el("button"); mk.type = "button"; mk.id = "mineNew"; mk.setAttribute("aria-label", "Crear sticker"); mk.textContent = "＋";
+      var mcap = el("span", "cap"); mcap.textContent = "Crear"; mk.appendChild(mcap); mk.addEventListener("click", function () { openStkEd(""); }); mg.appendChild(mk);
+      myStk.forEach(function (st) {
+        var b = el("button"); b.type = "button"; b.title = st.n; b.dataset.id = st.id; b.setAttribute("aria-label", st.n);
+        b.setAttribute("aria-pressed", n.icon === "c:" + st.id ? "true" : "false"); b.appendChild(iconSpan("c:" + st.id));
+        var cap = el("span", "cap"); cap.textContent = st.n; b.appendChild(cap);
+        b.addEventListener("click", function () { setIcon("c:" + st.id); }); mg.appendChild(b);
+      });
+      body.appendChild(mg);
+      var mh = el("p", "hintlp"); mh.textContent = myStk.length ? "Tus stickers viven solo en este teléfono." : "Creá tu primer sticker: dibujalo, con una foto o con un emoji."; body.appendChild(mh);
+      var ma = el("div", "actions"); ma.style.marginTop = "8px"; var mb = el("button", "btn"); mb.type = "button"; mb.id = "mineMgr"; mb.textContent = "Administrar mis stickers";
+      mb.addEventListener("click", function () { openStkMgr("icon"); }); ma.appendChild(mb); body.appendChild(ma);
     } else {
       EMOJI_SETS.forEach(function (set) {
         var h = el("div", "ihead"); h.textContent = set.n; body.appendChild(h);
@@ -3745,7 +4231,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function openIconSheet() {
     if (!cur() || readOnly()) return;
-    if (cur().icon && cur().icon.charAt(0) === "e") iconKind = "emojis";
+    var ci = cur().icon || "";
+    if (ci.charAt(0) === "e") iconKind = "emojis";
+    else if (ci.slice(0, 2) === "c:") iconKind = "mine";
     else iconKind = "stickers";
     renderIconSheet();
     $("scrim").hidden = false; $("iconSheet").hidden = false;
@@ -3758,6 +4246,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var b = e.target.closest("button"); if (!b) return;
     iconKind = b.dataset.k; renderIconSheet();
   });
+  $("cuMode").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; cuSet({ m: b.dataset.m }); renderSheet(); });
+  $("cuSize").addEventListener("input", function () { cuSet({ s: $("cuSize").value }); });
+  $("cuOp").addEventListener("input", function () { cuSet({ o: $("cuOp").value }); });
+  $("cuChange").addEventListener("click", function () { openStkMgr("bg"); });
 
   /* ---------- botón Guardar ---------- */
   var saveBtnTimer = null;
@@ -3790,12 +4282,25 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (withDefault) add("", "Como en Ajustes", settings.noteBg === "none" ? "" : settings.noteBg, settings.noteBg === "none");
     add("none", "Sin fondo", "", true);
     BGS.forEach(function (g) { add(g.k, g.n, g.k, false); });
+    if (withDefault) {
+      var cm = CU_RE0.exec(current || ""), cb = el("button", "bgp"); cb.type = "button"; cb.id = "bgMine"; cb.setAttribute("aria-label", "Fondo: sticker propio");
+      cb.setAttribute("aria-pressed", cm ? "true" : "false");
+      var ct = el("span", "bgthumb cuthumb"); if (cm) ct.appendChild(stkImg(cm[1], false)); else ct.textContent = "★";
+      var cc = el("span", "cap"); cc.textContent = "Sticker propio"; cb.appendChild(ct); cb.appendChild(cc);
+      cb.addEventListener("click", function () { if (myStk.length) openStkMgr("bg"); else openStkEd(""); });
+      box.appendChild(cb);
+    }
   }
 
   /* ---------- panel de personalización ---------- */
   function renderSheet() {
     var n = cur(); if (!n) return;
     renderBgPick($("bgPick"), n.bg, true, function (k) { n.bg = k; changed(n); renderBg(); renderSheet(); renderList(); });
+    var cum = CU_RE0.exec(n.bg || ""); $("cuCtl").hidden = !cum;
+    if (cum) {
+      $("cuMode").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.m === cum[2] ? "true" : "false"); });
+      $("cuSize").value = cum[3]; $("cuOp").value = cum[4];
+    }
     var sw = $("swatches"); sw.textContent = "";
     COLORS.forEach(function (c) {
       var b = el("button", "sw" + (c.rgb ? "" : " none")); b.type = "button";
@@ -4005,6 +4510,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.55.0", d: "9 nov 2026", t: "Stickers propios", l: ["Mis stickers (menú y selector de iconos): creá los tuyos dibujando, con una foto o con un emoji/texto", "Personalizalos: forma, relleno y degradado, borde, brillo y animación (flotar, latir, girar…)", "Usalos como icono de nota, como fondo (mosaico, centro o esquina, con tamaño e intensidad) o dentro de la nota como imagen que se mueve y escala", "Editar, duplicar y borrar; hasta 40; incluidos en la copia de seguridad"] },
     { v: "1.54.0", d: "9 nov 2026", t: "Plantillas propias", l: ["Personalizar → «Guardar como plantilla»: guarda cualquier nota (texto o lista, con subtareas) como plantilla, eligiendo si incluye título, etiquetas y color/icono", "Tus plantillas aparecen primero al crear una nota vacía", "{fecha} y {hora} se completan solos al usarla", "«Mis plantillas» (también en Ajustes): usar, renombrar y borrar con Deshacer", "Hasta 30 plantillas; van incluidas en la copia de seguridad"] },
     { v: "1.53.0", d: "9 nov 2026", t: "Botón flotante y deslizar tarjetas", l: ["Botón flotante + para crear una nota (mantenido pulsado crea una lista); se esconde en la papelera, al seleccionar y al escribir en la búsqueda", "En la vista de lista: desliza una tarjeta a la derecha para fijar o a la izquierda para archivar, con Deshacer", "Ambos se pueden apagar en Personalización → Pantalla de inicio"] },
     { v: "1.52.0", d: "9 nov 2026", t: "Exportar e importar Markdown", l: ["Ajustes → Markdown → «Exportar todo»: un .zip con una nota por archivo .md, en carpetas, con etiquetas, fechas y fijado", "Las listas salen como casillas, con sus subtareas", "Las notas protegidas y las de la papelera no se exportan", "«Importar .md, .txt o .zip»: acepta archivos sueltos o zips (también los comprimidos de otras apps), usa el título del archivo o el primer #, lee etiquetas y fechas, y respeta las carpetas", "Si importas algo que ya tienes, se omite en vez de duplicarlo"] },
@@ -4664,6 +5170,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("mnProfile").addEventListener("click", function () { closeMenuThen(openProfile); });
   $("mnMax").addEventListener("click", function () { soon("MAX"); });
   $("mnCustom").addEventListener("click", openCustom);
+  $("mnStickers").addEventListener("click", function () { closeMenuThen(function () { openStkMgr(""); }); });
   $("mnNews").addEventListener("click", openNews);
   $("mnSettings").addEventListener("click", openSettings);
   $("mnBackup").addEventListener("click", function () {
@@ -4778,10 +5285,11 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   }
   function imagesForBackup() {
     var ids = Array.from(usedImageIds()), out = {};
+    myStk.forEach(function (m) { ids.push("stk:" + m.id, "stk:" + m.id + ":s"); });
     return Promise.all(ids.map(function (id) { return imgGet(id).then(function (b) { return b ? blobToDataUrl(b) : null; }).then(function (u) { if (u) out[id] = u; }); })).then(function () { return out; });
   }
   function backupJson() {
-    return JSON.stringify({ app: "tronx", version: 2, exportedAt: new Date().toISOString(), notes: Array.from(notes.values()), tpls: myTpls, map: window.TronxMap ? window.TronxMap.exportData() : undefined }, null, 2);
+    return JSON.stringify({ app: "tronx", version: 2, exportedAt: new Date().toISOString(), notes: Array.from(notes.values()), tpls: myTpls, stickers: myStk, map: window.TronxMap ? window.TronxMap.exportData() : undefined }, null, 2);
   }
   // Entrega un archivo: en el teléfono abre el menú de compartir; en el navegador lo descarga.
   // Devuelve una promesa: true si se entregó, false si la persona canceló.
@@ -4997,9 +5505,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       var tAdd = 0; data.tpls.slice(0, 60).forEach(function (x) { var t = cleanTpl(x); if (t && myTpls.length < 30 && !myTpls.some(function (m) { return m.id === t.id; })) { myTpls.push(t); tAdd++; } });
       if (tAdd) saveTpls();
     }
+    if (data && !Array.isArray(data) && Array.isArray(data.stickers)) {
+      var sAdd = 0; data.stickers.slice(0, 80).forEach(function (x) { var t = cleanStk(x); if (t && myStk.length < STK_MAX && !stkOf(t.id)) { myStk.push(t); sAdd++; } });
+      if (sAdd) saveStk();
+    }
     if (window.TronxMap && data && !Array.isArray(data) && data.map) window.TronxMap.importData(data.map);
     if (data && !Array.isArray(data) && data.images && typeof data.images === "object") {
-      Object.keys(data.images).forEach(function (id) { var b = dataUrlToBlob(data.images[id]); if (b) imgPut(id, b).then(function () { if (activeId) renderImages(); }); });
+      Object.keys(data.images).forEach(function (id) { var b = dataUrlToBlob(data.images[id]); if (b) imgPut(id, b).then(function () { if (id.indexOf("stk:") === 0 && id.slice(-2) !== ":s") stkLoad(id.slice(4), true).then(function () { stkChanged(); }); if (activeId) renderImages(); }); });
     }
     persistNow(); renderAll();
     if (activeId) renderEditor();
