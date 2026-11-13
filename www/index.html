@@ -993,6 +993,15 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .calgrid .cdots { position: absolute; left: 0; right: 0; bottom: 5px; display: flex; gap: 3px; justify-content: center; }
 .cdot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; vertical-align: middle; }
 .cdot.rem { background: #f59e0b; } .cdot.made { background: var(--muted); }
+body.focus .side, body.focus .fmt, body.focus .meta, body.focus #taglines, body.focus #crumb, body.focus #tpls, body.focus #rel, body.focus #sugg, body.focus #pinBtn, body.focus #moreBtn, body.focus .fab, body.focus #backBtn { display: none !important; }
+body.focus .app { grid-template-columns: 1fr !important; }
+body.focus .pane { grid-column: 1 / -1; }
+body.focus #doc { max-width: 720px; margin: 0 auto; }
+.fpill { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 30; display: flex; gap: 12px; align-items: center; padding: 8px 8px 8px 16px; border-radius: 999px; background: var(--raised); border: 1px solid var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,.35); font-size: 14px; font-variant-numeric: tabular-nums; }
+.fpill[hidden] { display: none; }
+.pf-hist { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 14px; }
+.pf-hist li { display: flex; gap: 10px; align-items: baseline; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--raised); }
+.pf-hist time { flex: none; color: var(--muted); font-size: 12px; min-width: 64px; }
 .calmode { margin: 0 0 8px; }
 .wkgrid { display: grid; gap: 6px; }
 .wk-day { border: 1px solid var(--line); border-radius: 12px; background: var(--raised); padding: 6px 8px; min-height: 48px; }
@@ -1191,6 +1200,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     </nav>
     <div class="chips folders" id="folders" aria-label="Carpetas" hidden></div>
     <div class="chips" id="chips" aria-label="Filtrar por etiqueta" hidden></div>
+    <div class="chips" id="savedRow" aria-label="Búsquedas guardadas" hidden></div>
     <div class="opts">
       <select id="sort" aria-label="Ordenar notas">
         <option value="updated">Más recientes</option>
@@ -1210,6 +1220,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <option value="pinned">Fijadas</option>
         <option value="color">Con color</option>
         <option value="remind">Con recordatorio</option>
+        <option value="img">Con imágenes</option>
+      </select>
+      <select id="when" aria-label="Filtrar por fecha de edición">
+        <option value="all">Cualquier fecha</option>
+        <option value="today">Hoy</option>
+        <option value="week">Últimos 7 días</option>
+        <option value="month">Últimos 30 días</option>
+        <option value="year">Último año</option>
       </select>
       <button class="btn icon" id="selBtn" type="button" title="Seleccionar notas" aria-label="Seleccionar notas" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/></svg></button>
       <button class="btn icon" id="viewBtn" type="button"></button>
@@ -1250,6 +1268,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       <button class="btn icon ghost back" id="backBtn" type="button" aria-label="Volver a las notas"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
       <span class="status" id="status" role="status" aria-live="polite"></span>
       <button class="btn primary save" id="saveBtn" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="lbl" id="saveLbl">Guardar</span></button>
+      <button class="btn" id="focusBtn" type="button" aria-pressed="false" title="Escribir sin distracciones">Enfoque</button>
       <button class="btn" id="pinBtn" type="button" aria-pressed="false">Fijar</button>
       <button class="btn" id="moreBtn" type="button" aria-haspopup="dialog" aria-label="Personalizar"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="8.5" cy="10.5" r="1"/><circle cx="12.5" cy="8.5" r="1"/><circle cx="15.5" cy="12" r="1"/></svg><span class="lbl">Personalizar</span></button>
     </div>
@@ -1428,10 +1447,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <p class="hint">Es el sonido del agujero negro de la pantalla de inicio. Suena solo cuando el agujero negro pasa, y sigue el volumen multimedia del teléfono: si no se escucha, subilo y usá “Probar sonido”. Para silenciarlo, elegí “Silenciado”.</p>
     <h3 id="backupH">Copia de seguridad</h3>
     <div class="actions">
-      <button class="btn" id="exportBtn" type="button">Exportar copia</button>
+      <button class="btn" id="exportBtn" type="button">Enviar copia completa</button>
+      <button class="btn" id="exportLiteBtn" type="button">Copia sin imágenes</button>
       <button class="btn" id="importBtn" type="button">Importar copia</button>
     </div>
-    <p class="hint">Tus notas viven solo en este teléfono. Si desinstalás la app o borrás sus datos, se pierden. Guardá una copia de vez en cuando.</p>
+    <p class="hint" id="bkStatus"></p>
+    <p class="hint">Tus notas viven solo en este teléfono. Si desinstalás la app o borrás sus datos, se pierden. Al enviar la copia se abre el menú de Android: elegí Drive, WhatsApp, correo o "Guardar en el teléfono". La copia sin imágenes pesa mucho menos y entra en cualquier chat.</p>
+    <div class="remrow"><label class="hint" for="bkEvery" style="align-self:center;flex:none;margin:0">Recordarme la copia</label><select id="bkEvery" aria-label="Cada cuánto recordar la copia"><option value="3">Cada 3 días</option><option value="7">Cada semana</option><option value="14">Cada 2 semanas</option><option value="30">Cada mes</option><option value="0">Nunca</option></select></div>
     <input type="file" id="importFile" accept=".json,application/json" hidden>
     <h3 id="secTpl">Plantillas</h3>
     <div class="actions"><button class="btn" id="tplOpenBtn" type="button">Mis plantillas</button></div>
@@ -1607,6 +1629,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <div class="orglist" id="orgFolders"></div>
   </section>
 </div>
+<div class="fpill" id="focusPill" hidden role="status"><span id="fpTime">0:00</span><span id="fpWords"></span><button class="btn small primary" id="fpExit" type="button">Salir</button></div>
 <div class="overlay" id="calendar" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Calendario">
     <div class="sheethead"><strong>Calendario</strong><button class="btn small" id="calClose" type="button">Listo</button></div>
@@ -1687,6 +1710,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     <p class="pf-since" id="pfBest"></p>
     <h3>Logros <span class="pf-ach-n" id="pfAchN"></span></h3>
     <div class="pf-ach" id="pfAch"></div>
+    <h3>Historial</h3>
+    <ol class="pf-hist" id="pfHist"></ol>
     <p class="hint">Tu perfil vive solo en este teléfono, igual que tus notas. No hace falta cuenta ni internet.</p>
   </section>
 </div>
@@ -1798,7 +1823,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.59.0";
+  var APP_VERSION = "1.59.6";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1853,6 +1878,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   if (settings.noteBg !== "none" && !bgOk(settings.noteBg)) settings.noteBg = "nebula";
   settings.bgAnim = settings.bgAnim !== false; settings.autoBk = settings.autoBk !== false;
   settings.pinBio = !!settings.pinBio; settings.fab = settings.fab !== false; settings.swipe = settings.swipe !== false;
+  settings.saved = (Array.isArray(settings.saved) ? settings.saved : []).filter(function (o) { return o && typeof o === "object" && typeof o.n === "string"; }).slice(0, 12).map(function (o) {
+    return { n: o.n.slice(0, 40), q: String(o.q || "").slice(0, 80), tag: typeof o.tag === "string" ? o.tag : null, folder: typeof o.folder === "string" ? o.folder : null, kind: String(o.kind || "all"), when: String(o.when || "all"), all: !!o.all };
+  });
+  if (!settings.focus || typeof settings.focus !== "object") settings.focus = {};
+  settings.focus = { min: Math.max(0, Math.floor(Number(settings.focus.min) || 0)), n: Math.max(0, Math.floor(Number(settings.focus.n) || 0)) };
+  settings.focusLog = (Array.isArray(settings.focusLog) ? settings.focusLog : []).filter(function (f) { return f && f.t > 0 && f.m >= 0; }).slice(0, 30).map(function (f) { return { t: +f.t, m: Math.floor(f.m), w: Math.max(0, Math.floor(f.w) || 0) }; });
+  settings.bkEvery = [0, 3, 7, 14, 30].indexOf(Number(settings.bkEvery)) >= 0 ? Number(settings.bkEvery) : 7;
   settings.dueAlert = settings.dueAlert !== false; settings.dueEve = !!settings.dueEve;
   if (!/^\d{2}:\d{2}$/.test(settings.dueAt || "") || +settings.dueAt.slice(0, 2) > 23 || +settings.dueAt.slice(3) > 59) settings.dueAt = "09:00";
   if (!settings.act || typeof settings.act !== "object" || Array.isArray(settings.act)) settings.act = {};
@@ -1934,7 +1966,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* ---------- datos ---------- */
   var notes = new Map();
-  var tab = "notes", tagFilter = null, query = "", activeId = null, folderFilter = null, kindFilter = "all", selMode = false, sel = new Set();
+  var tab = "notes", tagFilter = null, query = "", activeId = null, folderFilter = null, kindFilter = "all", whenFilter = "all", allScope = false, selMode = false, sel = new Set();
   var saveTimer = null, statusTimer = null, listRaf = 0;
 
   /* ---------- iconos de las notas (emoji o sticker) ---------- */
@@ -2062,6 +2094,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (rp === "days" && !wd.length) rp = "week";
     return { at: at, rep: rp, wd: rp === "days" ? wd : [], seen: !!r.seen, snz: Number(r.snz) > 0 ? Number(r.snz) : 0 };
   }
+  function cleanEnc(e) {
+    if (!e || typeof e !== "object" || typeof e.iv !== "string" || typeof e.ct !== "string" || !e.iv || !e.ct) return null;
+    return { v: 1, it: Math.min(1000000, Math.max(1000, Math.floor(Number(e.it)) || 120000)), iv: e.iv, ct: e.ct };
+  }
   function cleanLock(l) {
     if (!l || typeof l !== "object") return null;
     var m = l.m === "bio" || l.m === "pin" || l.m === "both" ? l.m : "";
@@ -2096,7 +2132,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var tags = [];
     (Array.isArray(x.tags) ? x.tags : []).forEach(function (t) { t = cleanTag(t); if (t && tags.indexOf(t) < 0 && tags.length < 8) tags.push(t); });
     var now = Date.now();
-    return {
+    var r = {
       id: String(x.id || uid()),
       type: type,
       title: String(x.title || ""),
@@ -2110,6 +2146,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       versions: cleanVersions(x.versions),
       remind: cleanRemind(x.remind),
       lock: cleanLock(x.lock),
+      enc: cleanEnc(x.enc),
       rems: Array.isArray(x.rems) ? x.rems.map(cleanRemind).filter(Boolean).slice(0, 4) : [],
       parent: x.parent && String(x.parent) !== String(x.id) ? String(x.parent) : "",
       icon: cleanIcon(x.icon),
@@ -2120,6 +2157,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       createdAt: Number(x.createdAt) || Number(x.updatedAt) || now,
       updatedAt: Number(x.updatedAt) || now
     };
+    /* nota con texto en claro y cifrado viejo (se cerró la app justo al editar): vale el texto en claro, se vuelve a cifrar al abrirla */
+    if (r.enc && (r.body || r.items.length || r.versions.length)) encMeta.set(r, { src: "!" });
+    return r;
   }
   function isEmptyNote(n) {
     if (n.title.trim() || (n.images && n.images.length)) return false;
@@ -2137,10 +2177,62 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       notes.set(n.id, n);
     });
   }
+  /* ---------- cifrado de notas protegidas con PIN ----------
+     El texto (cuerpo, casillas y versiones) de una nota con PIN propio se guarda cifrado con AES-GCM; la clave sale del PIN (PBKDF2).
+     En memoria la nota abierta está en claro; en el disco (y en las copias) queda cifrada. Título, etiquetas e imágenes no se cifran. */
+  var encMeta = new WeakMap(), encKeys = {}, encTimers = {}, ENC_IT = 120000, lastPin = "";
+  function b64(buf) { var a = new Uint8Array(buf), s = ""; for (var i = 0; i < a.length; i += 8192) s += String.fromCharCode.apply(null, a.subarray(i, i + 8192)); return btoa(s); }
+  function unb64(t) { var s = atob(t), a = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
+  function encOk() { return !!(window.crypto && crypto.subtle && window.TextEncoder && window.TextDecoder); }
+  function encKey(pin, salt, it) {
+    var te = new TextEncoder();
+    return crypto.subtle.importKey("raw", te.encode(pin), "PBKDF2", false, ["deriveKey"]).then(function (base) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: te.encode("tronx-enc|" + salt), iterations: it, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+    });
+  }
+  function encPlain(n) { return JSON.stringify({ b: n.body, i: n.items, v: n.versions }); }
+  function isPinEnc(n) { return !!(n.lock && n.lock.m === "pin"); }
+  function serNote(n) {
+    if (!n.enc) return n;
+    var meta = encMeta.get(n);
+    if (meta && meta.src !== encPlain(n)) { if (document.hidden) encSave(n); else encSoon(n); return n; } /* editada: se guarda en claro un momento hasta cifrarla */
+    var c = Object.assign({}, n); c.body = ""; c.items = []; c.versions = []; return c;
+  }
+  function encSave(n) {
+    if (!encOk() || !isPinEnc(n)) return Promise.resolve(false);
+    var key = encKeys[n.lock.s]; if (!key) return Promise.resolve(false);
+    var plain = encPlain(n), meta = encMeta.get(n);
+    if (n.enc && meta && meta.src === plain) return Promise.resolve(true);
+    var iv = crypto.getRandomValues(new Uint8Array(12)), te = new TextEncoder();
+    return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, te.encode(plain)).then(function (ct) {
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ct).then(function (back) {
+        if (new TextDecoder().decode(back) !== plain || encPlain(n) !== plain) return false; /* verificar antes de reemplazar; si cambió mientras tanto, se reintenta */
+        n.enc = { v: 1, it: ENC_IT, iv: b64(iv), ct: b64(ct) }; encMeta.set(n, { src: plain }); persistNow(true); return true;
+      });
+    }).catch(function () { return false; });
+  }
+  function encSoon(n) { clearTimeout(encTimers[n.id]); encTimers[n.id] = setTimeout(function () { encSave(n).then(function (ok) { if (!ok && isPinEnc(n) && encKeys[n.lock.s] && encMeta.get(n) && encMeta.get(n).src !== encPlain(n)) encSoon(n); }); }, 700); }
+  /* tras ingresar el PIN de una nota: descifra si hace falta y activa el cifrado */
+  function encUnlock(n, pin) {
+    if (!isPinEnc(n) || !pin || !encOk()) return Promise.resolve();
+    var it = (n.enc && n.enc.it) || ENC_IT;
+    return encKey(pin, n.lock.s, it).then(function (key) {
+      encKeys[n.lock.s] = key;
+      if (n.enc && !encMeta.has(n)) {
+        return crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(n.enc.iv) }, key, unb64(n.enc.ct)).then(function (buf) {
+          var src = new TextDecoder().decode(buf), o = JSON.parse(src);
+          n.body = String(o.b || ""); n.items = (Array.isArray(o.i) ? o.i : []).map(function (x) { return cleanItem(x, 1e9); }); n.versions = cleanVersions(o.v);
+          encMeta.set(n, { src: encPlain(n) }); if (encMeta.get(n).src !== src) encSoon(n);
+        });
+      }
+      return encSave(n);
+    });
+  }
+  function encDrop(n) { delete n.enc; encMeta.delete(n); }
   function persistNow(soft) {
     syncSoon();
     clearTimeout(saveTimer); saveTimer = null;
-    var json = JSON.stringify(Array.from(notes.values())), ok = lsSet(KEY, json);
+    var json = JSON.stringify(Array.from(notes.values()).map(serNote)), ok = lsSet(KEY, json);
     if (ok && soft !== true) { try { ok = localStorage.getItem(KEY) === json; } catch { ok = false; } }
     setStatus(ok ? "Guardado" : "No se pudo guardar: sin espacio");
     if (window.TronxMap) window.TronxMap.prune();
@@ -2236,8 +2328,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function noteSize(n) { return n.type === "list" ? n.items.reduce(function (s, i) { return s + i.t.length; }, 0) : n.body.length; }
   function visibleNotes() {
     var q = query.trim().toLowerCase();
-    var arr = Array.from(notes.values()).filter(function (n) { return inTab(n, tab); });
-    if (!filtering()) arr = arr.filter(function (n) {
+    var wide = !!(q && allScope);
+    var arr = Array.from(notes.values()).filter(function (n) { return wide || inTab(n, tab); });
+    if (!filtering() && !wide) arr = arr.filter(function (n) {
       var pr = n.parent && notes.get(n.parent);
       return !(pr && !pr.trashedAt && pr.archived === n.archived && pr.parent !== n.id);
     });
@@ -2248,8 +2341,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       if (kindFilter === "open") return n.type === "list" && n.items.some(function (i) { return i.t.trim() && !i.done; });
       if (kindFilter === "pinned") return n.pinned;
       if (kindFilter === "remind") return !!n.remind;
+      if (kindFilter === "img") return !n.lock && n.images.length > 0;
       return n.color !== "none" && n.color !== COLORS[0].k;
     });
+    if (whenFilter !== "all") {
+      var t0 = new Date(); t0.setHours(0, 0, 0, 0);
+      var from = whenFilter === "today" ? t0.getTime() : Date.now() - ({ week: 7, month: 30, year: 365 }[whenFilter] || 0) * 86400000;
+      arr = arr.filter(function (n) { return n.updatedAt >= from; });
+    }
     if (q) {
       var kh = {};
       notes.forEach(function (k) { if (k.parent && !k.trashedAt) (kh[k.parent] = kh[k.parent] || []).push(haystack(k)); });
@@ -2389,6 +2488,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       b.appendChild(tg);
     }
     var m = el("span", "m");
+    if (n.trashedAt || (n.archived && tab !== "archive")) { var wb = el("span", "fold"); wb.textContent = n.trashedAt ? "🗑 Papelera" : "📦 Archivo"; m.appendChild(wb); }
     if (n.pinned) { var pin = el("span", "pin"); pin.textContent = "fijada"; m.appendChild(pin); }
     if (n.remind) { var rm = el("span", "fold"); rm.textContent = "⏰ " + remText(n.remind) + (n.rems.length ? " · +" + n.rems.length : ""); m.appendChild(rm); }
     if (n.images.length && !n.lock) { var im = el("span"); im.textContent = "🖼 " + n.images.length; m.appendChild(im); }
@@ -2474,12 +2574,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function cardSig(n) {
     var d = 0, k = 0;
     for (var i = 0; i < n.items.length; i++) { k++; if (n.items[i].done) d++; }
-    return n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
+    return (n.trashedAt ? "t" : n.archived ? "a" : "n") + tab + "|" + n.updatedAt + "|" + n.title.length + "|" + n.body.length + "|" + k + "|" + d + "|" + n.color + "|" + n.icon + "|" +
       (n.pinned ? 1 : 0) + "|" + n.tags.join(",") + "|" + resolveBg(n, true) + "|" + (n.id === activeId ? 1 : 0) + "|" +
       (n.trashedAt || 0) + "|" + when(n.trashedAt || n.updatedAt) + "|" + n.folder + "|" + (n.remind ? n.remind.at + n.remind.rep + n.remind.seen + n.remind.snz + (n.remind.wd || []).join("") : "") + "|" + n.rems.map(function (r) { return r.at + r.rep + r.seen; }).join(",") + "|" + (n.lock ? n.lock.m : "") + "|" + n.images.length + "|" + (kidCount[n.id] || 0) + "|" + query.trim().toLowerCase() + "|" + (selMode ? (sel.has(n.id) ? 2 : 1) : 0);
   }
   function renderList() {
     var listEl = $("list"), rows = visibleNotes();
+    renderSaved();
     kidCount = {};
     notes.forEach(function (k) { if (k.parent && !k.trashedAt && notes.has(k.parent)) kidCount[k.parent] = (kidCount[k.parent] || 0) + 1; });
     if (listEl.getAttribute("data-view") !== settings.view) listEl.setAttribute("data-view", settings.view);
@@ -2518,7 +2619,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("emptyTrash").hidden = !(tab === "trash" && total > 0);
     renderBkBar();
   }
-  function filtering() { return !!(query.trim() || tagFilter || folderFilter !== null || kindFilter !== "all"); }
+  function filtering() { return !!(query.trim() || tagFilter || folderFilter !== null || kindFilter !== "all" || whenFilter !== "all"); }
   function renderListSoon() {
     if (listRaf) return;
     listRaf = requestAnimationFrame(function () { listRaf = 0; renderList(); });
@@ -4544,10 +4645,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var n = cur(); if (!n) return;
     var now = Date.now();
     var c = normalize(JSON.parse(JSON.stringify(n)));
-    c.id = uid(); c.pinned = false; c.createdAt = now; c.updatedAt = now;
+    c.id = uid(); c.pinned = false; c.createdAt = now; c.updatedAt = now; delete c.enc;
     c.title = (n.title.trim() || (n.type === "list" ? "Lista" : "Nota")) + " (copia)";
     c.items = c.items.map(function (i) { return copyItem(i, true); });
-    notes.set(c.id, c); persistNow(); renderAll();
+    notes.set(c.id, c); persistNow(); renderAll(); if (isPinEnc(c)) encSoon(c);
     toast("Nota duplicada", "Abrir", function () { closeLayer("sheet"); setTimeout(function () { openNote(c.id); }, 200); });
   }
   function leaveToList() { closeLayer("editor"); }
@@ -4610,7 +4711,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("blankNew").addEventListener("click", function () { createNote("text"); });
   $("blankList").addEventListener("click", function () { createNote("list"); });
   $("backBtn").addEventListener("click", leaveToList);
-  $("q").addEventListener("input", function () { query = $("q").value; renderListSoon(); });
+  $("q").addEventListener("input", function () { query = $("q").value; renderListSoon(); renderSaved(); });
   document.querySelectorAll(".tab").forEach(function (b) {
     b.addEventListener("click", function () {
       if (selMode) closeLayer("select");
@@ -4618,7 +4719,43 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       renderAll();
     });
   });
-  $("kind").addEventListener("change", function () { kindFilter = $("kind").value; renderList(); });
+  $("kind").addEventListener("change", function () { kindFilter = $("kind").value; renderList(); renderSaved(); });
+  $("when").addEventListener("change", function () { whenFilter = $("when").value; renderList(); renderSaved(); });
+  /* búsquedas guardadas + alcance (archivo y papelera) */
+  function savedList() { return Array.isArray(settings.saved) ? settings.saved : []; }
+  function savedName(o) {
+    var parts = []; if (o.q) parts.push("“" + o.q + "”"); if (o.tag) parts.push("#" + o.tag); if (o.folder !== null) parts.push("▣ " + (o.folder || "Sin carpeta"));
+    var ko = $("kind").querySelector('[value="' + o.kind + '"]'), wo = $("when").querySelector('[value="' + o.when + '"]');
+    if (o.kind !== "all" && ko) parts.push(ko.textContent); if (o.when !== "all" && wo) parts.push(wo.textContent); if (o.all && o.q) parts.push("en todo");
+    return (parts.join(" · ") || "Búsqueda").slice(0, 40);
+  }
+  function renderSaved() {
+    var row = $("savedRow"), q = query.trim(); row.textContent = "";
+    if (q) {
+      var sc = el("button", "chip"); sc.type = "button"; sc.id = "scopeBtn"; sc.textContent = allScope ? "✓ Buscando en todo" : "Buscar también en archivo y papelera";
+      sc.setAttribute("aria-pressed", allScope ? "true" : "false"); sc.addEventListener("click", function () { allScope = !allScope; renderList(); renderSaved(); }); row.appendChild(sc);
+    }
+    savedList().forEach(function (o, i) {
+      var c = el("span", "chip"); c.setAttribute("role", "button"); c.tabIndex = 0; c.dataset.i = i; c.title = "Aplicar esta búsqueda";
+      var t = el("span"); t.textContent = "★ " + o.n; var x = el("span", "x"); x.textContent = " ✕"; x.title = "Quitar búsqueda guardada"; x.setAttribute("aria-label", "Quitar " + o.n);
+      c.appendChild(t); c.appendChild(x); row.appendChild(c);
+    });
+    if (filtering()) {
+      var sv = el("button", "chip"); sv.type = "button"; sv.id = "saveSearch"; sv.textContent = "💾 Guardar búsqueda"; row.appendChild(sv);
+    }
+    row.hidden = !row.children.length;
+  }
+  $("savedRow").addEventListener("click", function (e) {
+    if (e.target.closest("#saveSearch")) {
+      var o = { q: query.trim(), tag: tagFilter, folder: folderFilter, kind: kindFilter, when: whenFilter, all: allScope && !!query.trim() };
+      o.n = savedName(o); var l = savedList().filter(function (x) { return x.n !== o.n; }); l.unshift(o); settings.saved = l.slice(0, 12); saveSettings(); renderSaved(); toast("Búsqueda guardada"); return;
+    }
+    var c = e.target.closest("[data-i]"); if (!c) return; var i = +c.dataset.i, o2 = savedList()[i]; if (!o2) return;
+    if (e.target.closest(".x")) { settings.saved = savedList().filter(function (_x, j) { return j !== i; }); saveSettings(); renderSaved(); return; }
+    query = o2.q; $("q").value = query; tagFilter = o2.tag; folderFilter = o2.folder; kindFilter = o2.kind; whenFilter = o2.when; allScope = !!o2.all;
+    $("kind").value = kindFilter; $("when").value = whenFilter; renderAll();
+  });
+  $("savedRow").addEventListener("keydown", function (e) { if (e.key === "Enter" && e.target.dataset && e.target.dataset.i) e.target.click(); });
   $("folderIn").addEventListener("change", function () {
     var n = cur(); if (!n || n.trashedAt) return;
     n.folder = cleanFolder($("folderIn").value); $("folderIn").value = n.folder; changed(n); renderFolders();
@@ -4631,6 +4768,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 
   /* ---------- ajustes ---------- */
   function renderSettings() {
+    renderBkStatus();
     try { renderPinUI(); renderAutoBk(); } catch {}
     $("themeSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.theme ? "true" : "false"); });
     $("fontSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === settings.font ? "true" : "false"); });
@@ -4699,6 +4837,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.59.6", d: "13 nov 2026", t: "Búsqueda avanzada, enfoque y cifrado", lv: "Nova", cat: "nuevo+mejora", l: ["Búsqueda avanzada con filtro por fecha y por notas con imágenes, y búsquedas guardadas", "Búsqueda también en el archivo y la papelera", "Modo enfoque para escribir sin distracciones, con cronómetro y contador de palabras", "Más logros y un historial de actividad en el perfil", "Cifrado del texto de las notas protegidas con PIN propio", "Copias de seguridad más cómodas: recordatorio configurable, copia sin imágenes y estado de la última copia"] },
     { v: "1.59.0", d: "13 nov 2026", t: "Captura rápida y calendario semanal", lv: "Hipernova", cat: "nuevo+mejora", l: ["Pulido visual de los temas claro y oscuro", "Recibir texto desde otras apps con Compartir > Tronx", "Dictado por voz para escribir las notas", "Avisos por fecha de cada tarea, con hora configurable y aviso opcional el día anterior", "Calendario con vista semanal y arrastre de avisos y tareas a otro día"] },
     { v: "1.58.4", d: "12 nov 2026", t: "Tema claro rediseñado", lv: "Nova", cat: "rediseno", l: ["Tema claro rediseñado: más contraste en textos y tarjetas, fondos con más color y sombras más definidas", "El menú lateral (Explorador) ahora acompaña al tema: en tema claro se muestra claro, en oscuro se mantiene oscuro"] },
     { v: "1.58.3", d: "12 nov 2026", t: "Nombres de versión", lv: "Destello", cat: "mejora", l: ["Cada versión vuelve a mostrar su nombre junto al nivel y la categoría", "Los textos de las novedades usan un lenguaje claro: «Se agregaron niveles según el tamaño de la actualización»"] },
@@ -5029,6 +5168,34 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("orgClose").addEventListener("click", function () { closeLayer("orgMgr"); });
   $("orgMgr").addEventListener("click", function (e) { if (e.target === $("orgMgr")) closeLayer("orgMgr"); });
 
+  /* ---------- modo enfoque ---------- */
+  var focusOn = false, focusT0 = 0, focusAcc = 0, focusTick = 0, focusW0 = 0;
+  function bodyWords() { var n = cur(); if (!n) return 0; var t = n.type === "list" ? n.items.map(function (i) { return i.t; }).join(" ") : n.body; var m = t.trim().match(/\S+/g); return m ? m.length : 0; }
+  function focusPaint() {
+    var ms = focusAcc + (document.hidden ? 0 : Date.now() - focusT0), sec = Math.floor(ms / 1000);
+    $("fpTime").textContent = Math.floor(sec / 60) + ":" + ("0" + (sec % 60)).slice(-2); $("fpWords").textContent = bodyWords() + " palabras";
+  }
+  function focusStart() {
+    if (focusOn || !cur() || cur().trashedAt) return;
+    focusOn = true; focusAcc = 0; focusT0 = Date.now(); focusW0 = bodyWords();
+    document.body.classList.add("focus"); $("focusPill").hidden = false; $("focusBtn").setAttribute("aria-pressed", "true");
+    focusPaint(); focusTick = setInterval(focusPaint, 1000); pushLayer("focus");
+  }
+  function focusEnd() {
+    if (!focusOn) return;
+    focusOn = false; clearInterval(focusTick);
+    var min = Math.floor((focusAcc + (document.hidden ? 0 : Date.now() - focusT0)) / 60000), w = Math.max(0, bodyWords() - focusW0);
+    document.body.classList.remove("focus"); $("focusPill").hidden = true; $("focusBtn").setAttribute("aria-pressed", "false");
+    if (min >= 1) {
+      settings.focus.min += min; settings.focus.n++; settings.focusLog.unshift({ t: Date.now(), m: min, w: w }); settings.focusLog = settings.focusLog.slice(0, 30);
+      achCheck(false); saveSettings(); toast("Enfoque: " + min + (min === 1 ? " minuto" : " minutos") + " · " + w + " palabras nuevas");
+    } else toast("Sesión de enfoque cerrada");
+  }
+  registerLayer("focus", focusEnd);
+  document.addEventListener("visibilitychange", function () { if (!focusOn) return; if (document.hidden) focusAcc += Date.now() - focusT0; else focusT0 = Date.now(); });
+  $("focusBtn").addEventListener("click", function () { if (focusOn) closeLayer("focus"); else focusStart(); });
+  $("fpExit").addEventListener("click", function () { closeLayer("focus"); });
+
   /* ---------- calendario ---------- */
   var calY = 0, calM = 0, calSel = null;
   function ymd(d) { return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); }
@@ -5266,10 +5433,26 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     { id: "s7", n: "Semana completa", d: "Escribí 7 días seguidos", g: function (s) { return s.w.best; }, t: 7 },
     { id: "s30", n: "Hábito de un mes", d: "Escribí 30 días seguidos", g: function (s) { return s.w.best; }, t: 30 },
     { id: "bk", n: "Resguardo", d: "Hacé tu primera copia de seguridad", g: function (s) { return settings.lastBackup ? 1 : 0; }, t: 1 },
-    { id: "lk", n: "Bajo llave", d: "Protegé una nota con PIN o huella", g: function (s) { return s.locked; }, t: 1 }
+    { id: "lk", n: "Bajo llave", d: "Protegé una nota con PIN o huella", g: function (s) { return s.locked; }, t: 1 },
+    { id: "f1", n: "Primer enfoque", d: "Completá una sesión de enfoque de 1 minuto", g: function (s) { return s.fN; }, t: 1 },
+    { id: "f60", n: "Una hora de enfoque", d: "Sumá 60 minutos en modo enfoque", g: function (s) { return s.fMin; }, t: 60 },
+    { id: "f600", n: "Concentración total", d: "Sumá 10 horas en modo enfoque", g: function (s) { return s.fMin; }, t: 600 },
+    { id: "d10", n: "Tareas cumplidas", d: "Tildá 10 casillas en tus listas", g: function (s) { return s.done; }, t: 10 },
+    { id: "d100", n: "Imparable", d: "Tildá 100 casillas en tus listas", g: function (s) { return s.done; }, t: 100 },
+    { id: "im5", n: "Fotógrafo", d: "Tené 5 notas con imágenes", g: function (s) { return s.img; }, t: 5 },
+    { id: "fo3", n: "Organizador", d: "Usá 3 carpetas distintas", g: function (s) { return s.folders; }, t: 3 },
+    { id: "ar1", n: "Archivista", d: "Archivá una nota", g: function (s) { return s.arch; }, t: 1 },
+    { id: "rm1", n: "Puntual", d: "Programá un aviso", g: function (s) { return s.rem; }, t: 1 },
+    { id: "sk1", n: "Con estilo", d: "Creá un sticker propio", g: function (s) { return myStk.length; }, t: 1 }
   ];
   function achState() {
-    var st = universeStats(); st.w = writeStats(); st.locked = 0; notes.forEach(function (n) { if (!n.trashedAt && n.lock) st.locked++; });
+    var st = universeStats(); st.w = writeStats(); st.locked = 0; st.done = 0; st.img = 0; st.arch = 0; st.rem = 0; var fo = {};
+    notes.forEach(function (n) {
+      if (n.trashedAt) return;
+      if (n.lock) st.locked++; if (n.archived) st.arch++; if (n.remind) st.rem++; if (n.folder) fo[n.folder] = 1; if (!n.lock && n.images.length) st.img++;
+      n.items.forEach(function (i) { if (i.done && i.t.trim()) st.done++; });
+    });
+    st.folders = Object.keys(fo).length; st.fMin = (settings.focus && settings.focus.min) || 0; st.fN = (settings.focus && settings.focus.n) || 0;
     return st;
   }
   function achCheck(silent) {
@@ -5308,6 +5491,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       r.appendChild(md); r.appendChild(tx); box.appendChild(r);
     });
     $("pfAchN").textContent = done + "/" + ACH.length;
+    var ev = [], hb = $("pfHist"); hb.textContent = "";
+    ACH.forEach(function (a) { if (settings.ach[a.id]) ev.push({ t: settings.ach[a.id], x: "★ Logro: " + a.n }); });
+    (settings.focusLog || []).forEach(function (f) { ev.push({ t: f.t, x: "⏱ Sesión de enfoque: " + f.m + " min · " + f.w + " palabras" }); });
+    ev.sort(function (a, b) { return b.t - a.t; }).slice(0, 10).forEach(function (e) {
+      var li = el("li"), tm = el("time"), sp = el("span"); tm.textContent = new Date(e.t).toLocaleDateString("es", { day: "numeric", month: "short" }).replace(/\./g, ""); sp.textContent = e.x; li.appendChild(tm); li.appendChild(sp); hb.appendChild(li);
+    });
+    if (!ev.length) { var l0 = el("li"); l0.textContent = "Todavía no hay actividad para mostrar."; hb.appendChild(l0); }
   }
   setTimeout(statsBoot, 0);
   function universeStats() {
@@ -5362,7 +5552,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function backupOverdue() {
     var real = 0; notes.forEach(function (n) { if (!n.trashedAt) real++; });
     var last = Math.max(settings.lastBackup || 0, settings.firstRun || 0);
-    return real >= 3 && Math.floor((Date.now() - last) / 86400000) >= BK_DAYS;
+    return real >= 3 && Math.floor((Date.now() - last) / 86400000) >= bkDays();
   }
   function newsUnseen() { return settings.newsSeen !== APP_VERSION; }
   function updateMenuBadge() { $("mbDot").hidden = !(backupOverdue() || newsUnseen()); }
@@ -5649,7 +5839,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     return Promise.all(ids.map(function (id) { return imgGet(id).then(function (b) { return b ? blobToDataUrl(b) : null; }).then(function (u) { if (u) out[id] = u; }); })).then(function () { return out; });
   }
   function backupJson() {
-    return JSON.stringify({ app: "tronx", version: 2, exportedAt: new Date().toISOString(), notes: Array.from(notes.values()), tpls: myTpls, stickers: myStk, map: window.TronxMap ? window.TronxMap.exportData() : undefined }, null, 2);
+    return JSON.stringify({ app: "tronx", version: 2, exportedAt: new Date().toISOString(), notes: Array.from(notes.values()).map(serNote), tpls: myTpls, stickers: myStk, map: window.TronxMap ? window.TronxMap.exportData() : undefined }, null, 2);
   }
   // Entrega un archivo: en el teléfono abre el menú de compartir; en el navegador lo descarga.
   // Devuelve una promesa: true si se entregó, false si la persona canceló.
@@ -5676,16 +5866,16 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       } catch (e) { reject(e); }
     });
   }
-  function exportBackup() {
-    persistNow();
+  function exportBackup(lite) {
+    lite = lite === true; persistNow();
     var d = new Date();
     var stamp = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-    imagesForBackup().then(function (imgs) {
+    (lite ? Promise.resolve({}) : imagesForBackup()).then(function (imgs) {
       var obj = JSON.parse(backupJson()); if (Object.keys(imgs).length) obj.images = imgs;
-      return shareFile("tronx-copia-" + stamp + ".json", JSON.stringify(obj), "application/json", "Copia de Tronx");
+      return shareFile("tronx-copia-" + stamp + (lite ? "-sin-imagenes" : "") + ".json", JSON.stringify(obj), "application/json", "Copia de Tronx");
     }).then(function (ok) {
       if (!ok) return;
-      settings.lastBackup = Date.now(); saveSettings(); renderBkBar();
+      settings.lastBackup = Date.now(); saveSettings(); renderBkBar(); renderBkStatus();
       if (!capPlugin("Share")) toast("Copia exportada");
     }).catch(function () { toast("No se pudo exportar la copia"); });
   }
@@ -5834,7 +6024,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("mdImpFile").addEventListener("change", function () { if ($("mdImpFile").files && $("mdImpFile").files.length) importMdFiles($("mdImpFile").files); });
 
   /* Aviso suave: las notas viven solo en el teléfono, así que se recuerda hacer copia cada tanto */
-  var BK_DAYS = 7;
+  function bkDays() { var v = Number(settings.bkEvery); return v === 0 ? Infinity : (v > 0 ? v : 7); }
   function renderBkBar() {
     if (settings.newsSeen == null && lsGet(WKEY) !== "1" && !notes.size) { settings.newsSeen = APP_VERSION; saveSettings(); }
     try { updateMenuBadge(); } catch {}
@@ -5842,12 +6032,12 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     notes.forEach(function (n) { if (!n.trashedAt) real++; });
     var last = Math.max(settings.lastBackup || 0, settings.bkNag || 0, settings.firstRun || 0);
     var days = Math.floor((Date.now() - last) / 86400000);
-    var show = tab === "notes" && real >= 3 && days >= BK_DAYS && !query.trim();
+    var show = tab === "notes" && real >= 3 && days >= bkDays() && !query.trim();
     $("bkbar").hidden = !show;
     if (!show) return;
     $("bkTxt").textContent = settings.lastBackup ? "Hace " + Math.floor((Date.now() - settings.lastBackup) / 86400000) + " días que no hacés una copia de seguridad." : "Todavía no hiciste una copia de seguridad de tus notas.";
   }
-  $("bkGo").addEventListener("click", exportBackup);
+  $("bkGo").addEventListener("click", function () { exportBackup(); });
   $("bkX").addEventListener("click", function () { settings.bkNag = Date.now(); saveSettings(); renderBkBar(); });
   function importBackup(text) {
     var data;
@@ -5878,7 +6068,14 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     renderSettings();
     toast(added || updated ? "Copia importada: " + added + " nuevas, " + updated + " actualizadas" : "No había nada nuevo para importar");
   }
-  $("exportBtn").addEventListener("click", exportBackup);
+  $("exportBtn").addEventListener("click", function () { exportBackup(); });
+  $("exportLiteBtn").addEventListener("click", function () { exportBackup(true); });
+  function renderBkStatus() {
+    var real = 0; notes.forEach(function (n) { if (!n.trashedAt) real++; });
+    $("bkStatus").textContent = (settings.lastBackup ? "Última copia: " + relTime(settings.lastBackup) : "Todavía no hiciste una copia") + " · " + real + (real === 1 ? " nota" : " notas");
+    $("bkEvery").value = String(settings.bkEvery === 0 ? 0 : (settings.bkEvery > 0 ? settings.bkEvery : 7));
+  }
+  $("bkEvery").addEventListener("change", function () { settings.bkEvery = Number($("bkEvery").value); saveSettings(); renderBkBar(); });
   $("importBtn").addEventListener("click", function () { $("importFile").value = ""; $("importFile").click(); });
   $("importFile").addEventListener("change", function () {
     var f = $("importFile").files && $("importFile").files[0]; if (!f) return;
@@ -6614,6 +6811,12 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function askNote(n, ok, cancel) {
     var l = n.lock; if (!l) { ok(); return; }
     var bio = l.m === "bio" || l.m === "both";
+    var ok0 = ok;
+    ok = function () {
+      var pin = lastPin; lastPin = "";
+      if (!isPinEnc(n)) { ok0(); return; }
+      encUnlock(n, pin).then(function () { ok0(); }, function () { toast("No se pudo descifrar la nota. Si es de una copia, revisá que el PIN sea el de esa nota."); if (cancel) cancel(); });
+    };
     openLock("unlock", ok, { target: l.m === "bio" ? { m: "bio", s: "", h: "" } : l, title: "Nota protegida", sub: "Ingresá el PIN de esta nota", cancelable: true, bio: bio, onlyBio: l.m === "bio", onCancel: cancel });
   }
   function renderNoteLock() {
@@ -6621,11 +6824,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     var l = n.lock, names = { pin: "un PIN propio", bio: "la huella", both: "huella o PIN" };
     $("nlSet").textContent = l ? "Cambiar protección" : "Proteger esta nota";
     $("nlOff").hidden = !l;
-    $("nlHint").textContent = l ? "Esta nota se abre con " + names[l.m] + ". Es un candado para curiosos: no cifra la nota, y las copias de seguridad la incluyen. Si olvidás el PIN y no tenés huella, no se puede recuperar." : "Opcional. Podés pedir un PIN propio, la huella del teléfono o cualquiera de los dos para abrir esta nota.";
+    $("nlHint").textContent = l ? "Esta nota se abre con " + names[l.m] + ". "+(l.m === "pin" ? "El texto se guarda cifrado en el teléfono y en las copias de seguridad (el título, las etiquetas y las imágenes no). Con un PIN de 4 dígitos protege de curiosos, no de un ataque decidido." : "Es un candado para curiosos: no cifra la nota, y las copias de seguridad la incluyen. Para cifrar el texto elegí un PIN propio.")+" Si olvidás el PIN y no tenés huella, no se puede recuperar." : "Opcional. Podés pedir un PIN propio, la huella del teléfono o cualquiera de los dos para abrir esta nota.";
     bioAvail().then(function (a) { $("nlBio").hidden = $("nlBoth").hidden = !a; });
   }
-  function setNoteLock(n, lock) {
-    n.lock = lock; changed(n); persistNow(); renderNoteLock(); renderAll(); syncReminders();
+  function setNoteLock(n, lock, pin) {
+    encDrop(n); n.lock = lock;
+    if (lock && lock.m === "pin" && pin) encUnlock(n, pin);
+    changed(n); persistNow(); renderNoteLock(); renderAll(); syncReminders();
     if (lock) unlocked.add(n.id); else unlocked.delete(n.id);
   }
   $("nlSet").addEventListener("click", function () { var pk = $("nlPick"); pk.hidden = !pk.hidden; });
@@ -6637,7 +6842,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         bioAuth("Confirmá con tu huella para proteger la nota").then(function () { setNoteLock(n, { m: "bio", s: "", h: "" }); toast("Nota protegida con huella"); }).catch(function () { toast("No se pudo confirmar la huella"); });
         return;
       }
-      openLock("set1", null, { setCb: function (s, h) { setNoteLock(n, { m: m, s: s, h: h }); toast(m === "both" ? "Nota protegida: huella o PIN" : "Nota protegida con PIN"); }, title: "PIN de la nota", sub: "Elegí 4 dígitos", cancelable: true, onCancel: function () {} });
+      openLock("set1", null, { setCb: function (s, h, pin) { setNoteLock(n, { m: m, s: s, h: h }, pin); toast(m === "both" ? "Nota protegida: huella o PIN" : "Nota protegida con PIN"); }, title: "PIN de la nota", sub: "Elegí 4 dígitos", cancelable: true, onCancel: function () {} });
     }
     if (n.lock) askNote(n, go); else go();
   });
@@ -6727,13 +6932,13 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     lockBusy = true;
     var pin = lockBuf, d = lockTarget || pinData();
     if (lockMode === "unlock" || lockMode === "verify") {
-      pinHash(pin, d ? d.s : "").then(function (h) { if (d && h === d.h) { lockBusy = false; lockDone(); } else lockFail("PIN incorrecto"); });
+      pinHash(pin, d ? d.s : "").then(function (h) { if (d && h === d.h) { lockBusy = false; lastPin = lockTarget ? pin : ""; lockDone(); } else lockFail("PIN incorrecto"); });
     } else if (lockMode === "set1") {
       lockTmp = pin; lockMode = "set2"; lockBuf = ""; lockBusy = false; $("lockT").textContent = "Repetí el PIN"; $("lockS").textContent = "Escribilo otra vez"; lockDraw();
     } else if (lockMode === "set2") {
       if (pin !== lockTmp) { lockMode = "set1"; lockFail("No coinciden. Elegí uno nuevo"); $("lockT").textContent = "Nuevo PIN"; return; }
       var salt = uid() + uid();
-      if (lockSetCb) { pinHash(pin, salt).then(function (h) { var cb = lockSetCb; lockSetCb = null; lockBusy = false; $("lock").hidden = true; lockBuf = ""; lockOk = null; lockCancelCb = null; cb(salt, h); }); return; }
+      if (lockSetCb) { pinHash(pin, salt).then(function (h) { var cb = lockSetCb; lockSetCb = null; lockBusy = false; $("lock").hidden = true; lockBuf = ""; lockOk = null; lockCancelCb = null; cb(salt, h, pin); }); return; }
       pinHash(pin, salt).then(function (h) { lsSet(PINKEY, JSON.stringify({ s: salt, h: h })); lockBusy = false; lockDone(); renderPinUI(); toast("PIN activado"); });
     }
   }
