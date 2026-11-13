@@ -993,6 +993,20 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 .calgrid .cdots { position: absolute; left: 0; right: 0; bottom: 5px; display: flex; gap: 3px; justify-content: center; }
 .cdot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; vertical-align: middle; }
 .cdot.rem { background: #f59e0b; } .cdot.made { background: var(--muted); }
+.calmode { margin: 0 0 8px; }
+.wkgrid { display: grid; gap: 6px; }
+.wk-day { border: 1px solid var(--line); border-radius: 12px; background: var(--raised); padding: 6px 8px; min-height: 48px; }
+.wk-day.today { border-color: var(--accent); }
+.wk-day.over { outline: 2px dashed var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--raised)); }
+.wk-day.sel .wk-h { color: var(--accent); }
+.wk-h { font-size: 13px; font-weight: 600; text-transform: capitalize; display: flex; justify-content: space-between; gap: 8px; }
+.wk-h span { font-weight: 400; color: var(--muted); }
+.wk-it { display: flex; gap: 8px; align-items: baseline; padding: 5px 8px; margin-top: 4px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg, transparent); font-size: 14px; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; cursor: pointer; }
+.wk-it[data-drag="1"] { cursor: grab; }
+.wk-it b { flex: none; font-variant-numeric: tabular-nums; }
+.wk-it span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wk-ghost { position: fixed; z-index: 60; pointer-events: none; max-width: 70vw; opacity: 0.92; box-shadow: 0 8px 24px rgba(0,0,0,.4); background: var(--raised); border-color: var(--accent); }
+.cdot.due { background: #34d399; }
 .calday { display: grid; gap: 6px; }
 .calday button { text-align: left; font: inherit; color: inherit; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; display: flex; gap: 10px; align-items: baseline; }
 .calday button b { flex: none; min-width: 44px; font-variant-numeric: tabular-nums; }
@@ -1280,6 +1294,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
         <button class="btn" type="button" data-ins="image">🖼 Imagen</button>
         <button class="btn" type="button" data-ins="photo">📷 Foto</button>
         <button class="btn" type="button" data-ins="draw">✏️ Dibujo</button>
+        <button class="btn" type="button" data-ins="dictate" id="dictBtn" hidden>🎤 Dictar</button>
         <button class="btn" type="button" data-ins="sticker">⭐ Sticker</button>
         <button class="btn" type="button" data-ins="link">[[ ]] Enlace</button>
         <button class="btn" type="button" data-ins="table">▦ Tabla</button>
@@ -1387,7 +1402,18 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <div class="overlay" id="settings" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Ajustes">
     <div class="sheethead"><strong>Ajustes</strong><button class="btn small" id="settingsClose" type="button">Cerrar</button></div>
-    <nav class="setjump" id="setJump" aria-label="Ir a una sección"><button class="chip" type="button" data-t="secSound">Sonido</button><button class="chip" type="button" data-t="backupH">Copias</button><button class="chip" type="button" data-t="secTpl">Plantillas</button><button class="chip" type="button" data-t="secMd">Markdown</button><button class="chip" type="button" data-t="secPin">PIN</button><button class="chip" type="button" data-t="secStore">Espacio</button><button class="chip" type="button" data-t="secAbout">Acerca</button></nav>
+    <nav class="setjump" id="setJump" aria-label="Ir a una sección"><button class="chip" type="button" data-t="secSound">Sonido</button><button class="chip" type="button" data-t="secDue">Fechas</button><button class="chip" type="button" data-t="backupH">Copias</button><button class="chip" type="button" data-t="secTpl">Plantillas</button><button class="chip" type="button" data-t="secMd">Markdown</button><button class="chip" type="button" data-t="secPin">PIN</button><button class="chip" type="button" data-t="secStore">Espacio</button><button class="chip" type="button" data-t="secAbout">Acerca</button></nav>
+    <h3 id="secDue">Tareas con fecha</h3>
+    <div class="seg" id="dueSeg" aria-label="Avisos por fecha">
+      <button type="button" data-v="on">Avisar el día</button>
+      <button type="button" data-v="off">Sin avisos</button>
+    </div>
+    <div class="seg" id="dueEveSeg" style="margin-top:10px" aria-label="Aviso del día anterior">
+      <button type="button" data-v="on">También el día antes</button>
+      <button type="button" data-v="off">Solo el día</button>
+    </div>
+    <label class="field" style="margin-top:10px">Hora del aviso <input type="time" id="dueAt" value="09:00"></label>
+    <p class="hint">Cada tarea de una lista con fecha te avisa ese día a la hora elegida (si todavía no está tildada). Las notas protegidas muestran solo "Nota protegida".</p>
     <h3 id="secSound">Sonido del agujero negro</h3>
     <div class="seg" id="soundSeg">
       <button type="button" data-v="on">Activado</button>
@@ -1585,9 +1611,11 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   <section class="panel" role="dialog" aria-modal="true" aria-label="Calendario">
     <div class="sheethead"><strong>Calendario</strong><button class="btn small" id="calClose" type="button">Listo</button></div>
     <div class="calnav"><button class="btn small ic" id="calPrev" type="button" aria-label="Mes anterior">◀</button><strong id="calTitle"></strong><button class="btn small ic" id="calNext" type="button" aria-label="Mes siguiente">▶</button><button class="btn small" id="calToday" type="button">Hoy</button></div>
-    <div class="calgrid calhead" aria-hidden="true"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+    <div class="seg calmode" id="calMode" aria-label="Vista del calendario"><button type="button" data-v="month">Mes</button><button type="button" data-v="week">Semana</button></div>
+    <div class="wkgrid" id="calWeek" hidden></div>
+    <div class="calgrid calhead" aria-hidden="true" id="calHead"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
     <div class="calgrid" id="calGrid"></div>
-    <p class="hint"><span class="cdot rem"></span> aviso &nbsp; <span class="cdot made"></span> nota creada ese día</p>
+    <p class="hint"><span class="cdot rem"></span> aviso &nbsp; <span class="cdot due"></span> tarea con fecha &nbsp; <span class="cdot made"></span> nota creada ese día<span id="calDragHint"> &nbsp;· En Semana, mantené pulsado un aviso o una tarea y arrastralo a otro día.</span></p>
     <h3 id="calDayT"></h3>
     <div id="calDay" class="calday"></div>
     <div class="actions"><button class="btn primary" id="calNew" type="button">Nueva nota con aviso este día</button></div>
@@ -1770,7 +1798,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.58.4";
+  var APP_VERSION = "1.59.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1825,6 +1853,8 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   if (settings.noteBg !== "none" && !bgOk(settings.noteBg)) settings.noteBg = "nebula";
   settings.bgAnim = settings.bgAnim !== false; settings.autoBk = settings.autoBk !== false;
   settings.pinBio = !!settings.pinBio; settings.fab = settings.fab !== false; settings.swipe = settings.swipe !== false;
+  settings.dueAlert = settings.dueAlert !== false; settings.dueEve = !!settings.dueEve;
+  if (!/^\d{2}:\d{2}$/.test(settings.dueAt || "") || +settings.dueAt.slice(0, 2) > 23 || +settings.dueAt.slice(3) > 59) settings.dueAt = "09:00";
   if (!settings.act || typeof settings.act !== "object" || Array.isArray(settings.act)) settings.act = {};
   if (!settings.ach || typeof settings.ach !== "object" || Array.isArray(settings.ach)) settings.ach = {};
   settings.wTot = Math.max(0, Number(settings.wTot) || 0); settings.streakBest = Math.max(0, Number(settings.streakBest) || 0);
@@ -4046,6 +4076,47 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (prev && !/\s/.test(prev)) text = " " + text; // no pegar la fecha a la palabra de antes
     bodyEl.setRangeText(text, s, e, "end");
   }
+  /* ---------- captura rápida: dictado por voz y texto compartido desde otras apps ---------- */
+  function dictate() {
+    var sr = capPlugin("SpeechRecognition"), n = cur();
+    if (!sr || !n || n.type !== "text" || n.trashedAt) return;
+    Promise.resolve(sr.available ? sr.available() : { available: true }).then(function (a) {
+      if (a && a.available === false) throw "na";
+      return sr.requestPermissions ? sr.requestPermissions() : null;
+    }).then(function (p) {
+      if (p && p.speechRecognition === "denied") throw "den";
+      return sr.start({ language: "es-AR", maxResults: 1, prompt: "Hablá para dictar tu nota", popup: true, partialResults: false });
+    }).then(function (r) {
+      var t = r && r.matches && r.matches[0] ? String(r.matches[0]).trim() : "";
+      if (!t) { toast("No se entendió, probá de nuevo"); return; }
+      if (cur() !== n || readMode) return;
+      var pos = bodyEl.selectionStart, before = bodyEl.value.slice(0, pos).trimEnd();
+      if (!before || /[.!?\n]$/.test(before)) t = t.charAt(0).toUpperCase() + t.slice(1);
+      insertAtCaret(t + " "); bodyEl.dispatchEvent(new Event("input", { bubbles: true }));
+    }).catch(function (e) { toast(e === "den" ? "Falta el permiso del micrófono. Activalo en los ajustes del teléfono" : "El dictado no está disponible en este teléfono"); });
+  }
+  function dictRefresh() { var b = $("dictBtn"); if (b) b.hidden = !capPlugin("SpeechRecognition"); }
+  var sharedSeen = {};
+  function sharedTitle(t, sub) {
+    sub = String(sub || "").trim(); if (sub) return sub.slice(0, 80);
+    t = String(t || "").trim();
+    if (/^https?:\/\/\S+$/i.test(t)) { try { return new URL(t).hostname.replace(/^www\./, ""); } catch { /* sin título */ } }
+    return t.split("\n")[0].slice(0, 60);
+  }
+  function processShared() {
+    var q = window.__tronxShared; if (!q || !q.length) return;
+    window.__tronxShared = [];
+    q.forEach(function (it) {
+      if (!it || !String(it.t || "").trim()) return;
+      var id = String(it.id || it.t); if (sharedSeen[id]) return; sharedSeen[id] = 1;
+      var now = Date.now(), text = String(it.t).slice(0, 200000), title = sharedTitle(text, it.s);
+      var n = normalize({ id: uid(), type: "text", title: title, body: text, items: [], parent: "", folder: "", tags: ["compartido"], createdAt: now, updatedAt: now });
+      notes.set(n.id, n); persistNow(); renderAll();
+      toast("Guardado en Tronx: " + (title || "nota nueva"), "Abrir", function () { openNote(n.id); });
+    });
+  }
+  window.addEventListener("tronxshare", processShared);
+  setTimeout(function () { processShared(); dictRefresh(); }, 900);
   $("fmt").addEventListener("mousedown", function (e) { e.preventDefault(); });
   $("fmt").addEventListener("click", function (e) {
     var b = e.target.closest("button"), n = cur();
@@ -4056,6 +4127,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     if (k === "image") { $("imgFile").click(); return; }
     if (k === "photo") { $("imgCam").click(); return; }
     if (k === "draw") { openDraw(); return; }
+    if (k === "dictate") { dictate(); return; }
     if (k === "sticker") { openStkMgr("note"); return; }
     if (k === "find") { findOpen($("findBar").hidden); return; }
     if (k === "hl") { var hr = $("hlRow"); if (hr.hidden) findOpen(false); hr.hidden = !hr.hidden; b.setAttribute("aria-pressed", hr.hidden ? "false" : "true"); fitBody(); return; }
@@ -4070,7 +4142,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     else if (k === "head") cycleHead();
     else if (k === "bold") wrapSel("**");
     else if (k === "italic") wrapSel("*");
-    else if (k === "image" || k === "photo" || k === "draw" || k === "sticker") return;
+    else if (k === "image" || k === "photo" || k === "draw" || k === "sticker" || k === "dictate") return;
     else if (k === "link") insertLink();
     else if (k === "table") insertTable();
     else if (k === "date") insertAtCaret(dlong.format(now));
@@ -4570,6 +4642,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("bgAnimSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.bgAnim ? "true" : "false"); });
     $("fabSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.fab ? "true" : "false"); });
     $("swipeSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.swipe ? "true" : "false"); });
+    $("dueSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.dueAlert ? "true" : "false"); });
+    $("dueEveSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.dueEve ? "true" : "false"); });
+    $("dueEveSeg").hidden = !settings.dueAlert; $("dueAt").value = settings.dueAt;
     var vol = window.TronxSound ? window.TronxSound.getVolume() : 0;
     $("volSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", Number(b.dataset.v) === vol ? "true" : "false"); });
     var sw = $("accentSw"); sw.textContent = "";
@@ -4624,6 +4699,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.59.0", d: "13 nov 2026", t: "Captura rápida y calendario semanal", lv: "Hipernova", cat: "nuevo+mejora", l: ["Pulido visual de los temas claro y oscuro", "Recibir texto desde otras apps con Compartir > Tronx", "Dictado por voz para escribir las notas", "Avisos por fecha de cada tarea, con hora configurable y aviso opcional el día anterior", "Calendario con vista semanal y arrastre de avisos y tareas a otro día"] },
     { v: "1.58.4", d: "12 nov 2026", t: "Tema claro rediseñado", lv: "Nova", cat: "rediseno", l: ["Tema claro rediseñado: más contraste en textos y tarjetas, fondos con más color y sombras más definidas", "El menú lateral (Explorador) ahora acompaña al tema: en tema claro se muestra claro, en oscuro se mantiene oscuro"] },
     { v: "1.58.3", d: "12 nov 2026", t: "Nombres de versión", lv: "Destello", cat: "mejora", l: ["Cada versión vuelve a mostrar su nombre junto al nivel y la categoría", "Los textos de las novedades usan un lenguaje claro: «Se agregaron niveles según el tamaño de la actualización»"] },
     { v: "1.58.2", d: "12 nov 2026", t: "Textos de novedades revisados", lv: "Destello", cat: "mejora", l: ["Textos de las novedades revisados con un tono más claro y profesional"] },
@@ -4968,16 +5044,99 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     return 0;
   }
   function calEvents(day) {
-    var rem = [], made = [];
+    var rem = [], made = [], due = [];
     notes.forEach(function (n) {
       if (n.trashedAt) return;
-      remsOf(n).forEach(function (r) { var t = remAt(r, day); if (t) rem.push({ t: t, n: n }); });
+      remsOf(n).forEach(function (r) { var t = remAt(r, day); if (t) rem.push({ t: t, n: n, r: r }); });
+      (n.items || []).forEach(function (it) { if (it.due && !it.done && ymd(new Date(it.due)) === ymd(day)) due.push({ n: n, it: it }); });
       if (ymd(new Date(n.createdAt)) === ymd(day)) made.push(n);
     });
     rem.sort(function (a, b) { return a.t - b.t; });
-    return { rem: rem, made: made };
+    return { rem: rem, made: made, due: due };
+  }
+  var calMode = "month";
+  function weekStart(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() + 6) % 7)); }
+  function renderWeek() {
+    var box = $("calWeek"); box.textContent = "";
+    var ws = weekStart(calSel || new Date()), we = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + 6), todayK = ymd(new Date());
+    var f1 = new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "short" }).format(ws).replace(/\./g, ""), f2 = new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "short", year: "numeric" }).format(we).replace(/\./g, "");
+    $("calTitle").textContent = f1 + " – " + f2;
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + i), ev = calEvents(d), k = ymd(d);
+      var dv = el("div", "wk-day"); dv.dataset.k = k; if (k === todayK) dv.classList.add("today"); if (calSel && ymd(calSel) === k) dv.classList.add("sel");
+      var h = el("div", "wk-h"), hs = el("strong"); hs.textContent = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric" }).format(d);
+      var cnt = ev.rem.length + ev.due.length + ev.made.length, hc = el("span"); hc.textContent = cnt ? String(cnt) : ""; h.appendChild(hs); h.appendChild(hc); dv.appendChild(h);
+      (function (dd) { h.addEventListener("click", function () { calSel = dd; renderCal(); }); })(d);
+      function it(time, n, drag, kind, ref) {
+        var b = el("div", "wk-it"); b.dataset.drag = drag ? "1" : "0"; b.setAttribute("role", "button"); b.tabIndex = 0;
+        var t = el("b"), sp = el("span"); t.textContent = time; sp.textContent = (n.lock ? "🔒 " : "") + (kind === "due" ? ref.t : noteLabel(n)); b.appendChild(t); b.appendChild(sp);
+        b.addEventListener("click", function () { if (dragSkip) { dragSkip = false; return; } openNote(n.id); });
+        b.addEventListener("keydown", function (e) { if (e.key === "Enter") openNote(n.id); });
+        if (drag) wkDrag(b, n, kind, ref, d);
+        dv.appendChild(b);
+      }
+      ev.rem.forEach(function (x) { it("⏰ " + tf.format(new Date(x.t)), x.n, !x.r.rep && !x.n.lock, "rem", x.r); });
+      ev.due.forEach(function (x) { it("☑", x.n, !x.n.lock, "due", x.it); });
+      ev.made.forEach(function (n) { it("📝", n, false, "made", null); });
+      box.appendChild(dv);
+    }
+  }
+  var dragSkip = false;
+  function wkDrop(n, kind, ref, from, to) {
+    if (ymd(from) === ymd(to)) return;
+    if (kind === "rem") {
+      var a = new Date(ref.at), at = new Date(to.getFullYear(), to.getMonth(), to.getDate(), a.getHours(), a.getMinutes()).getTime();
+      if (at <= Date.now()) { toast("Ese día y hora ya pasaron: elegí otro día"); return; }
+      ref.at = at; ref.seen = false; ref.snz = 0;
+    } else ref.due = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 12).getTime();
+    changed(n); syncReminders(); renderCal();
+    toast((kind === "rem" ? "Aviso movido al " : "Tarea movida al ") + new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long" }).format(to));
+  }
+  /* arrastre con puntero: mouse al mover, táctil tras mantener pulsado (así no molesta al desplazar la pantalla) */
+  function wkDrag(node, n, kind, ref, from) {
+    node.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+    node.addEventListener("pointerdown", function (e) {
+      if (e.button) return;
+      var sx = e.clientX, sy = e.clientY, on = false, ghost = null, over = null, timer = 0, touch = e.pointerType === "touch";
+      function hit(x, y) { var t = document.elementFromPoint(x, y); return t && t.closest ? t.closest(".wk-day") : null; }
+      function start() {
+        on = true; ghost = node.cloneNode(true); ghost.classList.add("wk-ghost"); document.body.appendChild(ghost); node.style.opacity = "0.4";
+        if (navigator.vibrate) { try { navigator.vibrate(15); } catch { /* sin vibración */ } }
+      }
+      function mv(x, y) { ghost.style.left = x + 10 + "px"; ghost.style.top = y - 16 + "px"; var d = hit(x, y); if (d !== over) { if (over) over.classList.remove("over"); over = d; if (over) over.classList.add("over"); } }
+      function onMove(ev) {
+        if (!on) {
+          if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) > 8) { if (touch) { clearTimeout(timer); cleanup(); } else { start(); mv(ev.clientX, ev.clientY); } }
+          return;
+        }
+        ev.preventDefault(); mv(ev.clientX, ev.clientY);
+      }
+      function noScroll(ev) { if (on) ev.preventDefault(); }
+      function cleanup() {
+        clearTimeout(timer);
+        document.removeEventListener("pointermove", onMove); document.removeEventListener("pointerup", onUp); document.removeEventListener("pointercancel", onCancel); document.removeEventListener("touchmove", noScroll);
+      }
+      function finish(drop) {
+        cleanup();
+        if (on) {
+          if (ghost) ghost.remove(); node.style.opacity = ""; if (over) over.classList.remove("over");
+          dragSkip = true; setTimeout(function () { dragSkip = false; }, 400);
+          if (drop && over) { var k = +over.dataset.k, to = new Date(Math.floor(k / 10000), Math.floor(k / 100) % 100 - 1, k % 100); wkDrop(n, kind, ref, from, to); }
+        }
+      }
+      function onUp() { finish(true); }
+      function onCancel() { finish(false); }
+      document.addEventListener("pointermove", onMove); document.addEventListener("pointerup", onUp); document.addEventListener("pointercancel", onCancel);
+      document.addEventListener("touchmove", noScroll, { passive: false });
+      if (touch) timer = setTimeout(function () { start(); mv(sx, sy); }, 380);
+    });
   }
   function renderCal() {
+    var wk = calMode === "week";
+    $("calWeek").hidden = !wk; $("calGrid").hidden = wk; $("calHead").hidden = wk; $("calDay").hidden = wk; $("calDayT").hidden = wk; $("calDragHint").hidden = !wk;
+    $("calMode").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === calMode ? "true" : "false"); });
+    $("calPrev").setAttribute("aria-label", wk ? "Semana anterior" : "Mes anterior"); $("calNext").setAttribute("aria-label", wk ? "Semana siguiente" : "Mes siguiente");
+    if (wk) { if (!calSel) { var t0 = new Date(); calSel = new Date(t0.getFullYear(), t0.getMonth(), t0.getDate()); } renderWeek(); return; }
     var first = new Date(calY, calM, 1), g = $("calGrid"); g.textContent = "";
     var ct = new Intl.DateTimeFormat("es-AR", { month: "long", year: "numeric" }).format(first); $("calTitle").textContent = ct.charAt(0).toUpperCase() + ct.slice(1);
     var start = new Date(calY, calM, 1 - ((first.getDay() + 6) % 7)), todayK = ymd(new Date());
@@ -4987,7 +5146,7 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
       if (d.getMonth() !== calM) b.classList.add("out"); if (ymd(d) === todayK) b.classList.add("today");
       b.setAttribute("aria-pressed", calSel && ymd(calSel) === ymd(d) ? "true" : "false");
       b.setAttribute("aria-label", new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long" }).format(d) + (ev.rem.length ? ", " + ev.rem.length + " avisos" : ""));
-      if (ev.rem.length || ev.made.length) { var ds = el("span", "cdots"); if (ev.rem.length) ds.appendChild(el("i", "cdot rem")); if (ev.made.length) ds.appendChild(el("i", "cdot made")); b.appendChild(ds); }
+      if (ev.rem.length || ev.made.length || ev.due.length) { var ds = el("span", "cdots"); if (ev.rem.length) ds.appendChild(el("i", "cdot rem")); if (ev.due.length) ds.appendChild(el("i", "cdot due")); if (ev.made.length) ds.appendChild(el("i", "cdot made")); b.appendChild(ds); }
       (function (dd) { b.addEventListener("click", function () { calSel = dd; renderCal(); }); })(d);
       g.appendChild(b);
     }
@@ -4996,8 +5155,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
     $("calDayT").textContent = new Intl.DateTimeFormat("es-AR", { weekday: "long", day: "numeric", month: "long" }).format(calSel);
     function row(time, n, icon) { var b = el("button"); b.type = "button"; var t = el("b"); t.textContent = time; var s = el("span"); s.textContent = (n.lock ? "🔒 " : "") + noteLabel(n); b.appendChild(t); b.appendChild(s); b.addEventListener("click", function () { openNote(n.id); }); box.appendChild(b); }
     ev2.rem.forEach(function (x) { row("⏰ " + tf.format(new Date(x.t)), x.n); });
+    ev2.due.forEach(function (x) { row("☑", x.n); });
     ev2.made.forEach(function (n) { row("📝", n); });
-    if (!ev2.rem.length && !ev2.made.length) { var nn = el("p", "none"); nn.textContent = "Nada este día."; box.appendChild(nn); }
+    if (!ev2.rem.length && !ev2.made.length && !ev2.due.length) { var nn = el("p", "none"); nn.textContent = "Nada este día."; box.appendChild(nn); }
   }
   function openCalendar() {
     var t = new Date(); calY = t.getFullYear(); calM = t.getMonth(); calSel = new Date(t.getFullYear(), t.getMonth(), t.getDate());
@@ -5006,9 +5166,10 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   registerLayer("calendar", function () { $("calendar").hidden = true; });
   $("calClose").addEventListener("click", function () { closeLayer("calendar"); });
   $("calendar").addEventListener("click", function (e) { if (e.target === $("calendar")) closeLayer("calendar"); });
-  $("calPrev").addEventListener("click", function () { calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); });
-  $("calNext").addEventListener("click", function () { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
+  $("calPrev").addEventListener("click", function () { if (calMode === "week") { calSel = new Date(calSel.getFullYear(), calSel.getMonth(), calSel.getDate() - 7); calY = calSel.getFullYear(); calM = calSel.getMonth(); renderCal(); return; } calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); });
+  $("calNext").addEventListener("click", function () { if (calMode === "week") { calSel = new Date(calSel.getFullYear(), calSel.getMonth(), calSel.getDate() + 7); calY = calSel.getFullYear(); calM = calSel.getMonth(); renderCal(); return; } calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
   $("calToday").addEventListener("click", function () { var t = new Date(); calY = t.getFullYear(); calM = t.getMonth(); calSel = new Date(t.getFullYear(), t.getMonth(), t.getDate()); renderCal(); });
+  $("calMode").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; calMode = b.dataset.v; if (calSel) { calY = calSel.getFullYear(); calM = calSel.getMonth(); } renderCal(); });
   $("calNew").addEventListener("click", function () {
     var d = calSel || new Date(), at = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 9, 0).getTime();
     closeLayer("calendar");
@@ -5459,6 +5620,9 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   });
   $("soundTest").addEventListener("click", testSound);
   $("fabSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.fab = b.dataset.v === "on"; saveSettings(); fabUpdate(); renderSettings(); });
+  $("dueSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.dueAlert = b.dataset.v === "on"; saveSettings(); renderSettings(); syncSoon(); });
+  $("dueEveSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.dueEve = b.dataset.v === "on"; saveSettings(); renderSettings(); syncSoon(); });
+  $("dueAt").addEventListener("change", function () { if (/^\d{2}:\d{2}$/.test(this.value)) { settings.dueAt = this.value; saveSettings(); syncSoon(); } });
   $("swipeSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.swipe = b.dataset.v === "on"; saveSettings(); renderSettings(); });
   $("bgAnimSeg").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
@@ -5788,6 +5952,22 @@ body.imgsel #rel, body.imgsel #sugg, body.imgsel .meta { display: none; }
   function syncReminders() {
     var plug = ln(); if (!plug) return;
     var want = [], sig = [];
+    if (settings.dueAlert) notes.forEach(function (n) {
+      if (n.trashedAt) return;
+      var hh = +settings.dueAt.slice(0, 2), mm = +settings.dueAt.slice(3);
+      (n.items || []).forEach(function (it) {
+        if (!it.due || it.done || !String(it.t || "").trim()) return;
+        var d0 = new Date(it.due);
+        [[0, "Vence hoy"], [-1, "Vence mañana"]].forEach(function (pr) {
+          if (pr[0] && !settings.dueEve) return;
+          var at = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + pr[0], hh, mm, 0).getTime();
+          if (at <= Date.now() + 5000) return;
+          var ttl = n.lock ? "Nota protegida" : String(it.t).slice(0, 80), bd = n.lock ? pr[1] : pr[1] + " · " + (n.title || "Sin título").slice(0, 60);
+          var o = { id: nidOf(n.id + "@" + it.id + (pr[0] ? "e" : "")), title: ttl, body: bd, largeBody: bd, summaryText: "Tarea con fecha · Tronx", channelId: REM_CH, smallIcon: "ic_stat_tronx", iconColor: "#7c5cff", autoCancel: true, schedule: { at: new Date(at), allowWhileIdle: true }, extra: { noteId: n.id } };
+          want.push(o); sig.push(o.id + ":" + at + ":" + ttl + ":" + bd);
+        });
+      });
+    });
     notes.forEach(function (n) {
       if (!n.remind || n.trashedAt) return;
       var tx0 = notifText(n);

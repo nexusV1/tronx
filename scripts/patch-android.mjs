@@ -68,6 +68,79 @@ try {
   console.warn("No se pudieron agregar los permisos de notificaciones:", e.message);
 }
 
+// Recibir texto desde otras apps ("Compartir" > Tronx): filtro de intents + MainActivity que lo pasa a la web.
+// La web lee window.__tronxShared y guarda cada texto como una nota nueva.
+try {
+  let xml = readFileSync(manifest, "utf8");
+  if (!xml.includes("android.intent.action.SEND")) {
+    const filter = `
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        `;
+    if (!/<\/activity>/.test(xml)) throw new Error("no se encontró </activity>");
+    xml = xml.replace(/<\/activity>/, `${filter}</activity>`);
+    writeFileSync(manifest, xml);
+  }
+  const dir = "android/app/src/main/java/com/tronx/notas";
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(
+    `${dir}/MainActivity.java`,
+    `package com.tronx.notas;
+
+import android.content.Intent;
+import android.os.Bundle;
+import com.getcapacitor.BridgeActivity;
+import org.json.JSONObject;
+
+public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        handleShare(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleShare(intent);
+    }
+
+    // Pasa el texto compartido a la web. Se reintenta unas veces porque en el arranque en frío la página todavía puede estar cargando
+    // (la web ignora los repetidos por el id).
+    private void handleShare(Intent intent) {
+        if (intent == null || !Intent.ACTION_SEND.equals(intent.getAction())) return;
+        String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+        String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+        setIntent(new Intent(Intent.ACTION_MAIN));
+        if (text == null || text.trim().isEmpty()) return;
+        final String js = "(function(){window.__tronxShared=window.__tronxShared||[];window.__tronxShared.push({id:" + System.currentTimeMillis()
+            + ",t:" + JSONObject.quote(text) + ",s:" + JSONObject.quote(subject == null ? "" : subject)
+            + "});window.dispatchEvent(new Event('tronxshare'));})();";
+        final int[] delays = {600, 1800, 4000};
+        for (final int d : delays) {
+            getWindow().getDecorView().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        getBridge().getWebView().evaluateJavascript(js, null);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }, d);
+        }
+    }
+}
+`
+  );
+  console.log("Recepción de texto compartido lista.");
+} catch (e) {
+  console.warn("No se pudo preparar la recepción de texto compartido:", e.message);
+}
+
 // Ícono de las notificaciones: silueta blanca de una nota (Android lo pinta con el color de acento).
 try {
   mkdirSync("android/app/src/main/res/drawable", { recursive: true });
