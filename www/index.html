@@ -683,7 +683,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .pf-heat i { aspect-ratio: 1; border-radius: 4px; background: var(--line); }
 .pf-heat i.l1 { background: var(--accent); opacity: 0.3; } .pf-heat i.l2 { background: var(--accent); opacity: 0.5; }
 .pf-heat i.l3 { background: var(--accent); opacity: 0.75; } .pf-heat i.l4 { background: var(--accent); }
-.pf-heat i.today { outline: 2px solid var(--text); outline-offset: 1px; }
+.pf-heat i.today { outline: 2px solid var(--ink); outline-offset: 1px; }
 .pf-ach-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-left: 6px; }
 .pf-ach { display: grid; gap: 8px; }
 .pf-a { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px 12px; }
@@ -1538,7 +1538,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     </div>
     <p class="hint" id="secureHint" hidden>Oculta el contenido de Tronx en la lista de apps recientes. También bloquea las capturas de pantalla.</p>
     <h3 id="secStore">Espacio</h3>
-    <div class="actions"><button class="btn" id="dupBtn" type="button">Buscar notas duplicadas</button></div>
+    <div class="actions"><button class="btn" id="dupFindBtn" type="button">Buscar notas duplicadas</button></div>
     <div class="stbox" id="stBox"><p class="hint" id="stTxt">Calculando…</p></div>
     <div class="actions"><button class="btn" id="stClean" type="button">Liberar espacio (imágenes sin uso)</button></div>
     <h3 id="secAbout">Acerca de Tronx</h3>
@@ -1913,7 +1913,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.61.5";
+  var APP_VERSION = "1.61.6";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5078,6 +5078,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.61.6", d: "14 nov 2026", t: "Correcciones tras auditoría", lv: "Destello", cat: "arreglo", l: ["Corregido el botón «Buscar notas duplicadas», que no respondía por compartir identificador con «Duplicar»", "Corregido el marcador del día de hoy en el mapa de actividad, que no se mostraba"] },
     { v: "1.61.5", d: "14 nov 2026", t: "Respaldos, duplicadas y pantallas a medida", lv: "Nova", cat: "nuevo+mejora", l: ["Copia automática con fecha en Documentos/Tronx, con rotación de las más antiguas", "Restauración de una nota suelta desde cualquier copia, sin tocar el resto", "Detección y unión de notas duplicadas, conservando etiquetas y carpeta", "Diseño optimizado para tablet y pantalla horizontal", "Tamaño de letra ajustable en la lista de notas", "Accesibilidad: contraste alto, menos movimiento y nombres para lectores de pantalla"] },
     { v: "1.60.9", d: "13 nov 2026", t: "Escritura y seguridad reforzadas", lv: "Nova", cat: "nuevo+mejora", l: ["Enlaces entre notas con actualización automática al renombrar y lista de menciones", "Tablas con botones para agregar filas y columnas", "Markdown más completo: código, tachado, subtítulos y enlaces", "Protección con frase además del PIN", "Cifrado opcional del título y cifrado de las imágenes de notas protegidas", "Opción para ocultar el contenido en las apps recientes"] },
     { v: "1.60.3", d: "13 nov 2026", t: "Acceso rápido y listas más potentes", lv: "Supernova", cat: "nuevo+mejora", l: ["Widget de pantalla de inicio con acceso a nota, lista y dictado", "Atajos al mantener pulsado el ícono de la app", "Notificación fija para crear una nota al instante", "Tareas repetidas (diarias, semanales y mensuales)", "Progreso de subtareas en cada tarea", "Orden de la lista por fecha de vencimiento", "Vista Mi día con tareas atrasadas, de hoy y de la semana"] },
@@ -6460,7 +6461,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     });
   }
   registerLayer("dups", function () { $("dups").hidden = true; });
-  $("dupBtn").addEventListener("click", function () { renderDups(); $("dups").hidden = false; pushLayer("dups"); });
+  $("dupFindBtn").addEventListener("click", function () { renderDups(); $("dups").hidden = false; pushLayer("dups"); });
   $("dpClose").addEventListener("click", function () { closeLayer("dups"); });
   $("dups").addEventListener("click", function (e) { if (e.target === $("dups")) closeLayer("dups"); });
   function importBackup(text) {
