@@ -226,5 +226,6 @@ Pasos, una sola vez:
 **1.59.6**: Esta actualización mejora la búsqueda, suma el modo enfoque y protege mejor las notas con PIN.
 **1.60.3**: Esta actualización acerca la captura de notas a la pantalla de inicio y mejora el trabajo con tareas.
 **1.60.9**: Esta actualización mejora la escritura y refuerza la protección de las notas privadas.
+**1.61.5**: Esta actualización refuerza los respaldos, permite restaurar notas sueltas, unir duplicadas y mejora la lectura en tablet, horizontal y con accesibilidad.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.
