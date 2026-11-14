@@ -28,7 +28,7 @@ Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK 
 - Buscar por título, texto, elementos de lista y etiquetas.
 - Ordenar (recientes, nuevas, título, color) y ver como lista o cuadrícula.
 - Duplicar, compartir y copiar el texto de una nota.
-- Ajustes: tema claro/oscuro/automático, 5 colores para la app, letra de las notas (Sans, Serif, Mono) y tamaño.
+- Ajustes: tema Blanco/Universo/automático, 5 colores para la app, letra de las notas (Sans, Serif, Mono) y tamaño.
 - Copia de seguridad: exportar e importar un archivo `.json`.
 - El botón Atrás de Android cierra la nota, el panel o los ajustes antes de salir.
 - Las notas de la versión 1.0 se migran solas.
@@ -221,7 +221,7 @@ Pasos, una sola vez:
 **1.58.1**: Novedades con niveles de actualización, nombres épicos, categorías y nueva numeración de versiones.
 **1.58.2**: Novedades con un estilo más sobrio y profesional.
 **1.58.3**: Se restauran los nombres de versión y se revisan los textos de novedades.
-**1.58.4**: Tema claro rediseñado y menú lateral que cambia con el tema.
+**1.58.4**: Tema Blanco rediseñado y menú lateral que cambia con el tema.
 **1.59.0**: Esta actualización reúne la captura rápida de notas y la planificación por fechas.
 **1.59.6**: Esta actualización mejora la búsqueda, suma el modo enfoque y protege mejor las notas con PIN.
 **1.60.3**: Esta actualización acerca la captura de notas a la pantalla de inicio y mejora el trabajo con tareas.
