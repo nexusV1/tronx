@@ -1047,6 +1047,31 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   .side #newBtn { display: none; }
   .side .fab { width: 62px; height: 62px; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 14px 30px -10px var(--card-glow), 0 4px 10px -4px rgba(0, 0, 0, 0.35); }
 }
+/* ---- Inicio 2.0 (teléfono): navegación inferior, cabecera corta, tarjetas de altura natural ---- */
+@media (max-width: 760px) {
+  .side .brand { padding: 14px 18px 6px; }
+  .side .brand h1 { font-size: 26px; }
+  .side .menubtn { width: 44px; height: 44px; border-radius: 15px; }
+  .side .chromein > .viewseg { position: fixed; z-index: 7; left: 18px; right: 98px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); margin: 0; padding: 4px; border-radius: 999px; background: var(--panel); border: 1px solid var(--card-bd, var(--line)); box-shadow: 0 14px 30px -12px var(--card-glow), 0 4px 10px -4px rgba(0, 0, 0, 0.3); }
+  .side .viewseg button { min-height: 46px; border-radius: 999px; }
+  .app[data-view="list"] .chrome.hide .chromein > .viewseg { visibility: visible; }
+  .side:has(#bulk:not([hidden])) .chromein > .viewseg, .side.typing .chromein > .viewseg { display: none; }
+  .side .fab { width: 56px; height: 56px; right: 20px; bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+  .side .tabs { margin: 4px 18px 0; padding: 4px; gap: 4px; border: 0; border-radius: 16px; background: var(--accent-soft); }
+  .side .tab { padding: 9px 4px; border: 0; margin: 0; border-radius: 12px; font-size: 14px; }
+  .side .tab[aria-selected="true"] { background: var(--raised); box-shadow: 0 4px 12px -6px var(--card-glow); }
+  .side .opts { padding: 10px 18px 12px; }
+  .side .list { border-top: 0; }
+  .side .foot { display: none; }
+  .side:has(#emptyTrash:not([hidden])) .foot { display: flex; padding-bottom: 100px; }
+  .side:has(#emptyTrash:not([hidden])) .foot .count { display: none; }
+  .side .list[data-view="grid"] { gap: 12px; padding: 8px 18px 130px; align-items: start; }
+  .side .list[data-view="grid"] .item { aspect-ratio: auto; min-height: 120px; padding: 16px 16px 14px; border-radius: 20px; box-shadow: 0 10px 26px -18px var(--card-glow); }
+  .side .list[data-view="grid"] .item .p { -webkit-line-clamp: 5; flex: none; -webkit-mask-image: none; mask-image: none; }
+  .side .list[data-view="grid"] .item .m { margin-top: 8px; }
+  .side .list[data-view="grid"] .item .t { font-size: 17px; }
+  .side .list:not([data-view="grid"]) .item { padding: 14px 18px 15px; }
+}
 .subprog { flex: none; font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
 .subprog.full { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
 .row .mv button.on { color: var(--accent); }
@@ -1943,7 +1968,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.61.7";
+  var APP_VERSION = "1.61.9";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5118,6 +5143,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.61.9", d: "14 nov 2026", t: "Inicio renovado", lv: "Nova", cat: "rediseno", l: ["Navegación inferior flotante: Notas y Constelaciones quedan al alcance del pulgar, junto al botón +", "Cabecera mucho más corta: más notas visibles sin desplazarse", "Pestañas Notas, Archivo y Papelera con estilo de píldora", "Tarjetas con altura natural: la vista previa se lee completa, sin recortes ni degradados"] },
     { v: "1.61.7", d: "14 nov 2026", t: "Inicio rediseñado", lv: "Eclipse", cat: "rediseno", l: ["Nueva pantalla de inicio: cabecera compacta, más espacio entre elementos y tarjetas más amplias", "Buscador con ícono y bordes más suaves", "Filtros plegables: el orden se lee completo y tipo/fecha se abren con un botón, con marca cuando hay un filtro activo", "Estado vacío con ilustración y mensaje claro", "Botón flotante más grande como acción principal de nueva nota en el teléfono"] },
     { v: "1.61.6", d: "14 nov 2026", t: "Correcciones tras auditoría", lv: "Destello", cat: "arreglo", l: ["Corregido el botón «Buscar notas duplicadas», que no respondía por compartir identificador con «Duplicar»", "Corregido el marcador del día de hoy en el mapa de actividad, que no se mostraba"] },
     { v: "1.61.5", d: "14 nov 2026", t: "Respaldos, duplicadas y pantallas a medida", lv: "Nova", cat: "nuevo+mejora", l: ["Copia automática con fecha en Documentos/Tronx, con rotación de las más antiguas", "Restauración de una nota suelta desde cualquier copia, sin tocar el resto", "Detección y unión de notas duplicadas, conservando etiquetas y carpeta", "Diseño optimizado para tablet y pantalla horizontal", "Tamaño de letra ajustable en la lista de notas", "Accesibilidad: contraste alto, menos movimiento y nombres para lectores de pantalla"] },
