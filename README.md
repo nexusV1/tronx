@@ -224,5 +224,6 @@ Pasos, una sola vez:
 **1.58.4**: Tema claro rediseñado y menú lateral que cambia con el tema.
 **1.59.0**: Esta actualización reúne la captura rápida de notas y la planificación por fechas.
 **1.59.6**: Esta actualización mejora la búsqueda, suma el modo enfoque y protege mejor las notas con PIN.
+**1.60.3**: Esta actualización acerca la captura de notas a la pantalla de inicio y mejora el trabajo con tareas.
 El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
 Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.

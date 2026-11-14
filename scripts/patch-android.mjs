@@ -68,8 +68,9 @@ try {
   console.warn("No se pudieron agregar los permisos de notificaciones:", e.message);
 }
 
-// Recibir texto desde otras apps ("Compartir" > Tronx): filtro de intents + MainActivity que lo pasa a la web.
-// La web lee window.__tronxShared y guarda cada texto como una nota nueva.
+// Recibir texto desde otras apps ("Compartir" > Tronx), atajos del ícono y widget de inicio.
+// MainActivity pasa a la web los textos compartidos y las acciones (nota, lista, dictar) por window.__tronxShared / window.__tronxActs,
+// y expone TronxNative.setWidget(línea1, línea2) para que la web actualice el texto del widget.
 try {
   let xml = readFileSync(manifest, "utf8");
   if (!xml.includes("android.intent.action.SEND")) {
@@ -82,44 +83,104 @@ try {
         `;
     if (!/<\/activity>/.test(xml)) throw new Error("no se encontró </activity>");
     xml = xml.replace(/<\/activity>/, `${filter}</activity>`);
-    writeFileSync(manifest, xml);
   }
-  const dir = "android/app/src/main/java/com/tronx/notas";
-  mkdirSync(dir, { recursive: true });
+  if (!xml.includes("android.app.shortcuts")) {
+    xml = xml.replace(/<\/activity>/, `    <meta-data android:name="android.app.shortcuts" android:resource="@xml/tronx_shortcuts" />\n        </activity>`);
+  }
+  if (!xml.includes("TronxWidget")) {
+    if (!/<\/application>/.test(xml)) throw new Error("no se encontró </application>");
+    xml = xml.replace(
+      /<\/application>/,
+      `    <receiver android:name=".TronxWidget" android:exported="true" android:label="Tronx">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/tronx_widget_info" />
+        </receiver>
+    </application>`
+    );
+  }
+  writeFileSync(manifest, xml);
+
+  const javaDir = "android/app/src/main/java/com/tronx/notas";
+  const resDir = "android/app/src/main/res";
+  mkdirSync(javaDir, { recursive: true });
+  for (const d of ["xml", "layout", "drawable", "values"]) mkdirSync(`${resDir}/${d}`, { recursive: true });
+
   writeFileSync(
-    `${dir}/MainActivity.java`,
+    `${javaDir}/MainActivity.java`,
     `package com.tronx.notas;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.webkit.JavascriptInterface;
 import com.getcapacitor.BridgeActivity;
 import org.json.JSONObject;
 
 public class MainActivity extends BridgeActivity {
+    public static final String ACT_NOTE = "com.tronx.notas.NEW_NOTE";
+    public static final String ACT_LIST = "com.tronx.notas.NEW_LIST";
+    public static final String ACT_DICTATE = "com.tronx.notas.DICTATE";
+
+    // Puente para que la web actualice el texto del widget.
+    public static class TronxBridge {
+        private final Context ctx;
+        TronxBridge(Context c) { ctx = c.getApplicationContext(); }
+
+        @JavascriptInterface
+        public void setWidget(String line1, String line2) {
+            SharedPreferences sp = ctx.getSharedPreferences("tronx_widget", Context.MODE_PRIVATE);
+            sp.edit().putString("l1", line1 == null ? "" : line1).putString("l2", line2 == null ? "" : line2).apply();
+            AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
+            int[] ids = mgr.getAppWidgetIds(new ComponentName(ctx, TronxWidget.class));
+            if (ids != null && ids.length > 0) TronxWidget.paint(ctx, mgr, ids);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handleShare(getIntent());
+        try {
+            getBridge().getWebView().addJavascriptInterface(new TronxBridge(this), "TronxNative");
+        } catch (Exception ignored) {
+        }
+        handleIntent(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        handleShare(intent);
+        handleIntent(intent);
     }
 
-    // Pasa el texto compartido a la web. Se reintenta unas veces porque en el arranque en frío la página todavía puede estar cargando
-    // (la web ignora los repetidos por el id).
-    private void handleShare(Intent intent) {
-        if (intent == null || !Intent.ACTION_SEND.equals(intent.getAction())) return;
-        String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-        String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-        setIntent(new Intent(Intent.ACTION_MAIN));
-        if (text == null || text.trim().isEmpty()) return;
-        final String js = "(function(){window.__tronxShared=window.__tronxShared||[];window.__tronxShared.push({id:" + System.currentTimeMillis()
-            + ",t:" + JSONObject.quote(text) + ",s:" + JSONObject.quote(subject == null ? "" : subject)
-            + "});window.dispatchEvent(new Event('tronxshare'));})();";
+    // Pasa a la web el texto compartido o la acción pedida. Se reintenta unas veces porque en el arranque en frío la página todavía
+    // puede estar cargando (la web ignora los repetidos por el id).
+    private void handleIntent(Intent intent) {
+        if (intent == null || intent.getAction() == null) return;
+        String action = intent.getAction();
+        final String js;
+        final long id = System.currentTimeMillis();
+        if (Intent.ACTION_SEND.equals(action)) {
+            String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+            String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+            setIntent(new Intent(Intent.ACTION_MAIN));
+            if (text == null || text.trim().isEmpty()) return;
+            js = "(function(){window.__tronxShared=window.__tronxShared||[];window.__tronxShared.push({id:" + id
+                + ",t:" + JSONObject.quote(text) + ",s:" + JSONObject.quote(subject == null ? "" : subject)
+                + "});window.dispatchEvent(new Event('tronxshare'));})();";
+        } else if (ACT_NOTE.equals(action) || ACT_LIST.equals(action) || ACT_DICTATE.equals(action)) {
+            String a = ACT_LIST.equals(action) ? "list" : (ACT_DICTATE.equals(action) ? "dictate" : "note");
+            setIntent(new Intent(Intent.ACTION_MAIN));
+            js = "(function(){window.__tronxActs=window.__tronxActs||[];window.__tronxActs.push({id:" + id + ",a:'" + a
+                + "'});window.dispatchEvent(new Event('tronxact'));})();";
+        } else {
+            return;
+        }
         final int[] delays = {600, 1800, 4000};
         for (final int d : delays) {
             getWindow().getDecorView().postDelayed(new Runnable() {
@@ -136,9 +197,139 @@ public class MainActivity extends BridgeActivity {
 }
 `
   );
-  console.log("Recepción de texto compartido lista.");
+
+  writeFileSync(
+    `${javaDir}/TronxWidget.java`,
+    `package com.tronx.notas;
+
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.widget.RemoteViews;
+
+public class TronxWidget extends AppWidgetProvider {
+    private static PendingIntent open(Context c, int code, String action) {
+        Intent i = new Intent(c, MainActivity.class);
+        if (action != null) i.setAction(action);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return PendingIntent.getActivity(c, code, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
+    static void paint(Context c, AppWidgetManager mgr, int[] ids) {
+        SharedPreferences sp = c.getSharedPreferences("tronx_widget", Context.MODE_PRIVATE);
+        String l1 = sp.getString("l1", "");
+        String l2 = sp.getString("l2", "");
+        for (int id : ids) {
+            RemoteViews v = new RemoteViews(c.getPackageName(), R.layout.widget_tronx);
+            v.setTextViewText(R.id.w_l1, l1.isEmpty() ? "Tronx" : l1);
+            v.setTextViewText(R.id.w_l2, l2);
+            v.setOnClickPendingIntent(R.id.w_root, open(c, 10, null));
+            v.setOnClickPendingIntent(R.id.w_note, open(c, 11, MainActivity.ACT_NOTE));
+            v.setOnClickPendingIntent(R.id.w_list, open(c, 12, MainActivity.ACT_LIST));
+            v.setOnClickPendingIntent(R.id.w_dict, open(c, 13, MainActivity.ACT_DICTATE));
+            mgr.updateAppWidget(id, v);
+        }
+    }
+
+    @Override
+    public void onUpdate(Context c, AppWidgetManager mgr, int[] ids) {
+        paint(c, mgr, ids);
+    }
+}
+`
+  );
+
+  writeFileSync(
+    `${resDir}/layout/widget_tronx.xml`,
+    `<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="12dp"
+    android:background="@drawable/widget_bg">
+    <TextView android:id="@+id/w_l1" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" />
+    <TextView android:id="@+id/w_l2" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="2dp" android:textColor="#B8B3D9" android:textSize="13sp" android:maxLines="2" android:ellipsize="end" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:gravity="bottom" android:orientation="horizontal">
+        <TextView android:id="@+id/w_note" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1"
+            android:gravity="center" android:text="Nota" android:textColor="#FFFFFF" android:textSize="14sp" android:background="@drawable/widget_btn" />
+        <TextView android:id="@+id/w_list" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1"
+            android:layout_marginStart="6dp" android:gravity="center" android:text="Lista" android:textColor="#FFFFFF" android:textSize="14sp" android:background="@drawable/widget_btn" />
+        <TextView android:id="@+id/w_dict" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1"
+            android:layout_marginStart="6dp" android:gravity="center" android:text="Dictar" android:textColor="#FFFFFF" android:textSize="14sp" android:background="@drawable/widget_btn" />
+    </LinearLayout>
+</LinearLayout>
+`
+  );
+  writeFileSync(
+    `${resDir}/drawable/widget_bg.xml`,
+    `<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#E6120F24" />
+    <corners android:radius="20dp" />
+</shape>
+`
+  );
+  writeFileSync(
+    `${resDir}/drawable/widget_btn.xml`,
+    `<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#FF4C3AA8" />
+    <corners android:radius="14dp" />
+</shape>
+`
+  );
+  writeFileSync(
+    `${resDir}/xml/tronx_widget_info.xml`,
+    `<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp" android:minHeight="110dp"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/widget_tronx"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />
+`
+  );
+  writeFileSync(
+    `${resDir}/xml/tronx_shortcuts.xml`,
+    `<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="tronx_note" android:enabled="true" android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/tronx_sc_note" android:shortcutLongLabel="@string/tronx_sc_note_long">
+        <intent android:action="com.tronx.notas.NEW_NOTE" android:targetPackage="com.tronx.notas" android:targetClass="com.tronx.notas.MainActivity" />
+    </shortcut>
+    <shortcut android:shortcutId="tronx_list" android:enabled="true" android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/tronx_sc_list" android:shortcutLongLabel="@string/tronx_sc_list_long">
+        <intent android:action="com.tronx.notas.NEW_LIST" android:targetPackage="com.tronx.notas" android:targetClass="com.tronx.notas.MainActivity" />
+    </shortcut>
+    <shortcut android:shortcutId="tronx_dictate" android:enabled="true" android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/tronx_sc_dictate" android:shortcutLongLabel="@string/tronx_sc_dictate_long">
+        <intent android:action="com.tronx.notas.DICTATE" android:targetPackage="com.tronx.notas" android:targetClass="com.tronx.notas.MainActivity" />
+    </shortcut>
+</shortcuts>
+`
+  );
+  writeFileSync(
+    `${resDir}/values/tronx_strings.xml`,
+    `<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tronx_sc_note">Nueva nota</string>
+    <string name="tronx_sc_note_long">Escribir una nota nueva</string>
+    <string name="tronx_sc_list">Nueva lista</string>
+    <string name="tronx_sc_list_long">Crear una lista de tareas</string>
+    <string name="tronx_sc_dictate">Dictar</string>
+    <string name="tronx_sc_dictate_long">Dictar una nota por voz</string>
+</resources>
+`
+  );
+  console.log("Recepción de texto compartido, atajos y widget listos.");
 } catch (e) {
-  console.warn("No se pudo preparar la recepción de texto compartido:", e.message);
+  console.warn("No se pudo preparar compartir, atajos o widget:", e.message);
 }
 
 // Ícono de las notificaciones: silueta blanca de una nota (Android lo pinta con el color de acento).
