@@ -1018,6 +1018,35 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   .content { min-height: 70px; }
   .content.imgs #body { min-height: 24vh; }
 }
+/* ---- Inicio rediseñado (1.62): más aire, menos amontonado ---- */
+.side .brand { padding: 18px 18px 12px; }
+.side .brand h1 { font-size: 30px; }
+.side .chromein > .viewseg { margin: 0 18px 10px; }
+.side .viewseg button { min-height: 42px; }
+.side .search { padding: 0 18px 12px; position: relative; }
+.side .search input { min-height: 48px; border-radius: 16px; padding: 10px 16px 10px 46px; box-shadow: 0 8px 22px -16px var(--card-glow); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8fb5' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='6.5'/%3E%3Cpath d='M16 16l4 4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 15px 50%; background-size: 20px; }
+.side .tabs { padding: 0 18px; }
+.side .tab { padding: 10px 4px 11px; font-size: 15px; }
+.side .chips { padding: 12px 18px 2px; gap: 8px; }
+.side .chip { min-height: 34px; padding: 4px 14px; }
+.side .opts { flex-wrap: wrap; gap: 8px; padding: 10px 18px 12px; }
+.side .opts #sort { flex: 1 1 0; min-width: 0; min-height: 42px; border-radius: 12px; font-size: 14px; padding: 6px 10px; }
+.side .opts .btn { min-height: 42px; width: 42px; border-radius: 12px; }
+.side .opts #kind, .side .opts #when { display: none; order: 5; flex: 1 1 calc(50% - 4px); min-height: 42px; border-radius: 12px; font-size: 14px; }
+.side .opts.open #kind, .side .opts.open #when { display: block; }
+#fltBtn[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+#fltBtn { position: relative; }
+#fltBtn.on::after { content: ""; position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.side .list[data-view="grid"] { gap: 14px; padding: 16px 18px 110px; }
+.side .list[data-view="grid"] .item { padding: 16px 16px 14px; gap: 6px; border-radius: 22px; }
+.side .list:not([data-view="grid"]) .item { padding: 14px 18px 15px; }
+.side .foot { padding: 8px 18px; }
+.list .nores { grid-column: 1 / -1; list-style: none; text-align: center; color: var(--muted); font-size: 15px; line-height: 1.55; padding: 56px 36px 40px; max-width: 360px; margin: 0 auto; }
+.list .nores::before { content: ""; display: block; width: 76px; height: 76px; margin: 0 auto 20px; border-radius: 26px; background: var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a6cf0' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 4h9l4 4v12H6z'/%3E%3Cpath d='M14 4v5h5M9 13h7M9 16.5h5'/%3E%3C/svg%3E") center / 40px no-repeat; }
+@media (max-width: 760px) {
+  .side #newBtn { display: none; }
+  .side .fab { width: 62px; height: 62px; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 14px 30px -10px var(--card-glow), 0 4px 10px -4px rgba(0, 0, 0, 0.35); }
+}
 .subprog { flex: none; font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
 .subprog.full { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
 .row .mv button.on { color: var(--accent); }
@@ -1258,6 +1287,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
         <option value="month">Últimos 30 días</option>
         <option value="year">Último año</option>
       </select>
+      <button class="btn icon" id="fltBtn" type="button" title="Más filtros" aria-label="Más filtros" aria-pressed="false" aria-expanded="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
       <button class="btn icon" id="selBtn" type="button" title="Seleccionar notas" aria-label="Seleccionar notas" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/></svg></button>
       <button class="btn icon" id="viewBtn" type="button"></button>
     </div>
@@ -1913,7 +1943,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.61.6";
+  var APP_VERSION = "1.61.7";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -2664,7 +2694,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     return li;
   }
   var EMPTY = {
-    notes: "Todavía no hay notas. Tocá “Nueva nota” para escribir la primera.",
+    notes: "Todavía no hay notas. Tocá el botón + para escribir la primera.",
     archive: "No hay notas archivadas. Archivá las que no uses para despejar la lista.",
     trash: "La papelera está vacía. Lo que borres queda acá hasta que lo elimines."
   };
@@ -2736,6 +2766,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     kidCount = {};
     notes.forEach(function (k) { if (k.parent && !k.trashedAt && notes.has(k.parent)) kidCount[k.parent] = (kidCount[k.parent] || 0) + 1; });
     if (listEl.getAttribute("data-view") !== settings.view) listEl.setAttribute("data-view", settings.view);
+    if (window.__fltReady) fltSync();
     var want = [];
     rows.forEach(function (n) {
       var sig = cardSig(n), c = cards.get(n.id);
@@ -4953,6 +4984,15 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       renderAll();
     });
   });
+  function fltSync() {
+    var on = kindFilter !== "all" || whenFilter !== "all", o = $("fltBtn").parentNode;
+    $("fltBtn").classList.toggle("on", on);
+    if (on && !o.classList.contains("open")) { o.classList.add("open"); }
+    $("fltBtn").setAttribute("aria-pressed", o.classList.contains("open") ? "true" : "false");
+    $("fltBtn").setAttribute("aria-expanded", o.classList.contains("open") ? "true" : "false");
+  }
+  window.__fltReady = true;
+  $("fltBtn").addEventListener("click", function () { var o = $("fltBtn").parentNode; o.classList.toggle("open"); fltSync(); });
   $("kind").addEventListener("change", function () { kindFilter = $("kind").value; renderList(); renderSaved(); });
   $("when").addEventListener("change", function () { whenFilter = $("when").value; renderList(); renderSaved(); });
   /* búsquedas guardadas + alcance (archivo y papelera) */
@@ -5078,6 +5118,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.61.7", d: "14 nov 2026", t: "Inicio rediseñado", lv: "Eclipse", cat: "rediseno", l: ["Nueva pantalla de inicio: cabecera compacta, más espacio entre elementos y tarjetas más amplias", "Buscador con ícono y bordes más suaves", "Filtros plegables: el orden se lee completo y tipo/fecha se abren con un botón, con marca cuando hay un filtro activo", "Estado vacío con ilustración y mensaje claro", "Botón flotante más grande como acción principal de nueva nota en el teléfono"] },
     { v: "1.61.6", d: "14 nov 2026", t: "Correcciones tras auditoría", lv: "Destello", cat: "arreglo", l: ["Corregido el botón «Buscar notas duplicadas», que no respondía por compartir identificador con «Duplicar»", "Corregido el marcador del día de hoy en el mapa de actividad, que no se mostraba"] },
     { v: "1.61.5", d: "14 nov 2026", t: "Respaldos, duplicadas y pantallas a medida", lv: "Nova", cat: "nuevo+mejora", l: ["Copia automática con fecha en Documentos/Tronx, con rotación de las más antiguas", "Restauración de una nota suelta desde cualquier copia, sin tocar el resto", "Detección y unión de notas duplicadas, conservando etiquetas y carpeta", "Diseño optimizado para tablet y pantalla horizontal", "Tamaño de letra ajustable en la lista de notas", "Accesibilidad: contraste alto, menos movimiento y nombres para lectores de pantalla"] },
     { v: "1.60.9", d: "13 nov 2026", t: "Escritura y seguridad reforzadas", lv: "Nova", cat: "nuevo+mejora", l: ["Enlaces entre notas con actualización automática al renombrar y lista de menciones", "Tablas con botones para agregar filas y columnas", "Markdown más completo: código, tachado, subtítulos y enlaces", "Protección con frase además del PIN", "Cifrado opcional del título y cifrado de las imágenes de notas protegidas", "Opción para ocultar el contenido en las apps recientes"] },
