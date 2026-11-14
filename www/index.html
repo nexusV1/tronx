@@ -999,6 +999,7 @@ body.focus .pane { grid-column: 1 / -1; }
 body.focus #doc { max-width: 720px; margin: 0 auto; }
 .fpill { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 30; display: flex; gap: 12px; align-items: center; padding: 8px 8px 8px 16px; border-radius: 999px; background: var(--raised); border: 1px solid var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,.35); font-size: 14px; font-variant-numeric: tabular-nums; }
 .fpill[hidden] { display: none; }
+.lockpass { width: 100%; box-sizing: border-box; margin: 10px 0 8px; padding: 12px 14px; font-size: 18px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: inherit; text-align: center; }
 .pf-hist { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 14px; }
 .pf-hist li { display: flex; gap: 10px; align-items: baseline; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--raised); }
 .pf-hist time { flex: none; color: var(--muted); font-size: 12px; min-width: 64px; }
@@ -1033,6 +1034,10 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 .hlrow[hidden] { display: none; }
 .hlrow .hlsw { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); padding: 0; }
 .hlrow .hlx { margin-left: auto; }
+.read code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.92em; padding: 1px 5px; border-radius: 5px; background: color-mix(in srgb, var(--muted) 22%, transparent); }
+.read pre { margin: 0.5em 0; padding: 10px 12px; border-radius: 10px; overflow-x: auto; background: color-mix(in srgb, var(--muted) 18%, transparent); }
+.read pre code { padding: 0; background: transparent; }
+.read del { opacity: .7; }
 .read blockquote { margin: 0.4em 0; padding: 2px 0 2px 12px; border-left: 3px solid var(--accent); color: var(--muted); }
 .read ul, .read ol { margin: 0.3em 0; padding-left: 1.3em; }
 .read hr { border: 0; border-top: 1px solid var(--line); margin: 0.8em 0; }
@@ -1325,7 +1330,11 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
         <button class="btn" type="button" data-ins="dictate" id="dictBtn" hidden>🎤 Dictar</button>
         <button class="btn" type="button" data-ins="sticker">⭐ Sticker</button>
         <button class="btn" type="button" data-ins="link">[[ ]] Enlace</button>
+        <button class="btn" type="button" data-ins="code">&lt;/&gt; Código</button>
+        <button class="btn" type="button" data-ins="strike"><s>Tachado</s></button>
         <button class="btn" type="button" data-ins="table">▦ Tabla</button>
+        <button class="btn" type="button" data-ins="tblrow">▦ + Fila</button>
+        <button class="btn" type="button" data-ins="tblcol">▦ + Columna</button>
         <button class="btn" type="button" data-ins="date">Fecha</button>
         <button class="btn" type="button" data-ins="time">Hora</button>
         <button class="btn" type="button" data-ins="read" aria-pressed="false">Leer</button>
@@ -1395,6 +1404,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       <div class="actions"><button class="btn" id="nlSet" type="button">Proteger esta nota</button><button class="btn danger" id="nlOff" type="button" hidden>Quitar protección</button></div>
       <div class="seg" id="nlPick" hidden>
         <button type="button" data-m="pin">PIN propio</button>
+        <button type="button" data-m="pass">Frase</button>
         <button type="button" data-m="bio" id="nlBio">Huella</button>
         <button type="button" data-m="both" id="nlBoth">Huella o PIN</button>
       </div>
@@ -1500,6 +1510,16 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       <button class="btn danger" id="pinOffBtn" type="button" hidden>Quitar PIN</button>
     </div>
     <div class="actions"><button class="chip" id="pinBioBtn" type="button" aria-pressed="false" hidden>Abrir también con huella</button></div>
+    <div class="seg" id="encTitleSeg" aria-label="Título de las notas protegidas">
+      <button type="button" data-v="on">Ocultar el título</button>
+      <button type="button" data-v="off">Mostrar el título</button>
+    </div>
+    <p class="hint">Ocultar el título cifra también el nombre de las notas protegidas con PIN o frase: en la lista aparecen como "Nota protegida" hasta que las abrís. Se aplica a una nota la próxima vez que la abras.</p>
+    <div class="seg" id="secureSeg" aria-label="Ocultar en apps recientes" hidden>
+      <button type="button" data-v="on">Ocultar en recientes</button>
+      <button type="button" data-v="off">Mostrar en recientes</button>
+    </div>
+    <p class="hint" id="secureHint" hidden>Oculta el contenido de Tronx en la lista de apps recientes. También bloquea las capturas de pantalla.</p>
     <h3 id="secStore">Espacio</h3>
     <div class="stbox" id="stBox"><p class="hint" id="stTxt">Calculando…</p></div>
     <div class="actions"><button class="btn" id="stClean" type="button">Liberar espacio (imágenes sin uso)</button></div>
@@ -1616,6 +1636,8 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     <p id="lockS"></p>
     <div class="lockdots" id="lockDots" aria-hidden="true"></div>
     <div class="lockpad" id="lockPad"></div>
+    <input class="lockpass" id="lockPass" type="password" autocomplete="off" autocapitalize="off" maxlength="64" aria-label="Frase de acceso" hidden>
+    <button class="btn primary" id="lockPassGo" type="button" hidden>Continuar</button>
     <button class="btn" id="lockBio" type="button" hidden>Usar huella</button>
     <button class="btn small" id="lockCancel" type="button" hidden>Cancelar</button>
   </div>
@@ -1845,7 +1867,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.60.3";
+  var APP_VERSION = "1.60.9";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1907,7 +1929,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   settings.focus = { min: Math.max(0, Math.floor(Number(settings.focus.min) || 0)), n: Math.max(0, Math.floor(Number(settings.focus.n) || 0)) };
   settings.focusLog = (Array.isArray(settings.focusLog) ? settings.focusLog : []).filter(function (f) { return f && f.t > 0 && f.m >= 0; }).slice(0, 30).map(function (f) { return { t: +f.t, m: Math.floor(f.m), w: Math.max(0, Math.floor(f.w) || 0) }; });
   settings.bkEvery = [0, 3, 7, 14, 30].indexOf(Number(settings.bkEvery)) >= 0 ? Number(settings.bkEvery) : 7;
-  settings.quickNotif = !!settings.quickNotif; settings.dueAlert = settings.dueAlert !== false; settings.dueEve = !!settings.dueEve;
+  settings.quickNotif = !!settings.quickNotif; settings.encTitle = !!settings.encTitle; settings.secureWin = !!settings.secureWin; settings.dueAlert = settings.dueAlert !== false; settings.dueEve = !!settings.dueEve;
   if (!/^\d{2}:\d{2}$/.test(settings.dueAt || "") || +settings.dueAt.slice(0, 2) > 23 || +settings.dueAt.slice(3) > 59) settings.dueAt = "09:00";
   if (!settings.act || typeof settings.act !== "object" || Array.isArray(settings.act)) settings.act = {};
   if (!settings.ach || typeof settings.ach !== "object" || Array.isArray(settings.ach)) settings.ach = {};
@@ -2118,11 +2140,11 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   }
   function cleanEnc(e) {
     if (!e || typeof e !== "object" || typeof e.iv !== "string" || typeof e.ct !== "string" || !e.iv || !e.ct) return null;
-    return { v: 1, it: Math.min(1000000, Math.max(1000, Math.floor(Number(e.it)) || 120000)), iv: e.iv, ct: e.ct };
+    return { v: 1, it: Math.min(1000000, Math.max(1000, Math.floor(Number(e.it)) || 120000)), iv: e.iv, ct: e.ct, tt: e.tt ? 1 : 0 };
   }
   function cleanLock(l) {
     if (!l || typeof l !== "object") return null;
-    var m = l.m === "bio" || l.m === "pin" || l.m === "both" ? l.m : "";
+    var m = l.m === "bio" || l.m === "pin" || l.m === "both" || l.m === "pass" ? l.m : "";
     if (!m) return null;
     if (m !== "bio" && !(typeof l.s === "string" && typeof l.h === "string" && l.s && l.h)) return null;
     return { m: m, s: m === "bio" ? "" : l.s, h: m === "bio" ? "" : l.h };
@@ -2227,24 +2249,66 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       return crypto.subtle.deriveKey({ name: "PBKDF2", salt: te.encode("tronx-enc|" + salt), iterations: it, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
     });
   }
-  function encPlain(n) { return JSON.stringify({ b: n.body, i: n.items, v: n.versions }); }
-  function isPinEnc(n) { return !!(n.lock && n.lock.m === "pin"); }
+  function encPlain(n) { var o = { b: n.body, i: n.items, v: n.versions }; if (settings.encTitle) o.t = n.title; return JSON.stringify(o); }
+  function isPinEnc(n) { return !!(n.lock && (n.lock.m === "pin" || n.lock.m === "pass")); }
+  function imgSig(n) { return n.images.map(function (i) { return i.src; }).join(","); }
+  /* imágenes de la nota: se cifran con la misma clave del texto; las miniaturas en claro se borran (se rehacen al abrir la nota) */
+  function encImages(n) {
+    if (!encOk() || !isPinEnc(n)) return Promise.resolve(false);
+    var key = encKeys[n.lock.s]; if (!key) return Promise.resolve(false);
+    var seen = {}, jobs = [];
+    n.images.forEach(function (it) {
+      if (seen[it.src]) return; seen[it.src] = 1;
+      jobs.push(imgGetRaw(it.src).then(function (raw) {
+        if (!raw) return;
+        var pl = raw.encImg ? (raw.s === n.lock.s ? null : imgGet(it.src)) : Promise.resolve(raw);
+        if (!pl) return imgDropThumb(it.src);
+        return Promise.resolve(pl).then(function (blob) {
+          if (!blob) return;
+          return blob.arrayBuffer().then(function (buf) {
+            var iv = crypto.getRandomValues(new Uint8Array(12));
+            return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, buf).then(function (ct) {
+              return crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ct).then(function (back) {
+                if (back.byteLength !== buf.byteLength) return;
+                imgMem.delete(it.src);
+                return imgPutRaw(it.src, { encImg: 1, s: n.lock.s, iv: iv.buffer, ct: ct, type: blob.type || "image/jpeg" }).then(function () { return imgDropThumb(it.src); });
+              });
+            });
+          });
+        });
+      }).catch(function () {}));
+    });
+    return Promise.all(jobs).then(function () { var m = encMeta.get(n); if (m) m.im = imgSig(n); return true; });
+  }
+  function encImgSoon(n) { clearTimeout(encTimers[n.id + "i"]); encTimers[n.id + "i"] = setTimeout(function () { encImages(n); }, 1200); }
+  /* al quitar la protección (o pasarla a una sin cifrado) las imágenes vuelven a guardarse en claro; devuelve una promesa */
+  function encRelease(n) {
+    if (!encOk() || !n.images.length) return Promise.resolve();
+    var seen = {};
+    return Promise.all(n.images.map(function (it) {
+      if (seen[it.src]) return null; seen[it.src] = 1;
+      return imgGetRaw(it.src).then(function (raw) { if (!raw || !raw.encImg) return; return imgGet(it.src).then(function (b) { if (b) return imgPutRaw(it.src, b); }); }).catch(function () {});
+    }));
+  }
   function serNote(n) {
     if (!n.enc) return n;
     var meta = encMeta.get(n);
     if (meta && meta.src !== encPlain(n)) { if (document.hidden) encSave(n); else encSoon(n); return n; } /* editada: se guarda en claro un momento hasta cifrarla */
-    var c = Object.assign({}, n); c.body = ""; c.items = []; c.versions = []; return c;
+    if (meta && meta.im !== imgSig(n)) encImgSoon(n);
+    var c = Object.assign({}, n); c.body = ""; c.items = []; c.versions = [];
+    if (n.enc.tt) c.title = "";
+    return c;
   }
   function encSave(n) {
     if (!encOk() || !isPinEnc(n)) return Promise.resolve(false);
     var key = encKeys[n.lock.s]; if (!key) return Promise.resolve(false);
-    var plain = encPlain(n), meta = encMeta.get(n);
+    var plain = encPlain(n), meta = encMeta.get(n), tt = settings.encTitle ? 1 : 0;
     if (n.enc && meta && meta.src === plain) return Promise.resolve(true);
     var iv = crypto.getRandomValues(new Uint8Array(12)), te = new TextEncoder();
     return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, te.encode(plain)).then(function (ct) {
       return crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ct).then(function (back) {
         if (new TextDecoder().decode(back) !== plain || encPlain(n) !== plain) return false; /* verificar antes de reemplazar; si cambió mientras tanto, se reintenta */
-        n.enc = { v: 1, it: ENC_IT, iv: b64(iv), ct: b64(ct) }; encMeta.set(n, { src: plain }); persistNow(true); return true;
+        n.enc = { v: 1, it: ENC_IT, iv: b64(iv), ct: b64(ct), tt: tt }; encMeta.set(n, { src: plain }); persistNow(true); encImages(n); return true;
       });
     }).catch(function () { return false; });
   }
@@ -2258,6 +2322,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       if (n.enc && !encMeta.has(n)) {
         return crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(n.enc.iv) }, key, unb64(n.enc.ct)).then(function (buf) {
           var src = new TextDecoder().decode(buf), o = JSON.parse(src);
+          if (typeof o.t === "string") n.title = o.t.slice(0, 200);
           n.body = String(o.b || ""); n.items = (Array.isArray(o.i) ? o.i : []).map(function (x) { return cleanItem(x, 1e9); }); n.versions = cleanVersions(o.v);
           encMeta.set(n, { src: encPlain(n) }); if (encMeta.get(n).src !== src) encSoon(n);
         });
@@ -2491,7 +2556,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     var top = el("span", "top");
     var ic = cardIcon(n.icon); if (ic) top.appendChild(ic);
     var t = el("span", "t" + (n.title.trim() ? "" : " empty"));
-    if (n.title.trim()) hlText(t, n.title.trim(), hq); else t.textContent = n.type === "list" ? "Lista sin título" : "Sin título";
+    if (n.title.trim()) hlText(t, n.title.trim(), hq); else if (n.lock && n.enc && n.enc.tt && !encMeta.has(n)) t.textContent = "🔒 Nota protegida"; else t.textContent = n.type === "list" ? "Lista sin título" : "Sin título";
     top.appendChild(t);
     b.appendChild(top);
     if (n.lock) {
@@ -3190,7 +3255,20 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     renderItems(); renderTint(); renderBg(); renderProg(); renderTpls(); renderTaglines(); renderIconBtn(); updateMeta(); renderRel(); selImg = null; renderImages();
   }
 
+  titleEl.addEventListener("focus", function () { var n = cur(); titleEl.dataset.old = n ? n.title : ""; });
   titleEl.addEventListener("input", function () { var n = cur(); if (!n || n.trashedAt) return; n.title = titleEl.value; changed(n); });
+  /* al renombrar una nota se actualizan los enlaces [[...]] que apuntaban al nombre anterior */
+  titleEl.addEventListener("change", function () {
+    var n = cur(), old = (titleEl.dataset.old || "").trim(), nw = titleEl.value.trim(); titleEl.dataset.old = titleEl.value;
+    if (!n || n.trashedAt || !old || !nw || old.toLowerCase() === nw.toLowerCase()) return;
+    var re = new RegExp("\\[\\[" + old.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\]\\]", "gi"), cnt = 0;
+    notes.forEach(function (o) {
+      if (o.id === n.id || o.trashedAt || o.lock) return;
+      if (o.type === "list") { o.items.forEach(function (i) { var t = i.t.replace(re, function () { cnt++; return "[[" + nw + "]]"; }); if (t !== i.t) { i.t = t; o.updatedAt = Date.now(); } }); }
+      else { var b = o.body.replace(re, function () { cnt++; return "[[" + nw + "]]"; }); if (b !== o.body) { o.body = b; o.updatedAt = Date.now(); } }
+    });
+    if (cnt) { persistNow(); renderList(); toast("Actualicé " + cnt + (cnt === 1 ? " enlace" : " enlaces") + " a esta nota"); }
+  });
   bodyEl.addEventListener("input", function () { var n = cur(); if (!n || n.trashedAt) return; n.body = bodyEl.value; changed(n); histSoon(); });
 
   /* Enlaces entre notas, subnotas y tablas */
@@ -3215,6 +3293,12 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       var txt = o.type === "list" ? o.items.map(function (i) { return i.t; }).join("\n") : o.body;
       if (txt.toLowerCase().indexOf("[[" + tl + "]]") >= 0) back.push(o);
     });
+    var ment = [];
+    if (tl.length >= 4) notes.forEach(function (o) {
+      if (o.id === n.id || o.trashedAt || o.lock || back.indexOf(o) >= 0 || ment.length >= 6) return;
+      var txt = (o.type === "list" ? o.items.map(function (i) { return i.t; }).join("\n") : o.body).toLowerCase();
+      if (txt.indexOf(tl) >= 0) ment.push(o);
+    });
     if (kids.length) { var l1 = el("span", "lbl"); l1.textContent = "Subnotas"; box.appendChild(l1); }
     kids.forEach(function (k) { box.appendChild(chipBtn(k.title.trim() || "Sin título", function () { openNote(k.id); })); });
     box.appendChild(chipBtn("+ Subnota", function () {
@@ -3223,6 +3307,8 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     }, "add"));
     if (back.length) { var l2 = el("span", "lbl"); l2.textContent = "Enlazada desde"; box.appendChild(l2); }
     back.forEach(function (o) { box.appendChild(chipBtn(o.title.trim() || "Sin título", function () { openNote(o.id); })); });
+    if (ment.length) { var l3 = el("span", "lbl"); l3.textContent = "Mencionada en"; box.appendChild(l3); }
+    ment.forEach(function (o) { box.appendChild(chipBtn(o.title.trim() || "Sin título", function () { openNote(o.id); })); });
     box.hidden = false;
   }
   function updateSugg() {
@@ -3252,6 +3338,25 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     bodyEl.setRangeText(t, s, bodyEl.selectionEnd, "end");
     var c = s + t.length - 8; bodyEl.setSelectionRange(c, c);
   }
+  /* agrega una fila o una columna a la tabla donde está el cursor */
+  function tableGrow(col) {
+    var v = bodyEl.value, pos = bodyEl.selectionStart, ls = v.split("\n"), off = 0, ci = 0;
+    for (var k = 0; k < ls.length; k++) { if (pos <= off + ls[k].length) { ci = k; break; } off += ls[k].length + 1; ci = k; }
+    var isT = function (l) { return /^\s*\|.*\|\s*$/.test(l); };
+    if (!isT(ls[ci])) { toast("Poné el cursor dentro de una tabla"); return; }
+    var a = ci, b = ci; while (a > 0 && isT(ls[a - 1])) a--; while (b < ls.length - 1 && isT(ls[b + 1])) b++;
+    if (col) {
+      var nc = ls[a].trim().replace(/^\||\|$/g, "").split("|").length + 1;
+      for (var r = a; r <= b; r++) {
+        var cells = ls[r].trim().replace(/^\||\|$/g, "").split("|"), sep = cells.every(function (c) { return /^\s*:?-{2,}:?\s*$/.test(c); });
+        ls[r] = "|" + cells.join("|") + "|" + (sep ? " --- |" : r === a ? " Columna " + nc + " |" : "  |");
+      }
+    } else {
+      var w = ls[ci].trim().replace(/^\||\|$/g, "").split("|").length, at = ci === a && ls[a + 1] && /^\s*\|[\s:|-]+\|\s*$/.test(ls[a + 1]) ? a + 1 : ci;
+      ls.splice(at + 1, 0, "|" + new Array(w + 1).join("  |"));
+    }
+    bodyEl.value = ls.join("\n"); bodyEl.setSelectionRange(pos, pos);
+  }
   function insertLink() {
     var v = bodyEl.value, s = bodyEl.selectionStart, e = bodyEl.selectionEnd;
     if (s !== e) { bodyEl.setRangeText("[[" + v.slice(s, e) + "]]", s, e, "end"); return; }
@@ -3277,20 +3382,31 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       return new Promise(function (res, rej) { var t = db.transaction("i", "readwrite"); t.objectStore("i").put(blob, id); t.oncomplete = function () { imgMem.delete(id); res(true); }; t.onerror = function () { rej(t.error); }; });
     }).catch(function () { return false; });
   }
-  function imgGet(id) {
+  function imgGetRaw(id) {
     if (imgMem.has(id)) return Promise.resolve(imgMem.get(id));
     return idbOpen().then(function (db) {
       return new Promise(function (res) { var q = db.transaction("i").objectStore("i").get(id); q.onsuccess = function () { res(q.result || null); }; q.onerror = function () { res(null); }; });
     }).catch(function () { return null; });
   }
+  /* las imágenes de notas protegidas se guardan cifradas ({encImg, s, iv, ct, type}); sin la clave de la sesión no se pueden leer */
+  function imgGet(id) {
+    return imgGetRaw(id).then(function (r) {
+      if (!r || !r.encImg) return r;
+      var key = encKeys[r.s]; if (!key) return null;
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: new Uint8Array(r.iv) }, key, r.ct).then(function (buf) { return new Blob([buf], { type: r.type || "image/jpeg" }); }).catch(function () { return null; });
+    });
+  }
+  function rawSize(b) { return !b ? 0 : b.encImg ? ((b.ct && b.ct.byteLength) || 0) : (b.size || 0); }
+  function imgPutRaw(id, v) { return idbOpen().then(function (db) { return new Promise(function (res) { var t = db.transaction("i", "readwrite"); t.objectStore("i").put(v, id); t.oncomplete = function () { res(true); }; t.onerror = function () { res(false); }; }); }).catch(function () { return false; }); }
+  function imgDropThumb(id) { thUrls.delete(id); return idbOpen().then(function (db) { db.transaction("i", "readwrite").objectStore("i").delete(id + ":t"); }).catch(function () {}); }
   function imgKeys() {
     return idbOpen().then(function (db) {
       return new Promise(function (res) { var q = db.transaction("i").objectStore("i").getAllKeys(); q.onsuccess = function () { res(q.result || []); }; q.onerror = function () { res([]); }; });
     }).catch(function () { return []; });
   }
+  var thUrls = new Map(), thChain = Promise.resolve();
   function imgDel(id) { imgUrls.delete(id); thUrls.delete(id); return idbOpen().then(function (db) { var s = db.transaction("i", "readwrite").objectStore("i"); s.delete(id); s.delete(id + ":t"); }).catch(function () {}); }
   // miniaturas chicas (96px) guardadas aparte; se generan de a una para no decodificar muchas fotos grandes juntas
-  var thUrls = new Map(), thChain = Promise.resolve();
   function thumbUrl(id) {
     if (thUrls.has(id)) return Promise.resolve(thUrls.get(id));
     var job = thChain.then(function () {
@@ -3330,7 +3446,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     return imgKeys().then(function (keys) {
       var used = usedImageIds(), dead = [];
       keys.forEach(function (k) { var base = String(k).replace(/:t$/, ""); if (base.indexOf("stk:") === 0) return; if (!used.has(base)) dead.push(k); });
-      return Promise.all(dead.map(function (k) { return imgGet(k).then(function (b) { return b ? b.size : 0; }, function () { return 0; }); })).then(function (sizes) {
+      return Promise.all(dead.map(function (k) { return imgGetRaw(k).then(rawSize, function () { return 0; }); })).then(function (sizes) {
         dead.forEach(function (k) { imgDel(String(k).replace(/:t$/, "")); });
         return { n: dead.filter(function (k) { return !/:t$/.test(k); }).length, bytes: sizes.reduce(function (a, c) { return a + c; }, 0) };
       });
@@ -4055,13 +4171,19 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   function esc(t) { return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function inline(t) {
     t = esc(t);
+    var stash = [];
+    function hold(h) { stash.push(h); return "\u0001" + (stash.length - 1) + "\u0002"; }
+    t = t.replace(/`([^`\n]+)`/g, function (all, c) { return hold("<code>" + c + "</code>"); });
+    t = t.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, function (all, txt, url) { return hold('<a href="' + url + '" target="_blank" rel="noopener">' + txt + "</a>"); });
+    t = t.replace(/~~(?=\S)(.+?)(?<=\S)~~/g, "<del>$1</del>");
     t = t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<i>$2</i>");
     t = t.replace(/==(?:\{(amarillo|verde|rosa|celeste|naranja)\})?(?=\S)(.+?)(?<=\S)==/g, function (all, c, s) { return '<mark class="hl-' + (c || "amarillo") + '">' + s + "</mark>"; });
     t = t.replace(/\[\[([^\]\n]+?)\]\]/g, function (all, name) { return '<a class="wl' + (findByTitle(name.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")) ? "" : " missing") + '" data-t="' + name + '">' + name + "</a>"; });
-    return t.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    t = t.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    return t.replace(/\u0001(\d+)\u0002/g, function (all, i) { return stash[+i]; });
   }
   function mdHtml(src) {
-    var out = [], lines = src.split("\n"), list = null, tbl = [];
+    var out = [], lines = src.split("\n"), list = null, tbl = [], code = null;
     function close() { if (list) { out.push("</" + list + ">"); list = null; } }
     function flushTbl() {
       if (!tbl.length) return;
@@ -4076,17 +4198,20 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     }
     lines.forEach(function (ln, i) {
       var m;
+      if (/^\s*```/.test(ln)) { close(); flushTbl(); if (code === null) code = []; else { out.push("<pre><code>" + esc(code.join("\n")) + "</code></pre>"); code = null; } return; }
+      if (code !== null) { code.push(ln); return; }
       if ((m = ln.match(/^\s*\|(.*)\|\s*$/))) { close(); tbl.push(m[1].split("|").map(function (c) { return c.trim(); })); return; }
       flushTbl();
       if ((m = ln.match(/^\s*(•|-|\*)\s+(.*)$/))) { if (list !== "ul") { close(); out.push("<ul>"); list = "ul"; } out.push("<li>" + inline(m[2]) + "</li>"); return; }
       if ((m = ln.match(/^\s*\d+[.)]\s+(.*)$/))) { if (list !== "ol") { close(); out.push("<ol>"); list = "ol"; } out.push("<li>" + inline(m[1]) + "</li>"); return; }
       close();
       if ((m = ln.match(/^\s*\[([ xX])\]\s*(.*)$/))) { var on = m[1] !== " "; out.push('<div class="ck' + (on ? " on" : "") + '" data-line="' + i + '"><span>' + (on ? "☑" : "☐") + "</span><span>" + inline(m[2]) + "</span></div>"); return; }
-      if ((m = ln.match(/^(#{1,2})\s+(.*)$/))) { out.push("<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">"); return; }
+      if ((m = ln.match(/^(#{1,3})\s+(.*)$/))) { out.push("<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">"); return; }
       if ((m = ln.match(/^>\s?(.*)$/))) { out.push("<blockquote>" + inline(m[1]) + "</blockquote>"); return; }
       if (/^\s*(---+|___+)\s*$/.test(ln)) { out.push("<hr>"); return; }
       out.push("<p>" + inline(ln) + "</p>");
     });
+    if (code !== null) out.push("<pre><code>" + esc(code.join("\n")) + "</code></pre>");
     close(); flushTbl();
     return out.join("");
   }
@@ -4301,6 +4426,10 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     else if (k === "image" || k === "photo" || k === "draw" || k === "sticker" || k === "dictate") return;
     else if (k === "link") insertLink();
     else if (k === "table") insertTable();
+    else if (k === "tblrow") tableGrow(false);
+    else if (k === "tblcol") tableGrow(true);
+    else if (k === "code") { var cs = bodyEl.selectionStart, ce = bodyEl.selectionEnd; if (bodyEl.value.slice(cs, ce).indexOf("\n") >= 0) bodyEl.setRangeText("```\n" + bodyEl.value.slice(cs, ce) + "\n```", cs, ce, "end"); else wrapSel("`"); }
+    else if (k === "strike") wrapSel("~~");
     else if (k === "date") insertAtCaret(dlong.format(now));
     else if (k === "time") insertAtCaret(tf.format(now));
     else return;
@@ -4835,6 +4964,9 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     $("bgAnimSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.bgAnim ? "true" : "false"); });
     $("fabSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.fab ? "true" : "false"); });
     $("swipeSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.swipe ? "true" : "false"); });
+    $("encTitleSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.encTitle ? "true" : "false"); });
+    var nat = window.TronxNative && typeof window.TronxNative.setSecure === "function"; $("secureSeg").hidden = $("secureHint").hidden = !nat;
+    $("secureSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.secureWin ? "true" : "false"); });
     $("quickSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.quickNotif ? "true" : "false"); });
     $("dueSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.dueAlert ? "true" : "false"); });
     $("dueEveSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.dueEve ? "true" : "false"); });
@@ -4860,7 +4992,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     var box = $("stTxt"), stamp = ++stSeq;
     imgKeys().then(function (keys) {
       var main = keys.filter(function (k) { return !/:t$/.test(k); });
-      return Promise.all(keys.map(function (k) { return imgGet(k).then(function (b) { return b ? b.size : 0; }, function () { return 0; }); })).then(function (sz) {
+      return Promise.all(keys.map(function (k) { return imgGetRaw(k).then(rawSize, function () { return 0; }); })).then(function (sz) {
         var tot = sz.reduce(function (a, c) { return a + c; }, 0), stk = main.filter(function (k) { return String(k).indexOf("stk:") === 0 && !/:s$/.test(k); }).length;
         var used = usedImageIds().size, notesN = 0; notes.forEach(function (n) { if (!n.trashedAt) notesN++; });
         var txt = notesN + (notesN === 1 ? " nota" : " notas") + " · " + used + (used === 1 ? " imagen en notas" : " imágenes en notas") + " · " + stk + (stk === 1 ? " sticker" : " stickers") + "\nImágenes y stickers ocupan " + fmtBytes(tot);
@@ -4893,6 +5025,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.60.9", d: "13 nov 2026", t: "Escritura y seguridad reforzadas", lv: "Nova", cat: "nuevo+mejora", l: ["Enlaces entre notas con actualización automática al renombrar y lista de menciones", "Tablas con botones para agregar filas y columnas", "Markdown más completo: código, tachado, subtítulos y enlaces", "Protección con frase además del PIN", "Cifrado opcional del título y cifrado de las imágenes de notas protegidas", "Opción para ocultar el contenido en las apps recientes"] },
     { v: "1.60.3", d: "13 nov 2026", t: "Acceso rápido y listas más potentes", lv: "Supernova", cat: "nuevo+mejora", l: ["Widget de pantalla de inicio con acceso a nota, lista y dictado", "Atajos al mantener pulsado el ícono de la app", "Notificación fija para crear una nota al instante", "Tareas repetidas (diarias, semanales y mensuales)", "Progreso de subtareas en cada tarea", "Orden de la lista por fecha de vencimiento", "Vista Mi día con tareas atrasadas, de hoy y de la semana"] },
     { v: "1.59.6", d: "13 nov 2026", t: "Búsqueda avanzada, enfoque y cifrado", lv: "Nova", cat: "nuevo+mejora", l: ["Búsqueda avanzada con filtro por fecha y por notas con imágenes, y búsquedas guardadas", "Búsqueda también en el archivo y la papelera", "Modo enfoque para escribir sin distracciones, con cronómetro y contador de palabras", "Más logros y un historial de actividad en el perfil", "Cifrado del texto de las notas protegidas con PIN propio", "Copias de seguridad más cómodas: recordatorio configurable, copia sin imágenes y estado de la última copia"] },
     { v: "1.59.0", d: "13 nov 2026", t: "Captura rápida y calendario semanal", lv: "Hipernova", cat: "nuevo+mejora", l: ["Pulido visual de los temas claro y oscuro", "Recibir texto desde otras apps con Compartir > Tronx", "Dictado por voz para escribir las notas", "Avisos por fecha de cada tarea, con hora configurable y aviso opcional el día anterior", "Calendario con vista semanal y arrastre de avisos y tareas a otro día"] },
@@ -5935,6 +6068,13 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   });
   $("soundTest").addEventListener("click", testSound);
   $("fabSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.fab = b.dataset.v === "on"; saveSettings(); fabUpdate(); renderSettings(); });
+  $("encTitleSeg").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return; settings.encTitle = b.dataset.v === "on"; saveSettings(); renderSettings();
+    notes.forEach(function (n) { if (n.enc && encMeta.has(n)) encSoon(n); });
+  });
+  function secureApply() { try { if (window.TronxNative && window.TronxNative.setSecure) window.TronxNative.setSecure(!!settings.secureWin); } catch { /* sin puente */ } }
+  $("secureSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.secureWin = b.dataset.v === "on"; saveSettings(); renderSettings(); secureApply(); });
+  setTimeout(secureApply, 800);
   $("quickSeg").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return; settings.quickNotif = b.dataset.v === "on"; saveSettings(); renderSettings();
     if (!settings.quickNotif) { quickSync(); return; }
@@ -5967,7 +6107,12 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   function imagesForBackup() {
     var ids = Array.from(usedImageIds()), out = {};
     myStk.forEach(function (m) { ids.push("stk:" + m.id, "stk:" + m.id + ":s"); });
-    return Promise.all(ids.map(function (id) { return imgGet(id).then(function (b) { return b ? blobToDataUrl(b) : null; }).then(function (u) { if (u) out[id] = u; }); })).then(function () { return out; });
+    return Promise.all(ids.map(function (id) {
+      return imgGetRaw(id).then(function (b) {
+        if (b && b.encImg) return { e: 1, s: b.s, iv: b64(b.iv), ct: b64(b.ct), t: b.type || "" };
+        return b ? blobToDataUrl(b) : null;
+      }).then(function (u) { if (u) out[id] = u; });
+    })).then(function () { return out; });
   }
   function backupJson() {
     return JSON.stringify({ app: "tronx", version: 2, exportedAt: new Date().toISOString(), notes: Array.from(notes.values()).map(serNote), tpls: myTpls, stickers: myStk, map: window.TronxMap ? window.TronxMap.exportData() : undefined }, null, 2);
@@ -6192,7 +6337,10 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     }
     if (window.TronxMap && data && !Array.isArray(data) && data.map) window.TronxMap.importData(data.map);
     if (data && !Array.isArray(data) && data.images && typeof data.images === "object") {
-      Object.keys(data.images).forEach(function (id) { var b = dataUrlToBlob(data.images[id]); if (b) imgPut(id, b).then(function () { if (id.indexOf("stk:") === 0 && id.slice(-2) !== ":s") stkLoad(id.slice(4), true).then(function () { stkChanged(); }); if (activeId) renderImages(); }); });
+      Object.keys(data.images).forEach(function (id) {
+        var v = data.images[id];
+        if (v && typeof v === "object" && v.e === 1 && typeof v.iv === "string" && typeof v.ct === "string") { imgPutRaw(id, { encImg: 1, s: String(v.s || ""), iv: unb64(v.iv).buffer, ct: unb64(v.ct).buffer, type: String(v.t || "") }); return; }
+        var b = dataUrlToBlob(v); if (b) imgPut(id, b).then(function () { if (id.indexOf("stk:") === 0 && id.slice(-2) !== ":s") stkLoad(id.slice(4), true).then(function () { stkChanged(); }); if (activeId) renderImages(); }); });
     }
     persistNow(); renderAll();
     if (activeId) renderEditor();
@@ -6949,19 +7097,26 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       if (!isPinEnc(n)) { ok0(); return; }
       encUnlock(n, pin).then(function () { ok0(); }, function () { toast("No se pudo descifrar la nota. Si es de una copia, revisá que el PIN sea el de esa nota."); if (cancel) cancel(); });
     };
-    openLock("unlock", ok, { target: l.m === "bio" ? { m: "bio", s: "", h: "" } : l, title: "Nota protegida", sub: "Ingresá el PIN de esta nota", cancelable: true, bio: bio, onlyBio: l.m === "bio", onCancel: cancel });
+    openLock("unlock", ok, { target: l.m === "bio" ? { m: "bio", s: "", h: "" } : l, title: "Nota protegida", sub: l.m === "pass" ? "Escribí la frase de esta nota" : "Ingresá el PIN de esta nota", cancelable: true, bio: bio, onlyBio: l.m === "bio", onCancel: cancel });
   }
   function renderNoteLock() {
     var n = cur(); if (!n) return;
-    var l = n.lock, names = { pin: "un PIN propio", bio: "la huella", both: "huella o PIN" };
+    var l = n.lock, names = { pin: "un PIN propio", pass: "una frase", bio: "la huella", both: "huella o PIN" };
     $("nlSet").textContent = l ? "Cambiar protección" : "Proteger esta nota";
     $("nlOff").hidden = !l;
-    $("nlHint").textContent = l ? "Esta nota se abre con " + names[l.m] + ". "+(l.m === "pin" ? "El texto se guarda cifrado en el teléfono y en las copias de seguridad (el título, las etiquetas y las imágenes no). Con un PIN de 4 dígitos protege de curiosos, no de un ataque decidido." : "Es un candado para curiosos: no cifra la nota, y las copias de seguridad la incluyen. Para cifrar el texto elegí un PIN propio.")+" Si olvidás el PIN y no tenés huella, no se puede recuperar." : "Opcional. Podés pedir un PIN propio, la huella del teléfono o cualquiera de los dos para abrir esta nota.";
+    $("nlHint").textContent = l ? "Esta nota se abre con " + names[l.m] + ". "+(l.m === "pass" ? "El texto y las imágenes se guardan cifrados en el teléfono y en las copias de seguridad" + (settings.encTitle ? ", y el título también" : "") + ". Una frase larga protege bien aunque alguien tenga los archivos. Si la olvidás no se puede recuperar." : l.m === "pin" ? "El texto y las imágenes se guardan cifrados en el teléfono y en las copias de seguridad" + (settings.encTitle ? ", y el título también" : " (el título no: podés ocultarlo en Ajustes)") + ". Con un PIN de 4 dígitos protege de curiosos, no de un ataque decidido; para más seguridad elegí una frase." : "Es un candado para curiosos: no cifra la nota, y las copias de seguridad la incluyen. Para cifrar el texto elegí un PIN propio.")+" Si olvidás el PIN y no tenés huella, no se puede recuperar." : "Opcional. Podés pedir un PIN propio, la huella del teléfono o cualquiera de los dos para abrir esta nota.";
     bioAvail().then(function (a) { $("nlBio").hidden = $("nlBoth").hidden = !a; });
   }
   function setNoteLock(n, lock, pin) {
+    var enc = !!(lock && (lock.m === "pin" || lock.m === "pass") && pin);
+    if (!enc && n.images.length && isPinEnc(n) && encMeta.has(n)) { /* primero las imágenes vuelven a claro, después se cambia el bloqueo */
+      encRelease(n).then(function () { setNoteLock2(n, lock, pin, enc); }); return;
+    }
+    setNoteLock2(n, lock, pin, enc);
+  }
+  function setNoteLock2(n, lock, pin, enc) {
     encDrop(n); n.lock = lock;
-    if (lock && lock.m === "pin" && pin) encUnlock(n, pin);
+    if (enc) encUnlock(n, pin);
     changed(n); persistNow(); renderNoteLock(); renderAll(); syncReminders();
     if (lock) unlocked.add(n.id); else unlocked.delete(n.id);
   }
@@ -6974,7 +7129,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
         bioAuth("Confirmá con tu huella para proteger la nota").then(function () { setNoteLock(n, { m: "bio", s: "", h: "" }); toast("Nota protegida con huella"); }).catch(function () { toast("No se pudo confirmar la huella"); });
         return;
       }
-      openLock("set1", null, { setCb: function (s, h, pin) { setNoteLock(n, { m: m, s: s, h: h }, pin); toast(m === "both" ? "Nota protegida: huella o PIN" : "Nota protegida con PIN"); }, title: "PIN de la nota", sub: "Elegí 4 dígitos", cancelable: true, onCancel: function () {} });
+      openLock("set1", null, { setCb: function (s, h, pin) { setNoteLock(n, { m: m, s: s, h: h }, pin); toast(m === "both" ? "Nota protegida: huella o PIN" : m === "pass" ? "Nota protegida con frase" : "Nota protegida con PIN"); }, title: m === "pass" ? "Frase de la nota" : "PIN de la nota", sub: m === "pass" ? "Elegí una frase de al menos 6 caracteres" : "Elegí 4 dígitos", cancelable: true, pass: m === "pass", onCancel: function () {} });
     }
     if (n.lock) askNote(n, go); else go();
   });
@@ -6982,7 +7137,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 
   /* ---------- bloqueo con PIN ---------- */
   var lockTarget = null, lockSetCb = null, lockCancelCb = null;
-  var PINKEY = "tronx.pin.v1", lockMode = "unlock", lockBuf = "", lockTmp = "", lockOk = null, lockBusy = false, lockFails = 0, lockUntil = 0, lockTimer = 0, hiddenAt = 0;
+  var lockPassMode = false, PINKEY = "tronx.pin.v1", lockMode = "unlock", lockBuf = "", lockTmp = "", lockOk = null, lockBusy = false, lockFails = 0, lockUntil = 0, lockTimer = 0, hiddenAt = 0;
   function pinData() { try { var d = JSON.parse(lsGet(PINKEY) || "null"); return d && d.h && d.s ? d : null; } catch { return null; } }
   function pinHash(pin, salt) {
     var txt = "tronx|" + salt + "|" + pin;
@@ -7001,6 +7156,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   }
   function lockDraw() {
     var d = $("lockDots"); d.textContent = "";
+    if (lockPassMode) { $("lockPass").value = ""; return; }
     for (var i = 0; i < 4; i++) d.appendChild(el("i", i < lockBuf.length ? "on" : ""));
   }
   function lockPadBuild() {
@@ -7015,10 +7171,14 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     lockMode = mode; lockOk = onOk || null; lockBuf = ""; lockTmp = ""; lockBusy = false; lockPadBuild();
     lockTarget = o.target || null; lockSetCb = o.setCb || null; lockCancelCb = o.onCancel || null;
     var bioMode = !!o.bio;
+    lockPassMode = !!o.pass || !!(o.target && o.target.m === "pass");
     var t = { unlock: ["Tronx bloqueado", "Ingresá tu PIN"], verify: ["Confirmá tu PIN", "Ingresá el PIN actual"], set1: ["Nuevo PIN", "Elegí 4 dígitos"], set2: ["Repetí el PIN", "Escribilo otra vez"] }[mode];
+    if (lockPassMode) t = { unlock: ["Nota protegida", "Escribí la frase de esta nota"], verify: ["Confirmá", "Escribí la frase"], set1: ["Frase de la nota", "Elegí una frase de al menos 6 caracteres"], set2: ["Repetí la frase", "Escribila otra vez"] }[mode];
     $("lockT").textContent = o.title || t[0]; $("lockS").textContent = bioMode && o.onlyBio ? "Usá tu huella para abrirla" : (o.sub || t[1]);
     $("lockCancel").hidden = mode === "unlock" && !o.cancelable; $("lock").hidden = false; lockDraw();
-    $("lockPad").hidden = $("lockDots").hidden = !!o.onlyBio;
+    $("lockPad").hidden = $("lockDots").hidden = !!o.onlyBio || lockPassMode;
+    $("lockPass").hidden = $("lockPassGo").hidden = !lockPassMode; $("lockPass").value = "";
+    if (lockPassMode) setTimeout(function () { try { $("lockPass").focus(); } catch { /* sin foco */ } }, 120);
     $("lockBio").hidden = !bioMode;
     lockPadState();
     if (mode === "unlock" && !o.target && !bioMode && settings.pinBio && pinData()) {
@@ -7037,6 +7197,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   function lockPadState() {
     var cool = Date.now() < lockUntil;
     $("lockPad").querySelectorAll("button").forEach(function (b) { b.disabled = cool || !b.dataset.k; });
+    $("lockPass").disabled = $("lockPassGo").disabled = cool;
     if (cool) {
       clearInterval(lockTimer);
       lockTimer = setInterval(function () {
@@ -7061,14 +7222,19 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     if (lockBuf.length >= 4) return;
     lockBuf += k; lockDraw();
     if (lockBuf.length < 4) return;
+    lockSubmit(lockBuf);
+  }
+  function lockSubmit(pin) {
+    if (lockBusy || Date.now() < lockUntil) return;
+    if (lockPassMode && (lockMode === "set1") && pin.length < 6) { lockFail("Usá al menos 6 caracteres"); return; }
     lockBusy = true;
-    var pin = lockBuf, d = lockTarget || pinData();
+    var d = lockTarget || pinData();
     if (lockMode === "unlock" || lockMode === "verify") {
-      pinHash(pin, d ? d.s : "").then(function (h) { if (d && h === d.h) { lockBusy = false; lastPin = lockTarget ? pin : ""; lockDone(); } else lockFail("PIN incorrecto"); });
+      pinHash(pin, d ? d.s : "").then(function (h) { if (d && h === d.h) { lockBusy = false; lastPin = lockTarget ? pin : ""; lockDone(); } else lockFail(lockPassMode ? "Frase incorrecta" : "PIN incorrecto"); });
     } else if (lockMode === "set1") {
-      lockTmp = pin; lockMode = "set2"; lockBuf = ""; lockBusy = false; $("lockT").textContent = "Repetí el PIN"; $("lockS").textContent = "Escribilo otra vez"; lockDraw();
+      lockTmp = pin; lockMode = "set2"; lockBuf = ""; lockBusy = false; $("lockT").textContent = lockPassMode ? "Repetí la frase" : "Repetí el PIN"; $("lockS").textContent = "Escribila otra vez".replace("Escribila", lockPassMode ? "Escribila" : "Escribilo"); lockDraw();
     } else if (lockMode === "set2") {
-      if (pin !== lockTmp) { lockMode = "set1"; lockFail("No coinciden. Elegí uno nuevo"); $("lockT").textContent = "Nuevo PIN"; return; }
+      if (pin !== lockTmp) { lockMode = "set1"; lockFail(lockPassMode ? "No coinciden. Elegí otra" : "No coinciden. Elegí uno nuevo"); $("lockT").textContent = lockPassMode ? "Frase de la nota" : "Nuevo PIN"; return; }
       var salt = uid() + uid();
       if (lockSetCb) { pinHash(pin, salt).then(function (h) { var cb = lockSetCb; lockSetCb = null; lockBusy = false; $("lock").hidden = true; lockBuf = ""; lockOk = null; lockCancelCb = null; cb(salt, h, pin); }); return; }
       pinHash(pin, salt).then(function (h) { lsSet(PINKEY, JSON.stringify({ s: salt, h: h })); lockBusy = false; lockDone(); renderPinUI(); toast("PIN activado"); });
@@ -7077,8 +7243,10 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("lockPad").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b && b.dataset.k) lockEnter(b.dataset.k); });
   $("lockCancel").addEventListener("click", function () { $("lock").hidden = true; lockOk = null; lockSetCb = null; lockTarget = null; var f = lockCancelCb; lockCancelCb = null; if (f) f(); });
   $("lockBio").addEventListener("click", lockBioTry);
+  $("lockPassGo").addEventListener("click", function () { var v = $("lockPass").value; if (v) lockSubmit(v); });
+  $("lockPass").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); $("lockPassGo").click(); } });
   document.addEventListener("keydown", function (e) {
-    if ($("lock").hidden) return;
+    if ($("lock").hidden || lockPassMode) return;
     if (/^[0-9]$/.test(e.key)) lockEnter(e.key); else if (e.key === "Backspace") lockEnter("⌫");
   });
   $("pinBioBtn").addEventListener("click", function () {

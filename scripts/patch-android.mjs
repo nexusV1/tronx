@@ -117,6 +117,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import com.getcapacitor.BridgeActivity;
 import org.json.JSONObject;
@@ -129,7 +130,20 @@ public class MainActivity extends BridgeActivity {
     // Puente para que la web actualice el texto del widget.
     public static class TronxBridge {
         private final Context ctx;
-        TronxBridge(Context c) { ctx = c.getApplicationContext(); }
+        private final MainActivity act;
+        TronxBridge(MainActivity a) { act = a; ctx = a.getApplicationContext(); }
+
+        // Oculta el contenido en la lista de apps recientes (y bloquea las capturas de pantalla).
+        @JavascriptInterface
+        public void setSecure(final boolean on) {
+            act.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (on) act.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                    else act.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+            });
+        }
 
         @JavascriptInterface
         public void setWidget(String line1, String line2) {
