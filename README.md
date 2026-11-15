@@ -228,6 +228,7 @@ Pasos, una sola vez:
 **1.60.9**: Esta actualización mejora la escritura y refuerza la protección de las notas privadas.
 **1.61.5**: Esta actualización refuerza los respaldos, permite restaurar notas sueltas, unir duplicadas y mejora la lectura en tablet, horizontal y con accesibilidad.
 **1.61.6**: Esta actualización corrige el botón de buscar notas duplicadas y el marcador del día actual en el mapa de actividad.
+**1.62.6**: Esta actualización renueva el perfil con foto, portada y frase, y suma una Sala de logros con medallas, categorías y progreso.
 **1.62.2**: Esta actualización reúne el buscador, el archivo y la papelera en una sola fila y renueva la barra inferior con un botón + de esquinas suaves.
 **1.61.9**: Esta actualización renueva el inicio con navegación inferior flotante, una cabecera más corta, pestañas en píldora y tarjetas con altura natural.
 **1.61.7**: Esta actualización renueva la pantalla de inicio con una cabecera más compacta, más espacio entre elementos, filtros plegables y un estado vacío más claro.

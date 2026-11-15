@@ -670,29 +670,103 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .lkempty { margin: 0; padding: 14px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; font-size: 14px; }
 
 /* perfil */
-.pf-hero { display: grid; place-items: center; margin: 4px 0 6px; }
-.pf-av { position: relative; width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 38%, rgba(130, 100, 255, 0.35), var(--panel)); box-shadow: 0 0 0 2px var(--accent), 0 0 30px -4px var(--accent); }
-.pf-av .ic { width: 78px; height: 78px; font-size: 58px; }
-.panel input[type="text"].pfname { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 8px 12px; font-size: 17px; color: var(--ink); }
-.panel input[type="text"].pfname:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-.pf-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.pf-stat { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px 6px; text-align: center; display: grid; gap: 2px; }
+.pfov { align-items: stretch; padding-top: 0; background: var(--solid); }
+.pfpage { width: 100%; max-width: 560px; margin: 0 auto; height: 100%; overflow-y: auto; background: var(--solid); padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); -webkit-overflow-scrolling: touch; }
+.pf-ban { height: calc(150px + env(safe-area-inset-top, 0px)); position: relative; background: linear-gradient(135deg, #c4246b, #7c4dff 60%, #2b6cff); }
+.pf-ban::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.35), transparent 40%), radial-gradient(circle at 15% 90%, rgba(255, 255, 255, 0.18), transparent 35%); pointer-events: none; }
+.pf-bar { position: absolute; z-index: 2; top: calc(14px + env(safe-area-inset-top, 0px)); left: 14px; right: 14px; display: flex; justify-content: space-between; }
+.pf-cb { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; color: #fff; background: rgba(255, 255, 255, 0.22); border: 1px solid rgba(255, 255, 255, 0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); cursor: pointer; }
+.pf-seg button, .pf-link, .pf-chips button, .pf-mode button, .pf-emo button, .pf-sw button, .pf-edit, .pf-cb { font: inherit; cursor: pointer; background-clip: padding-box; }
+.pf-seg button, .pf-link, .pf-emo button { border: 0; background: transparent; }
+.pf-cb svg, .pf-edit svg, .pf-mode svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.pf-avw { position: relative; width: 132px; height: 132px; margin: -66px auto 0; z-index: 3; }
+.pf-av { position: relative; width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; overflow: hidden; border: 5px solid var(--solid); box-shadow: 0 14px 30px -12px rgba(80, 40, 200, 0.5); color: #fff; font-weight: 800; letter-spacing: -0.04em; }
+.pf-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pf-av .pf-ini { font-size: 48px; line-height: 1; font-family: var(--font-display, inherit); }
+.pf-av .ic { width: 70px; height: 70px; font-size: 62px; }
+.pf-av.pv { width: 116px; height: 116px; margin: 0 auto; }
+.pf-av.pv .pf-ini { font-size: 42px; }
+.pf-edit { position: absolute; right: 2px; bottom: 6px; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--accent); border: 3px solid var(--solid); cursor: pointer; }
+.pf-edit svg { width: 16px; height: 16px; }
+.pf-id { text-align: center; padding: 12px 22px 0; }
+.pf-id h2 { margin: 0; font-size: 26px; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.pf-id p { margin: 5px 0 0; color: var(--muted); font-size: 14.5px; line-height: 1.4; overflow-wrap: anywhere; }
+.pf-id p:empty { display: none; }
+.pf-lvl { display: inline-flex; align-items: center; gap: 7px; margin-top: 11px; padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; }
+.pf-seg { display: flex; gap: 2px; margin: 18px 18px 0; padding: 4px; border-radius: 16px; background: var(--accent-soft); }
+.pf-seg button { flex: 1; min-height: 40px; border-radius: 12px; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+.pf-seg button[aria-selected="true"] { background: var(--raised); color: var(--ink); box-shadow: 0 4px 12px -6px var(--card-glow); }
+.pf-pane { padding: 0 18px; }
+.pf-pane[hidden] { display: none; }
+.pf-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; padding-top: 14px; }
+.pf-card .pf-stats { padding-top: 0; }
+.pf-stat { border: 1px solid var(--line); border-radius: 18px; background: var(--panel); padding: 13px 6px; text-align: center; display: grid; gap: 3px; }
 .pf-stat b { font-family: var(--font-display); font-size: 22px; line-height: 1.1; }
 .pf-stat span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.pf-heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 4px; margin: 12px 0 0; }
+.pf-card { margin-top: 12px; border: 1px solid var(--line); border-radius: 20px; background: var(--panel); padding: 14px; }
+.pf-card h4 { margin: 0 0 11px; display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.pf-link { color: var(--accent); font-weight: 700; font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; }
+.pf-strip { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.pf-strip::-webkit-scrollbar { display: none; }
+.pf-mini { flex: none; width: 66px; text-align: center; font-size: 11px; font-weight: 600; line-height: 1.25; color: var(--muted); }
+.pf-mini .md { margin: 0 auto 6px; }
+.md { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-size: 24px; flex: none; }
+.md.gold { background: radial-gradient(circle at 35% 25%, #ffe9a0, #e5a824 70%); box-shadow: 0 8px 16px -6px #e5a824, inset 0 -3px 0 rgba(0, 0, 0, 0.12); }
+.md.silver { background: radial-gradient(circle at 35% 25%, #fff, #b9bfd6 70%); box-shadow: 0 8px 16px -6px #9aa2c4, inset 0 -3px 0 rgba(0, 0, 0, 0.1); }
+.md.bronze { background: radial-gradient(circle at 35% 25%, #ffd0a8, #c8773a 70%); box-shadow: 0 8px 16px -6px #c8773a, inset 0 -3px 0 rgba(0, 0, 0, 0.14); }
+.md.off { background: var(--line); color: var(--muted); box-shadow: none; }
+.md.off span { opacity: 0.45; filter: grayscale(1); }
+.pf-heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 4px; }
 .pf-heat i { aspect-ratio: 1; border-radius: 4px; background: var(--line); }
 .pf-heat i.l1 { background: var(--accent); opacity: 0.3; } .pf-heat i.l2 { background: var(--accent); opacity: 0.5; }
 .pf-heat i.l3 { background: var(--accent); opacity: 0.75; } .pf-heat i.l4 { background: var(--accent); }
 .pf-heat i.today { outline: 2px solid var(--ink); outline-offset: 1px; }
-.pf-ach-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-left: 6px; }
-.pf-ach { display: grid; gap: 8px; }
-.pf-a { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px 12px; }
-.pf-a .md { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; background: var(--line); color: var(--muted); }
-.pf-a.on .md { background: radial-gradient(circle at 50% 35%, #ffd76a, #d99a1d); color: #3a2400; box-shadow: 0 0 14px -2px #f5b82e; }
-.pf-a b { display: block; font-size: 14px; } .pf-a span { display: block; font-size: 12px; color: var(--muted); }
-.pf-a:not(.on) b { color: var(--muted); }
-.pf-a .pb2 { height: 4px; border-radius: 2px; background: var(--line); margin-top: 6px; overflow: hidden; } .pf-a .pb2 i { display: block; height: 100%; background: var(--accent); }
 .pf-since { margin: 10px 0 0; text-align: center; font-size: 13px; color: var(--muted); }
+.pf-foot { margin: 18px 22px 0; }
+/* sala de logros */
+.pf-ahead { display: flex; align-items: center; gap: 16px; margin-top: 14px; padding: 16px; border-radius: 22px; color: #fff; background: linear-gradient(160deg, #2a1a6e, #7c4dff 70%, #c4246b); }
+.pf-ring { position: relative; width: 84px; height: 84px; flex: none; }
+.pf-ring svg { width: 84px; height: 84px; fill: none; stroke-width: 7; stroke-linecap: round; }
+.pf-ring .bg { stroke: rgba(255, 255, 255, 0.25); } .pf-ring .fg { stroke: #ffd76a; stroke-dasharray: 0 214; transition: stroke-dasharray 0.6s ease; }
+.pf-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 20px; }
+.pf-atx { display: grid; gap: 8px; min-width: 0; }
+.pf-atx strong { font-size: 17px; }
+.pf-atx span { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; font-weight: 600; }
+.pf-atx span i { font-style: normal; background: rgba(255, 255, 255, 0.16); border-radius: 10px; padding: 4px 9px; }
+.pf-chips { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; padding: 14px 0 4px; }
+.pf-chips::-webkit-scrollbar { display: none; }
+.pf-chips button { flex: none; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: 13px; font-weight: 600; color: var(--muted); }
+.pf-chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--solid); }
+.pf-sec { margin: 14px 0 8px; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.pf-a { display: grid; grid-template-columns: 56px 1fr; gap: 13px; align-items: center; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); padding: 11px 12px; margin-bottom: 8px; }
+.pf-a .md { width: 52px; height: 52px; font-size: 22px; }
+.pf-a b { display: block; font-size: 14.5px; }
+.pf-a span.d { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.pf-a:not(.on) b { color: var(--ink); }
+.pf-a .pbl { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-top: 7px; font-family: var(--font-mono); }
+.pf-a .pb2 { height: 6px; border-radius: 3px; background: var(--line); margin-top: 5px; overflow: hidden; } .pf-a .pb2 i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), #7c4dff); }
+.pf-new { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 6px; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 700; vertical-align: 1px; }
+.pf-hist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pf-hist li { display: grid; grid-template-columns: 54px 1fr; gap: 8px; font-size: 13.5px; }
+.pf-hist time { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); padding-top: 2px; text-transform: uppercase; }
+/* editor de perfil */
+.pfed h3 { margin: 16px 0 8px; }
+.pf-pvw { padding: 8px 0 12px; }
+.pf-mode { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.pf-mode button { display: grid; justify-items: center; gap: 6px; padding: 12px 6px; border: 1.5px solid var(--line); border-radius: 18px; background: var(--panel); font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.pf-mode button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.pf-mode svg { width: 24px; height: 24px; }
+.pf-photoact { display: flex; gap: 8px; margin-top: 10px; }
+.pf-emo { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.pf-emo button { min-height: 42px; border-radius: 12px; font-size: 22px; }
+.pf-emo button[aria-pressed="true"] { background: var(--accent-soft); outline: 2px solid var(--accent); }
+.pf-sw { display: flex; flex-wrap: wrap; gap: 11px; }
+.pf-sw button { width: 36px; height: 36px; border-radius: 50%; border: 0; }
+.pf-sw.cov button { width: 58px; border-radius: 12px; }
+.pf-sw button[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 2px; }
+.pf-opt { font-weight: 400; color: var(--muted); font-size: 13px; }
+.panel input[type="text"].pfname { width: 100%; min-height: 46px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 8px 14px; font-size: 16px; color: var(--ink); }
+.panel input[type="text"].pfname:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
 @media (prefers-reduced-motion: reduce) {
   .menu *, .menu *::before, .menu *::after { animation: none !important; transition-duration: 0.01s !important; transition-delay: 0s !important; }
@@ -1849,27 +1923,63 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     <p class="hint">El botón + crea una nota (mantenlo pulsado para una lista). En la vista de lista, deslizá una tarjeta a la derecha para fijarla o a la izquierda para archivarla.</p>
   </section>
 </div>
-<div class="overlay" id="profile" hidden>
-  <section class="panel" role="dialog" aria-modal="true" aria-label="Perfil">
-    <div class="sheethead"><strong>Perfil</strong><button class="btn small" id="profileClose" type="button">Listo</button></div>
-    <div class="pf-hero"><span class="pf-av" id="pfAv"></span></div>
-    <h3>Tu nombre</h3>
+<div class="overlay pfov" id="profile" hidden>
+  <section class="pfpage" role="dialog" aria-modal="true" aria-label="Perfil">
+    <div class="pf-ban" id="pfBan">
+      <div class="pf-bar">
+        <button class="pf-cb" id="profileClose" type="button" aria-label="Cerrar el perfil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="pf-cb" id="pfEditTop" type="button" aria-label="Editar perfil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg></button>
+      </div>
+    </div>
+    <div class="pf-avw"><span class="pf-av" id="pfAv"></span><button class="pf-edit" id="pfEdit" type="button" aria-label="Cambiar foto o avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg></button></div>
+    <div class="pf-id"><h2 id="pfNameOut">Explorador</h2><p id="pfBioOut"></p><span class="pf-lvl" id="pfLvl"></span></div>
+    <div class="pf-seg" id="pfSeg" role="tablist" aria-label="Secciones del perfil">
+      <button type="button" role="tab" data-pt="sum" aria-selected="true">Resumen</button>
+      <button type="button" role="tab" data-pt="ach" aria-selected="false">Logros</button>
+      <button type="button" role="tab" data-pt="act" aria-selected="false">Actividad</button>
+    </div>
+    <div class="pf-pane" id="pfSum">
+      <div class="pf-stats" id="pfStats"></div>
+      <p class="pf-since" id="pfSince"></p>
+      <div class="pf-card"><h4>Últimos logros <button class="pf-link" id="pfSeeAll" type="button">Ver todos</button></h4><div class="pf-strip" id="pfStrip"></div></div>
+      <div class="pf-card"><h4>Tu actividad <span>12 semanas</span></h4><div class="pf-heat" id="pfHeat" role="img" aria-label="Actividad de las últimas 12 semanas"></div><p class="pf-since" id="pfBest"></p></div>
+    </div>
+    <div class="pf-pane" id="pfAchP" hidden>
+      <div class="pf-ahead">
+        <div class="pf-ring"><svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="34" class="bg"/><circle cx="42" cy="42" r="34" class="fg" id="pfRing" transform="rotate(-90 42 42)"/></svg><b id="pfRingN">0%</b></div>
+        <div class="pf-atx"><strong id="pfAchT">0 de 0 logros</strong><span id="pfTiers"></span></div>
+      </div>
+      <div class="pf-chips" id="pfAchChips" role="group" aria-label="Categorías de logros"></div>
+      <div id="pfAch"></div>
+    </div>
+    <div class="pf-pane" id="pfActP" hidden>
+      <div class="pf-card"><h4>Tu escritura</h4><div class="pf-stats" id="pfWrite"></div></div>
+      <div class="pf-card"><h4>Historial</h4><ol class="pf-hist" id="pfHist"></ol></div>
+    </div>
+    <p class="hint pf-foot">Tu perfil vive solo en este teléfono, igual que tus notas. No hace falta cuenta ni internet.</p>
+  </section>
+</div>
+<div class="overlay" id="pfEditor" hidden>
+  <section class="panel pfed" role="dialog" aria-modal="true" aria-label="Editar perfil">
+    <div class="sheethead"><strong>Tu perfil</strong><button class="btn small primary" id="pfEdDone" type="button">Listo</button></div>
+    <div class="pf-pvw"><span class="pf-av pv" id="pfPv"></span></div>
+    <div class="pf-mode" id="pfMode" role="group" aria-label="Tipo de avatar">
+      <button type="button" data-m="p"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="12" cy="12" r="3.5"/></svg>Foto</button>
+      <button type="button" data-m="i"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19l5-14h4l5 14M8 14h8"/></svg>Iniciales</button>
+      <button type="button" data-m="e"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 007 0M9 9.5h.01M15 9.5h.01"/></svg>Emoji</button>
+    </div>
+    <input type="file" id="pfFile" accept="image/*" hidden>
+    <div class="pf-photoact" id="pfPhotoAct" hidden><button class="btn small" id="pfPhotoChg" type="button">Cambiar foto</button><button class="btn small danger" id="pfPhotoDel" type="button">Quitar foto</button></div>
+    <div id="pfEmoBox" hidden><h3>Elegí un emoji</h3><div class="pf-emo" id="pfEmo"></div></div>
+    <h3>Color del avatar</h3>
+    <div class="pf-sw" id="pfSw"></div>
+    <h3>Nombre</h3>
     <input class="pfname" id="pfName" type="text" maxlength="24" placeholder="Explorador" autocomplete="off" autocapitalize="words" aria-label="Tu nombre">
-    <h3>Tu avatar</h3>
-    <div class="igrid stk" id="pfStk"></div>
-    <div class="igrid" id="pfEmo" style="margin-top:8px"></div>
-    <h3>Tu universo</h3>
-    <div class="pf-stats" id="pfStats"></div>
-    <p class="pf-since" id="pfSince"></p>
-    <h3>Tu escritura</h3>
-    <div class="pf-stats" id="pfWrite"></div>
-    <div class="pf-heat" id="pfHeat" role="img" aria-label="Actividad de las últimas 12 semanas"></div>
-    <p class="pf-since" id="pfBest"></p>
-    <h3>Logros <span class="pf-ach-n" id="pfAchN"></span></h3>
-    <div class="pf-ach" id="pfAch"></div>
-    <h3>Historial</h3>
-    <ol class="pf-hist" id="pfHist"></ol>
-    <p class="hint">Tu perfil vive solo en este teléfono, igual que tus notas. No hace falta cuenta ni internet.</p>
+    <h3>Frase <span class="pf-opt">(opcional)</span></h3>
+    <input class="pfname" id="pfBioIn" type="text" maxlength="60" placeholder="Algo sobre vos" autocomplete="off" aria-label="Tu frase">
+    <h3>Portada</h3>
+    <div class="pf-sw cov" id="pfCov"></div>
+    <p class="hint">La foto se guarda solo en este teléfono y no sale de él. Las insignias son solo para las notas.</p>
   </section>
 </div>
 <div class="overlay" id="links" hidden>
@@ -1981,7 +2091,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.62.2";
+  var APP_VERSION = "1.62.6";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -2503,6 +2613,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     if (name === "settings") $("settings").hidden = true;
     else if (name === "custom") $("custom").hidden = true;
     else if (name === "profile") $("profile").hidden = true;
+    else if (name === "pfedit") $("pfEditor").hidden = true;
     else if (name === "links") $("links").hidden = true;
     else if (name === "menu") closeMenuUI();
     else if (name === "sheet") { $("sheet").hidden = true; $("scrim").hidden = true; }
@@ -5159,6 +5270,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.62.6", d: "14 nov 2026", t: "Perfil renovado y Sala de logros", lv: "Supernova", cat: "nuevo+mejora", l: ["Perfil en pantalla completa con portada, avatar grande, frase personal y nivel", "Avatar con foto de la galería, iniciales con color o emoji; las insignias quedan solo para las notas", "Sala de logros: medallas de bronce, plata y oro, progreso general y barras de avance", "Logros organizados por categoría: Escritura, Constancia, Orden, Enfoque y Seguridad", "Perfil dividido en Resumen, Logros y Actividad, con editor propio y portada a elegir"] },
     { v: "1.62.2", d: "14 nov 2026", t: "Inicio más cómodo", lv: "Nova", cat: "rediseno", l: ["Buscador, Archivo y Papelera en una sola fila, con contador en cada ícono", "Se quitó la pestaña Notas de la parte superior: ahora se accede desde la barra inferior", "Barra inferior renovada: selector plano y botón + cuadrado con esquinas suaves", "Desde Archivo o Papelera, el botón Notas de la barra inferior vuelve a tus notas"] },
     { v: "1.61.9", d: "14 nov 2026", t: "Inicio renovado", lv: "Nova", cat: "rediseno", l: ["Navegación inferior flotante: Notas y Constelaciones quedan al alcance del pulgar, junto al botón +", "Cabecera mucho más corta: más notas visibles sin desplazarse", "Pestañas Notas, Archivo y Papelera con estilo de píldora", "Tarjetas con altura natural: la vista previa se lee completa, sin recortes ni degradados"] },
     { v: "1.61.7", d: "14 nov 2026", t: "Inicio rediseñado", lv: "Eclipse", cat: "rediseno", l: ["Nueva pantalla de inicio: cabecera compacta, más espacio entre elementos y tarjetas más amplias", "Buscador con ícono y bordes más suaves", "Filtros plegables: el orden se lee completo y tipo/fecha se abren con un botón, con marca cuando hay un filtro activo", "Estado vacío con ilustración y mensaje claro", "Botón flotante más grande como acción principal de nueva nota en el teléfono"] },
@@ -5750,18 +5862,46 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("custom").addEventListener("click", function (e) { if (e.target === $("custom")) closeLayer("custom"); });
 
   /* ---------- perfil (se guarda solo en este teléfono, dentro de los ajustes) ---------- */
-  var PF_DEFAULT = "s:tierra";
+    var PF_COLORS = ["linear-gradient(140deg,#ff7ab0,#c4246b)", "linear-gradient(140deg,#8f7bff,#4b2fd6)", "linear-gradient(140deg,#4fd1c5,#0d8a82)", "linear-gradient(140deg,#ffb35c,#e0601a)", "linear-gradient(140deg,#6fb1ff,#1f5fd6)", "linear-gradient(140deg,#4a4e7a,#17183b)"];
+  var PF_COVERS = ["linear-gradient(135deg,#c4246b,#7c4dff 60%,#2b6cff)", "linear-gradient(135deg,#0d8a82,#2b6cff)", "linear-gradient(135deg,#e0601a,#c4246b)", "linear-gradient(135deg,#17183b,#4b2fd6)"];
+  var PF_EMOJIS = ["😀", "😎", "🥳", "🤓", "😺", "🦊", "🐼", "🦉", "🐙", "🦄", "🌙", "⭐", "🚀", "🌿", "🌸", "🔥", "☕", "🎧", "📚", "🎨", "⚡", "🌈", "🍀", "💡"];
   function getProfile() {
     var p = settings.profile && typeof settings.profile === "object" ? settings.profile : {};
-    return { name: String(p.name || "").replace(/\s+/g, " ").trim().slice(0, 24), avatar: cleanIcon(p.avatar) || PF_DEFAULT };
+    var photo = typeof p.photo === "string" && p.photo.indexOf("data:image/") === 0 && p.photo.length < 400000 ? p.photo : "";
+    var av = String(p.avatar || ""), emo = av.slice(0, 2) === "e:" ? cleanIcon(av) : "";
+    var mode = av === "p" && photo ? "p" : emo ? "e" : "i";
+    var ci = Math.round(Number(p.color)), vi = Math.round(Number(p.cover));
+    return {
+      name: String(p.name || "").replace(/\s+/g, " ").trim().slice(0, 24),
+      bio: String(p.bio || "").replace(/\s+/g, " ").trim().slice(0, 60),
+      mode: mode, emoji: emo, photo: photo,
+      color: ci >= 0 && ci < PF_COLORS.length ? ci : 0, cover: vi >= 0 && vi < PF_COVERS.length ? vi : 0
+    };
   }
   function setProfile(patch) {
-    var p = getProfile();
+    var o = settings.profile && typeof settings.profile === "object" ? settings.profile : {}, g = getProfile();
+    var p = { name: o.name != null ? String(o.name).slice(0, 24) : g.name, bio: g.bio, color: g.color, cover: g.cover, photo: g.photo, avatar: g.mode === "p" ? "p" : g.mode === "e" ? g.emoji : "i" };
     if (patch.name != null) p.name = String(patch.name).slice(0, 24);
-    if (patch.avatar != null) p.avatar = cleanIcon(patch.avatar) || PF_DEFAULT;
+    if (patch.bio != null) p.bio = String(patch.bio).slice(0, 60);
+    if (patch.color != null) p.color = patch.color;
+    if (patch.cover != null) p.cover = patch.cover;
+    if (patch.photo != null) p.photo = patch.photo;
+    if (patch.avatar != null) p.avatar = patch.avatar;
     settings.profile = p; saveSettings();
   }
-  function paintAvatar(box, icon) { box.textContent = ""; var ic = iconSpan(icon, "pf"); if (ic) box.appendChild(ic); }
+  function pfInitials(name) {
+    var w = String(name || "").trim().split(/\s+/).filter(Boolean);
+    if (!w.length) return "E";
+    return (w[0].charAt(0) + (w.length > 1 ? w[1].charAt(0) : "")).toUpperCase();
+  }
+  function paintAvatar(box, p) {
+    box.textContent = ""; box.style.background = "";
+    if (p.mode === "p") { var im = el("img"); im.alt = ""; im.src = p.photo; box.appendChild(im); return; }
+    box.style.background = PF_COLORS[p.color];
+    if (p.mode === "e") { var ic = iconSpan(p.emoji, "pf"); if (ic) { box.appendChild(ic); return; } }
+    var s = el("span", "pf-ini"); s.textContent = pfInitials(p.name); box.appendChild(s);
+  }
+
   /* ---------- escritura: palabras, rachas y logros ---------- */
   var wcMap = null, statsSaveT = 0;
   function dayKey(ts) { var d = new Date(ts); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
@@ -5842,6 +5982,60 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     { id: "rm1", n: "Puntual", d: "Programá un aviso", g: function (s) { return s.rem; }, t: 1 },
     { id: "sk1", n: "Con estilo", d: "Creá un sticker propio", g: function (s) { return myStk.length; }, t: 1 }
   ];
+  var ACH_META = {
+    n1: ["Escritura", "📝", 1], n10: ["Escritura", "🗒️", 1], n50: ["Escritura", "📚", 2], n100: ["Escritura", "🏆", 3],
+    w1k: ["Escritura", "✍️", 1], w10k: ["Escritura", "📖", 2], w50k: ["Escritura", "🖋️", 3], im5: ["Escritura", "📷", 2], sk1: ["Escritura", "🎨", 1],
+    s3: ["Constancia", "🔥", 1], s7: ["Constancia", "🔥", 2], s30: ["Constancia", "📅", 3], rm1: ["Constancia", "⏰", 1],
+    l1: ["Orden", "✅", 1], t5: ["Orden", "🏷️", 1], c1: ["Orden", "🌌", 2], v5: ["Orden", "🔗", 2], d10: ["Orden", "☑️", 1], d100: ["Orden", "💪", 3], fo3: ["Orden", "🗂️", 2], ar1: ["Orden", "📦", 1],
+    f1: ["Enfoque", "🎯", 1], f60: ["Enfoque", "⏱️", 2], f600: ["Enfoque", "🧘", 3],
+    bk: ["Seguridad", "💾", 1], lk: ["Seguridad", "🔒", 1]
+  };
+  ACH.forEach(function (a) { var m = ACH_META[a.id] || ["Orden", "⭐", 1]; a.c = m[0]; a.e = m[1]; a.tier = m[2]; });
+  var PF_CATS = ["Todos", "Escritura", "Constancia", "Orden", "Enfoque", "Seguridad"], pfCat = "Todos";
+  var TIER_CLS = ["", "bronze", "silver", "gold"], TIER_NM = ["", "bronce", "plata", "oro"];
+  function medal(a, on) {
+    var m = el("div", "md " + (on ? TIER_CLS[a.tier] : "off")), s = el("span"); s.textContent = a.e; m.appendChild(s); m.setAttribute("aria-hidden", "true"); return m;
+  }
+  function fmtN(n) { return Number(n).toLocaleString("es"); }
+  function renderAch() {
+    var st = achState(), box = $("pfAch"), done = 0, cnt = [0, 0, 0, 0]; box.textContent = "";
+    ACH.forEach(function (a) { if (settings.ach[a.id]) { done++; cnt[a.tier]++; } });
+    var pct = Math.round(done / ACH.length * 100);
+    $("pfRing").style.strokeDasharray = (pct * 2.136) + " 214"; $("pfRingN").textContent = pct + "%";
+    $("pfAchT").textContent = done + " de " + ACH.length + " logros";
+    var tr = $("pfTiers"); tr.textContent = "";
+    [3, 2, 1].forEach(function (t) { var i = el("i"); i.textContent = (t === 3 ? "🥇 " : t === 2 ? "🥈 " : "🥉 ") + cnt[t] + " " + TIER_NM[t]; tr.appendChild(i); });
+    var ch = $("pfAchChips"); ch.textContent = "";
+    PF_CATS.forEach(function (c) {
+      var b = el("button"); b.type = "button"; b.textContent = c; b.setAttribute("aria-pressed", c === pfCat ? "true" : "false");
+      b.addEventListener("click", function () { pfCat = c; renderAch(); }); ch.appendChild(b);
+    });
+    var list = ACH.filter(function (a) { return pfCat === "Todos" || a.c === pfCat; });
+    var got = list.filter(function (a) { return settings.ach[a.id]; }).sort(function (x, y) { return settings.ach[y.id] - settings.ach[x.id]; });
+    var go = list.filter(function (a) { return !settings.ach[a.id]; }).sort(function (x, y) { return Math.min(1, y.g(st) / y.t) - Math.min(1, x.g(st) / x.t); });
+    function sec(t) { var s = el("div", "pf-sec"); s.textContent = t; box.appendChild(s); }
+    if (got.length) {
+      sec(pfCat === "Todos" ? "Conseguidos" : "Conseguidos · " + pfCat);
+      got.forEach(function (a) {
+        var r = el("div", "pf-a on"), tx = el("div"), b = el("b"), s = el("span", "d"), ts = settings.ach[a.id];
+        b.textContent = a.n;
+        if (Date.now() - ts < 3 * 86400000) { var nw = el("i", "pf-new"); nw.textContent = "NUEVO"; b.appendChild(nw); }
+        s.textContent = a.d + " · " + new Date(ts).toLocaleDateString("es", { day: "numeric", month: "short", year: "numeric" }).replace(/\./g, "");
+        tx.appendChild(b); tx.appendChild(s); r.appendChild(medal(a, true)); r.appendChild(tx); box.appendChild(r);
+      });
+    }
+    if (go.length) {
+      sec("En camino");
+      go.forEach(function (a) {
+        var v = Math.min(a.t, Math.floor(a.g(st))), r = el("div", "pf-a"), tx = el("div"), b = el("b"), s = el("span", "d"), pl = el("div", "pbl"), pb = el("div", "pb2"), pi = el("i");
+        b.textContent = a.n; s.textContent = a.d;
+        var l1 = el("span"), l2 = el("span"); l1.textContent = fmtN(v) + " / " + fmtN(a.t); l2.textContent = TIER_NM[a.tier]; pl.appendChild(l1); pl.appendChild(l2);
+        pi.style.width = Math.round(v / a.t * 100) + "%"; pb.appendChild(pi);
+        tx.appendChild(b); tx.appendChild(s); tx.appendChild(pl); tx.appendChild(pb); r.appendChild(medal(a, false)); r.appendChild(tx); box.appendChild(r);
+      });
+    }
+    if (!got.length && !go.length) { var e0 = el("p", "pf-since"); e0.textContent = "No hay logros en esta categoría."; box.appendChild(e0); }
+  }
   function achState() {
     var st = universeStats(); st.w = writeStats(); st.locked = 0; st.done = 0; st.img = 0; st.arch = 0; st.rem = 0; var fo = {};
     notes.forEach(function (n) {
@@ -5878,16 +6072,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       hm.appendChild(c);
     }
     $("pfBest").textContent = w.cur > 0 ? (w.cur === 1 ? "Escribiste hoy o ayer: sumá otro día para armar una racha." : "Llevás " + w.cur + " días seguidos escribiendo. ¡Seguí así!") : "Escribí algo hoy para empezar una racha.";
-    var st = achState(), box = $("pfAch"), done = 0; box.textContent = "";
-    ACH.forEach(function (a) {
-      var on = !!settings.ach[a.id]; if (on) done++;
-      var r = el("div", "pf-a" + (on ? " on" : "")), md = el("div", "md"), tx = el("div"), b = el("b"), s = el("span");
-      md.textContent = on ? "★" : "☆"; b.textContent = a.n; s.textContent = on ? "Conseguido el " + new Date(settings.ach[a.id]).toLocaleDateString("es", { day: "numeric", month: "short", year: "numeric" }) : a.d;
-      tx.appendChild(b); tx.appendChild(s);
-      if (!on) { var pb = el("div", "pb2"), pi = el("i"); pi.style.width = Math.min(100, Math.round(a.g(st) / a.t * 100)) + "%"; pb.appendChild(pi); tx.appendChild(pb); }
-      r.appendChild(md); r.appendChild(tx); box.appendChild(r);
-    });
-    $("pfAchN").textContent = done + "/" + ACH.length;
+    renderAch();
     var ev = [], hb = $("pfHist"); hb.textContent = "";
     ACH.forEach(function (a) { if (settings.ach[a.id]) ev.push({ t: settings.ach[a.id], x: "★ Logro: " + a.n }); });
     (settings.focusLog || []).forEach(function (f) { ev.push({ t: f.t, x: "⏱ Sesión de enfoque: " + f.m + " min · " + f.w + " palabras" }); });
@@ -5908,37 +6093,88 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     var m = window.TronxMap ? window.TronxMap.exportData() : { links: [], groups: [] };
     return { notes: total, lists: lists, tags: Object.keys(tg).length, groups: m.groups.length, links: m.links.length, first: first };
   }
+  function pfShow(t) {
+    document.querySelectorAll("#pfSeg button").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.pt === t ? "true" : "false"); });
+    $("pfSum").hidden = t !== "sum"; $("pfAchP").hidden = t !== "ach"; $("pfActP").hidden = t !== "act";
+    $("profile").querySelector(".pfpage").scrollTop = 0;
+  }
+  function compactN(n) { return n >= 10000 ? (Math.round(n / 100) / 10).toLocaleString("es") + "k" : n.toLocaleString("es"); }
   function renderProfile() {
-    var p = getProfile(), st = universeStats();
-    paintAvatar($("pfAv"), p.avatar);
-    if ($("pfName") !== document.activeElement) $("pfName").value = p.name;
-    var stk = $("pfStk"); stk.textContent = "";
-    (window.TronxStickers ? window.TronxStickers.list : []).forEach(function (s) {
-      var b = el("button"); b.type = "button"; b.title = s.n; b.setAttribute("aria-label", "Avatar: " + s.n);
-      b.setAttribute("aria-pressed", p.avatar === "s:" + s.id ? "true" : "false");
-      b.appendChild(iconSpan("s:" + s.id, "static"));
-      b.addEventListener("click", function () { setProfile({ avatar: "s:" + s.id }); renderProfile(); renderMenu(); });
-      stk.appendChild(b);
-    });
-    var emo = $("pfEmo"); emo.textContent = "";
-    EMOJI_SETS[0].e.concat(EMOJI_SETS[4].e).forEach(function (e) {
-      var b = el("button"); b.type = "button"; b.setAttribute("aria-label", "Avatar " + e);
-      b.setAttribute("aria-pressed", p.avatar === "e:" + e ? "true" : "false");
-      b.appendChild(iconSpan("e:" + e, "static"));
-      b.addEventListener("click", function () { setProfile({ avatar: "e:" + e }); renderProfile(); renderMenu(); });
-      emo.appendChild(b);
-    });
+    var p = getProfile(), st = universeStats(), w = writeStats(), lv = levelInfo(st.notes);
+    paintAvatar($("pfAv"), p);
+    $("pfBan").style.background = PF_COVERS[p.cover];
+    $("pfNameOut").textContent = p.name || "Explorador"; $("pfBioOut").textContent = p.bio;
+    $("pfLvl").textContent = "⭐ " + lv.name + " · Nivel " + lv.n;
     var sx = $("pfStats"); sx.textContent = "";
-    [[st.notes, "Notas"], [st.lists, "Listas"], [st.tags, "Etiquetas"], [st.groups, "Constelaciones"], [st.links, "Vínculos"]].forEach(function (a) {
+    [[st.notes, "Notas"], [st.lists, "Listas"], [compactN(w.total), "Palabras"], [w.cur, "Racha"], [st.groups, "Constelaciones"], [st.links, "Vínculos"]].forEach(function (a) {
       var t = el("div", "pf-stat"), b = el("b"), sp = el("span"); b.textContent = String(a[0]); sp.textContent = a[1]; t.appendChild(b); t.appendChild(sp); sx.appendChild(t);
     });
-    var sc = $("pfSince");
     renderWriting();
+    var strip = $("pfStrip"); strip.textContent = "";
+    var got = ACH.filter(function (a) { return settings.ach[a.id]; }).sort(function (x, y) { return settings.ach[y.id] - settings.ach[x.id]; }).slice(0, 4);
+    var as = achState();
+    var next = ACH.filter(function (a) { return !settings.ach[a.id]; }).sort(function (x, y) { return Math.min(1, y.g(as) / y.t) - Math.min(1, x.g(as) / x.t); }).slice(0, 2);
+    got.concat(next).forEach(function (a) {
+      var m = el("div", "pf-mini"), n = el("div"); n.textContent = a.n; m.appendChild(medal(a, !!settings.ach[a.id])); m.appendChild(n); strip.appendChild(m);
+    });
+    var sc = $("pfSince");
     sc.textContent = st.first ? "Explorando tu universo desde el " + new Date(st.first).toLocaleDateString("es", { day: "numeric", month: "long", year: "numeric" }) : "Tu universo está por empezar.";
   }
+  function renderPfEditor() {
+    var p = getProfile();
+    paintAvatar($("pfPv"), p);
+    document.querySelectorAll("#pfMode button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.m === p.mode ? "true" : "false"); });
+    $("pfPhotoAct").hidden = p.mode !== "p"; $("pfEmoBox").hidden = p.mode !== "e";
+    var sw = $("pfSw"); sw.textContent = "";
+    PF_COLORS.forEach(function (c, i) {
+      var b = el("button"); b.type = "button"; b.style.background = c; b.setAttribute("aria-label", "Color " + (i + 1)); b.setAttribute("aria-pressed", i === p.color ? "true" : "false");
+      b.addEventListener("click", function () { setProfile({ color: i }); renderPfEditor(); renderProfile(); renderMenu(); }); sw.appendChild(b);
+    });
+    var cv = $("pfCov"); cv.textContent = "";
+    PF_COVERS.forEach(function (c, i) {
+      var b = el("button"); b.type = "button"; b.style.background = c; b.setAttribute("aria-label", "Portada " + (i + 1)); b.setAttribute("aria-pressed", i === p.cover ? "true" : "false");
+      b.addEventListener("click", function () { setProfile({ cover: i }); renderPfEditor(); renderProfile(); }); cv.appendChild(b);
+    });
+    var em = $("pfEmo"); em.textContent = "";
+    PF_EMOJIS.forEach(function (e) {
+      var b = el("button"); b.type = "button"; b.textContent = e; b.setAttribute("aria-label", "Emoji " + e); b.setAttribute("aria-pressed", p.mode === "e" && p.emoji === "e:" + e ? "true" : "false");
+      b.addEventListener("click", function () { setProfile({ avatar: "e:" + e }); renderPfEditor(); renderProfile(); renderMenu(); }); em.appendChild(b);
+    });
+    if ($("pfName") !== document.activeElement) $("pfName").value = p.name;
+    if ($("pfBioIn") !== document.activeElement) $("pfBioIn").value = p.bio;
+  }
+  function pfLoadPhoto(file) {
+    if (!file) return;
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      var s = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement("canvas");
+      c.width = c.height = 320;
+      c.getContext("2d").drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, 320, 320);
+      URL.revokeObjectURL(url);
+      setProfile({ photo: c.toDataURL("image/jpeg", 0.85), avatar: "p" });
+      renderPfEditor(); renderProfile(); renderMenu();
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); toast("No se pudo leer esa imagen"); };
+    img.src = url;
+  }
+  function openPfEditor() { renderPfEditor(); $("pfEditor").hidden = false; pushLayer("pfedit"); }
   $("profileClose").addEventListener("click", function () { closeLayer("profile"); });
-  $("profile").addEventListener("click", function (e) { if (e.target === $("profile")) closeLayer("profile"); });
-  $("pfName").addEventListener("input", function () { setProfile({ name: $("pfName").value }); renderMenu(); });
+  $("pfEdit").addEventListener("click", openPfEditor); $("pfEditTop").addEventListener("click", openPfEditor);
+  $("pfEdDone").addEventListener("click", function () { closeLayer("pfedit"); });
+  $("pfEditor").addEventListener("click", function (e) { if (e.target === $("pfEditor")) closeLayer("pfedit"); });
+  $("pfSeg").addEventListener("click", function (e) { var b = e.target.closest("button[data-pt]"); if (b) pfShow(b.dataset.pt); });
+  $("pfSeeAll").addEventListener("click", function () { pfCat = "Todos"; renderAch(); pfShow("ach"); });
+  $("pfMode").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-m]"); if (!b) return; var m = b.dataset.m, p = getProfile();
+    if (m === "p") { if (p.photo) { setProfile({ avatar: "p" }); renderPfEditor(); renderProfile(); renderMenu(); } else $("pfFile").click(); }
+    else if (m === "e") { setProfile({ avatar: p.emoji || "e:" + PF_EMOJIS[0] }); renderPfEditor(); renderProfile(); renderMenu(); }
+    else { setProfile({ avatar: "i" }); renderPfEditor(); renderProfile(); renderMenu(); }
+  });
+  $("pfPhotoChg").addEventListener("click", function () { $("pfFile").click(); });
+  $("pfPhotoDel").addEventListener("click", function () { setProfile({ photo: "", avatar: "i" }); renderPfEditor(); renderProfile(); renderMenu(); });
+  $("pfFile").addEventListener("change", function () { var f = $("pfFile").files && $("pfFile").files[0]; $("pfFile").value = ""; pfLoadPhoto(f); });
+  $("pfName").addEventListener("input", function () { setProfile({ name: $("pfName").value }); paintAvatar($("pfPv"), getProfile()); renderProfile(); renderMenu(); });
+  $("pfBioIn").addEventListener("input", function () { setProfile({ bio: $("pfBioIn").value }); renderProfile(); });
 
   /* ---------- menú cósmico ---------- */
   var menuTimer = 0, menuFullTimer = 0, pausedAnims = [];
@@ -5955,7 +6191,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   function updateMenuBadge() { $("mbDot").hidden = !(backupOverdue() || newsUnseen()); }
   function renderMenu() {
     var p = getProfile(), st = universeStats(), over = backupOverdue();
-    paintAvatar($("mnAv"), p.avatar);
+    paintAvatar($("mnAv"), p);
     $("mnName").textContent = p.name || "Explorador";
     var lv = levelInfo(st.notes);
     $("mnRank").textContent = "Nivel " + lv.n + " · " + lv.name;
@@ -6109,7 +6345,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("mnClose").addEventListener("click", function () { closeLayer("menu"); });
   $("mnScrim").addEventListener("click", function () { closeLayer("menu"); });
   function soon(name) { toast(name + " está en desarrollo"); }
-  function openProfile() { renderProfile(); $("profile").hidden = false; pushLayer("profile"); }
+  function openProfile() { pfCat = "Todos"; renderProfile(); pfShow("sum"); $("profile").hidden = false; pushLayer("profile"); }
   $("mnMe").addEventListener("click", function () { closeMenuThen(openProfile); });
   $("mnProfile").addEventListener("click", function () { closeMenuThen(openProfile); });
   $("mnMax").addEventListener("click", function () { soon("MAX"); });
