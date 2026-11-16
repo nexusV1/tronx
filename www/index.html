@@ -714,7 +714,6 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .pf-mini .md { margin: 0 auto 6px; }
 .md { position: relative; width: 56px; height: 56px; display: grid; place-items: center; font-size: 22px; flex: none; }
 .md svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; fill: none; stroke: none; }
-.md > span { position: relative; z-index: 1; margin-top: 3px; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)); }
 .md.gold { filter: drop-shadow(0 5px 8px rgba(229, 168, 36, 0.45)); }
 .md.off { opacity: 0.8; }
 .md.off span { opacity: 0.45; filter: grayscale(1); }
@@ -2212,7 +2211,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.64.0";
+  var APP_VERSION = "1.65.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5394,6 +5393,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.65.0", d: "16 nov 2026", t: "Insignias con íconos propios y nivel 40 renovado", lv: "Hipernova", cat: "mejora", l: ["Los logros tienen insignias nuevas con un ícono dibujado para cada uno, sin emojis", "Nivel 40, Agujero negro: más equilibrado, centrado y con partículas cósmicas, y una versión pensada para tamaños chicos", "Resplandor exterior del emblema más limpio"] },
     { v: "1.64.0", d: "16 nov 2026", t: "Insignias nuevas y niveles animados", lv: "Hipernova", cat: "mejora", l: ["Insignias de logros rediseñadas: cada categoría tiene su forma y cada nivel su metal (bronce, plata y oro)", "Nivel 40, Agujero negro: nuevo diseño con el disco de gas girando alrededor", "Nivel 50, Singularidad: rayos, destellos y brillo animados, sin el aro exterior", "Las animaciones se detienen con el modo calmo"] },
     { v: "1.63.1", d: "16 nov 2026", t: "Corrección de la foto de perfil en el menú", lv: "Hipernova", cat: "arreglo", l: ["Al usar una foto de perfil, el menú la mostraba a pantalla completa y tapaba las opciones; ahora se ve como avatar circular"] },
     { v: "1.63.0", d: "15 nov 2026", t: "Llega MAX", lv: "Hipernova", cat: "nuevo", nm: "Llega MAX", l: ["MAX: nuevo centro con Inicio, Tienda, Misiones, Niveles y Novedades, accesible desde el menú", "Sistema de niveles por XP (50 niveles, 8 rangos) con insignias hexagonales y pantalla de celebración al subir", "Misiones diarias y semanales, bonus del día y premios por rachas de días seguidos", "Ganás XP al crear notas, escribir, usar el enfoque y desbloquear logros; también estrellas ⭐", "La Tienda de MAX está en desarrollo"] },
@@ -6133,7 +6133,39 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     if (cat === "Seguridad") return '<path d="M50 ' + (50 - r) + " L" + (50 + r * 0.86) + " " + (50 - r * 0.62) + " V" + (50 + r * 0.1) + " C" + (50 + r * 0.86) + " " + (50 + r * 0.62) + " 50 " + (50 + r) + " 50 " + (50 + r) + " C50 " + (50 + r) + " " + (50 - r * 0.86) + " " + (50 + r * 0.62) + " " + (50 - r * 0.86) + " " + (50 + r * 0.1) + " V" + (50 - r * 0.62) + 'Z"' + at + "/>";
     return '<rect x="' + (50 - r * 0.86) + '" y="' + (50 - r * 0.86) + '" width="' + (r * 1.72) + '" height="' + (r * 1.72) + '" rx="' + (r * 0.3) + '" transform="rotate(45 50 50)"' + at + "/>";
   }
-  function medalSvg(cat, tier, on) {
+  var GL={
+  n1:["M7 3h8l4 4v14H7z","M15 3v4h4","M10 13h6","M10 17h4"],
+  n10:["M9 8h10v13H9z","M5 4h10v2","M5 4v13h2","M12 12h4","M12 16h4"],
+  n50:["M4 17l8-4 8 4-8 4z","M4 12l8-4 8 4","M4 7l8-4 8 4-8 4z"],
+  n100:["M8 4h8v5a4 4 0 01-8 0z","M8 6H5v2a3 3 0 003 3","M16 6h3v2a3 3 0 01-3 3","M12 13v4","M8 20h8","M10 17h4"],
+  l1:["M4 7l2 2 3-3","M12 7h8","M4 15l2 2 3-3","M12 15h8"],
+  t5:["M3 12V4h8l9 9-8 8z","M7.5 8.5h.01"],
+  c1:["M5 17l5-8 5 5 4-9","M5 17h.01","M10 9h.01","M15 14h.01","M19 5h.01"],
+  v5:["M10 14a4 4 0 010-6l2-2a4 4 0 016 6l-1 1","M14 10a4 4 0 010 6l-2 2a4 4 0 01-6-6l1-1"],
+  w1k:["M4 20l1-4L16 5l3 3L8 19z","M14 7l3 3"],
+  w10k:["M3 6c3-1 6-1 9 1 3-2 6-2 9-1v13c-3-1-6-1-9 1-3-2-6-2-9-1z","M12 7v13"],
+  w50k:["M20 4C10 4 6 10 6 16l-2 4 4-2c6 0 12-4 12-14z","M8 16l8-8"],
+  s3:["M12 3c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"],
+  s7:["M4 6h16v14H4z","M4 10h16","M8 3v4","M16 3v4","M8 14l2 2 4-4"],
+  s30:["M4 6h16v14H4z","M4 10h16","M8 3v4","M16 3v4","M12 12.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z"],
+  bk:["M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z","M9 12l2 2 4-4"],
+  lk:["M6 11h12v10H6z","M8 11V8a4 4 0 018 0v3","M12 15v3"],
+  f1:["M12 3a9 9 0 100 18 9 9 0 000-18z","M12 8a4 4 0 100 8 4 4 0 000-8z","M12 12h.01"],
+  f60:["M12 5a8 8 0 100 16 8 8 0 000-16z","M12 9v4l3 2","M10 2h4"],
+  f600:["M12 20c-4 0-7-3-8-7 3 0 5 1 8 4 3-3 5-4 8-4-1 4-4 7-8 7z","M12 17c-3-2-3-8 0-12 3 4 3 10 0 12z"],
+  d10:["M4 4h16v16H4z","M8 12l3 3 5-6"],
+  d100:["M13 2L5 14h6l-1 8 8-12h-6z"],
+  im5:["M4 8h4l2-3h4l2 3h4v11H4z","M12 11a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"],
+  fo3:["M3 6h7l2 2h9v11H3z","M3 11h18"],
+  ar1:["M3 5h18v4H3z","M5 9v11h14V9","M10 13h4"],
+  rm1:["M12 6a7 7 0 100 14 7 7 0 000-14z","M12 10v4l2 1","M4 7l3-3","M20 7l-3-3"],
+  sk1:["M12 3a9 9 0 000 18c1 0 2-1 1-2-1-2 0-3 2-3h3a3 3 0 003-3c0-5-4-10-9-10z","M7.5 11h.01","M10 7.5h.01","M15 7.5h.01"]
+  };
+  function glyph(id,c,on){var g=GL[id]||[];var dark=on?c[2]:'#15172e',lite=on?c[3]:'#7f84ad',s='<g transform="translate(27 27) scale(1.9)" fill="none" stroke-linecap="round" stroke-linejoin="round">';
+   g=g.map(function(d){var m=/^M([\d.]+) ([\d.]+)h\.01$/.exec(d);return m?'M'+(+m[1]-1.3)+' '+m[2]+'a1.3 1.3 0 102.6 0a1.3 1.3 0 10-2.6 0':d});
+   g.forEach(function(d){s+='<path d="'+d+'" stroke="'+dark+'" stroke-width="3.6" opacity=".9"/>'});
+   g.forEach(function(d){s+='<path d="'+d+'" stroke="'+lite+'" stroke-width="1.7"/>'});return s+'</g>'}
+  function medalSvg(cat, tier, on, id0) {
     var id = "md" + (++mdN), c = MD_PAL[on ? tier : 0], s = "";
     s += '<defs><linearGradient id="' + id + 'a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".5" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><linearGradient id="' + id + 'i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c[2] + '" stop-opacity=".9"/><stop offset="1" stop-color="' + c[1] + '" stop-opacity=".9"/></linearGradient><linearGradient id="' + id + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>';
     if (on && tier === 3) s += '<circle cx="50" cy="50" r="49" fill="' + c[1] + '" opacity=".25"/>';
@@ -6142,10 +6174,11 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     s += '<path d="M20 38 Q50 12 80 38 Q50 30 20 38Z" fill="url(#' + id + 's)" opacity=".8"/>';
     if (on && tier >= 2) s += '<circle cx="50" cy="12" r="2.6" fill="' + c[3] + '"/>';
     if (on && tier === 3) s += '<path d="M50 3 l2.2 5 5.3.5-4 3.6 1.2 5.2-4.7-2.8-4.7 2.8 1.2-5.2-4-3.6 5.3-.5z" fill="#fff6c9" stroke="#8a5a00" stroke-width="1" transform="translate(5 -2) scale(.9)"/>';
+    if (id0) s += glyph(id0, c, on);
     return '<svg viewBox="-2 -4 104 106" aria-hidden="true">' + s + "</svg>";
   }
   function medal(a, on) {
-    var m = el("div", "md " + (on ? TIER_CLS[a.tier] : "off")), s = el("span"); s.textContent = a.e; m.innerHTML = medalSvg(a.c, a.tier, on); m.appendChild(s); m.setAttribute("aria-hidden", "true"); return m;
+    var m = el("div", "md " + (on ? TIER_CLS[a.tier] : "off")); m.innerHTML = medalSvg(a.c, a.tier, on, a.id); m.setAttribute("aria-hidden", "true"); return m;
   }
   function fmtN(n) { return Number(n).toLocaleString("es"); }
   function renderAch() {
@@ -6388,13 +6421,15 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   }
   var embN = 0;
   function bhEmblem(n, size, anim) {
-    var id = "bhe" + (++embN), s = "", i, hp = function (r) { var p = []; for (var k = 0; k < 6; k++) { var a = (-90 + k * 60) * Math.PI / 180; p.push((100 + r * Math.cos(a)).toFixed(1) + "," + (100 + r * Math.sin(a)).toFixed(1)); } return p.join(" "); };
-    s += '<defs><clipPath id="' + id + 'k"><polygon points="' + hp(82) + '"/></clipPath><filter id="' + id + 'g"><feGaussianBlur stdDeviation="6"/></filter><linearGradient id="' + id + 'f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0abfc"/><stop offset=".5" stop-color="#a21caf"/><stop offset="1" stop-color="#3b0764"/></linearGradient></defs>';
-    s += '<circle cx="100" cy="100" r="99" fill="#d946ef" opacity=".35" filter="url(#' + id + 'g)">' + (anim ? '<animate attributeName="opacity" values=".25;.5;.25" dur="4s" repeatCount="indefinite"/>' : "") + "</circle>";
+    var small = !anim && size <= 90, id = "bhe" + (++embN), s = "", i, hp = function (r) { var p = []; for (var k = 0; k < 6; k++) { var a = (-90 + k * 60) * Math.PI / 180; p.push((100 + r * Math.cos(a)).toFixed(1) + "," + (100 + r * Math.sin(a)).toFixed(1)); } return p.join(" "); };
+    s += '<defs><clipPath id="' + id + 'k"><polygon points="' + hp(82) + '"/></clipPath><filter id="' + id + 'g"><feGaussianBlur stdDeviation="4.5"/></filter><linearGradient id="' + id + 'f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0abfc"/><stop offset=".5" stop-color="#a21caf"/><stop offset="1" stop-color="#3b0764"/></linearGradient></defs>';
+    s += '<circle cx="100" cy="100" r="99" fill="#d946ef" opacity=".24" filter="url(#' + id + 'g)">' + (anim ? '<animate attributeName="opacity" values=".25;.5;.25" dur="4s" repeatCount="indefinite"/>' : "") + "</circle>";
     s += '<polygon points="' + hp(92) + '" fill="url(#' + id + 'f)" stroke="#3a1408" stroke-width="3"/><polygon points="' + hp(83) + '" fill="#000"/><g clip-path="url(#' + id + 'k)">';
-    for (i = 0; i < (anim ? 12 : 1); i++) s += '<image class="bhf"' + (anim ? ' data-a="1"' : "") + ' href="bh/f' + (i < 10 ? "0" : "") + i + '.webp" x="14" y="16" width="172" height="172" opacity="' + (i ? 0 : 1) + '"/>';
+    for (i = 0; i < (anim ? 12 : 1); i++) s += '<image class="bhf"' + (anim ? ' data-a="1"' : "") + ' href="' + (small ? "bh/small.webp" : "bh/f" + (i < 10 ? "0" : "") + i + ".webp") + '" x="14" y="14" width="172" height="172" opacity="' + (i ? 0 : 1) + '"/>';
     s += '</g><polygon points="' + hp(83) + '" fill="none" stroke="#ffe2c4" stroke-opacity=".6" stroke-width="2"/>';
-    s += '<rect x="64" y="152" width="72" height="24" rx="12" fill="#000" fill-opacity=".75" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="170" text-anchor="middle" font-weight="900" font-size="19" fill="#fff" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
+    if (size <= 56) s += '<rect x="48" y="142" width="104" height="40" rx="20" fill="#000" fill-opacity=".78" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="172" text-anchor="middle" font-weight="900" font-size="32" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
+    else if (small) s += '<rect x="54" y="146" width="92" height="32" rx="16" fill="#000" fill-opacity=".78" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="170" text-anchor="middle" font-weight="900" font-size="26" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
+    else s += '<rect x="64" y="152" width="72" height="24" rx="12" fill="#000" fill-opacity=".75" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="170" text-anchor="middle" font-weight="900" font-size="19" fill="#fff" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
     return '<svg viewBox="-6 -4 212 204" width="' + size + '" height="' + Math.round(size * 0.962) + '" aria-hidden="true" style="overflow:visible">' + s + "</svg>";
   }
   var bhRaf = 0, bhT0 = 0;
