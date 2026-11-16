@@ -1159,6 +1159,99 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   .side .list[data-view="grid"] .item .t { font-size: 17px; }
   .side .list:not([data-view="grid"]) .item { padding: 14px 18px 15px; }
 }
+/* MAX */
+.maxov { align-items: stretch; padding-top: 0; background: #0b0c26; }
+.maxpage { position: relative; width: 100%; max-width: 560px; margin: 0 auto; height: 100%; display: flex; flex-direction: column; overflow: hidden; color: #f3f1ff; background: #0b0c26; font-family: var(--font-body, inherit); }
+.maxpage::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 85% -5%, rgba(251, 146, 60, 0.28), transparent 45%), radial-gradient(circle at 0% 30%, rgba(124, 77, 255, 0.2), transparent 40%); }
+.maxpage svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.mx-top { position: relative; display: flex; align-items: center; gap: 10px; padding: calc(16px + env(safe-area-inset-top, 0px)) 18px 8px; flex: none; }
+.mx-bk { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: rgba(255, 255, 255, 0.08); color: #fff; cursor: pointer; border: 0; }
+.mx-bk svg { width: 22px; height: 22px; }
+.mx-ttl { flex: 1; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; }
+.mx-ttl i { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; color: #3a1500; background: linear-gradient(140deg, #fbbf24, #ea580c); }
+.mx-ttl i svg { width: 18px; height: 18px; stroke-width: 2.4; }
+.mx-bal { padding: 7px 12px; border-radius: 999px; font-weight: 800; font-size: 14px; color: #ffd76a; background: rgba(251, 191, 36, 0.14); border: 1px solid rgba(251, 191, 36, 0.35); }
+.mx-sc { position: relative; flex: 1; overflow-y: auto; padding: 4px 18px calc(100px + env(safe-area-inset-bottom, 0px)); -webkit-overflow-scrolling: touch; }
+.mx-nav { position: absolute; left: 14px; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); height: 64px; display: flex; justify-content: space-around; align-items: center; padding: 0 6px; border-radius: 24px; background: rgba(30, 31, 72, 0.94); border: 1px solid rgba(255, 255, 255, 0.12); z-index: 3; }
+.mx-nav button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 64px; padding: 7px 0; border: 0; border-radius: 16px; background: transparent; font: inherit; font-size: 10.5px; font-weight: 700; color: #8e91c0; cursor: pointer; }
+.mx-nav button svg { width: 21px; height: 21px; }
+.mx-nav button[aria-selected="true"] { color: #fff; background: rgba(251, 146, 60, 0.18); }
+.mx-nav button[aria-selected="true"] svg { stroke: #fb923c; }
+.mx-dot { position: absolute; top: 4px; right: 12px; width: 9px; height: 9px; border-radius: 50%; background: #ec4899; border: 2px solid #1e1f48; }
+.mx-dot[hidden] { display: none; }
+.mx-hero { position: relative; overflow: hidden; margin-top: 8px; padding: 16px; border-radius: 24px; background: linear-gradient(135deg, #ea580c, #be185d 60%, #6d28d9); }
+.mx-hero::after { content: ""; position: absolute; right: -30px; top: -30px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255, 255, 255, 0.14); }
+.mx-hero small { opacity: 0.85; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+.mx-hero h2 { margin: 4px 0 12px; font-size: 25px; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.mx-hero p { margin: 7px 0 0; font-size: 12.5px; opacity: 0.92; position: relative; z-index: 1; }
+.mx-xp { height: 9px; border-radius: 5px; overflow: hidden; background: rgba(0, 0, 0, 0.28); position: relative; z-index: 1; }
+.mx-xp i { display: block; height: 100%; background: linear-gradient(90deg, #ffe08a, #fff); }
+.mx-sec { display: flex; justify-content: space-between; align-items: center; margin: 18px 0 9px; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: #a9acd6; font-weight: 700; }
+.mx-link { border: 0; background: transparent; font: inherit; font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #fbbf24; cursor: pointer; }
+.mx-card { padding: 14px; border-radius: 20px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 9px; }
+.mx-mi { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; }
+.mx-ic { width: 44px; height: 44px; border-radius: 15px; display: grid; place-items: center; font-size: 22px; background: rgba(255, 255, 255, 0.1); }
+.mx-ic.ok { background: #16a34a; }
+.mx-mi b { display: block; font-size: 14.5px; }
+.mx-mi span.d { display: block; font-size: 12px; color: #a9acd6; margin-top: 2px; }
+.mx-pb { height: 6px; border-radius: 3px; margin-top: 7px; overflow: hidden; background: rgba(255, 255, 255, 0.12); }
+.mx-pb i { display: block; height: 100%; background: linear-gradient(90deg, #fbbf24, #f97316); }
+.mx-rw { display: inline-flex; align-items: center; gap: 4px; padding: 6px 11px; border-radius: 999px; font: inherit; font-weight: 800; font-size: 12.5px; color: #ffd76a; background: rgba(251, 191, 36, 0.14); border: 0; white-space: nowrap; }
+button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135deg, #fbbf24, #f97316); }
+.mx-rw.done { color: #fff; background: #16a34a; }
+.mx-chips { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; margin: 6px 0 8px; }
+.mx-chips::-webkit-scrollbar { display: none; }
+.mx-chips button { flex: none; height: 36px; padding: 0 15px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 600; color: #c4c6e8; background: transparent; border: 1px solid rgba(255, 255, 255, 0.14); cursor: pointer; }
+.mx-chips button[aria-pressed="true"] { color: #0d0e2b; background: #fff; border-color: #fff; }
+.mx-note { font-size: 12.5px; color: #a9acd6; line-height: 1.45; margin: 4px 2px 10px; }
+.mx-emw { position: relative; display: grid; place-items: center; margin: 14px auto 0; }
+.mx-emw::before { content: ""; position: absolute; inset: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(251, 191, 36, 0.3), transparent 68%); }
+.mx-emw svg { position: relative; fill: none; }
+.mx-ctr { text-align: center; }
+.mx-ctr h2 { margin: 8px 0 0; font-size: 27px; letter-spacing: -0.02em; }
+.mx-ctr p { margin: 3px 0 0; font-size: 13px; color: #a9acd6; }
+.mx-tier { display: inline-block; margin-top: 6px; padding: 5px 14px; border-radius: 999px; font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #3a1500; background: linear-gradient(90deg, #f59e0b, #ea580c); }
+.mx-bar { height: 12px; border-radius: 7px; overflow: hidden; background: rgba(255, 255, 255, 0.1); }
+.mx-bar i { display: block; height: 100%; background: linear-gradient(90deg, #fbbf24, #f97316); box-shadow: 0 0 16px rgba(249, 115, 22, 0.6); }
+.mx-xt { display: flex; justify-content: space-between; margin: 16px 0 6px; font-size: 12.5px; font-weight: 700; color: #c4c6e8; }
+.mx-nxt { display: flex; gap: 12px; align-items: center; margin-top: 12px; padding: 12px 14px; border-radius: 18px; font-size: 13px; background: rgba(251, 146, 60, 0.12); border: 1px solid rgba(251, 146, 60, 0.4); }
+.mx-nxt b { display: block; font-size: 14px; }
+.mx-nxt span { color: #c4c6e8; }
+.mx-x { display: grid; grid-template-columns: 36px 1fr auto; gap: 11px; align-items: center; padding: 9px 12px; margin-bottom: 7px; border-radius: 15px; font-size: 13.5px; font-weight: 600; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.09); }
+.mx-x .e { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-size: 18px; background: rgba(255, 255, 255, 0.1); }
+.mx-x small { display: block; font-weight: 400; color: #a9acd6; font-size: 11.5px; }
+.mx-x em { font-style: normal; color: #ffd76a; font-weight: 800; font-size: 13px; }
+.mx-road { display: grid; grid-template-columns: 62px 1fr; gap: 10px; align-items: center; padding: 8px 6px; margin-bottom: 4px; border-radius: 16px; }
+.mx-road.cur { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(251, 146, 60, 0.5); }
+.mx-road.fut { opacity: 0.72; }
+.mx-road .em { display: grid; place-items: center; }
+.mx-road b { display: block; font-size: 14px; }
+.mx-road span { font-size: 11.5px; color: #a9acd6; }
+.mx-soon { text-align: center; padding: 30px 18px; }
+.mx-soon .big { font-size: 56px; }
+.mx-soon h2 { margin: 10px 0 6px; font-size: 22px; }
+.mx-pills { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 14px; }
+.mx-pills span { padding: 7px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #8e91c0; border: 1px dashed rgba(255, 255, 255, 0.22); }
+.mx-nw { display: grid; grid-template-columns: 10px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.mx-nw i { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; background: #5b5f8a; }
+.mx-nw.cur i { background: #ec4899; }
+.mx-nw b { font-size: 14.5px; }
+.mx-nw span { display: block; margin-top: 3px; font-size: 12.5px; color: #a9acd6; }
+.mx-btn { width: 100%; min-height: 46px; margin-top: 12px; border-radius: 16px; font: inherit; font-weight: 700; font-size: 14px; color: #fff; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.16); cursor: pointer; }
+.lvlov { z-index: 40; align-items: center; background: rgba(5, 6, 20, 0.88); }
+.lu { position: relative; width: 100%; max-width: 480px; height: 100%; display: grid; place-items: center; overflow: hidden; color: #f3f1ff; background: radial-gradient(circle at 50% 38%, rgba(251, 191, 36, 0.4), rgba(168, 85, 247, 0.3) 35%, #0b0c26 72%); }
+.lu-rays { position: absolute; left: 50%; top: 40%; width: 900px; height: 900px; margin: -450px 0 0 -450px; border-radius: 50%; background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.13) 0 5deg, transparent 5deg 15deg); -webkit-mask: radial-gradient(circle, #000 8%, transparent 55%); mask: radial-gradient(circle, #000 8%, transparent 55%); animation: luSpin 40s linear infinite; }
+@keyframes luSpin { to { transform: rotate(360deg); } }
+.lu-in { position: relative; text-align: center; padding: 0 22px; }
+.lu-big { font-size: 14px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: #ffd76a; }
+.lu-emb { display: grid; place-items: center; margin: 22px 0 8px; animation: luPop 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+@keyframes luPop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.lu h2 { margin: 14px 0 0; font-size: 29px; letter-spacing: -0.02em; }
+.lu p { margin: 4px 0 0; font-size: 14px; color: #c4c6e8; }
+.lu-rw { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin-top: 16px; }
+.lu-rw div { padding: 10px 13px; border-radius: 16px; font-size: 12.5px; font-weight: 700; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+.lu-ok { margin-top: 22px; width: 240px; height: 50px; border: 0; border-radius: 18px; font: inherit; font-weight: 800; font-size: 16px; color: #3a1500; cursor: pointer; background: linear-gradient(135deg, #fbbf24, #f97316); }
+:root[data-calm="1"] .lu-rays, :root[data-calm="1"] .lu-emb { animation: none; }
 .subprog { flex: none; font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
 .subprog.full { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
 .row .mv button.on { color: var(--accent); }
@@ -1862,6 +1955,32 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     <div class="actions"><button class="btn primary" id="calNew" type="button">Nueva nota con aviso este día</button></div>
   </section>
 </div>
+<div class="overlay maxov" id="max" hidden>
+  <section class="maxpage" role="dialog" aria-modal="true" aria-label="MAX">
+    <div class="mx-top"><button class="mx-bk" id="maxClose" type="button" aria-label="Cerrar MAX"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><div class="mx-ttl"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg></i><span id="mxTitle">MAX</span></div><div class="mx-bal" id="mxBal" aria-label="Tus estrellas">⭐ 0</div></div>
+    <div class="mx-sc" id="mxSc"></div>
+    <nav class="mx-nav" id="mxNav" role="tablist" aria-label="Secciones de MAX">
+      <button type="button" role="tab" data-mx="home" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/></svg>Inicio</button>
+      <button type="button" role="tab" data-mx="shop" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 016 0"/></svg>Tienda</button>
+      <button type="button" role="tab" data-mx="mis" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Misiones<i class="mx-dot" id="mxDot" hidden></i></button>
+      <button type="button" role="tab" data-mx="lvl" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Niveles</button>
+      <button type="button" role="tab" data-mx="news" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0112 0c0 6 2 7 2 7H4s2-1 2-7M10 19a2 2 0 004 0"/></svg>Novedades</button>
+    </nav>
+  </section>
+</div>
+<div class="overlay lvlov" id="lvlup" hidden>
+  <div class="lu" role="dialog" aria-modal="true" aria-label="Subiste de nivel">
+    <div class="lu-rays" aria-hidden="true"></div>
+    <div class="lu-in">
+      <div class="lu-big">¡Subiste de nivel!</div>
+      <div class="lu-emb" id="luEmb"></div>
+      <h2 id="luName"></h2>
+      <p id="luSub"></p>
+      <div class="lu-rw" id="luRw"></div>
+      <button class="lu-ok" id="luOk" type="button">¡Genial!</button>
+    </div>
+  </div>
+</div>
 <div class="overlay" id="news" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Novedades">
     <div class="sheethead"><strong>Novedades</strong><button class="btn small" id="newsClose" type="button">Listo</button></div>
@@ -2027,7 +2146,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
       <li><button class="mn-item" id="mnStickers" type="button" style="--i:3;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.9 4.6L17.5 9l-4.6 1.9L11 15.5l-1.9-4.6L4.5 9l4.6-1.4z"/><path d="M18.5 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg></span><span class="mn-tx"><b>Mis stickers</b><i>Creá los tuyos y usalos</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:4" aria-hidden="true">Explorar</li>
       <li><button class="mn-item" id="mnLink" type="button" style="--i:5;--c1:#34d399;--c2:#064e3b"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="mn-tx"><b>Vinculación</b><span class="mn-soon">En desarrollo</span></span></button></li>
-      <li><button class="mn-item soon" id="mnMax" type="button" style="--i:6;--c1:#fb923c;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg></span><span class="mn-tx"><b>MAX</b><span class="mn-soon">En desarrollo</span></span></button></li>
+      <li><button class="mn-item" id="mnMax" type="button" style="--i:6;--c1:#fb923c;--c2:#7c2d12"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg></span><span class="mn-tx"><b>MAX</b><i id="mnSubMax">Misiones, niveles y más</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li class="mn-sec" style="--i:7" aria-hidden="true">Aplicación</li>
       <li><button class="mn-item" id="mnTour" type="button" style="--i:8;--c1:#a78bfa;--c2:#312e81"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.500"/><path d="M15.500 8.500l-2 5-5 2 2-5z"/></svg></span><span class="mn-tx"><b>Guía de Tronx</b><i>Recorrido por todo lo que hay</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
       <li><button class="mn-item" id="mnSettings" type="button" style="--i:8;--c1:#fbbf24;--c2:#78350f"><span class="mn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span><span class="mn-tx"><b>Ajustes</b><i id="mnSubSet">Sonido y volumen</i></span><svg class="mn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
@@ -2091,7 +2210,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.62.6";
+  var APP_VERSION = "1.63.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -2614,6 +2733,8 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     else if (name === "custom") $("custom").hidden = true;
     else if (name === "profile") $("profile").hidden = true;
     else if (name === "pfedit") $("pfEditor").hidden = true;
+    else if (name === "max") $("max").hidden = true;
+    else if (name === "lvlup") { $("lvlup").hidden = true; celebrating = false; tryCelebrate(); }
     else if (name === "links") $("links").hidden = true;
     else if (name === "menu") closeMenuUI();
     else if (name === "sheet") { $("sheet").hidden = true; $("scrim").hidden = true; }
@@ -2915,7 +3036,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     kidCount = {};
     notes.forEach(function (k) { if (k.parent && !k.trashedAt && notes.has(k.parent)) kidCount[k.parent] = (kidCount[k.parent] || 0) + 1; });
     if (listEl.getAttribute("data-view") !== settings.view) listEl.setAttribute("data-view", settings.view);
-    if (window.__fltReady) fltSync();
+    if (window.__fltReady) { fltSync(); tryCelebrate(); }
     var want = [];
     rows.forEach(function (n) {
       var sig = cardSig(n), c = cards.get(n.id);
@@ -4724,6 +4845,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     $("app").dataset.view = "list";
     renderEditor(); renderAll();
     if (window.TronxMap) window.TronxMap.resume();
+    setTimeout(function () { if (typeof tryCelebrate === "function") tryCelebrate(); }, 500);
   }
   function createNote(type, opts) {
     opts = opts || {};
@@ -5270,6 +5392,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.63.0", d: "15 nov 2026", t: "Llega MAX", lv: "Hipernova", cat: "nuevo", nm: "Llega MAX", l: ["MAX: nuevo centro con Inicio, Tienda, Misiones, Niveles y Novedades, accesible desde el menú", "Sistema de niveles por XP (50 niveles, 8 rangos) con insignias hexagonales y pantalla de celebración al subir", "Misiones diarias y semanales, bonus del día y premios por rachas de días seguidos", "Ganás XP al crear notas, escribir, usar el enfoque y desbloquear logros; también estrellas ⭐", "La Tienda de MAX está en desarrollo"] },
     { v: "1.62.6", d: "14 nov 2026", t: "Perfil renovado y Sala de logros", lv: "Supernova", cat: "nuevo+mejora", l: ["Perfil en pantalla completa con portada, avatar grande, frase personal y nivel", "Avatar con foto de la galería, iniciales con color o emoji; las insignias quedan solo para las notas", "Sala de logros: medallas de bronce, plata y oro, progreso general y barras de avance", "Logros organizados por categoría: Escritura, Constancia, Orden, Enfoque y Seguridad", "Perfil dividido en Resumen, Logros y Actividad, con editor propio y portada a elegir"] },
     { v: "1.62.2", d: "14 nov 2026", t: "Inicio más cómodo", lv: "Nova", cat: "rediseno", l: ["Buscador, Archivo y Papelera en una sola fila, con contador en cada ícono", "Se quitó la pestaña Notas de la parte superior: ahora se accede desde la barra inferior", "Barra inferior renovada: selector plano y botón + cuadrado con esquinas suaves", "Desde Archivo o Papelera, el botón Notas de la barra inferior vuelve a tus notas"] },
     { v: "1.61.9", d: "14 nov 2026", t: "Inicio renovado", lv: "Nova", cat: "rediseno", l: ["Navegación inferior flotante: Notas y Constelaciones quedan al alcance del pulgar, junto al botón +", "Cabecera mucho más corta: más notas visibles sin desplazarse", "Pestañas Notas, Archivo y Papelera con estilo de píldora", "Tarjetas con altura natural: la vista previa se lee completa, sin recortes ni degradados"] },
@@ -5665,7 +5788,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     document.body.classList.remove("focus"); $("focusPill").hidden = true; $("focusBtn").setAttribute("aria-pressed", "false");
     if (min >= 1) {
       settings.focus.min += min; settings.focus.n++; settings.focusLog.unshift({ t: Date.now(), m: min, w: w }); settings.focusLog = settings.focusLog.slice(0, 30);
-      achCheck(false); saveSettings(); toast("Enfoque: " + min + (min === 1 ? " minuto" : " minutos") + " · " + w + " palabras nuevas");
+      maxFocus(min); achCheck(false); saveSettings(); toast("Enfoque: " + min + (min === 1 ? " minuto" : " minutos") + " · " + w + " palabras nuevas");
     } else toast("Sesión de enfoque cerrada");
   }
   registerLayer("focus", focusEnd);
@@ -5925,9 +6048,12 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   function statsTick(n) {
     if (!wcMap) return;
     var c = noteWords(n), prev = wcMap.get(n.id);
+    var isNew = false;
     if (prev == null) prev = Date.now() - n.createdAt < 60000 ? 0 : c;
+    if (prev === 0 && c >= 1 && !maxNoted[n.id] && Date.now() - n.createdAt < 600000) { isNew = true; maxNoted[n.id] = 1; }
     wcMap.set(n.id, c);
     var k = dayKey(Date.now()), d = Math.max(0, c - prev);
+    maxNote(isNew && c >= 1, d);
     settings.act[k] = (settings.act[k] || 0) + d; settings.wTot += d;
     var keys = Object.keys(settings.act);
     if (keys.length > 430) { keys.sort(); keys.slice(0, keys.length - 400).forEach(function (x) { delete settings.act[x]; }); }
@@ -6049,6 +6175,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   function achCheck(silent) {
     var st = achState(), fresh = [];
     ACH.forEach(function (a) { if (!settings.ach[a.id] && a.g(st) >= a.t) { settings.ach[a.id] = Date.now(); fresh.push(a); } });
+    fresh.forEach(function (a) { grantXp(TIER_XP[a.tier], Math.round(TIER_XP[a.tier] / 2)); });
     if (fresh.length) {
       if (!silent && typeof toast === "function") toast("Logro desbloqueado: " + fresh[0].n + (fresh.length > 1 ? " (+" + (fresh.length - 1) + ")" : ""));
       clearTimeout(statsSaveT); statsSaveT = setTimeout(saveSettings, 800);
@@ -6100,11 +6227,11 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   }
   function compactN(n) { return n >= 10000 ? (Math.round(n / 100) / 10).toLocaleString("es") + "k" : n.toLocaleString("es"); }
   function renderProfile() {
-    var p = getProfile(), st = universeStats(), w = writeStats(), lv = levelInfo(st.notes);
+    var p = getProfile(), st = universeStats(), w = writeStats(), lv = maxLevel();
     paintAvatar($("pfAv"), p);
     $("pfBan").style.background = PF_COVERS[p.cover];
     $("pfNameOut").textContent = p.name || "Explorador"; $("pfBioOut").textContent = p.bio;
-    $("pfLvl").textContent = "⭐ " + lv.name + " · Nivel " + lv.n;
+    $("pfLvl").textContent = "⭐ " + lv.title + " · Nivel " + lv.L;
     var sx = $("pfStats"); sx.textContent = "";
     [[st.notes, "Notas"], [st.lists, "Listas"], [compactN(w.total), "Palabras"], [w.cur, "Racha"], [st.groups, "Constelaciones"], [st.links, "Vínculos"]].forEach(function (a) {
       var t = el("div", "pf-stat"), b = el("b"), sp = el("span"); b.textContent = String(a[0]); sp.textContent = a[1]; t.appendChild(b); t.appendChild(sp); sx.appendChild(t);
@@ -6176,6 +6303,236 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   $("pfName").addEventListener("input", function () { setProfile({ name: $("pfName").value }); paintAvatar($("pfPv"), getProfile()); renderProfile(); renderMenu(); });
   $("pfBioIn").addEventListener("input", function () { setProfile({ bio: $("pfBioIn").value }); renderProfile(); });
 
+  /* ---------- MAX: XP, niveles, misiones y rachas ---------- */
+  var MX_TITLES = [[1, "Polvo estelar"], [2, "Tripulante"], [4, "Navegante"], [6, "Cartógrafo"], [8, "Astrónomo"], [10, "Piloto"], [12, "Almirante"], [13, "Guardián de constelaciones"], [16, "Arquitecto estelar"], [20, "Señor de nebulosas"], [25, "Titán"], [30, "Oráculo cósmico"], [35, "Soberano"], [40, "Eón"], [45, "Devorador de estrellas"], [50, "Singularidad"]];
+  var MX_RANKS = [[1, "Bronce", 1, "~2 semanas"], [5, "Plata", 2, "~1 mes"], [10, "Oro", 3, "~3 meses"], [15, "Cristal", 4, "~5 meses y medio"], [20, "Nebulosa", 5, "~1 año"], [30, "Supernova", 6, "~2 años"], [40, "Agujero negro", 7, "~3 años y medio"], [50, "Singularidad", 8, "El rango final"]];
+  var TIER_XP = [0, 50, 150, 400], MX_MAXL = 50;
+  function xpAt(L) { return L <= 1 ? 0 : Math.round(30 * Math.pow(L - 1, 2.2) / 10) * 10; }
+  function lvlOf(xp) { var L = 1; while (L < MX_MAXL && xp >= xpAt(L + 1)) L++; return L; }
+  function titleOf(L) { var t = MX_TITLES[0][1]; MX_TITLES.forEach(function (r) { if (L >= r[0]) t = r[1]; }); return t; }
+  function rankOf(L) { var r = MX_RANKS[0]; MX_RANKS.forEach(function (x) { if (L >= x[0]) r = x; }); return { i: r[2], name: r[1], from: r[0] }; }
+  function maxInit() {
+    var st = universeStats(), x = Math.min(st.notes, 300) * 10 + Math.floor((settings.wTot || 0) / 20) + ((settings.focus && settings.focus.min) || 0) + Math.max(settings.streakBest || 0, 0) * 5;
+    ACH.forEach(function (a) { if (settings.ach[a.id]) x += TIER_XP[a.tier]; });
+    return x;
+  }
+  var maxNoted = {}, maxSaveT = 0;
+  function maxSave() { clearTimeout(maxSaveT); maxSaveT = setTimeout(saveSettings, 800); }
+  function getMax() {
+    var m = settings.max;
+    if (!m || typeof m !== "object") {
+      m = { xp: maxInit(), stars: 0, seen: 1, pend: 0, day: "", cap: { n: 0, w: 0, f: 0 }, wAcc: 0, base: 0, tasks: 0, cl: {}, sc: {} };
+      m.stars = Math.floor(m.xp / 10); m.seen = lvlOf(m.xp); settings.max = m; saveSettings();
+    }
+    m.xp = Math.max(0, +m.xp || 0); m.stars = Math.max(0, Math.floor(+m.stars || 0)); m.seen = Math.max(1, Math.floor(+m.seen || 1)); m.pend = Math.floor(+m.pend || 0);
+    if (!m.cap || typeof m.cap !== "object") m.cap = { n: 0, w: 0, f: 0 };
+    if (!m.cl || typeof m.cl !== "object") m.cl = {}; if (!m.sc || typeof m.sc !== "object") m.sc = {};
+    m.wAcc = Math.max(0, +m.wAcc || 0);
+    var k = dayKey(Date.now());
+    if (m.day !== k) {
+      m.day = k; m.cap = { n: 0, w: 0, f: 0 }; m.tasks = 0; m.base = achState().done;
+      var lim = Date.now() - 21 * 86400000; Object.keys(m.cl).forEach(function (x) { if (!(m.cl[x] > lim)) delete m.cl[x]; });
+      maxSave();
+    }
+    return m;
+  }
+  function grantXp(xp, stars) {
+    var m = getMax(), before = m.seen;
+    m.xp += Math.max(0, xp); m.stars += Math.max(0, stars || 0);
+    var L = lvlOf(m.xp);
+    if (L > m.seen) {
+      var bonus = 0; for (var i = m.seen + 1; i <= L; i++) bonus += 10 * i;
+      m.stars += bonus; m.pend = L; m.seen = L; m.pendFrom = before; m.pendStars = (m.pendStars || 0) + bonus;
+      if (typeof toast === "function") toast("¡Subiste al nivel " + L + "!");
+    }
+    maxSave(); tryCelebrate();
+  }
+  function maxNote(isNew, words) {
+    var m = getMax();
+    if (isNew && m.cap.n < 5) { m.cap.n++; grantXp(10, 5); }
+    m.wAcc += Math.max(0, words);
+    while (m.wAcc >= 100) { m.wAcc -= 100; if (m.cap.w < 6) { m.cap.w++; grantXp(5, 2); } }
+  }
+  function maxFocus(min) {
+    var m = getMax(), g = Math.max(0, Math.min(min, 90 - m.cap.f));
+    if (g > 0) { m.cap.f += g; grantXp(g, Math.floor(g / 2)); }
+  }
+  function maxLevel() {
+    var m = getMax(), L = lvlOf(m.xp), a = xpAt(L), b = L < MX_MAXL ? xpAt(L + 1) : a;
+    return { L: L, xp: m.xp, a: a, b: b, left: Math.max(0, b - m.xp), pct: L >= MX_MAXL ? 100 : Math.max(0, Math.min(100, Math.round((m.xp - a) / (b - a) * 100))), title: titleOf(L), rank: rankOf(L), max: L >= MX_MAXL, stars: m.stars };
+  }
+  var embN = 0;
+  function emblemSvg(tier, n, size) {
+    var P = { 1: ["#f0a56a", "#a8531f", "#5a2a0c", "#ffd2a8"], 2: ["#f4f6fb", "#9aa3b8", "#4b5468", "#ffffff"], 3: ["#ffe58a", "#e0a014", "#8a5a00", "#fff6c9"], 4: ["#b8f4ff", "#22b8d6", "#0a5a7a", "#ffffff"], 5: ["#e0b8ff", "#9b4dff", "#3a1286", "#ffd0f5"], 6: ["#fff3a8", "#ff8a1f", "#a3123a", "#fff9d6"], 7: ["#6b3fd6", "#1a0b3d", "#000000", "#ff9a3d"], 8: ["#ffffff", "#ffd76a", "#f0509a", "#ffffff"] }[tier] || ["#f0a56a", "#a8531f", "#5a2a0c", "#ffd2a8"];
+    var id = "emb" + (++embN), c = P, s = "", i;
+    s += '<defs><linearGradient id="' + id + 'm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".55" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><linearGradient id="' + id + 'i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><radialGradient id="' + id + 'h"><stop offset="0" stop-color="' + c[1] + '" stop-opacity=".55"/><stop offset="1" stop-color="' + c[1] + '" stop-opacity="0"/></radialGradient></defs>';
+    if (tier >= 3) s += '<circle cx="100" cy="100" r="98" fill="url(#' + id + 'h)" stroke="none"/>';
+    if (tier >= 6) for (i = 0; i < 12; i++) s += '<polygon points="100,2 106,40 94,40" fill="' + c[0] + '" stroke="none" opacity=".75" transform="rotate(' + (i * 30) + ' 100 100)"/>';
+    if (tier === 8) s += '<circle cx="100" cy="100" r="92" fill="none" stroke="' + c[2] + '" stroke-width="2" stroke-dasharray="2 7" opacity=".9"/>';
+    if (tier === 5) s += '<ellipse cx="100" cy="100" rx="96" ry="30" fill="none" stroke="' + c[0] + '" stroke-width="3" opacity=".8" transform="rotate(-24 100 100)"/><circle cx="18" cy="122" r="5" fill="#fff" stroke="none"/><circle cx="182" cy="78" r="4" fill="#ffd0f5" stroke="none"/>';
+    if (tier >= 2 && tier !== 7) { var w = '<path d="M52 92 L8 66 L22 100 L8 134 L52 108Z" fill="url(#' + id + 'm)" stroke="' + c[2] + '" stroke-width="2"/>'; s += w + '<g transform="translate(200 0) scale(-1 1)">' + w + '</g>'; }
+    if (tier >= 3) s += '<path d="M64 36 L74 10 L88 30 L100 4 L112 30 L126 10 L136 36Z" fill="url(#' + id + 'm)" stroke="' + c[2] + '" stroke-width="2.5"/>';
+    s += '<polygon points="100,18 168,57 168,143 100,182 32,143 32,57" fill="url(#' + id + 'm)" stroke="' + c[2] + '" stroke-width="3"/>';
+    s += '<polygon points="100,34 154,65 154,135 100,166 46,135 46,65" fill="url(#' + id + 'i)" stroke="' + c[3] + '" stroke-opacity=".65" stroke-width="2.5"/>';
+    if (tier >= 4) s += '<polygon points="100,34 154,65 100,100" fill="#fff" stroke="none" opacity=".22"/><polygon points="46,65 100,100 46,135" fill="#fff" stroke="none" opacity=".1"/><polygon points="154,135 100,100 154,65" fill="#000" stroke="none" opacity=".1"/><polygon points="100,166 46,135 100,100" fill="#000" stroke="none" opacity=".18"/>';
+    else s += '<polygon points="100,34 154,65 154,100 46,100 46,65" fill="#fff" stroke="none" opacity=".16"/>';
+    if (tier === 7) s += '<ellipse cx="100" cy="100" rx="70" ry="16" fill="none" stroke="' + c[3] + '" stroke-width="6" opacity=".95" transform="rotate(-18 100 100)"/><circle cx="100" cy="100" r="30" fill="#000" stroke="#c084fc" stroke-width="2.5"/>';
+    var fs = n >= 10 ? 64 : 76, tc = tier === 7 ? "#fff" : tier === 8 ? "#5b1240" : "#fff";
+    s += '<text x="100" y="' + (tier === 7 ? 150 : 123) + '" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="' + (tier === 7 ? 34 : fs) + '" fill="' + tc + '" stroke="' + (tier === 8 ? "none" : c[2]) + '" stroke-width="4" paint-order="stroke" style="letter-spacing:-2px">' + (n | 0) + '</text>';
+    if (tier >= 4) s += '<path d="M92 160 L100 170 L108 160" fill="none" stroke="' + c[3] + '" stroke-width="3"/>';
+    return '<svg viewBox="-6 -4 212 204" width="' + size + '" height="' + Math.round(size * 0.962) + '" aria-hidden="true" style="overflow:visible">' + s + '</svg>';
+  }
+  /* misiones */
+  function mxCtx() {
+    var m = getMax(), now = Date.now(), d = new Date(now), t0 = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(), dow = (d.getDay() + 6) % 7, w0 = t0 - dow * 86400000;
+    var c = { t0: t0, w0: w0, dk: dayKey(now), wk: dayKey(w0 + 43200000), notesD: 0, notesW: 0, wordsD: settings.act[dayKey(now)] || 0, wordsW: 0, daysW: 0, focusD: 0, focusW: 0 };
+    notes.forEach(function (n) { if (n.trashedAt) return; if (n.createdAt >= t0) c.notesD++; if (n.createdAt >= w0) c.notesW++; });
+    for (var i = 0; i <= dow; i++) { var v = settings.act[dayKey(dayShift(now, -i))]; if (v != null) { c.wordsW += v; c.daysW++; } }
+    (settings.focusLog || []).forEach(function (f) { if (f.t >= t0) c.focusD += f.m; if (f.t >= w0) c.focusW += f.m; });
+    var dn = achState().done - m.base; if (dn > m.tasks) { m.tasks = dn; maxSave(); }
+    c.tasksD = m.tasks; c.dn = Math.floor(t0 / 86400000);
+    return c;
+  }
+  var MX_D = {
+    d1: { n: "Creá una nota nueva", t: 1, xp: 20, e: "📝", g: function (c) { return c.notesD; } },
+    d6: { n: "Creá 3 notas", t: 3, xp: 45, e: "🗒️", g: function (c) { return c.notesD; } },
+    d2: { n: "Escribí 200 palabras", t: 200, xp: 40, e: "✍️", g: function (c) { return c.wordsD; } },
+    d3: { n: "Escribí 500 palabras", t: 500, xp: 80, e: "📖", g: function (c) { return c.wordsD; } },
+    d4: { n: "Tildá 5 casillas de una lista", t: 5, xp: 25, e: "☑️", g: function (c) { return c.tasksD; } },
+    d5: { n: "Sumá 10 minutos de enfoque", t: 10, xp: 30, e: "🎯", g: function (c) { return c.focusD; } }
+  };
+  var MX_W = {
+    w1: { n: "Escribí en 5 días distintos", t: 5, xp: 120, e: "🔥", g: function (c) { return c.daysW; } },
+    w2: { n: "Escribí 2.000 palabras", t: 2000, xp: 150, e: "📚", g: function (c) { return c.wordsW; } },
+    w3: { n: "Sumá 60 minutos de enfoque", t: 60, xp: 100, e: "⏱️", g: function (c) { return c.focusW; } },
+    w4: { n: "Creá 7 notas", t: 7, xp: 100, e: "🗂️", g: function (c) { return c.notesW; } }
+  };
+  var MX_STREAKS = [3, 7, 14, 30, 60, 100, 200, 365];
+  function mxDaily(c) { var p = c.dn % 2; return [p ? "d6" : "d1", p ? "d3" : "d2", p ? "d5" : "d4"]; }
+  function mxWeekly(c) { return ["w1", Math.floor(c.dn / 7) % 2 ? "w3" : "w2", Math.floor(c.dn / 7) % 2 ? "w4" : "w2"].slice(0, 2).concat(Math.floor(c.dn / 7) % 2 ? [] : ["w4"]).slice(0, 3); }
+  function mxClaim(key, xp, stars, msg) {
+    var m = getMax(); if (m.cl[key]) return false; m.cl[key] = Date.now(); grantXp(xp, stars); if (msg) toast(msg); mxRender(); return true;
+  }
+  function mxReady() {
+    var c = mxCtx(), n = 0, m = getMax();
+    mxDaily(c).forEach(function (id) { if (MX_D[id].g(c) >= MX_D[id].t && !m.cl["d:" + c.dk + ":" + id]) n++; });
+    mxWeekly(c).forEach(function (id) { if (MX_W[id].g(c) >= MX_W[id].t && !m.cl["w:" + c.wk + ":" + id]) n++; });
+    var best = writeStats().best; MX_STREAKS.forEach(function (s) { if (best >= s && !m.sc[s]) n++; });
+    return n;
+  }
+  /* pantallas */
+  var mxTab = "home", mxMisTab = "d";
+  function mk(tag, cls, txt) { var e = el(tag, cls); if (txt != null) e.textContent = txt; return e; }
+  function fmtMx(n) { return Number(n).toLocaleString("es"); }
+  function mxMissionRow(def, prog, claimed, onClaim) {
+    var done = prog >= def.t, card = mk("div", "mx-card mx-mi"), ic = mk("div", "mx-ic" + (claimed ? " ok" : ""), claimed ? "✓" : def.e), tx = mk("div"), b = mk("b", null, def.n);
+    tx.appendChild(b); tx.appendChild(mk("span", "d", claimed ? "¡Conseguida!" : fmtMx(Math.min(prog, def.t)) + " / " + fmtMx(def.t)));
+    if (!claimed) { var pb = mk("div", "mx-pb"), pi = el("i"); pi.style.width = Math.min(100, Math.round(prog / def.t * 100)) + "%"; pb.appendChild(pi); tx.appendChild(pb); }
+    card.appendChild(ic); card.appendChild(tx);
+    if (claimed) card.appendChild(mk("div", "mx-rw done", "+" + def.xp + " XP"));
+    else if (done) { var bt = mk("button", "mx-rw", "Reclamar +" + def.xp + " XP"); bt.type = "button"; bt.addEventListener("click", onClaim); card.appendChild(bt); }
+    else card.appendChild(mk("div", "mx-rw", "+" + def.xp + " XP"));
+    return card;
+  }
+  function mxRender() {
+    var box = $("mxSc"); if (!box) return;
+    var lv = maxLevel(), m = getMax(), c = mxCtx(); box.textContent = "";
+    $("mxBal").textContent = "⭐ " + fmtMx(m.stars);
+    var rdy = mxReady(); $("mxDot").hidden = !rdy;
+    $("mxTitle").textContent = { home: "MAX", shop: "Tienda", mis: "Misiones", lvl: "Niveles", news: "Novedades" }[mxTab];
+    document.querySelectorAll("#mxNav button").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.mx === mxTab ? "true" : "false"); });
+    if (mxTab === "home") {
+      var hero = mk("div", "mx-hero"); hero.appendChild(mk("small", null, "Tu nivel")); hero.appendChild(mk("h2", null, lv.title + " · Nivel " + lv.L));
+      var xb = mk("div", "mx-xp"), xi = el("i"); xi.style.width = lv.pct + "%"; xb.appendChild(xi); hero.appendChild(xb);
+      hero.appendChild(mk("p", null, lv.max ? "Nivel máximo alcanzado" : fmtMx(lv.xp - lv.a) + " / " + fmtMx(lv.b - lv.a) + " XP · Faltan " + fmtMx(lv.left) + " para el nivel " + (lv.L + 1)));
+      box.appendChild(hero);
+      var s1 = mk("div", "mx-sec"); s1.appendChild(mk("span", null, "Misión del día")); var l1 = mk("button", "mx-link", "Ver todas"); l1.type = "button"; l1.addEventListener("click", function () { mxGo("mis"); }); s1.appendChild(l1); box.appendChild(s1);
+      var id0 = mxDaily(c).filter(function (id) { return !m.cl["d:" + c.dk + ":" + id]; })[0] || mxDaily(c)[0], d0 = MX_D[id0], key0 = "d:" + c.dk + ":" + id0;
+      box.appendChild(mxMissionRow(d0, d0.g(c), !!m.cl[key0], function () { mxClaim(key0, d0.xp, Math.round(d0.xp / 2), "Misión cumplida: +" + d0.xp + " XP"); }));
+      var s2 = mk("div", "mx-sec"); s2.appendChild(mk("span", null, "Racha")); box.appendChild(s2);
+      var w = writeStats(), rc = mk("div", "mx-card mx-mi"); rc.appendChild(mk("div", "mx-ic", "🔥")); var rt = mk("div"); rt.appendChild(mk("b", null, w.cur > 0 ? w.cur + (w.cur === 1 ? " día de racha" : " días de racha") : "Sin racha por ahora")); rt.appendChild(mk("span", "d", "Mejor racha: " + w.best + (w.best === 1 ? " día" : " días"))); rc.appendChild(rt); rc.appendChild(mk("div", "mx-rw", rdy ? rdy + " para reclamar" : "Seguí así")); box.appendChild(rc);
+      var s3 = mk("div", "mx-sec"); s3.appendChild(mk("span", null, "Novedades")); var l3 = mk("button", "mx-link", "Ver todas"); l3.type = "button"; l3.addEventListener("click", function () { mxGo("news"); }); s3.appendChild(l3); box.appendChild(s3);
+      var n0 = NEWS[0], nc = mk("div", "mx-card"), nw = mk("div", "mx-nw cur"); nw.style.border = "0"; nw.style.padding = "0"; nw.appendChild(el("i")); var nt = mk("div"); nt.appendChild(mk("b", null, "Versión " + n0.v + " · " + n0.t)); nt.appendChild(mk("span", null, (n0.l && n0.l[0]) || "")); nw.appendChild(nt); nc.appendChild(nw); box.appendChild(nc);
+    } else if (mxTab === "shop") {
+      var sc = mk("div", "mx-card mx-soon"); sc.appendChild(mk("div", "big", "🛍️")); sc.appendChild(mk("h2", null, "Tienda en desarrollo")); sc.appendChild(mk("p", "mx-note", "Pronto podrás usar tus estrellas ⭐ para estrenar cosas nuevas. Mientras tanto, seguí sumándolas con misiones, rachas y niveles."));
+      var pl = mk("div", "mx-pills"); ["Temas", "Fondos animados", "Marcos de avatar", "Portadas de perfil", "Insignias"].forEach(function (t) { pl.appendChild(mk("span", null, t)); }); sc.appendChild(pl); box.appendChild(sc);
+      box.appendChild(mk("p", "mx-note", "Tus estrellas ya se guardan: " + fmtMx(m.stars) + " ⭐"));
+    } else if (mxTab === "mis") {
+      var ch = mk("div", "mx-chips"); [["d", "Diarias"], ["w", "Semanales"], ["s", "Rachas"]].forEach(function (a) { var b = mk("button", null, a[1]); b.type = "button"; b.setAttribute("aria-pressed", a[0] === mxMisTab ? "true" : "false"); b.addEventListener("click", function () { mxMisTab = a[0]; mxRender(); }); ch.appendChild(b); }); box.appendChild(ch);
+      if (mxMisTab === "d") {
+        var tl = Math.max(0, c.t0 + 86400000 - Date.now()), hh = Math.floor(tl / 3600000), mm = Math.floor(tl % 3600000 / 60000);
+        box.appendChild(mk("p", "mx-note", "Se renuevan en " + hh + " h " + mm + " min. Completá las 3 para un bonus de +50 XP y +30 ⭐."));
+        var allc = true; mxDaily(c).forEach(function (id) { var d = MX_D[id], key = "d:" + c.dk + ":" + id; if (!m.cl[key]) allc = false; box.appendChild(mxMissionRow(d, d.g(c), !!m.cl[key], function () { mxClaim(key, d.xp, Math.round(d.xp / 2), "Misión cumplida: +" + d.xp + " XP"); })); });
+        var bk = "d:" + c.dk + ":bonus"; if (allc) { var bc = mk("div", "mx-card mx-mi"); bc.appendChild(mk("div", "mx-ic" + (m.cl[bk] ? " ok" : ""), m.cl[bk] ? "✓" : "🎁")); var bt2 = mk("div"); bt2.appendChild(mk("b", null, "Bonus del día")); bt2.appendChild(mk("span", "d", "Completaste las 3 misiones")); bc.appendChild(bt2); if (m.cl[bk]) bc.appendChild(mk("div", "mx-rw done", "Reclamado")); else { var bb = mk("button", "mx-rw", "Reclamar +50 XP"); bb.type = "button"; bb.addEventListener("click", function () { mxClaim(bk, 50, 30, "Bonus del día: +50 XP"); }); bc.appendChild(bb); } box.appendChild(bc); }
+      } else if (mxMisTab === "w") {
+        var dl = Math.max(0, c.w0 + 7 * 86400000 - Date.now()), dd = Math.floor(dl / 86400000);
+        box.appendChild(mk("p", "mx-note", "Se renuevan el lunes (en " + (dd + 1) + (dd === 0 ? " día" : " días") + ")."));
+        mxWeekly(c).forEach(function (id) { var d = MX_W[id], key = "w:" + c.wk + ":" + id; box.appendChild(mxMissionRow(d, d.g(c), !!m.cl[key], function () { mxClaim(key, d.xp, Math.round(d.xp / 2), "Misión cumplida: +" + d.xp + " XP"); })); });
+      } else {
+        var ws = writeStats(); box.appendChild(mk("p", "mx-note", "Escribí días seguidos para reclamar premios. Tu mejor racha: " + ws.best + (ws.best === 1 ? " día." : " días.")));
+        MX_STREAKS.forEach(function (s) {
+          var xp = s * 10, claimed = !!m.sc[s], ok = ws.best >= s, card = mk("div", "mx-card mx-mi"), ic = mk("div", "mx-ic" + (claimed ? " ok" : ""), claimed ? "✓" : "🔥"), tx = mk("div");
+          tx.appendChild(mk("b", null, s + " días seguidos")); tx.appendChild(mk("span", "d", claimed ? "¡Conseguida!" : Math.min(ws.best, s) + " / " + s));
+          if (!claimed) { var pb = mk("div", "mx-pb"), pi = el("i"); pi.style.width = Math.min(100, Math.round(ws.best / s * 100)) + "%"; pb.appendChild(pi); tx.appendChild(pb); }
+          card.appendChild(ic); card.appendChild(tx);
+          if (claimed) card.appendChild(mk("div", "mx-rw done", "+" + fmtMx(xp) + " XP"));
+          else if (ok) { var b = mk("button", "mx-rw", "Reclamar +" + fmtMx(xp) + " XP"); b.type = "button"; b.addEventListener("click", function () { var mm2 = getMax(); if (mm2.sc[s]) return; mm2.sc[s] = Date.now(); grantXp(xp, s * 2); toast("Racha de " + s + " días: +" + fmtMx(xp) + " XP"); mxRender(); }); card.appendChild(b); }
+          else card.appendChild(mk("div", "mx-rw", "+" + fmtMx(xp) + " XP"));
+          box.appendChild(card);
+        });
+      }
+    } else if (mxTab === "lvl") {
+      var ct = mk("div", "mx-ctr"), ew = mk("div", "mx-emw"); ew.innerHTML = emblemSvg(lv.rank.i, lv.L, 190); ct.appendChild(ew);
+      ct.appendChild(mk("span", "mx-tier", "Rango " + lv.rank.name)); ct.appendChild(mk("h2", null, lv.title)); ct.appendChild(mk("p", null, "Nivel " + lv.L + " de " + MX_MAXL)); box.appendChild(ct);
+      var xt = mk("div", "mx-xt"); xt.appendChild(mk("span", null, fmtMx(lv.xp) + " XP")); xt.appendChild(mk("span", null, lv.max ? "Máximo" : fmtMx(lv.b) + " XP")); box.appendChild(xt);
+      var br = mk("div", "mx-bar"), bi = el("i"); bi.style.width = lv.pct + "%"; br.appendChild(bi); box.appendChild(br);
+      box.appendChild(mk("p", "mx-note", lv.max ? "Llegaste al rango final." : "Faltan " + fmtMx(lv.left) + " XP para el nivel " + (lv.L + 1) + (titleOf(lv.L + 1) !== lv.title ? " · «" + titleOf(lv.L + 1) + "»" : "") + "."));
+      if (!lv.max) { var nx = mk("div", "mx-nxt"); nx.appendChild(mk("div", null, "🎁")); nx.firstChild.style.fontSize = "26px"; var nxt = mk("div"); nxt.appendChild(mk("b", null, "Premio del nivel " + (lv.L + 1))); nxt.appendChild(mk("span", null, "+" + (10 * (lv.L + 1)) + " ⭐" + (titleOf(lv.L + 1) !== lv.title ? " y título nuevo" : ""))); nx.appendChild(nxt); box.appendChild(nx); }
+      box.appendChild(mk("div", "mx-sec", "Cómo se gana XP"));
+      [["📝", "Crear una nota", "hasta 5 por día", "+10"], ["✍️", "Cada 100 palabras", "hasta 600 por día", "+5"], ["🎯", "Cada minuto de enfoque", "hasta 90 por día", "+1"], ["🏅", "Logros", "bronce · plata · oro", "+50 / 150 / 400"], ["🎯", "Misiones", "diarias y semanales", "+20 a +150"], ["🔥", "Rachas", "3, 7, 14, 30 días y más", "+30 a +3.650"]].forEach(function (a) {
+        var r = mk("div", "mx-x"), e = mk("div", "e", a[0]), t = mk("div", null, a[1]); t.appendChild(mk("small", null, a[2])); r.appendChild(e); r.appendChild(t); r.appendChild(mk("em", null, a[3])); box.appendChild(r);
+      });
+      box.appendChild(mk("div", "mx-sec", "Camino de rangos"));
+      MX_RANKS.forEach(function (r, i) {
+        var nextFrom = MX_RANKS[i + 1] ? MX_RANKS[i + 1][0] : MX_MAXL, cur = lv.rank.i === r[2], fut = r[2] > lv.rank.i;
+        var row = mk("div", "mx-road" + (cur ? " cur" : fut ? " fut" : "")), em = mk("div", "em"); em.innerHTML = emblemSvg(r[2], r[0], 52); var tx = mk("div");
+        tx.appendChild(mk("b", null, r[1] + (r[0] === MX_MAXL ? " · nivel 50" : " · niv. " + r[0] + "–" + (nextFrom - 1)) + (cur ? " ◀ estás aquí" : "")));
+        tx.appendChild(mk("span", null, r[0] === MX_MAXL ? "El rango final · " + fmtMx(xpAt(MX_MAXL)) + " XP" : "Hasta " + fmtMx(xpAt(nextFrom)) + " XP · " + r[3]));
+        row.appendChild(em); row.appendChild(tx); box.appendChild(row);
+      });
+      box.appendChild(mk("p", "mx-note", "Los tiempos son estimados para un uso activo (unos 120 XP por día)."));
+    } else {
+      NEWS.slice(0, 8).forEach(function (n, i) {
+        var nw = mk("div", "mx-nw" + (i === 0 ? " cur" : "")); nw.appendChild(el("i")); var t = mk("div"); t.appendChild(mk("b", null, n.v + " · " + n.t)); t.appendChild(mk("span", null, (n.l && n.l[0] ? n.l[0] + " · " : "") + n.d)); nw.appendChild(t); box.appendChild(nw);
+      });
+      var all = mk("button", "mx-btn", "Ver todas las novedades"); all.type = "button"; all.addEventListener("click", function () { openNews(); }); box.appendChild(all);
+    }
+  }
+  function mxGo(t) { mxTab = t; mxRender(); $("mxSc").scrollTop = 0; }
+  function openMax() { mxTab = "home"; mxMisTab = "d"; mxRender(); $("max").hidden = false; pushLayer("max"); }
+  function maxMenuSub() {
+    var lv = maxLevel(), r = mxReady();
+    return "Nivel " + lv.L + (r ? " · " + r + (r === 1 ? " premio por reclamar" : " premios por reclamar") : " · Misiones y niveles");
+  }
+  var celebrating = false;
+  var celT = 0;
+  function tryCelebrate() { clearTimeout(celT); celT = setTimeout(doCelebrate, 450); }
+  function doCelebrate() {
+    var m = settings.max; if (!m || !m.pend || celebrating) return;
+    var app = document.querySelector(".app"); if (!app || app.getAttribute("data-view") !== "list" || layers.length) return;
+    celebrating = true;
+    var L = m.pend, r = rankOf(L), prev = titleOf(m.pendFrom || L - 1), nm = titleOf(L);
+    $("luEmb").innerHTML = emblemSvg(r.i, L, 240); $("luName").textContent = nm; $("luSub").textContent = "Rango " + r.name + " · Nivel " + L;
+    var rw = $("luRw"); rw.textContent = ""; rw.appendChild(mk("div", null, "⭐ +" + fmtMx(m.pendStars || 0)));
+    if (nm !== prev) rw.appendChild(mk("div", null, "🏷️ Título nuevo"));
+    m.pend = 0; m.pendFrom = 0; m.pendStars = 0; maxSave();
+    $("lvlup").hidden = false; pushLayer("lvlup");
+  }
+  $("mnMax").addEventListener("click", function () { closeMenuThen(openMax); });
+  $("maxClose").addEventListener("click", function () { closeLayer("max"); });
+  $("mxNav").addEventListener("click", function (e) { var b = e.target.closest("button[data-mx]"); if (b) mxGo(b.dataset.mx); });
+  $("luOk").addEventListener("click", function () { closeLayer("lvlup"); });
+
   /* ---------- menú cósmico ---------- */
   var menuTimer = 0, menuFullTimer = 0, pausedAnims = [];
   function relTime(ts) {
@@ -6193,9 +6550,10 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     var p = getProfile(), st = universeStats(), over = backupOverdue();
     paintAvatar($("mnAv"), p);
     $("mnName").textContent = p.name || "Explorador";
-    var lv = levelInfo(st.notes);
-    $("mnRank").textContent = "Nivel " + lv.n + " · " + lv.name;
-    $("mnLvT").textContent = lv.next ? lv.left + (lv.left === 1 ? " nota" : " notas") + " para ser " + lv.next : "Nivel máximo alcanzado";
+    var lv = maxLevel();
+    $("mnRank").textContent = "Nivel " + lv.L + " · " + lv.title;
+    $("mnLvT").textContent = lv.max ? "Nivel máximo alcanzado" : "Faltan " + lv.left.toLocaleString("es") + " XP para el nivel " + (lv.L + 1);
+    $("mnSubMax").textContent = maxMenuSub();
     $("mnLvB").style.width = lv.pct + "%";
     $("mnTipT").textContent = TIPS[tipI];
     $("mnSub").textContent = "Tu universo de notas";
@@ -6254,12 +6612,6 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
   /* ---------- nivel, consejos y guía de bienvenida ---------- */
-  var LEVELS = [[0, "Polvo estelar"], [1, "Tripulante"], [5, "Navegante"], [15, "Cartógrafo"], [40, "Astrónomo"], [100, "Capitán estelar"]];
-  function levelInfo(n) {
-    var i = 0; while (i + 1 < LEVELS.length && n >= LEVELS[i + 1][0]) i++;
-    var nx = LEVELS[i + 1], cur = LEVELS[i][0];
-    return { n: i + 1, name: LEVELS[i][1], next: nx ? nx[1] : "", left: nx ? nx[0] - n : 0, pct: nx ? Math.round((n - cur) / (nx[0] - cur) * 100) : 100 };
-  }
   var TIPS = [
     "Mantené pulsada una insignia en el selector para ver su información.",
     "Lo que mandás a la papelera queda ahí hasta que la vacíes.",
@@ -6282,7 +6634,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
     { k: "Buscar y ordenar", i: "brujula", t: "Encontrá lo que quieras", d: "Buscá en todo el texto, ordená por fecha, título o color y cambiá entre lista y cuadrícula.", c: ["Búsqueda", "Orden", "Vistas"] },
     { k: "Tus datos", i: "satelite", t: "Siempre a salvo", d: "Exportá una copia cuando quieras e importala en otro teléfono. Lo que borrás queda en la papelera hasta que la vacíes.", c: ["Copia", "Papelera"] },
     { k: "Estilo", i: "luna", t: "Hacela tuya", d: "Elegí el tema Universo o Blanco, el color de acento y la tipografía desde Ajustes y Personalizar.", c: ["Universo", "Blanco", "Acentos"] },
-    { k: "Lo que viene", i: "nebulosa", t: "Esto recién empieza", d: "Perfil, Vinculación y MAX están en desarrollo. Mirá Novedades en el menú para ver qué trae cada versión.", c: ["Perfil", "Vinculación", "MAX"] }
+    { k: "Lo que viene", i: "nebulosa", t: "Esto recién empieza", d: "La Tienda de MAX y la Vinculación están en desarrollo. Mirá Novedades en el menú para ver qué trae cada versión.", c: ["Tienda", "Vinculación", "MAX"] }
   ];
   var tourI = 0, tourDir = 1;
   function renderTour() {
@@ -6348,7 +6700,6 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
   function openProfile() { pfCat = "Todos"; renderProfile(); pfShow("sum"); $("profile").hidden = false; pushLayer("profile"); }
   $("mnMe").addEventListener("click", function () { closeMenuThen(openProfile); });
   $("mnProfile").addEventListener("click", function () { closeMenuThen(openProfile); });
-  $("mnMax").addEventListener("click", function () { soon("MAX"); });
   $("mnCustom").addEventListener("click", openCustom);
   $("mnStickers").addEventListener("click", function () { closeMenuThen(function () { openStkMgr(""); }); });
   $("mnNews").addEventListener("click", openNews);
