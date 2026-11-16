@@ -611,6 +611,8 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .mn-av { position: relative; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 30%, #231a66, #0a0b26); }
 .mn-av .ic { width: 42px; height: 42px; font-size: 31px; }
 .mn-av .ic.sk { width: 58px; height: 58px; }
+.mn-av { overflow: hidden; }
+.mn-av img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 .mn-who { display: grid; min-width: 0; gap: 1px; }
 .mn-rank { font-style: normal; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #a99cf5; }
 .mn-who b { font-family: var(--font-display); font-size: 21px; letter-spacing: -0.015em; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -2210,7 +2212,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.63.0";
+  var APP_VERSION = "1.63.1";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5392,6 +5394,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.63.1", d: "16 nov 2026", t: "Corrección de la foto de perfil en el menú", lv: "Hipernova", cat: "arreglo", l: ["Al usar una foto de perfil, el menú la mostraba a pantalla completa y tapaba las opciones; ahora se ve como avatar circular"] },
     { v: "1.63.0", d: "15 nov 2026", t: "Llega MAX", lv: "Hipernova", cat: "nuevo", nm: "Llega MAX", l: ["MAX: nuevo centro con Inicio, Tienda, Misiones, Niveles y Novedades, accesible desde el menú", "Sistema de niveles por XP (50 niveles, 8 rangos) con insignias hexagonales y pantalla de celebración al subir", "Misiones diarias y semanales, bonus del día y premios por rachas de días seguidos", "Ganás XP al crear notas, escribir, usar el enfoque y desbloquear logros; también estrellas ⭐", "La Tienda de MAX está en desarrollo"] },
     { v: "1.62.6", d: "14 nov 2026", t: "Perfil renovado y Sala de logros", lv: "Supernova", cat: "nuevo+mejora", l: ["Perfil en pantalla completa con portada, avatar grande, frase personal y nivel", "Avatar con foto de la galería, iniciales con color o emoji; las insignias quedan solo para las notas", "Sala de logros: medallas de bronce, plata y oro, progreso general y barras de avance", "Logros organizados por categoría: Escritura, Constancia, Orden, Enfoque y Seguridad", "Perfil dividido en Resumen, Logros y Actividad, con editor propio y portada a elegir"] },
     { v: "1.62.2", d: "14 nov 2026", t: "Inicio más cómodo", lv: "Nova", cat: "rediseno", l: ["Buscador, Archivo y Papelera en una sola fila, con contador en cada ícono", "Se quitó la pestaña Notas de la parte superior: ahora se accede desde la barra inferior", "Barra inferior renovada: selector plano y botón + cuadrado con esquinas suaves", "Desde Archivo o Papelera, el botón Notas de la barra inferior vuelve a tus notas"] },
