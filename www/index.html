@@ -712,11 +712,11 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .pf-strip::-webkit-scrollbar { display: none; }
 .pf-mini { flex: none; width: 66px; text-align: center; font-size: 11px; font-weight: 600; line-height: 1.25; color: var(--muted); }
 .pf-mini .md { margin: 0 auto 6px; }
-.md { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-size: 24px; flex: none; }
-.md.gold { background: radial-gradient(circle at 35% 25%, #ffe9a0, #e5a824 70%); box-shadow: 0 8px 16px -6px #e5a824, inset 0 -3px 0 rgba(0, 0, 0, 0.12); }
-.md.silver { background: radial-gradient(circle at 35% 25%, #fff, #b9bfd6 70%); box-shadow: 0 8px 16px -6px #9aa2c4, inset 0 -3px 0 rgba(0, 0, 0, 0.1); }
-.md.bronze { background: radial-gradient(circle at 35% 25%, #ffd0a8, #c8773a 70%); box-shadow: 0 8px 16px -6px #c8773a, inset 0 -3px 0 rgba(0, 0, 0, 0.14); }
-.md.off { background: var(--line); color: var(--muted); box-shadow: none; }
+.md { position: relative; width: 56px; height: 56px; display: grid; place-items: center; font-size: 22px; flex: none; }
+.md svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; fill: none; stroke: none; }
+.md > span { position: relative; z-index: 1; margin-top: 3px; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)); }
+.md.gold { filter: drop-shadow(0 5px 8px rgba(229, 168, 36, 0.45)); }
+.md.off { opacity: 0.8; }
 .md.off span { opacity: 0.45; filter: grayscale(1); }
 .pf-heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 4px; }
 .pf-heat i { aspect-ratio: 1; border-radius: 4px; background: var(--line); }
@@ -741,7 +741,7 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .pf-chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--solid); }
 .pf-sec { margin: 14px 0 8px; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
 .pf-a { display: grid; grid-template-columns: 56px 1fr; gap: 13px; align-items: center; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); padding: 11px 12px; margin-bottom: 8px; }
-.pf-a .md { width: 52px; height: 52px; font-size: 22px; }
+.pf-a .md { width: 52px; height: 52px; font-size: 20px; }
 .pf-a b { display: block; font-size: 14.5px; }
 .pf-a span.d { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
 .pf-a:not(.on) b { color: var(--ink); }
@@ -2212,7 +2212,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.63.1";
+  var APP_VERSION = "1.64.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5394,6 +5394,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.64.0", d: "16 nov 2026", t: "Insignias nuevas y niveles animados", lv: "Hipernova", cat: "mejora", l: ["Insignias de logros rediseñadas: cada categoría tiene su forma y cada nivel su metal (bronce, plata y oro)", "Nivel 40, Agujero negro: nuevo diseño con el disco de gas girando alrededor", "Nivel 50, Singularidad: rayos, destellos y brillo animados, sin el aro exterior", "Las animaciones se detienen con el modo calmo"] },
     { v: "1.63.1", d: "16 nov 2026", t: "Corrección de la foto de perfil en el menú", lv: "Hipernova", cat: "arreglo", l: ["Al usar una foto de perfil, el menú la mostraba a pantalla completa y tapaba las opciones; ahora se ve como avatar circular"] },
     { v: "1.63.0", d: "15 nov 2026", t: "Llega MAX", lv: "Hipernova", cat: "nuevo", nm: "Llega MAX", l: ["MAX: nuevo centro con Inicio, Tienda, Misiones, Niveles y Novedades, accesible desde el menú", "Sistema de niveles por XP (50 niveles, 8 rangos) con insignias hexagonales y pantalla de celebración al subir", "Misiones diarias y semanales, bonus del día y premios por rachas de días seguidos", "Ganás XP al crear notas, escribir, usar el enfoque y desbloquear logros; también estrellas ⭐", "La Tienda de MAX está en desarrollo"] },
     { v: "1.62.6", d: "14 nov 2026", t: "Perfil renovado y Sala de logros", lv: "Supernova", cat: "nuevo+mejora", l: ["Perfil en pantalla completa con portada, avatar grande, frase personal y nivel", "Avatar con foto de la galería, iniciales con color o emoji; las insignias quedan solo para las notas", "Sala de logros: medallas de bronce, plata y oro, progreso general y barras de avance", "Logros organizados por categoría: Escritura, Constancia, Orden, Enfoque y Seguridad", "Perfil dividido en Resumen, Logros y Actividad, con editor propio y portada a elegir"] },
@@ -6122,8 +6123,29 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   ACH.forEach(function (a) { var m = ACH_META[a.id] || ["Orden", "⭐", 1]; a.c = m[0]; a.e = m[1]; a.tier = m[2]; });
   var PF_CATS = ["Todos", "Escritura", "Constancia", "Orden", "Enfoque", "Seguridad"], pfCat = "Todos";
   var TIER_CLS = ["", "bronze", "silver", "gold"], TIER_NM = ["", "bronce", "plata", "oro"];
+  var MD_PAL = { 1: ["#ffd9b8", "#cd7f45", "#6b3512", "#fff0e0"], 2: ["#ffffff", "#b6bdd3", "#4e566e", "#ffffff"], 3: ["#fff3b0", "#f0b01c", "#8a5a00", "#fffbe0"], 0: ["#4a4e70", "#34375a", "#222542", "#6b6f95"] };
+  var mdN = 0;
+  function mdShape(cat, r, fill, stroke, sw) {
+    var i, a, p = [], d = "", at = ' fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '" stroke-linejoin="round"';
+    if (cat === "Escritura") { for (i = 0; i < 6; i++) { a = (-90 + i * 60) * Math.PI / 180; p.push((50 + r * Math.cos(a)).toFixed(1) + "," + (50 + r * Math.sin(a)).toFixed(1)); } return '<polygon points="' + p.join(" ") + '"' + at + "/>"; }
+    if (cat === "Constancia") { for (i = 0; i < 16; i++) { a = i * 22.5 * Math.PI / 180; var rr = i % 2 ? r * 0.86 : r; d += (i ? "L" : "M") + (50 + rr * Math.cos(a)).toFixed(1) + " " + (50 + rr * Math.sin(a)).toFixed(1); } return '<path d="' + d + 'Z"' + at + "/>"; }
+    if (cat === "Enfoque") { for (i = 0; i < 8; i++) { a = (i * 45 + 22.5) * Math.PI / 180; p.push((50 + r * Math.cos(a)).toFixed(1) + "," + (50 + r * Math.sin(a)).toFixed(1)); } return '<polygon points="' + p.join(" ") + '"' + at + "/>"; }
+    if (cat === "Seguridad") return '<path d="M50 ' + (50 - r) + " L" + (50 + r * 0.86) + " " + (50 - r * 0.62) + " V" + (50 + r * 0.1) + " C" + (50 + r * 0.86) + " " + (50 + r * 0.62) + " 50 " + (50 + r) + " 50 " + (50 + r) + " C50 " + (50 + r) + " " + (50 - r * 0.86) + " " + (50 + r * 0.62) + " " + (50 - r * 0.86) + " " + (50 + r * 0.1) + " V" + (50 - r * 0.62) + 'Z"' + at + "/>";
+    return '<rect x="' + (50 - r * 0.86) + '" y="' + (50 - r * 0.86) + '" width="' + (r * 1.72) + '" height="' + (r * 1.72) + '" rx="' + (r * 0.3) + '" transform="rotate(45 50 50)"' + at + "/>";
+  }
+  function medalSvg(cat, tier, on) {
+    var id = "md" + (++mdN), c = MD_PAL[on ? tier : 0], s = "";
+    s += '<defs><linearGradient id="' + id + 'a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".5" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><linearGradient id="' + id + 'i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c[2] + '" stop-opacity=".9"/><stop offset="1" stop-color="' + c[1] + '" stop-opacity=".9"/></linearGradient><linearGradient id="' + id + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>';
+    if (on && tier === 3) s += '<circle cx="50" cy="50" r="49" fill="' + c[1] + '" opacity=".25"/>';
+    s += mdShape(cat, 44, "url(#" + id + "a)", c[2], 2.5);
+    s += mdShape(cat, 36, "url(#" + id + "i)", c[3], 1.6).replace('stroke-width="1.6"', 'stroke-width="1.6" stroke-opacity=".7"');
+    s += '<path d="M20 38 Q50 12 80 38 Q50 30 20 38Z" fill="url(#' + id + 's)" opacity=".8"/>';
+    if (on && tier >= 2) s += '<circle cx="50" cy="12" r="2.6" fill="' + c[3] + '"/>';
+    if (on && tier === 3) s += '<path d="M50 3 l2.2 5 5.3.5-4 3.6 1.2 5.2-4.7-2.8-4.7 2.8 1.2-5.2-4-3.6 5.3-.5z" fill="#fff6c9" stroke="#8a5a00" stroke-width="1" transform="translate(5 -2) scale(.9)"/>';
+    return '<svg viewBox="-2 -4 104 106" aria-hidden="true">' + s + "</svg>";
+  }
   function medal(a, on) {
-    var m = el("div", "md " + (on ? TIER_CLS[a.tier] : "off")), s = el("span"); s.textContent = a.e; m.appendChild(s); m.setAttribute("aria-hidden", "true"); return m;
+    var m = el("div", "md " + (on ? TIER_CLS[a.tier] : "off")), s = el("span"); s.textContent = a.e; m.innerHTML = medalSvg(a.c, a.tier, on); m.appendChild(s); m.setAttribute("aria-hidden", "true"); return m;
   }
   function fmtN(n) { return Number(n).toLocaleString("es"); }
   function renderAch() {
@@ -6365,13 +6387,39 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     return { L: L, xp: m.xp, a: a, b: b, left: Math.max(0, b - m.xp), pct: L >= MX_MAXL ? 100 : Math.max(0, Math.min(100, Math.round((m.xp - a) / (b - a) * 100))), title: titleOf(L), rank: rankOf(L), max: L >= MX_MAXL, stars: m.stars };
   }
   var embN = 0;
-  function emblemSvg(tier, n, size) {
+  function bhEmblem(n, size, anim) {
+    var id = "bhe" + (++embN), s = "", i, hp = function (r) { var p = []; for (var k = 0; k < 6; k++) { var a = (-90 + k * 60) * Math.PI / 180; p.push((100 + r * Math.cos(a)).toFixed(1) + "," + (100 + r * Math.sin(a)).toFixed(1)); } return p.join(" "); };
+    s += '<defs><clipPath id="' + id + 'k"><polygon points="' + hp(82) + '"/></clipPath><filter id="' + id + 'g"><feGaussianBlur stdDeviation="6"/></filter><linearGradient id="' + id + 'f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0abfc"/><stop offset=".5" stop-color="#a21caf"/><stop offset="1" stop-color="#3b0764"/></linearGradient></defs>';
+    s += '<circle cx="100" cy="100" r="99" fill="#d946ef" opacity=".35" filter="url(#' + id + 'g)">' + (anim ? '<animate attributeName="opacity" values=".25;.5;.25" dur="4s" repeatCount="indefinite"/>' : "") + "</circle>";
+    s += '<polygon points="' + hp(92) + '" fill="url(#' + id + 'f)" stroke="#3a1408" stroke-width="3"/><polygon points="' + hp(83) + '" fill="#000"/><g clip-path="url(#' + id + 'k)">';
+    for (i = 0; i < (anim ? 12 : 1); i++) s += '<image class="bhf"' + (anim ? ' data-a="1"' : "") + ' href="bh/f' + (i < 10 ? "0" : "") + i + '.webp" x="14" y="16" width="172" height="172" opacity="' + (i ? 0 : 1) + '"/>';
+    s += '</g><polygon points="' + hp(83) + '" fill="none" stroke="#ffe2c4" stroke-opacity=".6" stroke-width="2"/>';
+    s += '<rect x="64" y="152" width="72" height="24" rx="12" fill="#000" fill-opacity=".75" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="170" text-anchor="middle" font-weight="900" font-size="19" fill="#fff" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
+    return '<svg viewBox="-6 -4 212 204" width="' + size + '" height="' + Math.round(size * 0.962) + '" aria-hidden="true" style="overflow:visible">' + s + "</svg>";
+  }
+  var bhRaf = 0, bhT0 = 0;
+  function bhLoop(ts) {
+    var ims = document.querySelectorAll(".bhf[data-a]");
+    if (!ims.length || calmOn()) { bhRaf = 0; return; }
+    var vis = !$("max").hidden || !$("lvlup").hidden;
+    if (vis) {
+      if (!bhT0) bhT0 = ts;
+      var n = 12, x = (((ts - bhT0) / 7000) % 1) * n, a = Math.floor(x) % n, b = (a + 1) % n, f = x - Math.floor(x), top = Math.max(a, b), bot = Math.min(a, b), tf = top === b ? f : 1 - f;
+      for (var i = 0; i < ims.length; i += n) {
+        for (var k = 0; k < n && ims[i + k]; k++) ims[i + k].setAttribute("opacity", k === bot ? 1 : k === top ? tf : 0);
+      }
+    }
+    bhRaf = requestAnimationFrame(bhLoop);
+  }
+  function bhStart() { if (!bhRaf && !calmOn()) { bhT0 = 0; bhRaf = requestAnimationFrame(bhLoop); } }
+  function emblemAnim(tier, n, size) { var a = !calmOn() && (tier === 7 || tier === 8); var s = emblemSvg(tier, n, size, a); if (a && tier === 7) setTimeout(bhStart, 30); return s; }
+  function emblemSvg(tier, n, size, anim) {
+    if (tier === 7) return bhEmblem(n, size, anim);
     var P = { 1: ["#f0a56a", "#a8531f", "#5a2a0c", "#ffd2a8"], 2: ["#f4f6fb", "#9aa3b8", "#4b5468", "#ffffff"], 3: ["#ffe58a", "#e0a014", "#8a5a00", "#fff6c9"], 4: ["#b8f4ff", "#22b8d6", "#0a5a7a", "#ffffff"], 5: ["#e0b8ff", "#9b4dff", "#3a1286", "#ffd0f5"], 6: ["#fff3a8", "#ff8a1f", "#a3123a", "#fff9d6"], 7: ["#6b3fd6", "#1a0b3d", "#000000", "#ff9a3d"], 8: ["#ffffff", "#ffd76a", "#f0509a", "#ffffff"] }[tier] || ["#f0a56a", "#a8531f", "#5a2a0c", "#ffd2a8"];
     var id = "emb" + (++embN), c = P, s = "", i;
     s += '<defs><linearGradient id="' + id + 'm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".55" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><linearGradient id="' + id + 'i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><radialGradient id="' + id + 'h"><stop offset="0" stop-color="' + c[1] + '" stop-opacity=".55"/><stop offset="1" stop-color="' + c[1] + '" stop-opacity="0"/></radialGradient></defs>';
-    if (tier >= 3) s += '<circle cx="100" cy="100" r="98" fill="url(#' + id + 'h)" stroke="none"/>';
-    if (tier >= 6) for (i = 0; i < 12; i++) s += '<polygon points="100,2 106,40 94,40" fill="' + c[0] + '" stroke="none" opacity=".75" transform="rotate(' + (i * 30) + ' 100 100)"/>';
-    if (tier === 8) s += '<circle cx="100" cy="100" r="92" fill="none" stroke="' + c[2] + '" stroke-width="2" stroke-dasharray="2 7" opacity=".9"/>';
+    if (tier >= 3 && tier !== 8) s += '<circle cx="100" cy="100" r="98" fill="url(#' + id + 'h)" stroke="none"/>';
+    if (tier >= 6 && !(anim && tier === 8)) for (i = 0; i < 12; i++) s += '<polygon points="100,2 106,40 94,40" fill="' + c[0] + '" stroke="none" opacity=".75" transform="rotate(' + (i * 30) + ' 100 100)"/>';
     if (tier === 5) s += '<ellipse cx="100" cy="100" rx="96" ry="30" fill="none" stroke="' + c[0] + '" stroke-width="3" opacity=".8" transform="rotate(-24 100 100)"/><circle cx="18" cy="122" r="5" fill="#fff" stroke="none"/><circle cx="182" cy="78" r="4" fill="#ffd0f5" stroke="none"/>';
     if (tier >= 2 && tier !== 7) { var w = '<path d="M52 92 L8 66 L22 100 L8 134 L52 108Z" fill="url(#' + id + 'm)" stroke="' + c[2] + '" stroke-width="2"/>'; s += w + '<g transform="translate(200 0) scale(-1 1)">' + w + '</g>'; }
     if (tier >= 3) s += '<path d="M64 36 L74 10 L88 30 L100 4 L112 30 L126 10 L136 36Z" fill="url(#' + id + 'm)" stroke="' + c[2] + '" stroke-width="2.5"/>';
@@ -6383,6 +6431,18 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     var fs = n >= 10 ? 64 : 76, tc = tier === 7 ? "#fff" : tier === 8 ? "#5b1240" : "#fff";
     s += '<text x="100" y="' + (tier === 7 ? 150 : 123) + '" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="' + (tier === 7 ? 34 : fs) + '" fill="' + tc + '" stroke="' + (tier === 8 ? "none" : c[2]) + '" stroke-width="4" paint-order="stroke" style="letter-spacing:-2px">' + (n | 0) + '</text>';
     if (tier >= 4) s += '<path d="M92 160 L100 170 L108 160" fill="none" stroke="' + c[3] + '" stroke-width="3"/>';
+    if (anim && tier === 8) {
+      var rays = '<g><animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="24s" repeatCount="indefinite"/>';
+      for (i = 0; i < 16; i++) rays += '<polygon points="100,-6 104,44 96,44" fill="#ffe9a8" opacity="' + (i % 2 ? 0.3 : 0.55) + '" transform="rotate(' + (i * 22.5) + ' 100 100)"/>';
+      rays += "</g>";
+      var sh = '<defs><clipPath id="' + id + 'q"><polygon points="100,18 168,57 168,143 100,182 32,143 32,57"/></clipPath><linearGradient id="' + id + 'w" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>';
+      s = sh + rays + s;
+      s += '<g clip-path="url(#' + id + 'q)"><rect x="-60" y="0" width="46" height="200" fill="url(#' + id + 'w)" transform="skewX(-20)" opacity=".75"><animate attributeName="x" values="-90;260" dur="3.6s" repeatCount="indefinite"/></rect></g>';
+      [[40, 40, 3], [164, 52, 2.6], [30, 130, 2.2], [170, 138, 3], [100, 8, 2.6], [60, 176, 2.2], [150, 176, 2.4]].forEach(function (p, k) {
+        var u = p[2], x = p[0], y = p[1];
+        s += '<path d="M' + x + " " + (y - u * 2.6) + " L" + (x + u * 0.7) + " " + (y - u * 0.7) + " L" + (x + u * 2.6) + " " + y + " L" + (x + u * 0.7) + " " + (y + u * 0.7) + " L" + x + " " + (y + u * 2.6) + " L" + (x - u * 0.7) + " " + (y + u * 0.7) + " L" + (x - u * 2.6) + " " + y + " L" + (x - u * 0.7) + " " + (y - u * 0.7) + 'Z" fill="#fff" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="' + (1.8 + k * 0.35) + 's" begin="' + (k * 0.45) + 's" repeatCount="indefinite"/></path>';
+      });
+    }
     return '<svg viewBox="-6 -4 212 204" width="' + size + '" height="' + Math.round(size * 0.962) + '" aria-hidden="true" style="overflow:visible">' + s + '</svg>';
   }
   /* misiones */
@@ -6485,7 +6545,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
         });
       }
     } else if (mxTab === "lvl") {
-      var ct = mk("div", "mx-ctr"), ew = mk("div", "mx-emw"); ew.innerHTML = emblemSvg(lv.rank.i, lv.L, 190); ct.appendChild(ew);
+      var ct = mk("div", "mx-ctr"), ew = mk("div", "mx-emw"); ew.innerHTML = emblemAnim(lv.rank.i, lv.L, 190); ct.appendChild(ew);
       ct.appendChild(mk("span", "mx-tier", "Rango " + lv.rank.name)); ct.appendChild(mk("h2", null, lv.title)); ct.appendChild(mk("p", null, "Nivel " + lv.L + " de " + MX_MAXL)); box.appendChild(ct);
       var xt = mk("div", "mx-xt"); xt.appendChild(mk("span", null, fmtMx(lv.xp) + " XP")); xt.appendChild(mk("span", null, lv.max ? "Máximo" : fmtMx(lv.b) + " XP")); box.appendChild(xt);
       var br = mk("div", "mx-bar"), bi = el("i"); bi.style.width = lv.pct + "%"; br.appendChild(bi); box.appendChild(br);
@@ -6525,7 +6585,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     var app = document.querySelector(".app"); if (!app || app.getAttribute("data-view") !== "list" || layers.length) return;
     celebrating = true;
     var L = m.pend, r = rankOf(L), prev = titleOf(m.pendFrom || L - 1), nm = titleOf(L);
-    $("luEmb").innerHTML = emblemSvg(r.i, L, 240); $("luName").textContent = nm; $("luSub").textContent = "Rango " + r.name + " · Nivel " + L;
+    $("luEmb").innerHTML = emblemAnim(r.i, L, 240); $("luName").textContent = nm; $("luSub").textContent = "Rango " + r.name + " · Nivel " + L;
     var rw = $("luRw"); rw.textContent = ""; rw.appendChild(mk("div", null, "⭐ +" + fmtMx(m.pendStars || 0)));
     if (nm !== prev) rw.appendChild(mk("div", null, "🏷️ Título nuevo"));
     m.pend = 0; m.pendFrom = 0; m.pendStars = 0; maxSave();
