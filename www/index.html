@@ -1244,6 +1244,13 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .mx-nw.cur i { background: #ec4899; }
 .mx-nw b { font-size: 14.5px; }
 .mx-nw span { display: block; margin-top: 3px; font-size: 12.5px; color: #a9acd6; }
+.mx-road { cursor: pointer; }
+.mx-test { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 12px; padding: 10px 12px; border-radius: 14px; background: rgba(251, 146, 60, 0.14); border: 1px solid rgba(251, 146, 60, 0.55); font-size: 12.5px; color: #ffd9b8; }
+.mx-tbtn { flex: none; min-height: 34px; padding: 0 14px; border-radius: 999px; font: inherit; font-weight: 700; font-size: 12.5px; color: #1b1030; background: #fdba74; border: 0; }
+.mx-tl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px; }
+.mx-tl2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mx-chip { min-height: 42px; border-radius: 14px; font: inherit; font-weight: 700; font-size: 13px; color: #fff; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); }
+.mx-chip:disabled, .mx-btn:disabled { opacity: 0.45; }
 .mx-btn { width: 100%; min-height: 46px; margin-top: 12px; border-radius: 16px; font: inherit; font-weight: 700; font-size: 14px; color: #fff; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.16); cursor: pointer; }
 .lvlov { z-index: 40; align-items: center; background: rgba(5, 6, 20, 0.88); }
 .lu { position: relative; width: 100%; max-width: 480px; height: 100%; display: grid; place-items: center; overflow: hidden; color: #f3f1ff; background: radial-gradient(circle at 50% 38%, rgba(251, 191, 36, 0.4), rgba(168, 85, 247, 0.3) 35%, #0b0c26 72%); }
@@ -1979,7 +1986,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   <div class="lu" role="dialog" aria-modal="true" aria-label="Subiste de nivel">
     <div class="lu-rays" aria-hidden="true"></div>
     <div class="lu-in">
-      <div class="lu-big">¡Subiste de nivel!</div>
+      <div class="lu-big" id="luBig">¡Subiste de nivel!</div>
       <div class="lu-emb" id="luEmb"></div>
       <h2 id="luName"></h2>
       <p id="luSub"></p>
@@ -6365,7 +6372,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   $("pfBioIn").addEventListener("input", function () { setProfile({ bio: $("pfBioIn").value }); renderProfile(); });
 
   /* ---------- MAX: XP, niveles, misiones y rachas ---------- */
-  var MX_TITLES = [[1, "Polvo estelar"], [2, "Tripulante"], [4, "Navegante"], [6, "Cartógrafo"], [8, "Astrónomo"], [10, "Piloto"], [12, "Almirante"], [13, "Guardián de constelaciones"], [16, "Arquitecto estelar"], [20, "Señor de nebulosas"], [25, "Titán"], [30, "Oráculo cósmico"], [35, "Soberano"], [40, "Eón"], [45, "Devorador de estrellas"], [50, "Singularidad"]];
+  var MX_TITLES = [[1, "Polvo estelar"], [3, "Chispa errante"], [5, "Navegante"], [7, "Cartógrafo"], [10, "Capitán estelar"], [12, "Comandante"], [15, "Guardián de constelaciones"], [18, "Arquitecto estelar"], [20, "Tejedor de nebulosas"], [25, "Señor de nebulosas"], [30, "Oráculo cósmico"], [33, "Titán estelar"], [36, "Soberano galáctico"], [40, "Dominador del vacío"], [43, "Eón"], [46, "Devorador de estrellas"], [50, "Singularidad"]];
   var MX_RANKS = [[1, "Bronce", 1, "~2 semanas"], [5, "Plata", 2, "~1 mes"], [10, "Oro", 3, "~3 meses"], [15, "Cristal", 4, "~5 meses y medio"], [20, "Nebulosa", 5, "~1 año"], [30, "Supernova", 6, "~2 años"], [40, "Agujero negro", 7, "~3 años y medio"], [50, "Singularidad", 8, "El rango final"]];
   var TIER_XP = [0, 50, 150, 400], MX_MAXL = 50;
   function xpAt(L) { return L <= 1 ? 0 : Math.round(30 * Math.pow(L - 1, 2.2) / 10) * 10; }
@@ -6398,15 +6405,29 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     return m;
   }
   function grantXp(xp, stars) {
-    var m = getMax(), before = m.seen;
-    m.xp += Math.max(0, xp); m.stars += Math.max(0, stars || 0);
-    var L = lvlOf(m.xp);
-    if (L > m.seen) {
-      var bonus = 0; for (var i = m.seen + 1; i <= L; i++) bonus += 10 * i;
-      m.stars += bonus; m.pend = L; m.seen = L; m.pendFrom = before; m.pendStars = (m.pendStars || 0) + bonus;
-      if (typeof toast === "function") toast("¡Subiste al nivel " + L + "!");
+    var m = getMax(), t = m.bk || m, before = t.seen;
+    t.xp += Math.max(0, xp); t.stars += Math.max(0, stars || 0);
+    var L = lvlOf(t.xp);
+    if (L > t.seen) {
+      var bonus = 0; for (var i = t.seen + 1; i <= L; i++) bonus += 10 * i;
+      t.stars += bonus; t.pend = L; t.seen = L; t.pendFrom = before; t.pendStars = (t.pendStars || 0) + bonus;
+      if (!m.bk && typeof toast === "function") toast("¡Subiste al nivel " + L + "!");
     }
-    maxSave(); tryCelebrate();
+    maxSave(); if (!m.bk) tryCelebrate();
+  }
+  /* Probador de niveles: cambia el nivel solo para ver los emblemas; el progreso real queda guardado en m.bk */
+  function mxTestGo(L) {
+    var m = getMax(); L = Math.max(1, Math.min(MX_MAXL, L));
+    if (!m.bk) m.bk = { xp: m.xp, stars: m.stars, seen: m.seen, pend: m.pend || 0, pendFrom: m.pendFrom || 0, pendStars: m.pendStars || 0 };
+    m.xp = xpAt(L); m.seen = L; m.pend = 0; m.pendFrom = 0; m.pendStars = 0;
+    saveSettings(); mxRender(); $("mxSc").scrollTop = 0;
+  }
+  function mxTestRestore() {
+    var m = getMax(), b = m.bk; if (!b) return;
+    m.xp = b.xp; m.stars = b.stars; m.seen = b.seen; m.pend = b.pend || 0; m.pendFrom = b.pendFrom || 0; m.pendStars = b.pendStars || 0;
+    delete m.bk; saveSettings(); mxRender(); $("mxSc").scrollTop = 0;
+    if (typeof toast === "function") toast("Volviste a tu nivel real: " + lvlOf(m.xp));
+    if (m.pend) tryCelebrate();
   }
   function maxNote(isNew, words) {
     var m = getMax();
@@ -6699,6 +6720,11 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
         });
       }
     } else if (mxTab === "lvl") {
+      var tm = getMax();
+      if (tm.bk) {
+        var tb = mk("div", "mx-test"); tb.appendChild(mk("span", null, "Modo prueba · tu nivel real es el " + lvlOf(tm.bk.xp)));
+        var tr = mk("button", "mx-tbtn", "Restablecer"); tr.type = "button"; tr.addEventListener("click", mxTestRestore); tb.appendChild(tr); box.appendChild(tb);
+      }
       var ct = mk("div", "mx-ctr"), ew = mk("div", "mx-emw"); ew.innerHTML = emblemAnim(lv.rank.i, lv.L, 190); ct.appendChild(ew);
       ct.appendChild(mk("span", "mx-tier", "Rango " + lv.rank.name)); ct.appendChild(mk("h2", null, lv.title)); ct.appendChild(mk("p", null, "Nivel " + lv.L + " de " + MX_MAXL)); box.appendChild(ct);
       var xt = mk("div", "mx-xt"); xt.appendChild(mk("span", null, fmtMx(lv.xp) + " XP")); xt.appendChild(mk("span", null, lv.max ? "Máximo" : fmtMx(lv.b) + " XP")); box.appendChild(xt);
@@ -6712,12 +6738,23 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
       box.appendChild(mk("div", "mx-sec", "Camino de rangos"));
       MX_RANKS.forEach(function (r, i) {
         var nextFrom = MX_RANKS[i + 1] ? MX_RANKS[i + 1][0] : MX_MAXL, cur = lv.rank.i === r[2], fut = r[2] > lv.rank.i;
-        var row = mk("div", "mx-road" + (cur ? " cur" : fut ? " fut" : "")), em = mk("div", "em"); em.innerHTML = emblemSvg(r[2], r[0], 52); var tx = mk("div");
+        var row = mk("div", "mx-road" + (cur ? " cur" : fut ? " fut" : "")), em = mk("div", "em"); em.innerHTML = r[2] >= 7 ? emblemAnim(r[2], r[0], 56) : emblemSvg(r[2], r[0], 52); var tx = mk("div");
+        row.addEventListener("click", function () { showRankPreview(r); });
         tx.appendChild(mk("b", null, r[1] + (r[0] === MX_MAXL ? " · nivel 50" : " · niv. " + r[0] + "–" + (nextFrom - 1)) + (cur ? " ◀ estás aquí" : "")));
         tx.appendChild(mk("span", null, r[0] === MX_MAXL ? "El rango final · " + fmtMx(xpAt(MX_MAXL)) + " XP" : "Hasta " + fmtMx(xpAt(nextFrom)) + " XP · " + r[3]));
         row.appendChild(em); row.appendChild(tx); box.appendChild(row);
       });
-      box.appendChild(mk("p", "mx-note", "Los tiempos son estimados para un uso activo (unos 120 XP por día)."));
+      box.appendChild(mk("p", "mx-note", "Los tiempos son estimados para un uso activo (unos 120 XP por día). Toca un rango para verlo en grande."));
+      box.appendChild(mk("div", "mx-sec", "Probador de niveles"));
+      box.appendChild(mk("p", "mx-note", "Cambia de nivel para ver cada emblema en grande. Tu progreso real queda guardado y puedes volver a él en cualquier momento."));
+      var tl = mk("div", "mx-tl");
+      [5, 10, 15, 20, 30, 40, 50].forEach(function (n) { var b = mk("button", "mx-chip", "Nivel " + n); b.type = "button"; b.addEventListener("click", function () { mxTestGo(n); }); tl.appendChild(b); });
+      box.appendChild(tl);
+      var tl2 = mk("div", "mx-tl2"), cL = lvlOf(tm.xp), bd = mk("button", "mx-chip", "− Bajar nivel"), bu = mk("button", "mx-chip", "+ Subir nivel");
+      bd.type = "button"; bu.type = "button"; bd.disabled = cL <= 1; bu.disabled = cL >= MX_MAXL;
+      bd.addEventListener("click", function () { mxTestGo(cL - 1); }); bu.addEventListener("click", function () { mxTestGo(cL + 1); });
+      tl2.appendChild(bd); tl2.appendChild(bu); box.appendChild(tl2);
+      var rs = mk("button", "mx-btn", tm.bk ? "Restablecer a mi nivel real (" + lvlOf(tm.bk.xp) + ")" : "Estás en tu nivel real"); rs.type = "button"; rs.disabled = !tm.bk; rs.addEventListener("click", mxTestRestore); box.appendChild(rs);
     } else {
       NEWS.slice(0, 8).forEach(function (n, i) {
         var nw = mk("div", "mx-nw" + (i === 0 ? " cur" : "")); nw.appendChild(el("i")); var t = mk("div"); t.appendChild(mk("b", null, n.v + " · " + n.t)); t.appendChild(mk("span", null, (n.l && n.l[0] ? n.l[0] + " · " : "") + n.d)); nw.appendChild(t); box.appendChild(nw);
@@ -6737,12 +6774,19 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   function doCelebrate() {
     var m = settings.max; if (!m || !m.pend || celebrating) return;
     var app = document.querySelector(".app"); if (!app || app.getAttribute("data-view") !== "list" || layers.length) return;
-    celebrating = true;
+    celebrating = true; $("luBig").textContent = "¡Subiste de nivel!";
     var L = m.pend, r = rankOf(L), prev = titleOf(m.pendFrom || L - 1), nm = titleOf(L);
     $("luEmb").innerHTML = emblemAnim(r.i, L, 240); $("luName").textContent = nm; $("luSub").textContent = "Rango " + r.name + " · Nivel " + L;
     var rw = $("luRw"); rw.textContent = ""; rw.appendChild(mk("div", null, "⭐ +" + fmtMx(m.pendStars || 0)));
     if (nm !== prev) rw.appendChild(mk("div", null, "🏷️ Título nuevo"));
     m.pend = 0; m.pendFrom = 0; m.pendStars = 0; maxSave();
+    $("lvlup").hidden = false; pushLayer("lvlup");
+  }
+  function showRankPreview(r) {
+    if (celebrating) return; celebrating = true;
+    $("luEmb").innerHTML = emblemAnim(r[2], r[0], 240); $("luName").textContent = titleOf(r[0]); $("luSub").textContent = "Rango " + r[1] + " · Nivel " + r[0];
+    $("luBig").textContent = "Vista previa";
+    var rw = $("luRw"); rw.textContent = ""; rw.appendChild(mk("div", null, "Así se ve este rango"));
     $("lvlup").hidden = false; pushLayer("lvlup");
   }
   $("mnMax").addEventListener("click", function () { closeMenuThen(openMax); });
