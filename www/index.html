@@ -2211,7 +2211,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.65.0";
+  var APP_VERSION = "1.66.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5393,6 +5393,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.66.0", d: "17 nov 2026", t: "Nivel 50 renovado: Singularidad con alas de ángel", lv: "Singularidad", cat: "mejora", l: ["Nuevo emblema del nivel 50: ángel cósmico con halo, alas doradas, nebulosa y esfera armilar", "En las pantallas grandes las alas aletean de vez en cuando y los aros giran alrededor del núcleo", "Con el modo calmo y en los tamaños chicos queda quieto"] },
     { v: "1.65.0", d: "16 nov 2026", t: "Insignias con íconos propios y nivel 40 renovado", lv: "Hipernova", cat: "mejora", l: ["Los logros tienen insignias nuevas con un ícono dibujado para cada uno, sin emojis", "Nivel 40, Agujero negro: más equilibrado, centrado y con partículas cósmicas, y una versión pensada para tamaños chicos", "Resplandor exterior del emblema más limpio"] },
     { v: "1.64.0", d: "16 nov 2026", t: "Insignias nuevas y niveles animados", lv: "Hipernova", cat: "mejora", l: ["Insignias de logros rediseñadas: cada categoría tiene su forma y cada nivel su metal (bronce, plata y oro)", "Nivel 40, Agujero negro: nuevo diseño con el disco de gas girando alrededor", "Nivel 50, Singularidad: rayos, destellos y brillo animados, sin el aro exterior", "Las animaciones se detienen con el modo calmo"] },
     { v: "1.63.1", d: "16 nov 2026", t: "Corrección de la foto de perfil en el menú", lv: "Hipernova", cat: "arreglo", l: ["Al usar una foto de perfil, el menú la mostraba a pantalla completa y tapaba las opciones; ahora se ve como avatar circular"] },
@@ -6447,9 +6448,125 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     bhRaf = requestAnimationFrame(bhLoop);
   }
   function bhStart() { if (!bhRaf && !calmOn()) { bhT0 = 0; bhRaf = requestAnimationFrame(bhLoop); } }
-  function emblemAnim(tier, n, size) { var a = !calmOn() && (tier === 7 || tier === 8); var s = emblemSvg(tier, n, size, a); if (a && tier === 7) setTimeout(bhStart, 30); return s; }
+  // ===== Nivel 50 · Singularidad (ángel cósmico) =====
+  var ANG_TT = 20, ANG_FL = 0.14, ANG_EV = [0.15, 0.65], ANG_ST = 1.3 / 20, PI = Math.PI;
+  function angB(p) { p = ((p % 1) + 1) % 1; var u = p / ANG_FL; if (u >= 1) return 0; return Math.pow(Math.sin(PI * u), 2) * (24 - 28 * Math.sin(PI * 4 * u)) * (1.08 - 0.2 * u); }
+  function angF(p) { return angB(p - ANG_EV[0]) + angB(p - ANG_EV[1]); }
+  function angOn(ph) { for (var i = 0; i < 2; i++) { var d = (((ph - ANG_EV[i]) % 1) + 1) % 1; if (d < ANG_FL + 0.04) return true; } return false; }
+  var ANG_ROWS = [
+    { n: 8, a0: -82, a1: -2, L0: 112, L1: 90, w: 14, g: "a", dx: 52, dy: -8 },
+    { n: 7, a0: -72, a1: 4, L0: 94, L1: 74, w: 12.5, g: "b", dx: 54, dy: -6 },
+    { n: 6, a0: -60, a1: 12, L0: 73, L1: 56, w: 11, g: "d", dx: 56, dy: -4 },
+    { n: 5, a0: -48, a1: 20, L0: 52, L1: 38, w: 9, g: "b", dx: 58, dy: -2 }];
+  var ANG_FE = null;
+  function angFeathers() {
+    if (ANG_FE) return ANG_FE; ANG_FE = [];
+    ANG_ROWS.forEach(function (r, ri) { for (var k = 0; k < r.n; k++) { var t = k / (r.n - 1); ANG_FE.push({ ri: ri, g: r.g, w: r.w, dx: r.dx, dy: r.dy, L: r.L0 + (r.L1 - r.L0) * t, a: r.a0 + (r.a1 - r.a0) * t }); } });
+    return ANG_FE;
+  }
+  function angTr(fe, ph, F0, sp) { return "translate(" + fe.dx + " " + fe.dy + ") rotate(" + (fe.a * sp + 0.6 * (angF(ph - 0.016 * (fe.L / 112) - 0.004 * fe.ri) - F0) - 0.25 * F0 * (fe.L / 112)).toFixed(1) + ")"; }
+  function angWing(id, sd, ph) {
+    var F0 = angF(ph), sp = 1 + 0.12 * F0 / 44, fe = angFeathers(), o = '<g class="aw" data-sd="' + sd + '" transform="rotate(' + (sd * F0).toFixed(2) + " " + (sd > 0 ? 152 : 48) + ' 98)"><g transform="translate(100 98) scale(' + (sd * 0.95) + ' .95)">';
+    fe.forEach(function (f) {
+      var L = f.L, w = f.w;
+      o += '<g transform="' + angTr(f, ph, F0, sp) + '"><path d="M0 0 C' + (L * .25).toFixed(1) + " " + (-w * .85).toFixed(1) + " " + (L * .7).toFixed(1) + " " + (-w) + " " + L.toFixed(1) + " 0 C" + (L * .75).toFixed(1) + " " + (w * .5).toFixed(1) + " " + (L * .28).toFixed(1) + " " + (w * .65).toFixed(1) + ' 0 0Z" fill="url(#' + id + f.g + ')" stroke="#7a4a00" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 -.5 L' + (L * .9).toFixed(1) + ' -.5" stroke="#fff6c9" stroke-width="1.1" stroke-linecap="round" opacity=".75"/></g>';
+    });
+    return o + "</g></g>";
+  }
+  function angWingUpd(g, ph) {
+    var sd = +g.getAttribute("data-sd"), F0 = angF(ph), sp = 1 + 0.12 * F0 / 44, fe = angFeathers(), ch = g.firstChild.childNodes, i;
+    g.setAttribute("transform", "rotate(" + (sd * F0).toFixed(2) + " " + (sd > 0 ? 152 : 48) + " 98)");
+    for (i = 0; i < fe.length; i++) ch[i].setAttribute("transform", angTr(fe[i], ph, F0, sp));
+  }
+  function angRot(x, y, tx, ps) { var y1 = y * Math.cos(tx), z1 = y * Math.sin(tx); return [x * Math.cos(ps) - y1 * Math.sin(ps), x * Math.sin(ps) + y1 * Math.cos(ps), z1]; }
+  function angRing(ri, ph) {
+    var P2 = 2 * PI, dir = ri % 2 ? -1 : 1, w = P2 * ph * 2, ps = ri * PI / 3 + dir * (w + 0.35 * Math.sin(w * 2 + ri)), tx = 1.0 + 0.55 * Math.sin(w + ri * 2.1), R = 49 + 2.5 * Math.sin(w * 2 + ri * 1.7), pts = [], M = 72, i, k;
+    for (i = 0; i <= M; i++) { var th = i / M * P2, p = angRot(R * Math.cos(th), R * Math.sin(th), tx, ps); pts.push([100 + p[0], 98 + p[1], p[2]]); }
+    var seg = function (sg) { var s = "", on = false; pts.forEach(function (p) { var ok = sg > 0 ? p[2] >= 0 : p[2] < 0; if (ok) { s += (on ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); on = true; } else on = false; }); return s; };
+    var fd = seg(1), bd = seg(-1), c0 = P2 * (ph * [2, 2, 4][ri] * dir + ri / 3), cp = "", cz = 0;
+    for (k = 0; k <= 10; k++) { var t2 = c0 - k * 0.075 * dir, p2 = angRot(R * Math.cos(t2), R * Math.sin(t2), tx, ps); cp += (k ? "L" : "M") + (100 + p2[0]).toFixed(1) + " " + (98 + p2[1]).toFixed(1); if (!k) cz = p2[2]; }
+    return { gl: fd + bd, bd: bd, fd: fd, cm: cp, cz: cz };
+  }
+  function angPart(ph) {
+    var o = "";
+    ANG_EV.forEach(function (e0) {
+      var u = (((ph - e0) % 1) + 1) % 1 / ANG_FL;
+      if (u < 1) for (var i = 0; i < 16; i++) {
+        var rr = Math.abs((Math.sin(i * 12.9898) * 43758.5453) % 1), r2 = Math.abs((Math.sin(i * 78.233) * 12345.678) % 1), sd = i % 2 ? 1 : -1;
+        o += '<circle cx="' + (100 + sd * (62 + rr * 70)).toFixed(1) + '" cy="' + (40 + r2 * 90 + 28 * u * (.5 + rr)).toFixed(1) + '" r="' + (1 + 1.8 * r2).toFixed(1) + '" fill="#fff3b0" opacity="' + (Math.sin(PI * u) * (.35 + .65 * r2)).toFixed(2) + '"/>';
+      }
+    });
+    return o;
+  }
+  function angCore(id, ph, anim) {
+    var o = '<g fill="none" stroke-linecap="round" stroke-linejoin="round">', gl = "", bk = "", fr = "", cm = "", ri, d;
+    var rg = [0, 1, 2].map(function (r) { return angRing(r, ph); });
+    for (ri = 0; ri < 3; ri++) {
+      d = rg[ri];
+      gl += '<path class="ag' + ri + '" d="' + d.gl + '" stroke="#ffd76a" stroke-width="7" opacity=".16"/>';
+      bk += '<path class="ab' + ri + '" d="' + d.bd + '" stroke="#5a3300" stroke-width="3.2" opacity=".55"/><path class="ab' + ri + '" d="' + d.bd + '" stroke="#c48a14" stroke-width="1.6" opacity=".7"/>';
+      fr += '<path class="af' + ri + '" d="' + d.fd + '" stroke="#6b4300" stroke-width="3.8"/><path class="af' + ri + '" d="' + d.fd + '" stroke="url(#' + id + 'g)" stroke-width="2.2"/>';
+      if (anim) cm += '<path class="ac' + ri + '" d="' + d.cm + '" stroke="#fff6c9" stroke-width="3.2" opacity="' + (d.cz >= 0 ? .95 : .4) + '"/><path class="ac' + ri + '" d="' + d.cm + '" stroke="#fff" stroke-width="1.3" opacity="' + (d.cz >= 0 ? 1 : .5) + '"/>';
+    }
+    var pu = .5 + .5 * Math.sin(2 * PI * ph * 3);
+    var star = '<circle class="ao" cx="100" cy="98" r="' + (21 + 3 * pu).toFixed(1) + '" fill="url(#' + id + 'o)" stroke="none"/><circle cx="100" cy="98" r="9" fill="#fff" stroke="none"/><path class="as" d="M100 66 L103 95 L100 98 L97 95Z M100 130 L103 101 L100 98 L97 101Z M68 98 L95 95 L100 98 L95 101Z M132 98 L105 95 L100 98 L105 101Z" fill="#fff6c9" stroke="none" transform="rotate(' + (ph * 180).toFixed(1) + ' 100 98)"/>';
+    return o + "<g>" + gl + "</g>" + bk + star + fr + cm + "</g>";
+  }
+  function angDraw(sv, ph) {
+    var q = function (c) { return sv.querySelectorAll(c); }, ri, d, i, e, on = angOn(ph);
+    for (ri = 0; ri < 3; ri++) {
+      d = angRing(ri, ph);
+      q(".ag" + ri).forEach(function (x) { x.setAttribute("d", d.gl); });
+      q(".ab" + ri).forEach(function (x) { x.setAttribute("d", d.bd); });
+      q(".af" + ri).forEach(function (x) { x.setAttribute("d", d.fd); });
+      e = q(".ac" + ri); for (i = 0; i < e.length; i++) { e[i].setAttribute("d", d.cm); e[i].setAttribute("opacity", i ? (d.cz >= 0 ? 1 : .5) : (d.cz >= 0 ? .95 : .4)); }
+    }
+    var o = sv.querySelector(".ao"); if (o) o.setAttribute("r", (21 + 3 * (.5 + .5 * Math.sin(2 * PI * ph * 3))).toFixed(1));
+    var s = sv.querySelector(".as"); if (s) s.setAttribute("transform", "rotate(" + (ph * 180).toFixed(1) + " 100 98)");
+    if (on || sv._on) {
+      q(".aw").forEach(function (g) { angWingUpd(g, ph); });
+      var pg = sv.querySelector(".ap"); if (pg) pg.innerHTML = angPart(ph);
+    }
+    sv._on = on;
+  }
+  function angEmblem(n, size, anim) {
+    var id = "ang" + (++embN), s = "", ph = anim ? 0 : ANG_ST, i, big = size > 90, mid = !big && size > 56;
+    var yt = big ? 150 : mid ? 144 : 140, yb = big ? 172 : mid ? 178 : 182, fs = big ? 26 : mid ? 34 : 42, ym = (yt + yb) / 2;
+    s += '<defs><linearGradient id="' + id + 'g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffbe6"/><stop offset=".45" stop-color="#ffd76a"/><stop offset="1" stop-color="#b8740a"/></linearGradient>' +
+      '<linearGradient id="' + id + 'a" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8740a"/><stop offset=".6" stop-color="#f0b01c"/><stop offset="1" stop-color="#ffe68a"/></linearGradient>' +
+      '<linearGradient id="' + id + 'b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d8920f"/><stop offset=".6" stop-color="#ffd05a"/><stop offset="1" stop-color="#fff1b8"/></linearGradient>' +
+      '<linearGradient id="' + id + 'd" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8a820"/><stop offset=".6" stop-color="#ffdd7a"/><stop offset="1" stop-color="#fff8d6"/></linearGradient>' +
+      '<radialGradient id="' + id + 'h"><stop offset=".6" stop-color="#ffb347" stop-opacity="0"/><stop offset=".85" stop-color="#ff9a3d" stop-opacity=".28"/><stop offset="1" stop-color="#ff7a2f" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="' + id + 'o"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".45" stop-color="#ffe9a0" stop-opacity=".5"/><stop offset="1" stop-color="#ffd76a" stop-opacity="0"/></radialGradient>' +
+      '<clipPath id="' + id + 'c"><circle cx="100" cy="98" r="58"/></clipPath></defs>';
+    s += '<circle cx="100" cy="98" r="100" fill="url(#' + id + 'h)"/>';
+    s += angWing(id, 1, ph) + angWing(id, -1, ph) + '<g class="ap">' + (anim ? angPart(ph) : "") + "</g>";
+    s += '<circle cx="100" cy="98" r="68" fill="url(#' + id + 'g)" stroke="#8a5a00" stroke-width="2.6"/><circle cx="100" cy="98" r="62.5" fill="#1b0a3a" stroke="#8a5a00" stroke-width="1.4"/><circle cx="100" cy="98" r="61" fill="none" stroke="#fff6c9" stroke-opacity=".8" stroke-width="1"/>';
+    s += '<g clip-path="url(#' + id + 'c)"><image href="bh/neb.webp" x="40" y="38" width="120" height="120"/>' + angCore(id, ph, anim) + "</g>";
+    s += '<ellipse cx="100" cy="20" rx="30" ry="7.5" fill="none" stroke="#8a5a00" stroke-width="6.5"/><ellipse cx="100" cy="20" rx="30" ry="7.5" fill="none" stroke="url(#' + id + 'g)" stroke-width="4"/><ellipse cx="100" cy="20" rx="30" ry="7.5" fill="none" stroke="#fff6c9" stroke-width="1.2" opacity=".8"/>';
+    s += '<path d="M44 ' + yt + " L156 " + yt + " L148 " + yb + " L52 " + yb + 'Z" fill="#2a0c4e" stroke="#ffd76a" stroke-width="2.5" stroke-linejoin="round"/><path d="M44 ' + yt + " L30 " + (yt + 8) + " L38 " + (yt + 16) + " L30 " + (yt + 24) + " L52 " + yb + "Z M156 " + yt + " L170 " + (yt + 8) + " L162 " + (yt + 16) + " L170 " + (yt + 24) + " L148 " + yb + 'Z" fill="#2a0c4e" stroke="#ffd76a" stroke-width="2" stroke-linejoin="round"/>';
+    s += '<text x="100" y="' + (yb - (big ? 2 : 4)) + '" text-anchor="middle" font-weight="900" font-size="' + fs + '" fill="url(#' + id + 'g)" stroke="#2a0c4e" stroke-width="' + (big ? 3 : 4) + '" paint-order="stroke" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
+    if (big) [[56, ym], [144, ym]].forEach(function (p) { s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.4" fill="#ffd76a" stroke="#8a5a00" stroke-width="1"/>'; });
+    [[38, 196, 3.0], [162, 196, 3.0], [22, 168, 2.2], [178, 168, 2.2]].forEach(function (p) { var u = p[2]; s += '<path d="M' + p[0] + " " + (p[1] - u * 2.4) + " L" + (p[0] + u * .7) + " " + (p[1] - u * .7) + " L" + (p[0] + u * 2.4) + " " + p[1] + " L" + (p[0] + u * .7) + " " + (p[1] + u * .7) + " L" + p[0] + " " + (p[1] + u * 2.4) + " L" + (p[0] - u * .7) + " " + (p[1] + u * .7) + " L" + (p[0] - u * 2.4) + " " + p[1] + " L" + (p[0] - u * .7) + " " + (p[1] - u * .7) + 'Z" fill="#fff6c9" stroke="#8a5a00" stroke-width="1"/>'; });
+    return '<svg' + (anim ? ' class="angsvg"' : "") + ' viewBox="-34 -22 268 244" width="' + size + '" height="' + Math.round(size * 244 / 268) + '" aria-hidden="true" style="overflow:visible">' + s + "</svg>";
+  }
+  var angRaf = 0, angT0 = 0, angLast = 0;
+  function angLoop(ts) {
+    var els = document.querySelectorAll(".angsvg");
+    if (!els.length || calmOn()) { angRaf = 0; return; }
+    var vis = !$("max").hidden || !$("lvlup").hidden;
+    if (vis && ts - angLast >= 30) {
+      if (!angT0) angT0 = ts; angLast = ts;
+      var ph = (((ts - angT0) / 1000) % ANG_TT) / ANG_TT;
+      for (var i = 0; i < els.length; i++) angDraw(els[i], ph);
+    }
+    angRaf = requestAnimationFrame(angLoop);
+  }
+  function angStart() { if (!angRaf && !calmOn()) { angT0 = 0; angRaf = requestAnimationFrame(angLoop); } }
+  function emblemAnim(tier, n, size) { var a = !calmOn() && (tier === 7 || tier === 8); var s = emblemSvg(tier, n, size, a); if (a && tier === 7) setTimeout(bhStart, 30); if (a && tier === 8) setTimeout(angStart, 30); return s; }
   function emblemSvg(tier, n, size, anim) {
     if (tier === 7) return bhEmblem(n, size, anim);
+    if (tier === 8) return angEmblem(n, size, anim);
     var P = { 1: ["#f0a56a", "#a8531f", "#5a2a0c", "#ffd2a8"], 2: ["#f4f6fb", "#9aa3b8", "#4b5468", "#ffffff"], 3: ["#ffe58a", "#e0a014", "#8a5a00", "#fff6c9"], 4: ["#b8f4ff", "#22b8d6", "#0a5a7a", "#ffffff"], 5: ["#e0b8ff", "#9b4dff", "#3a1286", "#ffd0f5"], 6: ["#fff3a8", "#ff8a1f", "#a3123a", "#fff9d6"], 7: ["#6b3fd6", "#1a0b3d", "#000000", "#ff9a3d"], 8: ["#ffffff", "#ffd76a", "#f0509a", "#ffffff"] }[tier] || ["#f0a56a", "#a8531f", "#5a2a0c", "#ffd2a8"];
     var id = "emb" + (++embN), c = P, s = "", i;
     s += '<defs><linearGradient id="' + id + 'm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".55" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><linearGradient id="' + id + 'i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><radialGradient id="' + id + 'h"><stop offset="0" stop-color="' + c[1] + '" stop-opacity=".55"/><stop offset="1" stop-color="' + c[1] + '" stop-opacity="0"/></radialGradient></defs>';

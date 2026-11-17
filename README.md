@@ -230,6 +230,7 @@ Pasos, una sola vez:
 **1.61.6**: Esta actualización corrige el botón de buscar notas duplicadas y el marcador del día actual en el mapa de actividad.
 **1.62.6**: Esta actualización renueva el perfil con foto, portada y frase, y suma una Sala de logros con medallas, categorías y progreso.
 
+**1.66.0**: Nivel 50 renovado, Singularidad con alas de ángel, halo, nebulosa y aros animados.
 **1.65.0**: Insignias de logros con íconos propios y nivel 40 renovado.
 **1.64.0**: Insignias de logros rediseñadas, y los niveles 40 y 50 con animación.
 **1.63.1**: Esta actualización corrige la foto de perfil, que se veía gigante en el menú.
