@@ -6446,27 +6446,71 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   var embN = 0;
   function bhEmblem(n, size, anim) {
     var small = !anim && size <= 90, id = "bhe" + (++embN), s = "", i, hp = function (r) { var p = []; for (var k = 0; k < 6; k++) { var a = (-90 + k * 60) * Math.PI / 180; p.push((100 + r * Math.cos(a)).toFixed(1) + "," + (100 + r * Math.sin(a)).toFixed(1)); } return p.join(" "); };
-    s += '<defs><clipPath id="' + id + 'k"><polygon points="' + hp(82) + '"/></clipPath><filter id="' + id + 'g"><feGaussianBlur stdDeviation="4.5"/></filter><linearGradient id="' + id + 'f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0abfc"/><stop offset=".5" stop-color="#a21caf"/><stop offset="1" stop-color="#3b0764"/></linearGradient></defs>';
+    s += '<defs><radialGradient id="' + id + 's"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient><clipPath id="' + id + 'k"><polygon points="' + hp(82) + '"/></clipPath><filter id="' + id + 'g"><feGaussianBlur stdDeviation="4.5"/></filter><linearGradient id="' + id + 'f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0abfc"/><stop offset=".5" stop-color="#a21caf"/><stop offset="1" stop-color="#3b0764"/></linearGradient></defs>';
     s += '<circle cx="100" cy="100" r="99" fill="#d946ef" opacity=".24" filter="url(#' + id + 'g)">' + (anim ? '<animate attributeName="opacity" values=".25;.5;.25" dur="4s" repeatCount="indefinite"/>' : "") + "</circle>";
     s += '<polygon points="' + hp(92) + '" fill="url(#' + id + 'f)" stroke="#3a1408" stroke-width="3"/><polygon points="' + hp(83) + '" fill="#000"/><g clip-path="url(#' + id + 'k)">';
-    for (i = 0; i < (anim ? 12 : 1); i++) s += '<image class="bhf"' + (anim ? ' data-a="1"' : "") + ' href="' + (small ? "bh/small.webp" : "bh/f" + (i < 10 ? "0" : "") + i + ".webp") + '" x="14" y="14" width="172" height="172" opacity="' + (i ? 0 : 1) + '"/>';
+    for (i = 0; i < (anim ? 24 : 1); i++) s += '<image class="bhf"' + (anim ? ' data-a="1"' : "") + ' href="' + (small ? "bh/small.webp" : "bh/f" + (i < 10 ? "0" : "") + i + ".webp") + '" x="14" y="14" width="172" height="172" opacity="' + (i ? 0 : 1) + '"/>';
+    if (anim) s += '<g class="bhs">' + bhStars().map(function () { return '<g class="bs" opacity="0"><path class="tr" d="" fill="none" stroke-linecap="round"/><g class="hd"><path d="M-3 0H3M0-3V3" stroke-width=".35" stroke-linecap="round" opacity=".6"/><ellipse rx="1" ry="1" stroke="none"/></g></g>'; }).join("") + "</g>";
     s += '</g><polygon points="' + hp(83) + '" fill="none" stroke="#ffe2c4" stroke-opacity=".6" stroke-width="2"/>';
     if (size <= 56) s += '<rect x="48" y="142" width="104" height="40" rx="20" fill="#000" fill-opacity=".78" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="172" text-anchor="middle" font-weight="900" font-size="32" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
     else if (small) s += '<rect x="54" y="146" width="92" height="32" rx="16" fill="#000" fill-opacity=".78" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="170" text-anchor="middle" font-weight="900" font-size="26" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
     else s += '<rect x="64" y="152" width="72" height="24" rx="12" fill="#000" fill-opacity=".75" stroke="#ffb482" stroke-opacity=".8"/><text x="100" y="170" text-anchor="middle" font-weight="900" font-size="19" fill="#fff" font-family="Inter,system-ui,sans-serif">' + (n | 0) + "</text>";
     return '<svg viewBox="-6 -4 212 204" width="' + size + '" height="' + Math.round(size * 0.962) + '" aria-hidden="true" style="overflow:visible">' + s + "</svg>";
   }
-  var bhRaf = 0, bhT0 = 0;
+  var BH_S = null;
+  function bhStars() {
+    if (BH_S) return BH_S;
+    var r = 777, rnd = function () { r = (r * 1664525 + 1013904223) % 4294967296; return r / 4294967296; }; BH_S = [];
+    var yy = [28, 52, 74, 96, 120, 138, 36, 108, 64];
+    for (var i = 0; i < 9; i++) BH_S.push({ d: 0, x: rnd() * 240 - 20, y: yy[i] + rnd() * 6, sp: 3 + rnd() * 5, sz: 0.6 + rnd() * 0.5, ph: rnd() * 6.28, c: ["#ffffff", "#d7e6ff", "#ffeedd"][i % 3] });
+    BH_S.push({ d: 1, pd: 13, ph: 0.15, a0: 3.6, sg: 1, r0: 80, sz: 0.9, c: "#ffffff" });
+    BH_S.push({ d: 1, pd: 17, ph: 0.62, a0: 0.5, sg: -1, r0: 78, sz: 0.8, c: "#e8f0ff" });
+    return BH_S;
+  }
+  var BH_RS = 31, BH_TE = 38;
+  function bhDoom(q, u) {
+    var r = BH_RS + (q.r0 - BH_RS) * Math.pow(1 - u, 2.2), a = q.a0 + q.sg * (2.4 * u + 3.6 * u * u * u);
+    return [100 + r * Math.cos(a), 100 + r * Math.sin(a) * 0.92, a];
+  }
+  // El agujero negro "viaja": las estrellas se deslizan, su gravedad las curva y alguna cae en espiral y es devorada
+  function bhStarsDraw(g, t) {
+    var st = bhStars(), el = g.childNodes, i, q, e, hd, x, y, ang, sx, sy, o, wr = function (v) { return ((v + 20) % 240 + 240) % 240 - 20; };
+    for (i = 0; i < st.length; i++) {
+      q = st[i]; e = el[i]; if (!e) break; hd = e.lastChild;
+      if (!q.d) {
+        var px = wr(q.x - q.sp * t), py = q.y + 3 * Math.sin(t * 0.3 + q.ph), dx = px - 100, dy = py - 100, b = Math.sqrt(dx * dx + dy * dy) || 0.01, th = (b + Math.sqrt(b * b + 4 * BH_TE * BH_TE)) / 2, k = th / b;
+        x = 100 + dx * k; y = 100 + dy * k; ang = Math.atan2(dy, dx) * 57.2958 + 90;
+        var near = BH_TE / (b + BH_TE); sx = q.sz * (1 + 3.2 * near * near); sy = q.sz * 0.8;
+        o = (0.55 + 0.45 * near) * (0.78 + 0.22 * Math.sin(t * 1.7 + q.ph * 3));
+        hd.setAttribute("fill", q.c); hd.setAttribute("stroke", q.c); e.firstChild.setAttribute("d", "");
+      } else {
+        var u = ((t / q.pd + q.ph) % 1), p = bhDoom(q, u), tr = "", kk, pp;
+        x = p[0]; y = p[1]; ang = p[2] * 57.2958 + 90 * q.sg;
+        sx = q.sz * (1 + 0.8 * u); sy = q.sz;
+        o = Math.min(1, u * 12) * (u < 0.94 ? 1 : Math.max(0, 1 - (u - 0.94) / 0.06));
+        if (u > 0.9) { sx *= 1 + (u - 0.9) * 14; sy *= 1 + (u - 0.9) * 14; }
+        var col = u < 0.5 ? q.c : u < 0.8 ? "#ffdcae" : "#ff9a4a";
+        for (kk = 0; kk < 9; kk++) { pp = bhDoom(q, Math.max(0, u - kk * 0.014)); tr += (kk ? "L" : "M") + pp[0].toFixed(1) + " " + pp[1].toFixed(1); }
+        e.firstChild.setAttribute("d", tr); e.firstChild.setAttribute("stroke", col); e.firstChild.setAttribute("stroke-width", (0.9 + u * 0.8).toFixed(2)); e.firstChild.setAttribute("opacity", (0.35 * Math.min(1, u * 6)).toFixed(2));
+        hd.setAttribute("fill", col); hd.setAttribute("stroke", col);
+      }
+      hd.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + ang.toFixed(0) + ")");
+      hd.lastChild.setAttribute("rx", (sx * 0.95).toFixed(2)); hd.lastChild.setAttribute("ry", (sy * 0.8).toFixed(2)); hd.firstChild.setAttribute("transform", "scale(" + (0.7 + q.sz * 0.7).toFixed(2) + ")");
+      e.setAttribute("opacity", o.toFixed(2));
+    }
+  }
+  var bhRaf = 0, bhT0 = 0, bhLast = 0;
   function bhLoop(ts) {
     var ims = document.querySelectorAll(".bhf[data-a]");
     if (!ims.length || calmOn()) { bhRaf = 0; return; }
     var vis = !$("max").hidden || !$("lvlup").hidden;
     if (vis) {
       if (!bhT0) bhT0 = ts;
-      var n = 12, x = (((ts - bhT0) / 7000) % 1) * n, a = Math.floor(x) % n, b = (a + 1) % n, f = x - Math.floor(x), top = Math.max(a, b), bot = Math.min(a, b), tf = top === b ? f : 1 - f;
+      var n = 24, x = (((ts - bhT0) / 6000) % 1) * n, a = Math.floor(x) % n, b = (a + 1) % n, f = x - Math.floor(x), top = Math.max(a, b), bot = Math.min(a, b), tf = top === b ? f : 1 - f;
       for (var i = 0; i < ims.length; i += n) {
         for (var k = 0; k < n && ims[i + k]; k++) ims[i + k].setAttribute("opacity", k === bot ? 1 : k === top ? tf : 0);
       }
+      if (ts - bhLast >= 30) { bhLast = ts; var gs = document.querySelectorAll(".bhs"); for (var j = 0; j < gs.length; j++) bhStarsDraw(gs[j], (ts - bhT0) / 1000); }
     }
     bhRaf = requestAnimationFrame(bhLoop);
   }
