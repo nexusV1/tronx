@@ -1237,6 +1237,47 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 .mx-wt em { display: block; font-style: normal; font-size: 10.5px; margin-top: 6px; color: #9a9dcc; }
 .mx-wt em.up { color: #6ee7a8; } .mx-wt em.dn { color: #fca5a5; }
 .mx-wb { margin: 12px 2px 0; font-size: 13px; color: #c9cbf0; }
+.fr { position: absolute; pointer-events: none; }
+.fr svg { display: block; width: 100%; height: 100%; overflow: visible; fill: none; stroke: none; }
+.mn-avw { overflow: visible; margin: 10px 12px 10px 10px; }
+.fr .fr-spin { animation: frspin 10s linear infinite; transform-origin: 80px 80px; }
+.fr .fr-spinr { animation: frspin 16s linear infinite reverse; transform-origin: 80px 80px; }
+@keyframes frspin { to { transform: rotate(360deg); } }
+.fr .fr-tw { animation: frtw 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes frtw { 0%, 100% { opacity: 0.2; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } }
+.fr .fr-np { animation: frnp 2.4s ease-in-out infinite; }
+@keyframes frnp { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+.fr .fr-hue { animation: frhu 6s linear infinite; }
+@keyframes frhu { to { filter: hue-rotate(360deg); } }
+.fr .fr-run { animation: frrn 4s linear infinite; }
+@keyframes frrn { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
+.fr .fr-cdl { animation: frcd 7s ease-in-out infinite; }
+@keyframes frcd { 0% { stroke-dashoffset: 100; opacity: 1; } 55% { stroke-dashoffset: 0; opacity: 1; } 85% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+.fr .fr-fl2 { animation: frf2 1.6s ease-in-out infinite; }
+@keyframes frf2 { 0%, 100% { transform: scaleY(0.6); opacity: 0.7; } 50% { transform: scaleY(1.25); opacity: 1; } }
+.fr .fr-pl { animation: frpl 7.2s ease-in-out infinite; }
+@keyframes frpl { 0% { stroke-dashoffset: 100; opacity: 0; } 12% { opacity: 1; } 45% { stroke-dashoffset: 0; opacity: 1; } 75% { stroke-dashoffset: 0; opacity: 0.9; } 100% { stroke-dashoffset: -100; opacity: 0; } }
+.fr .fr-sway { animation: frsw 6s ease-in-out infinite alternate; transform-origin: 80px 80px; }
+@keyframes frsw { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+.fr .fr-em2 { animation: frem2 2.6s ease-out infinite; }
+@keyframes frem2 { 0% { transform: translate(0, 0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
+.fr .fr-pw { animation: frpw 5.2s ease-out infinite; transform-origin: 80px 80px; }
+@keyframes frpw { 0% { transform: scale(1); opacity: 0.9; } 100% { transform: scale(1.32); opacity: 0; } }
+.mx-fst { position: relative; text-align: center; padding: 56px 0 4px; }
+.mx-fpw { position: relative; width: 100px; height: 100px; margin: 0 auto; }
+.mx-fpa, .mx-fca { position: relative; z-index: 1; display: grid; place-items: center; border-radius: 50%; overflow: hidden; color: #fff; font-weight: 800; width: 100%; height: 100%; }
+.mx-fpa img, .mx-fca img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mx-fpa .pf-ini { font-size: 38px; line-height: 1; }
+.mx-fca .pf-ini { font-size: 20px; line-height: 1; }
+.mx-fin { margin-top: 54px; } .mx-fin b { display: block; font-size: 17px; }
+.mx-fr { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 800; margin-top: 2px; }
+.mx-fbuy { margin-top: 12px; }
+.mx-fg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.mx-fc { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 34px 8px 12px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.05); font: inherit; color: inherit; cursor: pointer; }
+.mx-fc.sel { border-color: #fb923c; background: rgba(251, 146, 60, 0.12); }
+.mx-fcw { position: relative; width: 52px; height: 52px; margin-bottom: 30px; }
+.mx-fr2 { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; }
+.mx-fc b { font-size: 13px; } .mx-fs { font-size: 11.5px; color: #c9cbf0; }
 .mx-nav { position: absolute; left: 14px; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); height: 64px; display: flex; justify-content: space-around; align-items: center; padding: 0 6px; border-radius: 24px; background: rgba(30, 31, 72, 0.94); border: 1px solid rgba(255, 255, 255, 0.12); z-index: 3; }
 .mx-nav button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 64px; padding: 7px 0; border: 0; border-radius: 16px; background: transparent; font: inherit; font-size: 10.5px; font-weight: 700; color: #8e91c0; cursor: pointer; }
 .mx-nav button svg { width: 21px; height: 21px; }
@@ -2295,7 +2336,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.69.0";
+  var APP_VERSION = "1.70.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5479,6 +5520,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.70.0", d: "18 nov 2026", t: "Tienda de MAX: marcos de perfil", lv: "Hipernova", nm: "Marcos de perfil", cat: "nuevo", l: ["La Tienda de MAX ya está abierta: canjeá tus estrellas por marcos animados para tu avatar", "Cinco marcos al lanzamiento: Neón pulsante, Aurora, Constelación, Sol y Nebulosa cósmica", "Vista previa en tu propio avatar antes de comprar y botón para equipar o quitar el marco", "Los marcos Míticos tienen grados, de I a VI: a mayor grado, mayor exclusividad", "Tu marco se ve en el perfil y en el menú, y se pausa con el modo calmo"] },
     { v: "1.69.0", d: "18 nov 2026", t: "Celebraciones, resumen semanal y recordatorio de racha", lv: "Hipernova", nm: "Celebraciones y racha", cat: "nuevo", l: ["Pantalla de celebración para los logros de rareza Platino o superior y para los secretos", "Resumen semanal en MAX: palabras, notas, enfoque y días activos frente a la semana anterior", "Recordatorio de racha opcional, desde Ajustes: te avisa solo si ese día todavía no escribiste"] },
     { v: "1.68.0", d: "18 nov 2026", t: "👀 Se han descubierto nuevos secretos... ¿Serás el primero en encontrarlos?", lv: "Hipernova", nm: "Nuevos secretos", cat: "nuevo", l: ["Nuevos logros secretos: permanecen ocultos hasta que los descubrís", "Sin pistas: explorá, creá y probá cosas distintas", "Nueva pestaña Secretos en tu perfil", "Medalla Estelar renovada, con una constelación que se dibuja sola", "Leyenda de Tronx ahora también requiere los secretos"] },
     { v: "1.67.0", d: "18 nov 2026", t: "Nuevas rarezas de logros y guía de MAX", lv: "Hipernova", cat: "nuevo", l: ["Cuatro rarezas nuevas de logros: Platino, Diamante, Estelar y Cósmico, con efectos animados propios", "35 logros nuevos para metas de largo plazo: notas, palabras, rachas, enfoque, tareas y nivel", "Nueva categoría Maestría, con logros ligados al nivel de MAX", "Más misiones diarias y semanales, con rotación más variada", "Guía de MAX la primera vez que entrás, disponible luego desde Inicio", "Los efectos se desactivan con el modo calmo"] },
@@ -6115,6 +6157,62 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     var s = el("span", "pf-ini"); s.textContent = pfInitials(p.name); box.appendChild(s);
   }
 
+  /* ---------- marcos de perfil ---------- */
+  var FR_LIST = [];
+  function frPt(r, a) { a = a * Math.PI / 180; return [80 + r * Math.cos(a), 80 + r * Math.sin(a)]; }
+  function frP(a) { return a.map(function (n) { return n.toFixed(1); }).join(" "); }
+  function frSpark(x, y, r, c, d) { return '<path class="tw" style="animation-delay:' + d + 's" d="M' + x + " " + (y - r) + "L" + (x + r * 0.22) + " " + (y - r * 0.22) + " " + (x + r) + " " + y + " " + (x + r * 0.22) + " " + (y + r * 0.22) + " " + x + " " + (y + r) + " " + (x - r * 0.22) + " " + (y + r * 0.22) + " " + (x - r) + " " + y + " " + (x - r * 0.22) + " " + (y - r * 0.22) + 'Z" fill="' + c + '"/>'; }
+  FR_LIST.push({id:'neon',n:'Neón pulsante',r:'Raro',p:400,c:'#5fd4ff',f:function(){return ['','<g class="hue"><circle class="np" cx="80" cy="80" r="54" stroke="#ff3df2" stroke-width="7" filter="url(#bl)"/><circle cx="80" cy="80" r="54" stroke="#3de8ff" stroke-width="3"/><circle cx="80" cy="80" r="54" stroke="#fff" stroke-width="1" stroke-opacity=".8"/></g>']}});
+  FR_LIST.push({id:'aurora',n:'Aurora',r:'Épico',p:1000,c:'#b48cff',f:function(){function arc(c,len,sp,rev,w,bl){return '<circle cx="80" cy="80" r="55" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round" pathLength="100" stroke-dasharray="'+len+' '+(100-len)+'" class="'+(rev?'spinr':'spin')+'" style="animation-duration:'+sp+'s"'+(bl?' filter="url(#bl)"':'')+'/>'}var s=arc('#34f5c5',38,7,0,8,1)+arc('#7c5cff',34,10,1,8,1)+arc('#3aa8ff',30,13,0,8,1)+arc('#34f5c5',38,7,0,3)+arc('#a98bff',34,10,1,3)+arc('#6fc4ff',30,13,0,3);return ['','<g transform="rotate(-90 80 80)">'+s+'</g>']}});
+  FR_LIST.push({id:'cons',n:'Constelación',r:'Épico',p:1000,c:'#b48cff',f:function(){var pts=[[-100,62],[-62,55],[-22,64],[20,57],[58,66],[98,56],[140,63],[176,57],[212,65]],d='',s='';pts.forEach(function(q,i){var p=frPt(q[1],q[0]);d+=(i?'L':'M')+frP(p)});var defs='<defs><linearGradient id="cl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fe3ff"/><stop offset="1" stop-color="#c3a8ff"/></linearGradient></defs>';s+='<circle cx="80" cy="80" r="56" stroke="#8fb0ff" stroke-opacity=".22" stroke-width="10" filter="url(#bl)"/><circle cx="80" cy="80" r="56" stroke="#a9b8ff" stroke-opacity=".3" stroke-width=".8"/>';s+='<path class="cdl" pathLength="100" d="'+d+'" stroke="url(#cl)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" filter="url(#bl2)" opacity=".8"/><path class="cdl" pathLength="100" d="'+d+'" stroke="#e6f6ff" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100"/>';pts.forEach(function(q,i){var p=frPt(q[1],q[0]),r=3.2+(i%3)*1.5;s+=frSpark(p[0],p[1],r*1.5,'#fff',i*.35)});[[20,48],[75,70],[130,44],[200,72],[250,52],[300,70]].forEach(function(q,i){var p=frPt(q[1],q[0]);s+='<circle class="tw" style="animation-delay:'+(i*.5)+'s" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r=".9" fill="#d6e6ff"/>'});return ['',defs+'<g class="spin" style="animation-duration:70s">'+s+'</g>']}});
+  FR_LIST.push({id:'sol',n:'Sol',r:'Mítico I',p:3000,c:'#ff6bd6',f:function(){
+ var d='<defs><filter id="tb" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="4" result="n"><animate attributeName="baseFrequency" dur="7s" values=".045;.07;.045" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="13" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="tb2" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="9" result="n"><animate attributeName="baseFrequency" dur="5s" values=".08;.12;.08" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter>'
+ +'<linearGradient id="sl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#ffe27a"/><stop offset="1" stop-color="#ffa21f"/></linearGradient>'
+ +'<linearGradient id="sp" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff3b1f"/><stop offset=".55" stop-color="#ff8a2a"/><stop offset="1" stop-color="#ffe3a0"/></linearGradient>'
+ +'<linearGradient id="sr" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".95"/><stop offset=".6" stop-color="#ff8a2a" stop-opacity=".5"/><stop offset="1" stop-color="#ff3b1f" stop-opacity="0"/></linearGradient></defs>';
+ var s='<circle cx="80" cy="80" r="60" stroke="#ff4a1a" stroke-width="22" stroke-opacity=".35" filter="url(#bl)" class="np"/><circle cx="80" cy="80" r="56" stroke="#ffa21f" stroke-width="12" stroke-opacity=".45" filter="url(#bl)"/>';
+ // serpentinas coronales suaves (desenfocadas, largas)
+ var st='';for(var i=0;i<14;i++){var L=18+(i*11%20),w=3.5+(i%3);st+='<g transform="rotate('+(i*25.7)+' 80 80)"><path class="fl2" style="animation-delay:'+(i*.37%2.2)+'s;transform-origin:80px 30px" d="M'+(80-w)+' 30L80 '+(29-L)+'L'+(80+w)+' 30Z" fill="url(#sr)"/></g>'}
+ s+='<g class="spin" style="animation-duration:80s" filter="url(#bl2)">'+st+'</g>';
+ // protuberancias magneticas: bucles grandes con 3 capas
+ var arcs=[[-112,-66,40],[-40,-14,28],[22,70,44],[100,128,30],[150,196,40],[226,256,30]],pr='';
+ arcs.forEach(function(q,i){var A=frPt(53,q[0]),B=frPt(53,q[1]),m=(q[0]+q[1])/2,C=frPt(53+q[2]*1.9,m),dd='M'+frP(A)+'Q'+frP(C)+' '+frP(B),dl='animation-delay:'+(i*1.15)+'s';
+  pr+='<g class="sway" style="animation-delay:'+(i*.7)+'s"><path class="pl" style="'+dl+'" pathLength="100" d="'+dd+'" stroke="#ff3b1f" stroke-width="10" stroke-opacity=".6" filter="url(#bl2)" stroke-dasharray="100" stroke-dashoffset="100"/><path class="pl" style="'+dl+'" pathLength="100" d="'+dd+'" stroke="url(#sp)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="100"/><path class="pl" style="'+dl+'" pathLength="100" d="'+dd+'" stroke="#fff3c4" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="100"/></g>'});
+ s+='<g class="spinr" style="animation-duration:120s">'+pr+'</g>';
+ // fotosfera: plasma que hierve
+ s+='<circle cx="80" cy="80" r="54" stroke="#ff7a1a" stroke-width="13" filter="url(#tb)"/><circle cx="80" cy="80" r="52.5" stroke="url(#sl)" stroke-width="6" filter="url(#tb2)"/><circle cx="80" cy="80" r="50.6" stroke="#fff" stroke-opacity=".85" stroke-width="1.6"/>';
+ var em='';[[-100,0],[-40,.9],[30,1.7],[100,.4],[165,1.3],[235,2.1],[290,.6]].forEach(function(e){var p=frPt(60,e[0]);em+='<circle class="em2" style="animation-delay:'+e[1]+'s;--dx:'+((p[0]-80)*.45).toFixed(1)+'px;--dy:'+((p[1]-80)*.45).toFixed(1)+'px" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="1.8" fill="#ffe08a"/>'});
+ return ['',d+s+em]}});
+  FR_LIST.push({id:'neb',n:'Nebulosa cósmica',r:'Mítico VI',p:10000,c:'#ff6bd6',f:function(){
+ var R=[[72,22,-24,'#ff9bf0',8,0],[67,19,32,'#8fd0ff',11,0]];
+ function ring(k){var r=R[k],e='<ellipse cx="80" cy="80" rx="'+r[0]+'" ry="'+r[1]+'" transform="rotate('+r[2]+' 80 80)"',g=e+' stroke="'+r[3]+'" stroke-width="1.3" stroke-opacity=".5"/>';[[34,.22,1.2],[22,.4,1.6],[12,.7,2.1],[5,1,2.8]].forEach(function(t){var T=r[4];g+=e+' pathLength="100" class="run" style="animation-duration:'+T+'s;animation-delay:'+(t[0]*T/100-T).toFixed(2)+'s" stroke="#fff" stroke-opacity="'+t[1]+'" stroke-width="'+t[2]+'" stroke-dasharray="'+t[0]+' '+(100-t[0])+'" stroke-linecap="round"/>'});return g}
+ var d='<defs><filter id="nt" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="7" result="n"><animate attributeName="baseFrequency" dur="14s" values=".035;.055;.035" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="16" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="2"/></filter><linearGradient id="ir" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe6ff"/><stop offset=".35" stop-color="#b98bff"/><stop offset=".7" stop-color="#8fd0ff"/><stop offset="1" stop-color="#ffb0f2"/></linearGradient><clipPath id="n0"><rect transform="rotate(-24 80 80)" x="-20" y="80" width="200" height="90"/></clipPath><clipPath id="n1"><rect transform="rotate(32 80 80)" x="-20" y="80" width="200" height="90"/></clipPath></defs>';
+ var cl='<g class="spin" style="animation-duration:30s"><circle cx="80" cy="80" r="57" pathLength="100" stroke="#7a2dff" stroke-width="15" stroke-opacity=".75" stroke-dasharray="46 54" filter="url(#nt)"/><circle cx="80" cy="80" r="57" pathLength="100" stroke="#ff4fd8" stroke-width="11" stroke-opacity=".7" stroke-dasharray="30 70" stroke-dashoffset="-48" filter="url(#nt)"/><circle cx="80" cy="80" r="58" pathLength="100" stroke="#3a8bff" stroke-width="10" stroke-opacity=".65" stroke-dasharray="26 74" stroke-dashoffset="-80" filter="url(#nt)"/></g><g class="spin" style="animation-duration:44s"><circle cx="80" cy="80" r="62" pathLength="100" stroke="#cfe9ff" stroke-width="4" stroke-opacity=".5" stroke-dasharray="10 90" filter="url(#bl2)"/></g>';
+ var dust='';for(var i=0;i<44;i++){var a=i*8.2+(i*37%9),r=60+(i*7%15),p=frPt(r,a),rr=.55+(i%4)*.25;dust+='<circle '+(i%5==0?'class="tw" style="animation-delay:'+(i*.23%2.4)+'s" ':'')+'cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+rr+'" fill="'+(i%3?'#ffffff':'#ffc8f4')+'" opacity=".85"/>'}
+ cl+='<g class="spin" style="animation-duration:110s">'+dust+'</g>';
+ var st='';[[80,6,7,0],[152,82,5,.9],[80,154,6.5,1.7],[8,80,5,.4],[132,24,4,1.3],[28,132,4,2.1]].forEach(function(q){st+=frSpark(q[0],q[1],q[2],'#fff',q[3])});
+ var front='<circle cx="80" cy="80" r="52" stroke="#e7b8ff" stroke-opacity=".5" stroke-width="7" filter="url(#bl2)"/><g class="hue" style="animation-duration:14s"><circle cx="80" cy="80" r="52.4" stroke="url(#ir)" stroke-width="3.6"/></g><circle cx="80" cy="80" r="54.4" stroke="#fff" stroke-opacity=".55" stroke-width=".8"/><circle cx="80" cy="80" r="50.4" stroke="#fff" stroke-opacity=".5" stroke-width=".8"/><circle class="pw" cx="80" cy="80" r="53" stroke="#f1c9ff" stroke-width="1.6"/><circle class="pw" style="animation-delay:2.6s" cx="80" cy="80" r="53" stroke="#a9d8ff" stroke-width="1.2"/><g clip-path="url(#n0)">'+ring(0)+'</g><g clip-path="url(#n1)">'+ring(1)+'</g>'+'<circle cx="80" cy="80" r="49" stroke="#1a0a3d" stroke-opacity=".45" stroke-width="3"/>'+st+'<circle class="np" cx="80" cy="27.4" r="6" fill="#ffd9ff" opacity=".5" filter="url(#bl2)"/><path d="M80 21L82.6 25.2 87 27.4 82.6 29.6 80 34 77.4 29.6 73 27.4 77.4 25.2Z" fill="#fff"/>'+'';
+ return [d+cl+ring(0)+ring(1),front]}});
+  var FR_DEFS = '<defs><filter id="bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter><filter id="bl2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>', frN = 0, FR_CLS = { spin: 1, spinr: 1, tw: 1, np: 1, hue: 1, run: 1, cdl: 1, fl2: 1, pl: 1, sway: 1, em2: 1, pw: 1 };
+  function frById(id) { for (var i = 0; i < FR_LIST.length; i++) if (FR_LIST[i].id === id) return FR_LIST[i]; return null; }
+  function frEq() { var m = settings.max; return m && m.eq && frById(m.eq.frame) ? m.eq.frame : ""; }
+  function frMarkup(f) {
+    var r = f.f(), u = "_" + (++frN);
+    function fix(t) { return t.replace(/id="(\w+)"/g, 'id="$1' + u + '"').replace(/url\(#(\w+)\)/g, "url(#$1" + u + ")").replace(/class="([^"]+)"/g, function (a, c) { return 'class="' + c.split(" ").map(function (x) { return FR_CLS[x] ? "fr-" + x : x; }).join(" ") + '"'; }); }
+    function svg(t) { return '<svg viewBox="0 0 160 160" aria-hidden="true" focusable="false">' + t + "</svg>"; }
+    return [r[0] ? svg(fix(r[0])) : "", svg(FR_DEFS.replace(/id="(\w+)"/g, 'id="$1' + u + '"') + fix(r[1]))];
+  }
+  /* pone el marco alrededor de un avatar: wrap es el contenedor con position:relative y av el avatar; D su diámetro */
+  function frApply(wrap, av, id, D) {
+    if (!wrap || !av) return;
+    wrap.querySelectorAll(".fr").forEach(function (x) { x.remove(); });
+    var f = id && frById(id); if (!f) return;
+    var m = frMarkup(f), sz = Math.round(D * 1.6), off = -Math.round(D * 0.3);
+    function mkl(h) { var e = el("span", "fr"); e.setAttribute("aria-hidden", "true"); e.style.cssText = "width:" + sz + "px;height:" + sz + "px;left:" + off + "px;top:" + off + "px"; e.innerHTML = h; return e; }
+    if (m[0]) wrap.insertBefore(mkl(m[0]), av);
+    var fr = mkl(m[1]); if (av.nextSibling) wrap.insertBefore(fr, av.nextSibling); else wrap.appendChild(fr);
+  }
+
   /* ---------- escritura: palabras, rachas y logros ---------- */
   var wcMap = null, statsSaveT = 0;
   function dayKey(ts) { var d = new Date(ts); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
@@ -6508,7 +6606,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   function compactN(n) { return n >= 10000 ? (Math.round(n / 100) / 10).toLocaleString("es") + "k" : n.toLocaleString("es"); }
   function renderProfile() {
     var p = getProfile(), st = universeStats(), w = writeStats(), lv = maxLevel();
-    paintAvatar($("pfAv"), p);
+    paintAvatar($("pfAv"), p); frApply($("pfAv").parentNode, $("pfAv"), frEq(), 132);
     $("pfBan").style.background = PF_COVERS[p.cover];
     $("pfNameOut").textContent = p.name || "Explorador"; $("pfBioOut").textContent = p.bio;
     $("pfLvl").textContent = "⭐ " + lv.title + " · Nivel " + lv.L;
@@ -6608,6 +6706,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     if (!m.cap || typeof m.cap !== "object") m.cap = { n: 0, w: 0, f: 0 };
     if (!m.cl || typeof m.cl !== "object") m.cl = {}; if (!m.sc || typeof m.sc !== "object") m.sc = {};
     m.wAcc = Math.max(0, +m.wAcc || 0);
+    if (!m.inv || typeof m.inv !== "object" || Array.isArray(m.inv)) m.inv = {}; if (!m.eq || typeof m.eq !== "object" || Array.isArray(m.eq)) m.eq = {};
     var k = dayKey(Date.now());
     if (m.day !== k) {
       m.day = k; m.cap = { n: 0, w: 0, f: 0 }; m.tasks = 0; m.base = achState().done;
@@ -6939,7 +7038,8 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     return n;
   }
   /* pantallas */
-  var mxTab = "home", mxMisTab = "d";
+  var mxTab = "home", mxMisTab = "d", mxFrSel = "";
+  function mxFrRefresh() { mxRender(); try { renderMenu(); } catch (e) { /* menú aún no creado */ } try { renderProfile(); } catch (e2) { /* perfil cerrado */ } }
   function mk(tag, cls, txt) { var e = el(tag, cls); if (txt != null) e.textContent = txt; return e; }
   function fmtMx(n) { return Number(n).toLocaleString("es"); }
   function mxMissionRow(def, prog, claimed, onClaim) {
@@ -6983,9 +7083,34 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
       var n0 = NEWS[0], nc = mk("div", "mx-card"), nw = mk("div", "mx-nw cur"); nw.style.border = "0"; nw.style.padding = "0"; nw.appendChild(el("i")); var nt = mk("div"); nt.appendChild(mk("b", null, "Versión " + n0.v + " · " + n0.t)); nt.appendChild(mk("span", null, (n0.l && n0.l[0]) || "")); nw.appendChild(nt); nc.appendChild(nw); box.appendChild(nc);
       var gd = mk("button", "mx-btn", "Ver guía de MAX"); gd.type = "button"; gd.addEventListener("click", function () { mxTourShow(0); }); box.appendChild(gd);
     } else if (mxTab === "shop") {
-      var sc = mk("div", "mx-card mx-soon"); sc.appendChild(mk("div", "big", "🛍️")); sc.appendChild(mk("h2", null, "Tienda en desarrollo")); sc.appendChild(mk("p", "mx-note", "Pronto podrás usar tus estrellas ⭐ para estrenar cosas nuevas. Mientras tanto, seguí sumándolas con misiones, rachas y niveles."));
-      var pl = mk("div", "mx-pills"); ["Temas", "Fondos animados", "Marcos de avatar", "Portadas de perfil", "Insignias"].forEach(function (t) { pl.appendChild(mk("span", null, t)); }); sc.appendChild(pl); box.appendChild(sc);
-      box.appendChild(mk("p", "mx-note", "Tus estrellas ya se guardan: " + fmtMx(m.stars) + " ⭐"));
+      var inv = m.inv, test = !!m.bk;
+      if (!frById(mxFrSel) && mxFrSel !== "none") mxFrSel = frEq() || FR_LIST[0].id;
+      var sf = frById(mxFrSel), prof = getProfile();
+      box.appendChild(mk("div", "mx-sec", "Marcos de perfil"));
+      var stg = mk("div", "mx-fst"), pw = mk("div", "mx-fpw"), pa = mk("span", "mx-fpa"); paintAvatar(pa, prof); pw.appendChild(pa); stg.appendChild(pw); box.appendChild(stg);
+      frApply(pw, pa, sf ? sf.id : "", 100);
+      var info = mk("div", "mx-fin"); info.appendChild(mk("b", null, sf ? sf.n : "Sin marco")); if (sf) { var rr = mk("span", "mx-fr", sf.r); rr.style.color = sf.c; info.appendChild(rr); } stg.appendChild(info);
+      var act = mk("button", "mx-btn mx-fbuy"); act.type = "button";
+      if (!sf) { act.textContent = frEq() ? "Quitar marco" : "Sin marco equipado"; act.disabled = !frEq(); act.addEventListener("click", function () { m.eq.frame = ""; maxSave(); mxFrRefresh(); }); }
+      else if (inv[sf.id]) {
+        var on = frEq() === sf.id; act.textContent = on ? "Equipado ✓" : "Equipar"; act.disabled = on; if (!on) act.addEventListener("click", function () { m.eq.frame = sf.id; maxSave(); toast("Marco equipado"); mxFrRefresh(); });
+      } else {
+        act.textContent = "Comprar · ⭐ " + fmtMx(sf.p); act.disabled = test || m.stars < sf.p;
+        act.addEventListener("click", function () { if (m.bk || m.stars < sf.p) return; m.stars -= sf.p; inv[sf.id] = Date.now(); m.eq.frame = sf.id; maxSave(); toast("Marco conseguido: " + sf.n); mxFrRefresh(); });
+      }
+      box.appendChild(act);
+      if (!inv[sf ? sf.id : ""] && sf) box.appendChild(mk("p", "mx-note", test ? "Estás en modo prueba: restablecé tu nivel real para comprar." : m.stars >= sf.p ? "Podés probarlo en tu avatar antes de comprar." : "Te faltan " + fmtMx(sf.p - m.stars) + " ⭐. Se ganan con misiones, rachas, logros y al subir de nivel."));
+      var gr = mk("div", "mx-fg");
+      [null].concat(FR_LIST).forEach(function (f) {
+        var id = f ? f.id : "none", card = mk("button", "mx-fc" + (mxFrSel === id ? " sel" : "")); card.type = "button";
+        var w = mk("div", "mx-fcw"), a2 = mk("span", "mx-fca"); paintAvatar(a2, prof); w.appendChild(a2); card.appendChild(w); if (f) frApply(w, a2, f.id, 52);
+        card.appendChild(mk("b", null, f ? f.n : "Sin marco"));
+        if (f) { var rt = mk("span", "mx-fr2", f.r); rt.style.color = f.c; card.appendChild(rt); var st = mk("span", "mx-fs", frEq() === f.id ? "Equipado" : inv[f.id] ? "Tuyo" : "⭐ " + fmtMx(f.p)); card.appendChild(st); }
+        card.addEventListener("click", function () { mxFrSel = id; mxRender(); });
+        gr.appendChild(card);
+      });
+      box.appendChild(gr);
+      box.appendChild(mk("p", "mx-note", "Pronto habrá más: portadas, efectos de nombre y fondos. Tus estrellas: " + fmtMx(m.stars) + " ⭐"));
     } else if (mxTab === "mis") {
       var ch = mk("div", "mx-chips"); [["d", "Diarias"], ["w", "Semanales"], ["s", "Rachas"]].forEach(function (a) { var b = mk("button", null, a[1]); b.type = "button"; b.setAttribute("aria-pressed", a[0] === mxMisTab ? "true" : "false"); b.addEventListener("click", function () { mxMisTab = a[0]; mxRender(); }); ch.appendChild(b); }); box.appendChild(ch);
       if (mxMisTab === "d") {
@@ -7144,7 +7269,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   function updateMenuBadge() { $("mbDot").hidden = !(backupOverdue() || newsUnseen()); }
   function renderMenu() {
     var p = getProfile(), st = universeStats(), over = backupOverdue();
-    paintAvatar($("mnAv"), p);
+    paintAvatar($("mnAv"), p); frApply($("mnAv").parentNode, $("mnAv"), frEq(), 60);
     $("mnName").textContent = p.name || "Explorador";
     var lv = maxLevel();
     $("mnRank").textContent = "Nivel " + lv.L + " · " + lv.title;
