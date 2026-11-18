@@ -1230,6 +1230,13 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 .mx-tn { border: 0; border-radius: 14px; padding: 11px 22px; font: inherit; font-size: 14px; font-weight: 800; color: #1a0b00; background: linear-gradient(135deg, #fdba74, #fb923c); cursor: pointer; }
 .mx-nav button.mx-hl { animation: mxhl 1.4s ease-in-out infinite; }
 @keyframes mxhl { 0%, 100% { box-shadow: 0 0 0 0 rgba(251, 146, 60, 0.6); } 50% { box-shadow: 0 0 0 6px rgba(251, 146, 60, 0); } }
+.mx-wg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mx-wt { padding: 11px 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); }
+.mx-wt b { display: block; font-size: 20px; letter-spacing: -0.01em; }
+.mx-wt span { display: block; font-size: 12px; color: #b3b6de; margin-top: 1px; }
+.mx-wt em { display: block; font-style: normal; font-size: 10.5px; margin-top: 6px; color: #9a9dcc; }
+.mx-wt em.up { color: #6ee7a8; } .mx-wt em.dn { color: #fca5a5; }
+.mx-wb { margin: 12px 2px 0; font-size: 13px; color: #c9cbf0; }
 .mx-nav { position: absolute; left: 14px; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); height: 64px; display: flex; justify-content: space-around; align-items: center; padding: 0 6px; border-radius: 24px; background: rgba(30, 31, 72, 0.94); border: 1px solid rgba(255, 255, 255, 0.12); z-index: 3; }
 .mx-nav button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 64px; padding: 7px 0; border: 0; border-radius: 16px; background: transparent; font: inherit; font-size: 10.5px; font-weight: 700; color: #8e91c0; cursor: pointer; }
 .mx-nav button svg { width: 21px; height: 21px; }
@@ -1315,6 +1322,12 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .lu p { margin: 4px 0 0; font-size: 14px; color: #c4c6e8; }
 .lu-rw { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin-top: 16px; }
 .lu-rw div { padding: 10px 13px; border-radius: 16px; font-size: 12.5px; font-weight: 700; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+.lu-emb .luMd { width: 190px; height: 190px; }
+.lvlov[data-t="4"] .lu { background: radial-gradient(circle at 50% 38%, rgba(120, 170, 230, 0.5), rgba(60, 100, 170, 0.3) 38%, #0b0c26 72%); }
+.lvlov[data-t="5"] .lu { background: radial-gradient(circle at 50% 38%, rgba(111, 211, 242, 0.5), rgba(40, 110, 170, 0.3) 38%, #0b0c26 72%); }
+.lvlov[data-t="6"] .lu { background: radial-gradient(circle at 50% 38%, rgba(70, 110, 240, 0.5), rgba(30, 40, 140, 0.35) 38%, #070820 72%); }
+.lvlov[data-t="7"] .lu { background: radial-gradient(circle at 50% 38%, rgba(190, 80, 240, 0.5), rgba(90, 30, 160, 0.35) 38%, #0a0620 72%); }
+.lvlov[data-t="4"] .lu-big { color: #bcd8ff; } .lvlov[data-t="5"] .lu-big { color: #a8ecff; } .lvlov[data-t="6"] .lu-big { color: #9fb8ff; } .lvlov[data-t="7"] .lu-big { color: #f3b8ff; }
 .lu-ok { margin-top: 22px; width: 240px; height: 50px; border: 0; border-radius: 18px; font: inherit; font-weight: 800; font-size: 16px; color: #3a1500; cursor: pointer; background: linear-gradient(135deg, #fbbf24, #f97316); }
 :root[data-calm="1"] .lu-rays, :root[data-calm="1"] .lu-emb { animation: none; }
 .subprog { flex: none; font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -1767,6 +1780,13 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     </div>
     <label class="field" style="margin-top:10px">Hora del aviso <input type="time" id="dueAt" value="09:00"></label>
     <p class="hint">Cada tarea de una lista con fecha te avisa ese día a la hora elegida (si todavía no está tildada). Las notas protegidas muestran solo "Nota protegida".</p>
+    <h3 id="secStreak">Racha de escritura</h3>
+    <div class="seg" id="streakSeg" aria-label="Recordatorio de racha">
+      <button type="button" data-v="on">Avisarme</button>
+      <button type="button" data-v="off">Sin aviso</button>
+    </div>
+    <label class="field" style="margin-top:10px" id="streakAtF">Hora del aviso <input type="time" id="streakAt" value="21:00"></label>
+    <p class="hint">Si ese día todavía no escribiste, te recordamos mantener tu racha. Si ya escribiste, no te avisamos.</p>
     <h3 id="secQuick">Acceso rápido</h3>
     <div class="seg" id="quickSeg" aria-label="Notificación de acceso rápido">
       <button type="button" data-v="on">Notificación fija</button>
@@ -2275,7 +2295,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.68.0";
+  var APP_VERSION = "1.69.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -2337,7 +2357,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   settings.focus = { min: Math.max(0, Math.floor(Number(settings.focus.min) || 0)), n: Math.max(0, Math.floor(Number(settings.focus.n) || 0)) };
   settings.focusLog = (Array.isArray(settings.focusLog) ? settings.focusLog : []).filter(function (f) { return f && f.t > 0 && f.m >= 0; }).slice(0, 30).map(function (f) { return { t: +f.t, m: Math.floor(f.m), w: Math.max(0, Math.floor(f.w) || 0) }; });
   settings.bkEvery = [0, 3, 7, 14, 30].indexOf(Number(settings.bkEvery)) >= 0 ? Number(settings.bkEvery) : 7;
-  settings.quickNotif = !!settings.quickNotif; settings.listSize = [90, 100, 115, 130].indexOf(Number(settings.listSize)) >= 0 ? Number(settings.listSize) : 100; settings.contrast = !!settings.contrast; if (typeof settings.calm !== "boolean") settings.calm = null; settings.encTitle = !!settings.encTitle; settings.secureWin = !!settings.secureWin; settings.dueAlert = settings.dueAlert !== false; settings.dueEve = !!settings.dueEve;
+  settings.quickNotif = !!settings.quickNotif; settings.listSize = [90, 100, 115, 130].indexOf(Number(settings.listSize)) >= 0 ? Number(settings.listSize) : 100; settings.contrast = !!settings.contrast; if (typeof settings.calm !== "boolean") settings.calm = null; settings.encTitle = !!settings.encTitle; settings.secureWin = !!settings.secureWin; settings.achPend = (Array.isArray(settings.achPend) ? settings.achPend : []).filter(function (x) { return typeof x === "string"; }).slice(0, 20); settings.streakAlert = !!settings.streakAlert; if (!/^\d{2}:\d{2}$/.test(settings.streakAt || "") || +settings.streakAt.slice(0, 2) > 23 || +settings.streakAt.slice(3) > 59) settings.streakAt = "21:00"; settings.dueAlert = settings.dueAlert !== false; settings.dueEve = !!settings.dueEve;
   if (!/^\d{2}:\d{2}$/.test(settings.dueAt || "") || +settings.dueAt.slice(0, 2) > 23 || +settings.dueAt.slice(3) > 59) settings.dueAt = "09:00";
   if (!settings.act || typeof settings.act !== "object" || Array.isArray(settings.act)) settings.act = {};
   if (!settings.ach || typeof settings.ach !== "object" || Array.isArray(settings.ach)) settings.ach = {};
@@ -2799,7 +2819,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     else if (name === "profile") $("profile").hidden = true;
     else if (name === "pfedit") $("pfEditor").hidden = true;
     else if (name === "max") $("max").hidden = true;
-    else if (name === "lvlup") { $("lvlup").hidden = true; celebrating = false; tryCelebrate(); }
+    else if (name === "lvlup") { $("lvlup").hidden = true; $("lvlup").removeAttribute("data-t"); celebrating = false; tryCelebrate(); }
     else if (name === "links") $("links").hidden = true;
     else if (name === "menu") closeMenuUI();
     else if (name === "sheet") { $("sheet").hidden = true; $("scrim").hidden = true; }
@@ -5403,6 +5423,8 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     $("dueSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.dueAlert ? "true" : "false"); });
     $("dueEveSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.dueEve ? "true" : "false"); });
     $("dueEveSeg").hidden = !settings.dueAlert; $("dueAt").value = settings.dueAt;
+    $("streakSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.v === "on") === settings.streakAlert ? "true" : "false"); });
+    $("streakAtF").hidden = !settings.streakAlert; $("streakAt").value = settings.streakAt;
     var vol = window.TronxSound ? window.TronxSound.getVolume() : 0;
     $("volSeg").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", Number(b.dataset.v) === vol ? "true" : "false"); });
     var sw = $("accentSw"); sw.textContent = "";
@@ -5457,6 +5479,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.69.0", d: "18 nov 2026", t: "Celebraciones, resumen semanal y recordatorio de racha", lv: "Hipernova", nm: "Celebraciones y racha", cat: "nuevo", l: ["Pantalla de celebración para los logros de rareza Platino o superior y para los secretos", "Resumen semanal en MAX: palabras, notas, enfoque y días activos frente a la semana anterior", "Recordatorio de racha opcional, desde Ajustes: te avisa solo si ese día todavía no escribiste"] },
     { v: "1.68.0", d: "18 nov 2026", t: "👀 Se han descubierto nuevos secretos... ¿Serás el primero en encontrarlos?", lv: "Hipernova", nm: "Nuevos secretos", cat: "nuevo", l: ["Nuevos logros secretos: permanecen ocultos hasta que los descubrís", "Sin pistas: explorá, creá y probá cosas distintas", "Nueva pestaña Secretos en tu perfil", "Medalla Estelar renovada, con una constelación que se dibuja sola", "Leyenda de Tronx ahora también requiere los secretos"] },
     { v: "1.67.0", d: "18 nov 2026", t: "Nuevas rarezas de logros y guía de MAX", lv: "Hipernova", cat: "nuevo", l: ["Cuatro rarezas nuevas de logros: Platino, Diamante, Estelar y Cósmico, con efectos animados propios", "35 logros nuevos para metas de largo plazo: notas, palabras, rachas, enfoque, tareas y nivel", "Nueva categoría Maestría, con logros ligados al nivel de MAX", "Más misiones diarias y semanales, con rotación más variada", "Guía de MAX la primera vez que entrás, disponible luego desde Inicio", "Los efectos se desactivan con el modo calmo"] },
     { v: "1.66.0", d: "17 nov 2026", t: "Nivel 50: Singularidad renovado", lv: "Hipernova", cat: "mejora", l: ["Nuevo emblema del nivel 50 con temática de ángel cósmico: halo, alas doradas, nebulosa y esfera armilar", "En las pantallas de nivel, las alas aletean periódicamente y los anillos giran alrededor del núcleo", "Las animaciones se desactivan con el modo calmo"] },
@@ -6125,7 +6148,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     var keys = Object.keys(settings.act);
     if (keys.length > 430) { keys.sort(); keys.slice(0, keys.length - 400).forEach(function (x) { delete settings.act[x]; }); }
     var s = streakInfo(); if (s.best > settings.streakBest) settings.streakBest = s.best;
-    achCheck(false);
+    achCheck(false); if (settings.streakAlert && d > 0) syncSoon();
     clearTimeout(statsSaveT); statsSaveT = setTimeout(saveSettings, 1500);
   }
   function streakInfo() {
@@ -6430,9 +6453,11 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   function achCheck(silent) {
     var st = achState(), fresh = [];
     ACH.forEach(function (a) { if (!settings.ach[a.id] && a.g(st) >= a.t) { settings.ach[a.id] = Date.now(); fresh.push(a); } });
-    fresh.forEach(function (a) { grantXp(TIER_XP[a.tier], Math.round(TIER_XP[a.tier] / 2)); });
+    fresh.forEach(function (a) { grantXp(TIER_XP[a.tier], Math.round(TIER_XP[a.tier] / 2)); if (a.tier >= 4 || a.sec) settings.achPend.push(a.id); });
     if (fresh.length) {
-      if (!silent && typeof toast === "function") toast("Logro desbloqueado: " + fresh[0].n + (fresh.length > 1 ? " (+" + (fresh.length - 1) + ")" : ""));
+      var low = fresh.filter(function (a) { return a.tier < 4 && !a.sec; });
+      if (!silent && low.length && typeof toast === "function") toast("Logro desbloqueado: " + low[0].n + (low.length > 1 ? " (+" + (low.length - 1) + ")" : ""));
+      if (fresh.length !== low.length) tryCelebrate();
       clearTimeout(statsSaveT); statsSaveT = setTimeout(saveSettings, 800);
     }
     return fresh;
@@ -6887,6 +6912,19 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     w9: { n: "Escribí los 7 días de la semana", t: 7, xp: 220, e: "🌟", g: function (c) { return c.daysW; } },
     w10: { n: "Creá 15 notas", t: 15, xp: 200, e: "📝", g: function (c) { return c.notesW; } }
   };
+  function mxWeek(c) {
+    var now = Date.now(), cur = { words: 0, days: 0, notes: 0, focus: 0 }, prev = { words: 0, days: 0, notes: 0, focus: 0 }, best = null, ONE = 86400000, wd = new Date(c.w0).getDay();
+    var mid = c.w0 + 43200000;
+    for (var i = 0; i < 14; i++) {
+      var ts = i < 7 ? mid + i * ONE : mid - (i - 6) * ONE, v = settings.act[dayKey(ts)];
+      if (v == null || (i < 7 && ts > now + ONE)) continue;
+      var o = i < 7 ? cur : prev; o.words += v; o.days++;
+      if (i < 7 && (!best || v > best.v)) best = { v: v, d: new Date(ts).getDay() };
+    }
+    notes.forEach(function (n) { if (n.trashedAt) return; if (n.createdAt >= c.w0) cur.notes++; else if (n.createdAt >= c.w0 - 7 * ONE) prev.notes++; });
+    (settings.focusLog || []).forEach(function (f) { if (f.t >= c.w0) cur.focus += f.m; else if (f.t >= c.w0 - 7 * ONE) prev.focus += f.m; });
+    return { cur: cur, prev: prev, best: best };
+  }
   var MX_STREAKS = [3, 7, 14, 30, 60, 100, 200, 365];
   function mxDaily(c) { var A = ["d1", "d6", "d11"], B = ["d2", "d3", "d10", "d8"], C = ["d4", "d5", "d9", "d7", "d12"]; return [A[c.dn % 3], B[(c.dn + 1) % 4], C[(c.dn + 2) % 5]]; }
   function mxWeekly(c) { var w = Math.round(c.w0 / 604800000); return [["w1", "w9"][w % 2], ["w2", "w3", "w5", "w6"][w % 4], ["w4", "w10", "w8"][w % 3]]; }
@@ -6931,6 +6969,16 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
       box.appendChild(mxMissionRow(d0, d0.g(c), !!m.cl[key0], function () { mxClaim(key0, d0.xp, Math.round(d0.xp / 2), "Misión cumplida: +" + d0.xp + " XP"); }));
       var s2 = mk("div", "mx-sec"); s2.appendChild(mk("span", null, "Racha")); box.appendChild(s2);
       var w = writeStats(), rc = mk("div", "mx-card mx-mi"); rc.appendChild(mk("div", "mx-ic", "🔥")); var rt = mk("div"); rt.appendChild(mk("b", null, w.cur > 0 ? w.cur + (w.cur === 1 ? " día de racha" : " días de racha") : "Sin racha por ahora")); rt.appendChild(mk("span", "d", "Mejor racha: " + w.best + (w.best === 1 ? " día" : " días"))); rc.appendChild(rt); rc.appendChild(mk("div", "mx-rw", rdy ? rdy + " para reclamar" : "Seguí así")); box.appendChild(rc);
+      var wk = mxWeek(c), s4 = mk("div", "mx-sec"); s4.appendChild(mk("span", null, "Tu semana")); box.appendChild(s4);
+      var wc = mk("div", "mx-card mx-wk"), wg = mk("div", "mx-wg");
+      [["Palabras", "words", fmtMx], ["Notas creadas", "notes", fmtMx], ["Enfoque", "focus", function (x) { return x >= 60 ? Math.floor(x / 60) + " h " + (x % 60) + " min" : x + " min"; }], ["Días activos", "days", function (x) { return x + "/7"; }]].forEach(function (a) {
+        var cv = wk.cur[a[1]], pv = wk.prev[a[1]], t = mk("div", "mx-wt"), dl;
+        if (!pv) dl = cv ? ["▲ nuevo", "up"] : ["–", "eq"]; else { var pc = Math.round((cv - pv) / pv * 100); dl = pc > 0 ? ["▲ " + pc + "%", "up"] : pc < 0 ? ["▼ " + Math.abs(pc) + "%", "dn"] : ["= igual", "eq"]; }
+        t.appendChild(mk("b", null, a[2](cv))); t.appendChild(mk("span", null, a[0])); t.appendChild(mk("em", dl[1], dl[0] + " vs. semana pasada")); wg.appendChild(t);
+      });
+      wc.appendChild(wg);
+      wc.appendChild(mk("p", "mx-wb", wk.best && wk.best.v > 0 ? "Tu mejor día fue el " + DAYS_ES[wk.best.d] + " con " + fmtMx(wk.best.v) + " palabras." : "Escribí algo hoy para empezar tu semana."));
+      box.appendChild(wc);
       var s3 = mk("div", "mx-sec"); s3.appendChild(mk("span", null, "Novedades")); var l3 = mk("button", "mx-link", "Ver todas"); l3.type = "button"; l3.addEventListener("click", function () { mxGo("news"); }); s3.appendChild(l3); box.appendChild(s3);
       var n0 = NEWS[0], nc = mk("div", "mx-card"), nw = mk("div", "mx-nw cur"); nw.style.border = "0"; nw.style.padding = "0"; nw.appendChild(el("i")); var nt = mk("div"); nt.appendChild(mk("b", null, "Versión " + n0.v + " · " + n0.t)); nt.appendChild(mk("span", null, (n0.l && n0.l[0]) || "")); nw.appendChild(nt); nc.appendChild(nw); box.appendChild(nc);
       var gd = mk("button", "mx-btn", "Ver guía de MAX"); gd.type = "button"; gd.addEventListener("click", function () { mxTourShow(0); }); box.appendChild(gd);
@@ -7046,8 +7094,9 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   var celT = 0;
   function tryCelebrate() { clearTimeout(celT); celT = setTimeout(doCelebrate, 450); }
   function doCelebrate() {
-    var m = settings.max; if (!m || !m.pend || celebrating) return;
+    var m = settings.max, hasL = m && m.pend, hasA = settings.achPend && settings.achPend.length; if ((!hasL && !hasA) || celebrating) return;
     var app = document.querySelector(".app"); if (!app || app.getAttribute("data-view") !== "list" || layers.length) return;
+    if (!hasL) { showAchUp(); return; }
     celebrating = true; $("luBig").textContent = "¡Subiste de nivel!";
     var L = m.pend, r = rankOf(L), prev = titleOf(m.pendFrom || L - 1), nm = titleOf(L);
     $("luEmb").innerHTML = emblemAnim(r.i, L, 240); $("luName").textContent = nm; $("luSub").textContent = "Rango " + r.name + " · Nivel " + L;
@@ -7055,6 +7104,18 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
     if (nm !== prev) rw.appendChild(mk("div", null, "🏷️ Título nuevo"));
     m.pend = 0; m.pendFrom = 0; m.pendStars = 0; maxSave();
     $("lvlup").hidden = false; pushLayer("lvlup");
+  }
+  function showAchUp() {
+    var id = settings.achPend.shift(), a = ACH.filter(function (x) { return x.id === id; })[0];
+    if (!a || !settings.ach[a.id]) { saveSettings(); tryCelebrate(); return; }
+    celebrating = true;
+    var lu = $("lvlup"); lu.setAttribute("data-t", a.tier);
+    $("luBig").textContent = a.sec ? "¡Secreto descubierto!" : "¡Logro desbloqueado!";
+    var md = el("div", "md luMd " + TIER_CLS[a.tier]); md.innerHTML = medalSvg(a.c, a.tier, true, a.id); md.setAttribute("aria-hidden", "true");
+    var em = $("luEmb"); em.textContent = ""; em.appendChild(md);
+    $("luName").textContent = a.n; $("luSub").textContent = "Rareza " + TIER_NM[a.tier].charAt(0).toUpperCase() + TIER_NM[a.tier].slice(1) + " · " + a.d;
+    var rw = $("luRw"); rw.textContent = ""; rw.appendChild(mk("div", null, "✨ +" + fmtMx(TIER_XP[a.tier]) + " XP")); rw.appendChild(mk("div", null, "⭐ +" + fmtMx(Math.round(TIER_XP[a.tier] / 2))));
+    saveSettings(); lu.hidden = false; pushLayer("lvlup");
   }
   function showRankPreview(r) {
     if (celebrating) return; celebrating = true;
@@ -7347,6 +7408,8 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
   });
   $("dueSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.dueAlert = b.dataset.v === "on"; saveSettings(); renderSettings(); syncSoon(); });
   $("dueEveSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.dueEve = b.dataset.v === "on"; saveSettings(); renderSettings(); syncSoon(); });
+  $("streakSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.streakAlert = b.dataset.v === "on"; saveSettings(); renderSettings(); syncSoon(); });
+  $("streakAt").addEventListener("change", function () { if (/^\d{2}:\d{2}$/.test(this.value)) { settings.streakAt = this.value; saveSettings(); syncSoon(); } });
   $("dueAt").addEventListener("change", function () { if (/^\d{2}:\d{2}$/.test(this.value)) { settings.dueAt = this.value; saveSettings(); syncSoon(); } });
   $("swipeSeg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; settings.swipe = b.dataset.v === "on"; saveSettings(); renderSettings(); });
   $("bgAnimSeg").addEventListener("click", function (e) {
@@ -7799,6 +7862,17 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
         });
       });
     });
+    if (settings.streakAlert && settings.wTot > 0) {
+      var sk = streakInfo(), sh = +settings.streakAt.slice(0, 2), sm = +settings.streakAt.slice(3), nw = new Date(), wroteToday = settings.act[dayKey(Date.now())] != null;
+      for (var di = 0; di < 7; di++) {
+        if (di === 0 && wroteToday) continue;
+        var sat = new Date(nw.getFullYear(), nw.getMonth(), nw.getDate() + di, sh, sm, 0).getTime(); if (sat <= Date.now() + 5000) continue;
+        var st1 = di === 0 && sk.cur > 0 ? "🔥 Tu racha de " + sk.cur + (sk.cur === 1 ? " día" : " días") + " está en juego" : "🔥 Mantené tu racha";
+        var sb1 = di === 0 ? "Todavía no escribiste hoy. Unas pocas palabras alcanzan." : "Escribí unas palabras hoy para sumar un día más.";
+        var so = { id: nidOf("streak" + di), title: st1, body: sb1, largeBody: sb1, summaryText: "Racha · Tronx", channelId: REM_CH, smallIcon: "ic_stat_tronx", iconColor: "#7c5cff", autoCancel: true, schedule: { at: new Date(sat), allowWhileIdle: true } };
+        want.push(so); sig.push(so.id + ":" + sat + ":" + st1);
+      }
+    }
     notes.forEach(function (n) {
       if (!n.remind || n.trashedAt) return;
       var tx0 = notifText(n);
