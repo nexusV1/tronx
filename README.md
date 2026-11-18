@@ -230,6 +230,7 @@ Pasos, una sola vez:
 **1.61.6**: Esta actualización corrige el botón de buscar notas duplicadas y el marcador del día actual en el mapa de actividad.
 **1.62.6**: Esta actualización renueva el perfil con foto, portada y frase, y suma una Sala de logros con medallas, categorías y progreso.
 
+**1.68.0**: Logros secretos, nueva pestaña Secretos y medalla Estelar renovada.
 **1.67.0**: Rarezas de logros Platino, Diamante, Estelar y Cósmico, 35 logros nuevos, más misiones y guía de MAX.
 **1.66.0**: Nivel 50 renovado, Singularidad con alas de ángel, halo, nebulosa y aros animados.
 **1.65.0**: Insignias de logros con íconos propios y nivel 40 renovado.
