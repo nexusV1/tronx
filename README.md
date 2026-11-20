@@ -230,6 +230,7 @@ Pasos, una sola vez:
 **1.61.6**: Esta actualización corrige el botón de buscar notas duplicadas y el marcador del día actual en el mapa de actividad.
 **1.62.6**: Esta actualización renueva el perfil con foto, portada y frase, y suma una Sala de logros con medallas, categorías y progreso.
 
+**1.71.0**: Marco Mítico Fusión nuclear con animación especial aleatoria y Familias de marcos en la Tienda de MAX.
 **1.70.0**: Tienda de MAX con marcos de perfil animados (Neón, Aurora, Constelación, Sol y Nebulosa cósmica).
 **1.69.0**: Celebración de logros raros, resumen semanal en MAX y recordatorio de racha.
 **1.68.0**: Logros secretos, nueva pestaña Secretos y medalla Estelar renovada.
