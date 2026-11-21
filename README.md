@@ -230,7 +230,7 @@ Pasos, una sola vez:
 **1.61.6**: Esta actualización corrige el botón de buscar notas duplicadas y el marcador del día actual en el mapa de actividad.
 **1.62.6**: Esta actualización renueva el perfil con foto, portada y frase, y suma una Sala de logros con medallas, categorías y progreso.
 
-**1.74.0**: Evento GTA VI: pestaña Misiones con tres misiones diarias y dos semanales que dan puntos SEIS y sobres.
+**1.74.0**: Evento GTA VI: pestaña Misiones con seis misiones diarias y seis semanales que dan puntos SEIS y sobres, sobres que se abren solos y mejor rendimiento.
 **1.73.0**: Evento GTA VI: cuenta regresiva, aviso de nuevas recompensas, seis pines exclusivos en los sobres y mejor rendimiento en la Tienda.
 **1.72.0**: Evento GTA VI en MAX: pestaña Eventos, marco Exclusivo GTA VI, sobres de la suerte, puntos SEIS y Tienda del evento.
 **1.71.0**: Marco Mítico Fusión nuclear con animación especial aleatoria y Familias de marcos en la Tienda de MAX.

@@ -1252,6 +1252,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 .mn-avw { overflow: visible; margin: 10px 12px 10px 10px; }
 .fr.fr-off, .fr.fr-off * { animation-play-state: paused !important; }
 .mx-fcw .fr [filter] { display: none; }
+.mx-fc:not(.sel) .fr, .mx-fc:not(.sel) .fr * { animation-play-state: paused !important; }
 .fr .fr-spin { animation: frspin 10s linear infinite; transform-origin: 80px 80px; }
 .fr .fr-spinr { animation: frspin 16s linear infinite reverse; transform-origin: 80px 80px; }
 @keyframes frspin { to { transform: rotate(360deg); } }
@@ -1691,13 +1692,15 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .mx-odd th { font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: #9a9dc8; text-align: left; padding: 4px 4px; font-weight: 700; }
 .mx-odd td { padding: 6px 4px; border-top: 1px solid rgba(255, 255, 255, 0.08); color: #e4e5ff; }
 .mx-odd td:first-child { color: #ffd25a; white-space: nowrap; }
-.mx-pko { --bg: #1a0d45; --gl: #8f6bff; position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 20px 24px; text-align: center; color: #fff; background-color: var(--bg); transition: background-color 0.9s ease; overflow: hidden; }
+.mx-pko { --bg: #1a0d45; --gl: #8f6bff; position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 20px 24px; text-align: center; color: #fff; background-color: var(--bg); overflow: hidden; contain: layout paint; }
 .mx-pko::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, var(--gl), transparent 62%); opacity: 0.34; transition: opacity 0.9s; pointer-events: none; }
 .mx-pko[data-s="6"]::before { opacity: 0; }
 .mx-pko[data-s="6"] .mx-pkh, .mx-pko[data-s="6"] .mx-pkc2 { text-shadow: 0 1px 8px rgba(10, 0, 30, 0.95), 0 0 2px rgba(10, 0, 30, 0.9); }
 .mx-pkbeach { position: absolute !important; inset: 0; z-index: 0 !important; opacity: 0; transition: opacity 1.3s ease; pointer-events: none; }
 .mx-pkbeach.on { opacity: 1; }
 .mx-pkbeach svg { display: block; width: 100%; height: 100%; }
+.mx-pkbeach img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mx-pkbeach .fg { position: absolute; inset: 0; }
 .mxtw { animation: mxsw 3.2s ease-in-out infinite; } @keyframes mxsw { 50% { opacity: 0.25; } }
 .sbl { animation: mxsbl 1.6s steps(1) infinite; } @keyframes mxsbl { 50% { opacity: 0.1; } }
 .sn { animation: mxsn 3.4s steps(1) infinite; } @keyframes mxsn { 0%,100% { opacity: 1; } 46% { opacity: 1; } 48% { opacity: .35; } 52% { opacity: 1; } 70% { opacity: .5; } 72% { opacity: 1; } }
@@ -1719,12 +1722,16 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 @keyframes mxfl1 { 0%,100% { transform: rotate(20deg); } 50% { transform: rotate(-30deg); } } @keyframes mxfl2 { 0%,100% { transform: rotate(-20deg); } 50% { transform: rotate(30deg); } }
 @media (prefers-reduced-motion: reduce) { .mx-pkbeach svg * { animation: none !important; } }
 .mx-pko > * { position: relative; z-index: 1; }
+#max.pkopen .mx-sc, #max.pkopen #mxNav, #max.pkopen .mx-top { visibility: hidden; }
 .mx-pkt { position: absolute !important; top: 14px; right: 14px; }
 .mx-pkx { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.35); color: #fff; font-size: 16px; cursor: pointer; }
 svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-pka { border: 0; background: transparent; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; perspective: 800px; }
 .mx-pka:disabled { cursor: default; }
-.mx-pko svg.pk { width: min(66vw, 252px); height: auto; aspect-ratio: 100 / 130; display: block; overflow: visible; filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 24px var(--gl)); animation: mxfl 4.8s ease-in-out infinite; transform-style: preserve-3d; }
+.mx-pko svg.pk { width: min(66vw, 252px); height: auto; aspect-ratio: 100 / 130; display: block; overflow: visible; animation: mxfl 4.8s ease-in-out infinite; transform-style: preserve-3d; will-change: transform; }
+.mx-pka { position: relative; }
+.mx-pka::before { content: ""; position: absolute; left: -14%; right: -14%; top: 6%; bottom: -4%; border-radius: 50%; background: radial-gradient(ellipse at 50% 55%, var(--gl) 0%, rgba(0, 0, 0, 0.0) 68%); opacity: 0.5; pointer-events: none; }
+.mx-pka::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: -10px; height: 18px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0) 70%); pointer-events: none; }
 @keyframes mxfl { 0%,100% { transform: translateY(0) rotateY(-9deg) rotateX(2deg); } 50% { transform: translateY(-6px) rotateY(9deg) rotateX(-2deg); } }
 .mx-pko svg.pk .shn { animation: mxshn 3.4s ease-in-out infinite; }
 @keyframes mxshn { 0%,55% { transform: translateX(0); } 100% { transform: translateX(150px); } }
@@ -5810,7 +5817,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
-    { v: "1.74.0", d: "21 nov 2026", t: "Misiones del evento GTA VI", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva pestaña Misiones en Eventos, con misiones propias del evento GTA VI", "Tres misiones diarias, que se renuevan a las 00:00: cada una te da 6 puntos SEIS y un sobre de 1 estrella", "Dos misiones semanales, que se renuevan cada lunes: la fácil da 16 puntos SEIS y un sobre de 2 estrellas, y la difícil 24 puntos SEIS y un sobre de 3 estrellas", "Cada misión muestra su barra de progreso, el porcentaje y cuánto falta para completarla", "Un aviso en el botón Eventos te indica cuándo tenés misiones listas para reclamar", "El botón Atrás del celular ahora retrocede paso a paso dentro de MAX y en las notas, y pide confirmación antes de cerrar la app"] },
+    { v: "1.74.0", d: "21 nov 2026", t: "Misiones del evento GTA VI", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva pestaña Misiones en Eventos, con misiones propias del evento GTA VI", "Seis misiones diarias, que se renuevan a las 00:00: cada una te da 6 puntos SEIS y un sobre de 1 estrella", "Seis misiones semanales, que se renuevan cada lunes: tres fáciles (16 puntos SEIS y sobre de 2 estrellas) y tres difíciles (24 puntos SEIS y sobre de 3 estrellas)", "Cada misión muestra su barra de progreso, el porcentaje y cuánto falta para completarla", "Un aviso en el botón Eventos te indica cuándo tenés misiones listas para reclamar", "Los sobres ahora se abren solos al terminar los toques", "Al tocar un marco en la Tienda se reproduce su animación y sus efectos", "Mejor rendimiento al abrir sobres y al navegar la Tienda de marcos", "El botón Atrás del celular ahora retrocede paso a paso dentro de MAX y en las notas, y pide confirmación antes de cerrar la app"] },
     { v: "1.73.0", d: "21 nov 2026", t: "Pines y cuenta regresiva GTA VI", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Cuenta regresiva en la pestaña Eventos: el evento GTA VI finaliza el 17 de diciembre", "Nuevo aviso en Eventos: durante estos días se sumarán más recompensas a los sobres", "Seis pines exclusivos de GTA VI, que se muestran junto a tu nombre: Atardecer, Cocodrilo, Casete, GTA, Palmera y VI", "Los pines pueden aparecer en los sobres de 5 y 6 estrellas, con un 15 % y un 35 % de probabilidad; cuanto más raro el pin, menos chances de obtenerlo", "Desde la sección Pines del evento podés equipar o quitar el pin que quieras mostrar", "Si te toca un pin que ya tenés, recibís puntos SEIS a cambio", "Mejor rendimiento al navegar la Tienda y las vistas con marcos animados"] },
     { v: "1.72.0", d: "20 nov 2026", t: "Evento GTA VI", lv: "Hipernova", nm: "Evento GTA VI", cat: "nuevo", l: ["Nueva pestaña Eventos en MAX, con el primer evento: GTA VI", "Nuevo marco Exclusivo GTA VI, con aro metálico, palmeras iluminadas y el VI en acabado cromado dorado; cuesta 6.666.666 ⭐ o se consigue en los sobres", "Sobres de la suerte: se obtienen al completar misiones, de 1 a 3 estrellas según la dificultad", "Tocá el sobre hasta 6 veces: cada toque puede mejorarlo una estrella, con un fondo y efectos propios para cada nivel", "Al abrirlo recibís ⭐, XP y puntos SEIS, y cada sobre tiene una chance de traer el marco, desde 0,002 % hasta 6 % en los de 6 estrellas", "Puntos SEIS y Tienda del evento: comprá sobres, cambialos por ⭐ o XP y subí tu nivel de suerte para mejorar tus chances"] },
     { v: "1.71.0", d: "20 nov 2026", t: "Fusión nuclear y Familias de marcos", lv: "Hipernova", nm: "Marcos de perfil", cat: "nuevo", l: ["Nuevo marco Mítico IV: Fusión nuclear, una armadura de reactor con cámaras de energía, átomo en movimiento y núcleo central", "Animación especial de Fusión nuclear: las cámaras se cargan, el marco se inestabiliza, el núcleo gira cada vez más rápido y la fusión estalla en un destello azul y blanco antes de volver a la calma", "La animación ocurre de forma completamente aleatoria: a veces pasa mucho tiempo sin nada y nunca sigue un intervalo fijo", "En la Tienda de MAX los marcos ahora se agrupan por Familias: Clásicos y Familia nuclear", "Podés ver la animación especial cuando quieras desde la vista previa del marco", "Se pausa con el modo calmo y no consume recursos cuando no está activa", "Pronto llegará un nuevo marco a la Familia nuclear"] },
@@ -6724,14 +6731,14 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     frEvT = 0;
     if (document.visibilityState === "visible" && !calmOn()) {
       var seen = [];
-      document.querySelectorAll(".fr[data-ev]").forEach(function (e) { var w = e.parentNode, b = e.getBoundingClientRect(); if (seen.indexOf(w) < 0 && b.width > 0 && b.bottom > 0 && b.top < innerHeight) seen.push(w); });
+      document.querySelectorAll(".fr[data-ev]").forEach(function (e) { var w = e.parentNode, b = e.getBoundingClientRect(); if (seen.indexOf(w) < 0 && b.width > 0 && b.bottom > 0 && b.top < innerHeight && !(w.closest && w.closest(".mx-fc:not(.sel)"))) seen.push(w); });
       seen.forEach(frEvRun);
     }
     frEvPlan(false);
   }
   /* los marcos que no se ven en pantalla se pausan: menos trabajo y menos batería */
   var frIO = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
-    es.forEach(function (e) { var off = !e.isIntersecting, sv = e.target.firstChild; e.target.classList.toggle("fr-off", off); if (sv && sv.pauseAnimations) { if (off) sv.pauseAnimations(); else sv.unpauseAnimations(); } });
+    es.forEach(function (e) { var off = !e.isIntersecting, sv = e.target.firstChild; e.target.classList.toggle("fr-off", off); if (sv && sv.pauseAnimations) { if (off || (e.target.closest && e.target.closest(".mx-fc:not(.sel)"))) sv.pauseAnimations(); else sv.unpauseAnimations(); } });
   }, { rootMargin: "80px" }) : null;
   function frApply(wrap, av, id, D) {
     if (!wrap || !av) return;
@@ -7862,7 +7869,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     }
     var refl = ""; for (var i = 0; i < 13; i++) { var yy = 484 + i * 12.5, ww = 14 + i * 7.5; refl += '<ellipse class="brf" style="transform-origin:200px ' + yy + 'px;animation-delay:' + (i * .23).toFixed(2) + 's;animation-duration:' + (1.6 + (i % 3) * .5) + 's" cx="200" cy="' + yy + '" rx="' + ww + '" ry="' + (1.6 + i * .12).toFixed(2) + '" fill="#ffe49a" fill-opacity="' + (0.75 - i * 0.04).toFixed(2) + '"/>'; }
     var st = ""; [[40, 40], [90, 90], [150, 30], [250, 60], [320, 36], [360, 110], [60, 150], [300, 140], [220, 22]].forEach(function (q, k) { st += '<circle class="btw" style="animation-delay:' + (k * .4) + 's" cx="' + q[0] + '" cy="' + q[1] + '" r="' + (k % 2 ? 1 : 1.5) + '" fill="#fff"/>'; });
-    return '<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>'
+    return { bg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice"><defs>'
       + '<linearGradient id="bsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14064a"/><stop offset=".28" stop-color="#4a1490"/><stop offset=".48" stop-color="#b8208a"/><stop offset=".58" stop-color="#ff5a7a"/><stop offset=".63" stop-color="#ffa060"/></linearGradient>'
       + '<radialGradient id="bsn" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffbe0"/><stop offset=".5" stop-color="#ffd25a"/><stop offset="1" stop-color="#ff8a3a"/></radialGradient>'
       + '<radialGradient id="bgl" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd890" stop-opacity=".9"/><stop offset=".45" stop-color="#ff7a6a" stop-opacity=".35"/><stop offset="1" stop-color="#ff2e93" stop-opacity="0"/></radialGradient>'
@@ -7879,8 +7886,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       + '<g class="bfm"><path d="M-10 648Q40 636 100 648T220 648T340 648T460 648" stroke="#fff" stroke-width="3" fill="none" stroke-opacity=".85" stroke-linecap="round"/><path d="M-10 656Q50 646 110 656T230 656T350 656T470 656" stroke="#ffe9f4" stroke-width="1.6" fill="none" stroke-opacity=".6" stroke-linecap="round"/></g>'
       + '<ellipse cx="200" cy="700" rx="150" ry="14" fill="#ffd0a0" fill-opacity=".16"/></g>'
       + palm(34, 810, 330, 90, 1.3, 0) + palm(384, 812, 270, -70, 1.05, -2.2) + palm(-6, 812, 190, 46, .9, -1)
-      + gull(96, .7, 26, -6, 1, .62) + gull(170, 1, 19, -12, -1, .5) + gull(240, .8, 23, -3, 1, .56) + gull(322, 1.15, 15, -9, -1, .46) + gull(398, .55, 30, -18, 1, .7) + gull(540, 1.3, 17, -5, -1, .52)
-      + '<rect y="500" width="400" height="300" fill="url(#bsh)"/></svg>';
+      + '<rect y="500" width="400" height="300" fill="url(#bsh)"/></svg>', fg: gull(96, .7, 26, -6, 1, .62) + gull(170, 1, 19, -12, -1, .5) + gull(322, 1.15, 15, -9, -1, .46) };
   }
   var MX_SC = [null,
     { sky: ["#06031a", "#120840", "#27106c", "#46188a"], hz: "#7a3cc4", body: { t: "moon", x: 292, y: 250, r: 24, c: "#e8eaff", g: "#9a8cff" }, st: 46, win: ["#7ad7ff", "#ffd27a", "#ff7ac0"], sea: ["#241080", "#0a0630"], far: "#1a0c4e", near: "#0b0524", ref: "#cfd2ff", cl: 0 },
@@ -7888,10 +7894,17 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     { sky: ["#240a58", "#6a1a9a", "#dc3c80", "#ff8a6a"], hz: "#ffb070", body: { t: "sun", x: 210, y: 548, r: 40, c: "#ffd890", g: "#ff7a6a" }, st: 8, win: ["#ffd27a", "#ff9ac8", "#ffffff"], sea: ["#c0407a", "#3a1070"], far: "#5a1a6e", near: "#1a0836", ref: "#ffd890", cl: 3, plane: 1 },
     { sky: ["#34085a", "#a81c8a", "#ff6258", "#ffb060"], hz: "#ffc880", body: { t: "sun", x: 126, y: 548, r: 58, c: "#ffe29a", g: "#ff8a4a" }, st: 0, win: ["#ffe29a", "#ffffff", "#ffb02e"], sea: ["#e8608a", "#4a1a7a"], far: "#7a2a7a", near: "#2a0c3a", ref: "#ffe29a", cl: 3, boats: 1 },
     { sky: ["#4a1a6a", "#c83c80", "#ffa860", "#ffe49a"], hz: "#fff0b0", body: { t: "sun", x: 276, y: 546, r: 66, c: "#fffbe0", g: "#ffc060" }, st: 0, win: ["#fff0b0", "#ffffff", "#ffc060"], sea: ["#ffa070", "#6a2a8a"], far: "#a04a7a", near: "#3a1240", ref: "#fff0b0", cl: 2, heli: 1 }];
+  var mxScCache = {};
+  function mxSceneEl(L) {
+    var c = mxScCache[L]; if (!c) { var r = mxSceneSvg(L); c = mxScCache[L] = { u: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(r.bg), f: r.fg }; }
+    var d = mk("div", "mx-pkbeach"), im = new Image(); im.alt = ""; im.decoding = "async"; im.src = c.u; d.appendChild(im);
+    if (c.f) { var f = mk("div", "fg"); f.innerHTML = '<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + c.f + "</svg>"; d.appendChild(f); }
+    return d;
+  }
   function mxSceneSvg(L) {
     if (L >= 6) return mxBeachSvg();
-    var S = MX_SC[L], sd = 7 + L * 13; function rnd() { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }
-    var o = '<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>'
+    var S = MX_SC[L], FG = "", sd = 7 + L * 13; function rnd() { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }
+    var o = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice"><defs>'
       + '<linearGradient id="sk' + L + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + S.sky[0] + '"/><stop offset=".3" stop-color="' + S.sky[1] + '"/><stop offset=".52" stop-color="' + S.sky[2] + '"/><stop offset=".72" stop-color="' + S.sky[3] + '"/></linearGradient>'
       + '<linearGradient id="se' + L + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + S.sea[0] + '"/><stop offset="1" stop-color="' + S.sea[1] + '"/></linearGradient>'
       + '<radialGradient id="sg' + L + '" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="' + S.hz + '" stop-opacity=".85"/><stop offset="1" stop-color="' + S.hz + '" stop-opacity="0"/></radialGradient>'
@@ -7915,7 +7928,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     if (b) { for (i = 0; i < 12; i++) { var yy = 574 + i * 9.5, ww = (b.r * 0.35) + i * (b.r * 0.12); o += '<ellipse class="brf" style="transform-origin:' + b.x + 'px ' + yy + 'px;animation-delay:' + (i * .23).toFixed(2) + 's;animation-duration:' + (1.6 + (i % 3) * .5) + 's" cx="' + b.x + '" cy="' + yy + '" rx="' + ww.toFixed(0) + '" ry="1.5" fill="' + S.ref + '" fill-opacity="' + (0.75 - i * .05).toFixed(2) + '"/>'; } }
     else for (i = 0; i < 14; i++) o += '<rect class="brf" style="transform-origin:' + (30 + rnd() * 340).toFixed(0) + 'px 600px;animation-delay:' + (rnd() * 2).toFixed(1) + 's;animation-duration:' + (1.8 + rnd() * 1.5).toFixed(1) + 's" x="' + (30 + rnd() * 340).toFixed(0) + '" y="' + (574 + rnd() * 100).toFixed(0) + '" width="' + (10 + rnd() * 26).toFixed(0) + '" height="1.6" fill="' + S.win[i % 3] + '" fill-opacity=".6"/>';
     o += '<path class="bw w2" style="animation-duration:9s" d="M0 600' + "q50 -4 100 0q50 4 100 0".repeat(1) + "q50 -4 100 0q50 4 100 0".repeat(7) + 'V690H0Z" fill="rgba(255,255,255,.06)"/>';
-    if (S.boats) [[90, 622, 1], [300, 640, .8]].forEach(function (q, k) { o += '<g transform="translate(' + q[0] + ' ' + q[1] + ') scale(' + q[2] + ')"><g class="sbt" style="animation-delay:' + (k * 1.3) + 's"><path d="M-22 0L22 0L16 8L-16 8Z" fill="#14062a"/><path d="M-2 -2V-34L18 -4Z" fill="#14062a"/><path d="M-5 -2V-26L-18 -4Z" fill="#14062a" fill-opacity=".9"/></g></g>'; });
+    if (S.boats) [[90, 622, 1], [300, 640, .8]].forEach(function (q, k) { FG += '<g transform="translate(' + q[0] + ' ' + q[1] + ') scale(' + q[2] + ')"><g class="sbt" style="animation-delay:' + (k * 1.3) + 's"><path d="M-22 0L22 0L16 8L-16 8Z" fill="#14062a"/><path d="M-2 -2V-34L18 -4Z" fill="#14062a"/><path d="M-5 -2V-26L-18 -4Z" fill="#14062a" fill-opacity=".9"/></g></g>'; });
     o += '<rect x="0" y="690" width="400" height="110" fill="#10052a"/><path d="M0 690H400" stroke="' + S.hz + '" stroke-opacity=".6" stroke-width="1.4"/>';
     for (i = 0; i < 6; i++) { var lx = 30 + i * 68; o += '<rect x="' + (lx - 1) + '" y="662" width="2" height="30" fill="#0a0318"/><circle class="mxtw" style="animation-delay:' + (i * .5) + 's" cx="' + lx + '" cy="660" r="3" fill="' + S.win[i % 2] + '"/><circle cx="' + lx + '" cy="660" r="9" fill="' + S.win[i % 2] + '" fill-opacity=".22"/>'; }
     function palm(x, y, h, lean, sc) {
@@ -7923,30 +7936,30 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       return '<g transform="translate(' + x + " " + y + ')"><g class="bpm" style="transform-origin:0 0"><path d="M-5 0C-3 ' + (-h * .4) + " " + (lean * .5) + " " + (-h * .75) + " " + (lean - 2) + " " + (-h) + "L" + (lean + 3) + " " + (-h) + "C" + (lean * .6 + 4) + " " + (-h * .75) + " 5 " + (-h * .4) + ' 7 0Z" fill="#0a0318"/><g transform="translate(' + lean + " " + (-h) + ')"><path d="' + fr + '" fill="#0a0318"/></g></g></g>';
     }
     o += palm(26, 806, 250, 56, 1.15) + palm(380, 806, 210, -48, 1) + palm(70, 806, 120, 24, .8);
-    if (S.car) o += '<g transform="translate(0 735)"><g class="scar"><path d="M0 0H44L40 -8Q30 -17 20 -17Q10 -17 4 -8Z" fill="#06020f"/><circle cx="10" cy="1" r="5" fill="#06020f"/><circle cx="34" cy="1" r="5" fill="#06020f"/><path d="M44 -3H62" stroke="#fff6c0" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/><circle cx="44" cy="-3" r="2.6" fill="#fff6c0"/><circle cx="0" cy="-3" r="1.8" fill="#ff3a4a"/></g></g>';
-    if (S.plane) o += '<g transform="translate(0 150)"><g class="spl"><path d="M0 0L24 0L30 3L24 6L0 6Z" fill="#1a0a3a"/><path d="M8 0L14 -8L17 -8L14 0Z" fill="#1a0a3a"/><circle class="sbl" cx="0" cy="3" r="1.8" fill="#ff3a4a"/><circle class="sbl" style="animation-delay:.5s" cx="30" cy="3" r="1.6" fill="#fff"/></g></g>';
-    if (S.heli) o += '<g transform="translate(0 190)"><g class="shc"><g class="sbob"><ellipse cx="0" cy="0" rx="13" ry="6" fill="#1a0a3a"/><path d="M-12 -1L-30 -4L-30 0L-12 3Z" fill="#1a0a3a"/><path d="M-2 -6V-10M-14 -10H12" stroke="#1a0a3a" stroke-width="1.6"/><circle class="sbl" cx="-30" cy="-2" r="1.8" fill="#ff3a4a"/><circle cx="13" cy="0" r="2" fill="#fff6c0"/></g></g></g>';
-    return o + '<rect y="520" width="400" height="280" fill="url(#ss' + L + ')"/></svg>';
+    if (S.car) FG += '<g transform="translate(0 735)"><g class="scar"><path d="M0 0H44L40 -8Q30 -17 20 -17Q10 -17 4 -8Z" fill="#06020f"/><circle cx="10" cy="1" r="5" fill="#06020f"/><circle cx="34" cy="1" r="5" fill="#06020f"/><path d="M44 -3H62" stroke="#fff6c0" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/><circle cx="44" cy="-3" r="2.6" fill="#fff6c0"/><circle cx="0" cy="-3" r="1.8" fill="#ff3a4a"/></g></g>';
+    if (S.plane) FG += '<g transform="translate(0 150)"><g class="spl"><path d="M0 0L24 0L30 3L24 6L0 6Z" fill="#1a0a3a"/><path d="M8 0L14 -8L17 -8L14 0Z" fill="#1a0a3a"/><circle class="sbl" cx="0" cy="3" r="1.8" fill="#ff3a4a"/><circle class="sbl" style="animation-delay:.5s" cx="30" cy="3" r="1.6" fill="#fff"/></g></g>';
+    if (S.heli) FG += '<g transform="translate(0 190)"><g class="shc"><g class="sbob"><ellipse cx="0" cy="0" rx="13" ry="6" fill="#1a0a3a"/><path d="M-12 -1L-30 -4L-30 0L-12 3Z" fill="#1a0a3a"/><path d="M-2 -6V-10M-14 -10H12" stroke="#1a0a3a" stroke-width="1.6"/><circle class="sbl" cx="-30" cy="-2" r="1.8" fill="#ff3a4a"/><circle cx="13" cy="0" r="2" fill="#fff6c0"/></g></g></g>';
+    return { bg: o + '<rect y="520" width="400" height="280" fill="url(#ss' + L + ')"/></svg>', fg: FG };
   }
   function mxCount(el, to, calm, pre) { if (calm) { el.textContent = pre + fmtMx(to); return; } var t0 = performance.now(), d = 800; (function f(t) { var k = Math.min(1, (t - t0) / d); el.textContent = pre + fmtMx(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(f); })(t0); }
   function mxPkOpenUi(idx) {
     var m = getMax(), l = mxPkList(m), pk = l[idx]; if (!pk || mxPkBusy) return; mxPkBusy = true;
     var calm = calmOn(), tms = [], ov = mk("div", "mx-pko"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Sobre de la suerte");
     function later(f, ms) { if (calm) ms = Math.min(ms, 80); tms.push(setTimeout(f, ms)); }
-    var scn = null, scL = 0; function theme() { var t = MX_PT[pk.s]; ov.style.setProperty("--bg", t.bg); ov.style.setProperty("--gl", t.gl); ov.setAttribute("data-s", pk.s); if (scL !== pk.s) { var old = scn; scL = pk.s; scn = mk("div", "mx-pkbeach"); scn.innerHTML = mxSceneSvg(pk.s); ov.insertBefore(scn, ov.firstChild); void scn.offsetWidth; scn.classList.add("on"); if (old) { old.classList.remove("on"); later(function () { old.remove(); }, 1400); } } }
+    var scn = null, scL = 0; function theme() { var t = MX_PT[pk.s]; ov.style.setProperty("--bg", t.bg); ov.style.setProperty("--gl", t.gl); ov.setAttribute("data-s", pk.s); if (scL !== pk.s) { var old = scn; scL = pk.s; scn = mxSceneEl(pk.s); ov.insertBefore(scn, ov.firstChild); void scn.offsetWidth; scn.classList.add("on"); if (old) { old.classList.remove("on"); later(function () { old.remove(); }, 1400); } } }
     function chance() { return Math.min(0.9, (pk.s < 6 ? MX_PK.tiers[pk.s].up : 0) + mxLuck(getMax()) * 0.02); }
     var fx = mk("div", "mx-pkfx"); fx.innerHTML = '<i class="hl"></i>'; ov.appendChild(fx);
     var top = mk("div", "mx-pkt"), x = mk("button", "mx-pkx", "✕"); x.type = "button"; x.setAttribute("aria-label", "Cerrar"); top.appendChild(x); ov.appendChild(top);
     var sr = mk("div", "mx-pks"); for (var i = 0; i < 6; i++) { var si = mk("i"); si.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="' + STAR_P + '"/></svg>'; sr.appendChild(si); } ov.appendChild(sr);
     var art = mk("button", "mx-pka"); art.type = "button"; art.setAttribute("aria-label", "Tocar el sobre para mejorarlo"); ov.appendChild(art);
-    var hint = mk("p", "mx-pkh"), ct = mk("div", "mx-pkc2"), acts = mk("div", "mx-pkac"), bo = mk("button", "mx-btn mx-pkb", "Abrir sobre"); bo.type = "button"; acts.appendChild(bo);
-    ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov);
+    var hint = mk("p", "mx-pkh"), ct = mk("div", "mx-pkc2"), acts = mk("div", "mx-pkac"), bo = mk("button");
+    ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov); $("max").classList.add("pkopen");
     function drawStars(prev) { for (var k = 0; k < 6; k++) { sr.children[k].className = k < pk.s ? "on" : ""; if (prev !== undefined && k >= prev && k < pk.s) { sr.children[k].classList.add("nw"); (function (n) { later(function () { n.classList.remove("nw"); }, 900); })(sr.children[k]); } } }
     function drawArt() { art.innerHTML = mxPkSvg(pk.s); }
     function drawCt() {
-      var left = MX_PK.taps - pk.t; ct.textContent = left > 0 ? "Toques restantes: " + left + " de " + MX_PK.taps + (pk.s < 6 ? " · Mejora: " + Math.round(chance() * 100) + " %" : "") : "Sin toques. ¡Es hora de abrirlo!";
-      if (left <= 0) { hint.textContent = pk.s === 6 ? "¡Sobre al máximo!" : "Ya no podés mejorarlo más."; bo.classList.add("pulse"); art.disabled = true; }
-      else hint.textContent = pk.s === 6 ? "¡Sobre al máximo! Abrilo cuando quieras." : "Tocá el sobre: cada toque puede mejorarlo una estrella.";
+      var left = MX_PK.taps - pk.t; ct.textContent = left > 0 ? "Toques restantes: " + left + " de " + MX_PK.taps + (pk.s < 6 ? " · Mejora: " + Math.round(chance() * 100) + " %" : "") : "Abriendo el sobre…";
+      if (left <= 0) { hint.textContent = pk.s === 6 ? "¡Sobre al máximo!" : "Ya no se puede mejorar más."; art.disabled = true; }
+      else hint.textContent = pk.s === 6 ? "¡Sobre al máximo! Seguí tocando: se abre solo al terminar los toques." : "Tocá el sobre: cada toque puede mejorarlo una estrella y, al terminar los toques, se abre solo.";
     }
     function draw() { theme(); drawStars(); drawArt(); drawCt(); }
     function flash(kind) { var e = mk("div", "mx-pkup " + kind); ov.appendChild(e); later(function () { e.remove(); }, 900); }
@@ -7957,10 +7970,11 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       var sv = art.firstChild; if (sv) { sv.classList.remove("tp", "pop"); void sv.getBoundingClientRect(); sv.classList.add("tp"); sv.addEventListener("animationend", function ae(ev) { if (ev.target === sv && ev.animationName === "mxpks") { sv.classList.remove("tp"); sv.removeEventListener("animationend", ae); } }); }
       if (up) later(function () { flash("up"); theme(); drawStars(before); drawArt(); var sv2 = art.firstChild; if (sv2) { sv2.classList.remove("tp"); sv2.classList.add("pop"); sv2.addEventListener("animationend", function ae2(ev) { if (ev.target === sv2 && ev.animationName === "mxpkp") { sv2.classList.remove("pop"); sv2.removeEventListener("animationend", ae2); } }); } drawCt(); hint.textContent = "¡El sobre mejoró a " + pk.s + (pk.s === 1 ? " estrella!" : " estrellas!"); }, calm ? 0 : 380);
       else later(drawCt, calm ? 0 : 380);
+      if (pk.t >= MX_PK.taps) later(openNow, up ? 1700 : 1000);
     }
-    function close() { tms.forEach(clearTimeout); ov.remove(); mxPkBusy = false; mxRender(); }
+    function close() { tms.forEach(clearTimeout); ov.remove(); $("max").classList.remove("pkopen"); mxPkBusy = false; mxRender(); }
     art.addEventListener("click", tap); x.addEventListener("click", close);
-    bo.addEventListener("click", function () {
+    var openNow = function () {
       if (ov.classList.contains("opening")) return; ov.classList.add("opening"); art.disabled = true; bo.disabled = true; hint.textContent = ""; ct.textContent = "";
       var sv = art.firstChild; if (sv) { sv.classList.remove("tp", "pop"); sv.classList.add("go"); }
       later(function () { if (sv) sv.classList.add("brs"); flash("big"); }, 1100);
@@ -7982,10 +7996,11 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         later(function () { cnt.forEach(function (c) { mxCount(c[0], c[1], calm, "+"); }); }, 150);
         if (!hit) ov.insertBefore(mk("p", "mx-pkn", "Chance del marco en este sobre: " + t.fp + " %."), hint);
         var more = mxPkList(getMax()).length, b1 = mk("button", "mx-btn mx-pkb", more ? "Siguiente sobre (" + more + ")" : "Cerrar"), b2 = mk("button", "mx-btn", "Cerrar"); b1.type = b2.type = "button"; acts.appendChild(b1); if (more) acts.appendChild(b2);
-        b1.addEventListener("click", function () { if (more) { ov.remove(); mxPkBusy = false; mxPkOpenUi(0); } else close(); }); b2.addEventListener("click", close);
+        b1.addEventListener("click", function () { if (more) { ov.remove(); $("max").classList.remove("pkopen"); mxPkBusy = false; mxPkOpenUi(0); } else close(); }); b2.addEventListener("click", close);
       }, 1700);
-    });
+    };
     draw();
+    if (pk.t >= MX_PK.taps) later(openNow, 700);
   }
   function mxEvShop(box, m, test) {
     var x = mxSx(m), lv = mxLuck(m), into = lv >= MX_PK.lvMax ? MX_PK.lvStep : (x.t || 0) % MX_PK.lvStep;
@@ -8029,26 +8044,34 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   var MX_EVD = {
     e1: { n: "Escribí 150 palabras", t: 150, e: "✍️", u: "palabras", g: function (c) { return c.wordsD; } },
     e2: { n: "Creá 2 notas", t: 2, e: "📝", u: "notas", g: function (c) { return c.notesD; } },
-    e3: { n: "Sumá 15 minutos de enfoque", t: 15, e: "🎯", u: "minutos", g: function (c) { return c.focusD; } },
+    e3: { n: "Usá el modo Enfoque durante 15 minutos", t: 15, e: "🎯", u: "minutos", g: function (c) { return c.focusD; } },
     e4: { n: "Editá 2 notas", t: 2, e: "✏️", u: "ediciones", g: function (c) { return c.touchD; } },
-    e5: { n: "Completá una sesión de enfoque", t: 1, e: "⏱️", u: "sesión", g: function (c) { return c.sessD; } },
+    e5: { n: "Completá 1 sesión del modo Enfoque", t: 1, e: "⏱️", u: "sesión", g: function (c) { return c.sessD; } },
     e6: { n: "Tildá 3 casillas de una lista", t: 3, e: "☑️", u: "casillas", g: function (c) { return c.tasksD; } },
-    e7: { n: "Escribí 300 palabras", t: 300, e: "📖", u: "palabras", g: function (c) { return c.wordsD; } }
+    e7: { n: "Escribí 300 palabras", t: 300, e: "📖", u: "palabras", g: function (c) { return c.wordsD; } },
+    e8: { n: "Creá 3 notas", t: 3, e: "🗒️", u: "notas", g: function (c) { return c.notesD; } },
+    e9: { n: "Editá 4 notas", t: 4, e: "🖊️", u: "ediciones", g: function (c) { return c.touchD; } },
+    e10: { n: "Escribí 600 palabras", t: 600, e: "📜", u: "palabras", g: function (c) { return c.wordsD; } }
   };
   var MX_EVW = {
     f1: { n: "Creá 10 notas", t: 10, e: "🗂️", u: "notas", g: function (c) { return c.notesW; } },
     f2: { n: "Escribí 1.500 palabras", t: 1500, e: "📚", u: "palabras", g: function (c) { return c.wordsW; } },
-    f3: { n: "Sumá 45 minutos de enfoque", t: 45, e: "🧘", u: "minutos", g: function (c) { return c.focusW; } },
+    f3: { n: "Usá el modo Enfoque durante 45 minutos", t: 45, e: "🧘", u: "minutos", g: function (c) { return c.focusW; } },
     f4: { n: "Escribí en 4 días distintos", t: 4, e: "🔥", u: "días", g: function (c) { return c.daysW; } },
+    f5: { n: "Completá 3 sesiones del modo Enfoque", t: 3, e: "⏳", u: "sesiones", g: function (c) { return c.sessW; } },
     h1: { n: "Escribí 4.000 palabras", t: 4000, e: "🖋️", u: "palabras", g: function (c) { return c.wordsW; } },
     h2: { n: "Creá 20 notas", t: 20, e: "🗃️", u: "notas", g: function (c) { return c.notesW; } },
-    h3: { n: "Sumá 150 minutos de enfoque", t: 150, e: "🏆", u: "minutos", g: function (c) { return c.focusW; } },
+    h3: { n: "Usá el modo Enfoque durante 150 minutos", t: 150, e: "🏆", u: "minutos", g: function (c) { return c.focusW; } },
     h4: { n: "Escribí los 7 días de la semana", t: 7, e: "🌟", u: "días", g: function (c) { return c.daysW; } },
-    h5: { n: "Completá 8 sesiones de enfoque", t: 8, e: "🎖️", u: "sesiones", g: function (c) { return c.sessW; } }
+    h5: { n: "Completá 8 sesiones del modo Enfoque", t: 8, e: "🎖️", u: "sesiones", g: function (c) { return c.sessW; } },
+    h6: { n: "Creá 30 notas", t: 30, e: "🏅", u: "notas", g: function (c) { return c.notesW; } }
   };
   var MX_EVR = { d: { sx: 6, s: 1, k: "Diaria", h: 0 }, f: { sx: 16, s: 2, k: "Semanal · Fácil", h: 0 }, h: { sx: 24, s: 3, k: "Semanal · Difícil", h: 1 } };
-  function mxEvDaily(c) { var L = ["e1", "e2", "e3", "e4", "e5", "e6", "e7"], i = c.dn % 7; return [L[i], L[(i + 2) % 7], L[(i + 4) % 7]]; }
-  function mxEvWeekly(c) { var w = Math.round(c.w0 / 604800000); return [["f1", "f2", "f3", "f4"][w % 4], ["h1", "h2", "h3", "h4", "h5"][w % 5]]; }
+  function mxEvDaily(c) { var L = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10"], i = c.dn % 10; return [0, 1, 3, 5, 7, 9].map(function (k) { return L[(i + k) % 10]; }); }
+  function mxEvWeekly(c) {
+    var w = Math.round(c.w0 / 604800000), F = ["f1", "f2", "f3", "f4", "f5"], H = ["h1", "h2", "h3", "h4", "h5", "h6"];
+    return [0, 1, 3].map(function (k) { return F[(w + k) % 5]; }).concat([0, 2, 4].map(function (k) { return H[(w + k) % 6]; }));
+  }
   function mxEvKey(kind, c, id) { return (kind === "d" ? "ed:" + c.dk : "ew:" + c.wk) + ":" + id; }
   function mxEvReady() {
     var c = mxCtx(), m = getMax(), n = 0;
@@ -8081,11 +8104,11 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxEvMis(box, m) {
     var c = mxCtx();
     box.appendChild(mk("div", "mx-sec", "Misiones diarias"));
-    box.appendChild(mk("p", "mx-note", "Se renuevan todos los días a las 00:00. Cada una te da 6 puntos SEIS y un sobre de 1 estrella."));
+    box.appendChild(mk("p", "mx-note", "Seis misiones que se renuevan todos los días a las 00:00. Cada una te da 6 puntos SEIS y un sobre de 1 estrella. El modo Enfoque es el botón «Enfoque» del editor de notas."));
     mxEvDaily(c).forEach(function (id) { var d = MX_EVD[id], key = mxEvKey("d", c, id); box.appendChild(mxEvCard(d, d.g(c), !!m.cl[key], MX_EVR.d, function () { mxEvClaim(key, MX_EVR.d); })); });
     box.appendChild(mk("div", "mx-sec", "Misiones semanales"));
-    box.appendChild(mk("p", "mx-note", "Se renuevan cada lunes. Son más difíciles: cuanto más exigente, más puntos SEIS y mejor sobre (2 o 3 estrellas)."));
-    mxEvWeekly(c).forEach(function (id, i) { var d = MX_EVW[id], rw = i ? MX_EVR.h : MX_EVR.f, key = mxEvKey("w", c, id); box.appendChild(mxEvCard(d, d.g(c), !!m.cl[key], rw, function () { mxEvClaim(key, rw); })); });
+    box.appendChild(mk("p", "mx-note", "Seis misiones que se renuevan cada lunes: tres fáciles (16 puntos SEIS y sobre de 2 estrellas) y tres difíciles (24 puntos SEIS y sobre de 3 estrellas)."));
+    mxEvWeekly(c).forEach(function (id, i) { var d = MX_EVW[id], rw = i >= 3 ? MX_EVR.h : MX_EVR.f, key = mxEvKey("w", c, id); box.appendChild(mxEvCard(d, d.g(c), !!m.cl[key], rw, function () { mxEvClaim(key, rw); })); });
   }
   function mxEvRender(box, m, prof) {
     if (mxEvSel !== "gta") {
@@ -8182,40 +8205,60 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       var n0 = NEWS[0], nc = mk("div", "mx-card"), nw = mk("div", "mx-nw cur"); nw.style.border = "0"; nw.style.padding = "0"; nw.appendChild(el("i")); var nt = mk("div"); nt.appendChild(mk("b", null, "Versión " + n0.v + " · " + n0.t)); nt.appendChild(mk("span", null, (n0.l && n0.l[0]) || "")); nw.appendChild(nt); nc.appendChild(nw); box.appendChild(nc);
       var gd = mk("button", "mx-btn", "Ver guía de MAX"); gd.type = "button"; gd.addEventListener("click", function () { mxTourShow(0); }); box.appendChild(gd);
     } else if (mxTab === "shop") {
-      var inv = m.inv, test = !!m.bk;
+      var inv = m.inv, test = !!m.bk, cards = {};
       if (!frById(mxFrSel) && mxFrSel !== "none") mxFrSel = frEq() || FR_LIST[0].id;
-      var sf = frById(mxFrSel), prof = getProfile();
+      var prof = getProfile();
       box.appendChild(mk("div", "mx-sec", "Marcos de perfil"));
-      var stg = mk("div", "mx-fst"), pw = mk("div", "mx-fpw"), pa = mk("span", "mx-fpa"); paintAvatar(pa, prof); pw.appendChild(pa); stg.appendChild(pw); box.appendChild(stg);
-      frApply(pw, pa, sf ? sf.id : "", 100);
-      var info = mk("div", "mx-fin"); info.appendChild(mk("b", null, sf ? sf.n : "Sin marco")); if (sf) { var rr = mk("span", "mx-fr", sf.r); rr.style.color = sf.c; info.appendChild(rr); if (sf.tag) info.appendChild(mk("span", "mx-ft", "\u201c" + sf.tag + "\u201d")); } stg.appendChild(info);
-      if (sf && sf.ev) { var evb = mk("button", "mx-link mx-fev", "\u25b6 Ver la animaci\u00f3n especial"); evb.type = "button"; evb.addEventListener("click", function () { if (calmOn()) { toast("Desactiv\u00e1 el modo calmo para verla"); return; } frEvRun(pw); }); box.appendChild(evb); }
-      var act = mk("button", "mx-btn mx-fbuy"); act.type = "button";
-      if (!sf) { act.textContent = frEq() ? "Quitar marco" : "Sin marco equipado"; act.disabled = !frEq(); act.addEventListener("click", function () { m.eq.frame = ""; maxSave(); mxFrRefresh(); }); }
-      else if (inv[sf.id]) {
-        var on = frEq() === sf.id; act.textContent = on ? "Equipado ✓" : "Equipar"; act.disabled = on; if (!on) act.addEventListener("click", function () { m.eq.frame = sf.id; maxSave(); toast("Marco equipado"); mxFrRefresh(); });
-      } else {
-        act.textContent = "Comprar · ⭐ " + fmtMx(sf.p); act.disabled = test || m.stars < sf.p;
-        act.addEventListener("click", function () { if (m.bk || m.stars < sf.p) return; m.stars -= sf.p; inv[sf.id] = Date.now(); m.eq.frame = sf.id; maxSave(); toast("Marco conseguido: " + sf.n); mxFrRefresh(); });
-      }
-      box.appendChild(act);
-      if (!inv[sf ? sf.id : ""] && sf) box.appendChild(mk("p", "mx-note", test ? "Estás en modo prueba: restablecé tu nivel real para comprar." : m.stars >= sf.p ? "Podés probarlo en tu avatar antes de comprar." : "Te faltan " + fmtMx(sf.p - m.stars) + " ⭐. Se ganan con misiones, rachas, logros y al subir de nivel."));
+      var topBox = mk("div"); box.appendChild(topBox);
+      /* sincroniza las tarjetas: solo el marco elegido se anima; los demás quedan quietos */
+      var syncCards = function () {
+        Object.keys(cards).forEach(function (id) {
+          var cd = cards[id], on = id === mxFrSel; cd.el.classList.toggle("sel", on);
+          if (cd.st) cd.st.textContent = frEq() === id ? "Equipado" : inv[id] ? "Tuyo" : "\u2b50 " + fmtMx(cd.p);
+          cd.el.querySelectorAll(".fr svg").forEach(function (sv) { if (sv.pauseAnimations) { if (on) sv.unpauseAnimations(); else sv.pauseAnimations(); } });
+        });
+      };
+      var shopUpd = function () { $("mxBal").textContent = "\u2b50 " + fmtMx(getMax().stars); syncCards(); paintTop(false); try { renderMenu(); } catch (e) { } try { renderProfile(); } catch (e2) { } };
+      var paintTop = function (play) {
+        var sf = frById(mxFrSel); topBox.textContent = "";
+        var stg = mk("div", "mx-fst"), pw = mk("div", "mx-fpw"), pa = mk("span", "mx-fpa"); paintAvatar(pa, prof); pw.appendChild(pa); stg.appendChild(pw); topBox.appendChild(stg);
+        frApply(pw, pa, sf ? sf.id : "", 100);
+        var info = mk("div", "mx-fin"); info.appendChild(mk("b", null, sf ? sf.n : "Sin marco")); if (sf) { var rr = mk("span", "mx-fr", sf.r); rr.style.color = sf.c; info.appendChild(rr); if (sf.tag) info.appendChild(mk("span", "mx-ft", "\u201c" + sf.tag + "\u201d")); } stg.appendChild(info);
+        if (sf && sf.ev) { var evb = mk("button", "mx-link mx-fev", "\u25b6 Ver la animaci\u00f3n especial"); evb.type = "button"; evb.addEventListener("click", function () { if (calmOn()) { toast("Desactiv\u00e1 el modo calmo para verla"); return; } frEvRun(pw); }); topBox.appendChild(evb); }
+        var act = mk("button", "mx-btn mx-fbuy"); act.type = "button";
+        if (!sf) { act.textContent = frEq() ? "Quitar marco" : "Sin marco equipado"; act.disabled = !frEq(); act.addEventListener("click", function () { m.eq.frame = ""; maxSave(); shopUpd(); }); }
+        else if (inv[sf.id]) {
+          var on = frEq() === sf.id; act.textContent = on ? "Equipado ✓" : "Equipar"; act.disabled = on; if (!on) act.addEventListener("click", function () { m.eq.frame = sf.id; maxSave(); toast("Marco equipado"); shopUpd(); });
+        } else {
+          act.textContent = "Comprar · ⭐ " + fmtMx(sf.p); act.disabled = test || m.stars < sf.p;
+          act.addEventListener("click", function () { if (m.bk || m.stars < sf.p) return; m.stars -= sf.p; inv[sf.id] = Date.now(); m.eq.frame = sf.id; maxSave(); toast("Marco conseguido: " + sf.n); shopUpd(); });
+        }
+        topBox.appendChild(act);
+        if (!inv[sf ? sf.id : ""] && sf) topBox.appendChild(mk("p", "mx-note", test ? "Estás en modo prueba: restablecé tu nivel real para comprar." : m.stars >= sf.p ? "Podés probarlo en tu avatar antes de comprar." : "Te faltan " + fmtMx(sf.p - m.stars) + " ⭐. Se ganan con misiones, rachas, logros y al subir de nivel."));
+        if (play && sf && sf.ev && !calmOn()) frEvRun(pw);
+      };
+      paintTop(false);
       [["", "Clásicos", "Los marcos originales de Tronx."], ["nuc", "Familia nuclear", "Armaduras de reactor con una secuencia especial de energía que ocurre muy de vez en cuando."]].forEach(function (fm, fi) {
         var lst = FR_LIST.filter(function (f) { return !f.evt && (f.fam || "") === fm[0]; }); if (!lst.length) return;
         var hd = mk("div", "mx-fam" + (fm[0] ? " " + fm[0] : "")); hd.appendChild(mk("b", null, fm[1])); hd.appendChild(mk("span", null, lst.length + (lst.length === 1 ? " marco" : " marcos"))); box.appendChild(hd); box.appendChild(mk("p", "mx-famd", fm[2]));
         var gr = mk("div", "mx-fg");
         (fi === 0 ? [null] : []).concat(lst).forEach(function (f) {
-          var id = f ? f.id : "none", card = mk("button", "mx-fc" + (mxFrSel === id ? " sel" : "")); card.type = "button";
+          var st = null, id = f ? f.id : "none", card = mk("button", "mx-fc" + (mxFrSel === id ? " sel" : "")); card.type = "button";
           var w = mk("div", "mx-fcw"), a2 = mk("span", "mx-fca"); paintAvatar(a2, prof); w.appendChild(a2); card.appendChild(w); if (f) frApply(w, a2, f.id, 52);
           card.appendChild(mk("b", null, f ? f.n : "Sin marco"));
-          if (f) { var rt = mk("span", "mx-fr2", f.r); rt.style.color = f.c; card.appendChild(rt); if (f.tag) card.appendChild(mk("span", "mx-ft", "\u201c" + f.tag + "\u201d")); var st = mk("span", "mx-fs", frEq() === f.id ? "Equipado" : inv[f.id] ? "Tuyo" : "\u2b50 " + fmtMx(f.p)); card.appendChild(st); }
-          card.addEventListener("click", function () { mxFrSel = id; mxRender(); });
+          if (f) { var rt = mk("span", "mx-fr2", f.r); rt.style.color = f.c; card.appendChild(rt); if (f.tag) card.appendChild(mk("span", "mx-ft", "\u201c" + f.tag + "\u201d")); st = mk("span", "mx-fs", frEq() === f.id ? "Equipado" : inv[f.id] ? "Tuyo" : "\u2b50 " + fmtMx(f.p)); card.appendChild(st); }
+          cards[id] = { el: card, st: f ? st : null, p: f ? f.p : 0 };
+          card.addEventListener("click", function () {
+            mxFrSel = id; syncCards(); paintTop(true);
+            if (f && f.ev && !calmOn()) frEvRun(w);
+          });
           gr.appendChild(card);
         });
         if (fm[0] === "nuc") { var qc = mk("div", "mx-fc fq"); qc.setAttribute("aria-label", "Marco misterioso, próximamente"); var qw = mk("div", "mx-fcw"); qw.appendChild(mk("div", "mx-fq-m", "?")); qc.appendChild(qw); qc.appendChild(mk("b", null, "???")); qc.appendChild(mk("span", "mx-fr2", "Próximamente")); gr.appendChild(qc); }
         box.appendChild(gr);
       });
       box.appendChild(mk("p", "mx-note", "Pronto habrá más: portadas, efectos de nombre y fondos. Tus estrellas: " + fmtMx(m.stars) + " ⭐"));
+      syncCards();
     } else if (mxTab === "evt") {
       if (!m.evs) { m.evs = 1; maxSave(); $("mxEvDot").hidden = true; }
       mxEvRender(box, m, getProfile());
