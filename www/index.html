@@ -504,6 +504,16 @@ mark { background: var(--accent-soft); color: inherit; border-radius: 3px; paddi
 .nwlv { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; }
 .lvb { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px 3px 7px; border-radius: 999px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--lc)); background: rgba(var(--lc), 0.14); border: 1px solid rgba(var(--lc), 0.45); }
 .lvb .lvi { display: inline-grid; width: 16px; height: 16px; } .lvb svg { width: 16px; height: 16px; }
+.nw.ep-gta { position: relative; overflow: hidden; border: 1px solid rgba(255, 226, 154, 0.55); background: linear-gradient(rgba(24, 6, 48, 0.28), rgba(24, 6, 48, 0.5)), linear-gradient(168deg, #5b1fb8 0%, #a41fb0 24%, #ff2e93 52%, #ff6a4a 76%, #ffb347 100%); color: #fff; box-shadow: 0 10px 30px rgba(255, 46, 147, 0.35); }
+.nw.ep-gta::before { content: ""; position: absolute; right: -44px; top: 118px; width: 128px; height: 128px; border-radius: 50%; background: linear-gradient(180deg, #ffe27a, #ff8a3d 55%, #ff2e93); opacity: 0.55; pointer-events: none; }
+.nw.ep-gta::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 46%; background: linear-gradient(180deg, transparent, rgba(24, 6, 48, 0.55)); pointer-events: none; }
+.nw.ep-gta > * { position: relative; z-index: 1; }
+.nw.ep-gta h4 { font-size: 24px; line-height: 1.12; color: #fff; text-shadow: 0 2px 0 rgba(60, 8, 80, 0.6), 0 0 18px rgba(255, 226, 154, 0.5); }
+.nw.ep-gta .nwsub { color: #fff2c0; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; font-size: 11.5px; text-shadow: 0 1px 6px rgba(40, 0, 60, 0.7); }
+.nw.ep-gta li, .nw.ep-gta .dt, .nw.ep-gta .v { color: #fff; text-shadow: 0 1px 8px rgba(40, 0, 60, 0.75); }
+.nw.ep-gta li::marker { color: #ffe27a; }
+.nwvi { text-shadow: none !important; display: inline-block; font-family: "Arial Black", Impact, sans-serif; font-weight: 900; font-style: italic; letter-spacing: -0.02em; padding: 0 0.14em 0 0.02em; background: linear-gradient(180deg, #ffc2e4 0%, #ff6bb8 30%, #ff2e93 62%, #ff4f7a 84%, #ff7a4a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 -1px 0 #fff) drop-shadow(2px 2.5px 0 #3a0a50) drop-shadow(0 0 11px rgba(255, 79, 163, 0.9)); }
+h4 .nwvi { font-size: 1.55em; line-height: 0.9; vertical-align: -0.06em; }
 .nwsub { margin: 0 0 2px; font-size: 12.5px; color: var(--muted); }
 .nwcat { display: inline-flex; align-items: center; gap: 6px; margin: 0 6px 6px 0; padding: 2px 9px; border-radius: 999px; font-size: 11.5px; border: 1px solid var(--line); background: transparent; color: var(--muted); }
 .nw header .nwcat { margin: 0; }
@@ -1240,6 +1250,8 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 .fr { position: absolute; pointer-events: none; }
 .fr svg { display: block; width: 100%; height: 100%; overflow: visible; fill: none; stroke: none; }
 .mn-avw { overflow: visible; margin: 10px 12px 10px 10px; }
+.fr.fr-off, .fr.fr-off * { animation-play-state: paused !important; }
+.mx-fcw .fr [filter] { display: none; }
 .fr .fr-spin { animation: frspin 10s linear infinite; transform-origin: 80px 80px; }
 .fr .fr-spinr { animation: frspin 16s linear infinite reverse; transform-origin: 80px 80px; }
 @keyframes frspin { to { transform: rotate(360deg); } }
@@ -1645,6 +1657,28 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .mx-evb h3 { margin: 8px 0 4px; font-size: 26px; letter-spacing: -0.02em; text-shadow: 0 2px 14px rgba(40, 0, 60, 0.45); }
 .mx-evb p { margin: 0; max-width: 80%; font-size: 13px; line-height: 1.4; color: #fff0f8; }
 .mx-evb2 { border-radius: 20px; padding: 14px; border: 1px dashed rgba(255, 255, 255, 0.18); color: #a9acd6; font-size: 13px; text-align: center; }
+.mx-cdw { margin-top: 14px; }
+.mx-cdt { font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; color: #fff0f8; margin-bottom: 7px; }
+.mx-cd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.mx-cd div { display: flex; flex-direction: column; align-items: center; padding: 8px 2px 6px; border-radius: 12px; background: rgba(20, 5, 42, 0.46); border: 1px solid rgba(255, 255, 255, 0.2); }
+.mx-cd b { font-size: 22px; line-height: 1.1; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+.mx-cd span { margin-top: 3px; font-size: 9.5px; letter-spacing: 0.07em; text-transform: uppercase; color: #ffd6ec; font-weight: 700; }
+.mx-cdw.end .mx-cd { opacity: 0.55; }
+.mx-cdl { margin-top: 10px; font-size: 12px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+.mx-evn { display: flex; gap: 11px; align-items: flex-start; padding: 12px 13px; margin-bottom: 12px; border-radius: 16px; background: rgba(255, 176, 46, 0.1); border: 1px solid rgba(255, 176, 46, 0.4); }
+.mx-evn b { font-size: 13.5px; color: #ffd25a; }
+.mx-evn p { margin: 3px 0 0; font-size: 12.5px; line-height: 1.4; color: #e4e5ff; }
+.mx-evni { flex: none; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #1a0a3a; background: linear-gradient(135deg, #ffd25a, #ff8a3d); }
+.nmpin { display: inline-flex; vertical-align: -0.16em; margin-left: 7px; }
+.nmpin svg { display: block; }
+.mx-pins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+.mx-pn { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 12px 4px 10px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.06); color: #fff; font: inherit; cursor: pointer; }
+.mx-pn b { font-size: 12.5px; margin-top: 5px; }
+.mx-pn small { font-size: 10.5px; color: #b9bce4; letter-spacing: 0.03em; }
+.mx-pn.on { border-color: #ff4fa3; background: rgba(255, 79, 163, 0.14); }
+.mx-pn.on small { color: #ffb0d8; font-weight: 700; }
+.mx-pn.nol { cursor: default; } .mx-pn.nol .mx-pni { filter: grayscale(1) brightness(0.35); opacity: 0.8; }
+.mx-pkrw .rr.pin { border: 1px solid rgba(255, 79, 163, 0.5); }
 .mx-evback { border: 0; background: transparent; color: #fbbf24; font: inherit; font-weight: 700; font-size: 13px; padding: 4px 2px; cursor: pointer; }
 .mx-evh { border-radius: 22px; padding: 18px 16px; margin: 6px 0 12px; color: #fff; background: linear-gradient(135deg, #7a3cff 0%, #ff2e93 50%, #ff9a3d 100%); }
 .mx-evh h2 { margin: 6px 0 4px; font-size: 28px; letter-spacing: -0.02em; } .mx-evh p { margin: 0; font-size: 13px; color: #fff0f8; line-height: 1.4; }
@@ -1687,7 +1721,7 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .mx-pko > * { position: relative; z-index: 1; }
 .mx-pkt { position: absolute !important; top: 14px; right: 14px; }
 .mx-pkx { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.35); color: #fff; font-size: 16px; cursor: pointer; }
-svg.pk, svg.six { stroke: none; stroke-width: 1; }
+svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-pka { border: 0; background: transparent; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; perspective: 800px; }
 .mx-pka:disabled { cursor: default; }
 .mx-pko svg.pk { width: min(66vw, 252px); height: auto; aspect-ratio: 100 / 130; display: block; overflow: visible; filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 24px var(--gl)); animation: mxfl 4.8s ease-in-out infinite; transform-style: preserve-3d; }
@@ -2547,7 +2581,7 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.72.0";
+  var APP_VERSION = "1.73.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5731,6 +5765,7 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.73.0", d: "21 nov 2026", t: "Pines y cuenta regresiva GTA VI", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Cuenta regresiva en la pestaña Eventos: el evento GTA VI finaliza el 17 de diciembre", "Nuevo aviso en Eventos: durante estos días se sumarán más recompensas a los sobres", "Seis pines exclusivos de GTA VI, que se muestran junto a tu nombre: Atardecer, Cocodrilo, Casete, GTA, Palmera y VI", "Los pines pueden aparecer en los sobres de 5 y 6 estrellas, con un 15 % y un 35 % de probabilidad; cuanto más raro el pin, menos chances de obtenerlo", "Desde la sección Pines del evento podés equipar o quitar el pin que quieras mostrar", "Si te toca un pin que ya tenés, recibís puntos SEIS a cambio", "Mejor rendimiento al navegar la Tienda y las vistas con marcos animados"] },
     { v: "1.72.0", d: "20 nov 2026", t: "Evento GTA VI", lv: "Hipernova", nm: "Evento GTA VI", cat: "nuevo", l: ["Nueva pestaña Eventos en MAX, con el primer evento: GTA VI", "Nuevo marco Exclusivo GTA VI, con aro metálico, palmeras iluminadas y el VI en acabado cromado dorado; cuesta 6.666.666 ⭐ o se consigue en los sobres", "Sobres de la suerte: se obtienen al completar misiones, de 1 a 3 estrellas según la dificultad", "Tocá el sobre hasta 6 veces: cada toque puede mejorarlo una estrella, con un fondo y efectos propios para cada nivel", "Al abrirlo recibís ⭐, XP y puntos SEIS, y cada sobre tiene una chance de traer el marco, desde 0,002 % hasta 6 % en los de 6 estrellas", "Puntos SEIS y Tienda del evento: comprá sobres, cambialos por ⭐ o XP y subí tu nivel de suerte para mejorar tus chances"] },
     { v: "1.71.0", d: "20 nov 2026", t: "Fusión nuclear y Familias de marcos", lv: "Hipernova", nm: "Marcos de perfil", cat: "nuevo", l: ["Nuevo marco Mítico IV: Fusión nuclear, una armadura de reactor con cámaras de energía, átomo en movimiento y núcleo central", "Animación especial de Fusión nuclear: las cámaras se cargan, el marco se inestabiliza, el núcleo gira cada vez más rápido y la fusión estalla en un destello azul y blanco antes de volver a la calma", "La animación ocurre de forma completamente aleatoria: a veces pasa mucho tiempo sin nada y nunca sigue un intervalo fijo", "En la Tienda de MAX los marcos ahora se agrupan por Familias: Clásicos y Familia nuclear", "Podés ver la animación especial cuando quieras desde la vista previa del marco", "Se pausa con el modo calmo y no consume recursos cuando no está activa", "Pronto llegará un nuevo marco a la Familia nuclear"] },
     { v: "1.70.0", d: "18 nov 2026", t: "Tienda de MAX: marcos de perfil", lv: "Hipernova", nm: "Marcos de perfil", cat: "nuevo", l: ["La Tienda de MAX ya está abierta: canjeá tus estrellas por marcos animados para tu avatar", "Cinco marcos al lanzamiento: Neón pulsante, Aurora, Constelación, Sol y Nebulosa cósmica", "Vista previa en tu propio avatar antes de comprar y botón para equipar o quitar el marco", "Los marcos Míticos tienen grados, de I a VI: a mayor grado, mayor exclusividad", "Tu marco se ve en el perfil y en el menú, y se pausa con el modo calmo"] },
@@ -5843,17 +5878,20 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
     b.appendChild(document.createTextNode(name)); b.title = L.d;
     return b;
   }
+  function nwRich(node, text) {
+    text.split(/(\bVI\b)/).forEach(function (p) { if (p === "VI") { var e = el("span", "nwvi"); e.textContent = p; node.appendChild(e); } else if (p) node.appendChild(document.createTextNode(p)); });
+  }
   function newsCard(n, fresh) {
-    var L = VLEVELS[n.lv], c = el("article", "nw" + (n.v === APP_VERSION ? " cur" : "") + (L ? " lvl lv-" + VLEVEL_ORDER.indexOf(n.lv) : ""));
+    var L = VLEVELS[n.lv], c = el("article", "nw" + (n.v === APP_VERSION ? " cur" : "") + (n.ep ? " ep-" + n.ep : "") + (L ? " lvl lv-" + VLEVEL_ORDER.indexOf(n.lv) : ""));
     if (L) c.style.setProperty("--lc", L.c);
     if (L) { var top = el("div", "nwlv"); top.appendChild(lvBadge(n.lv)); if (fresh) { var nw = el("span", "new"); nw.textContent = "Nuevo"; top.appendChild(nw); } c.appendChild(top); }
     var h = el("header"); var v = el("span", "v"); v.textContent = "v" + n.v; h.appendChild(v);
     if (fresh && !L) { var nw2 = el("span", "new"); nw2.textContent = "Nuevo"; h.appendChild(nw2); }
     var ct = CATS[n.cat]; if (ct) { var cc = el("span", "nwcat c-" + n.cat.replace("+", "p")); cc.textContent = ct.n; h.appendChild(cc); }
     var d = el("span", "dt"); d.textContent = n.d; h.appendChild(d); c.appendChild(h);
-    var t = el("h4"); t.textContent = n.nm || n.t; c.appendChild(t);
-    if (n.nm) { var sub = el("p", "nwsub"); sub.textContent = n.t; c.appendChild(sub); }
-    var ul = el("ul"); n.l.forEach(function (x) { var li = el("li"); li.textContent = x; ul.appendChild(li); }); c.appendChild(ul);
+    var t = el("h4"); if (n.ep) nwRich(t, n.nm || n.t); else t.textContent = n.nm || n.t; c.appendChild(t);
+    if (n.nm) { var sub = el("p", "nwsub"); if (n.ep) nwRich(sub, n.t); else sub.textContent = n.t; c.appendChild(sub); }
+    var ul = el("ul"); n.l.forEach(function (x) { var li = el("li"); if (n.ep) nwRich(li, x); else li.textContent = x; ul.appendChild(li); }); c.appendChild(ul);
     return c;
   }
   function newsLegend() {
@@ -6645,12 +6683,16 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
     }
     frEvPlan(false);
   }
+  /* los marcos que no se ven en pantalla se pausan: menos trabajo y menos batería */
+  var frIO = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { var off = !e.isIntersecting, sv = e.target.firstChild; e.target.classList.toggle("fr-off", off); if (sv && sv.pauseAnimations) { if (off) sv.pauseAnimations(); else sv.unpauseAnimations(); } });
+  }, { rootMargin: "80px" }) : null;
   function frApply(wrap, av, id, D) {
     if (!wrap || !av) return;
-    wrap.querySelectorAll(".fr").forEach(function (x) { x.remove(); });
+    wrap.querySelectorAll(".fr").forEach(function (x) { if (frIO) frIO.unobserve(x); x.remove(); });
     var f = id && frById(id); if (!f) return;
     var m = frMarkup(f), sz = Math.round(D * 1.6), off = -Math.round(D * 0.3);
-    function mkl(h) { var e = el("span", "fr"); if (f.ev) e.setAttribute("data-ev", "1"); e.setAttribute("aria-hidden", "true"); e.style.cssText = "width:" + sz + "px;height:" + sz + "px;left:" + off + "px;top:" + off + "px"; e.innerHTML = h; return e; }
+    function mkl(h) { var e = el("span", "fr"); if (f.ev) e.setAttribute("data-ev", "1"); e.setAttribute("aria-hidden", "true"); e.style.cssText = "width:" + sz + "px;height:" + sz + "px;left:" + off + "px;top:" + off + "px"; e.innerHTML = h; if (frIO) frIO.observe(e); return e; }
     if (m[0]) wrap.insertBefore(mkl(m[0]), av);
     var fr = mkl(m[1]); if (av.nextSibling) wrap.insertBefore(fr, av.nextSibling); else wrap.appendChild(fr);
     if (f.ev && !frEvT) frEvPlan(true);
@@ -7051,7 +7093,7 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
     var p = getProfile(), st = universeStats(), w = writeStats(), lv = maxLevel();
     paintAvatar($("pfAv"), p); frApply($("pfAv").parentNode, $("pfAv"), frEq(), 132);
     $("pfBan").style.background = PF_COVERS[p.cover];
-    $("pfNameOut").textContent = p.name || "Explorador"; $("pfBioOut").textContent = p.bio;
+    $("pfNameOut").textContent = p.name || "Explorador"; mxPinTag($("pfNameOut"), 22); $("pfBioOut").textContent = p.bio;
     $("pfLvl").textContent = "⭐ " + lv.title + " · Nivel " + lv.L;
     var sx = $("pfStats"); sx.textContent = "";
     [[st.notes, "Notas"], [st.lists, "Listas"], [compactN(w.total), "Palabras"], [w.cur, "Racha"], [st.groups, "Constelaciones"], [st.links, "Vínculos"]].forEach(function (a) {
@@ -7149,7 +7191,7 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
     if (!m.cap || typeof m.cap !== "object") m.cap = { n: 0, w: 0, f: 0 };
     if (!m.cl || typeof m.cl !== "object") m.cl = {}; if (!m.sc || typeof m.sc !== "object") m.sc = {};
     m.wAcc = Math.max(0, +m.wAcc || 0);
-    if (!m.inv || typeof m.inv !== "object" || Array.isArray(m.inv)) m.inv = {}; if (!m.eq || typeof m.eq !== "object" || Array.isArray(m.eq)) m.eq = {};
+    if (!m.pins || typeof m.pins !== "object" || Array.isArray(m.pins)) m.pins = {}; if (!m.inv || typeof m.inv !== "object" || Array.isArray(m.inv)) m.inv = {}; if (!m.eq || typeof m.eq !== "object" || Array.isArray(m.eq)) m.eq = {};
     var k = dayKey(Date.now());
     if (m.day !== k) {
       m.day = k; m.cap = { n: 0, w: 0, f: 0 }; m.tasks = 0; m.base = achState().done;
@@ -7501,6 +7543,224 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
     if (rand01() < mxLuck(m) * 0.03) s = Math.min(4, s + 1);
     if (l.length < 60) l.push({ s: s, t: 0 }); maxSave(); return s;
   }
+  var MX_PINS = [
+    { id: "sol", n: "Atardecer", r: "Común", w: 30 },
+    { id: "gat", n: "Cocodrilo", r: "Común", w: 30 },
+    { id: "cas", n: "Casete", r: "Raro", w: 15 },
+    { id: "gta", n: "GTA", r: "Raro", w: 15 },
+    { id: "pal", n: "Palmera", r: "Épico", w: 7 },
+    { id: "vi", n: "VI", r: "Legendario", w: 3 }];
+  var pinN = 0;
+  function pinStk(I, px, u) {
+    var D = "#12051f", VP = "M-15 -8H-3.4V-5.8H-5.6L-1.6 3.6L2.4 -5.8H.2V-8H11.8V-5.8H9.6L1.6 8H-4.8L-12.8 -5.8H-15Z", IP = "M13.4 -8H22.6V-5.8H20.4V5.8H22.6V8H13.4V5.8H15.6V-5.8H13.4Z", VI = VP + IP;
+    function frondD(a, L) {
+      var r = a * Math.PI / 180, dx = Math.sin(r), dy = -Math.cos(r), dr = L * .55 * Math.pow(Math.abs(dx), 1.3), d = "", M = 9;
+      function B(t) { return [2 * (1 - t) * t * dx * L * .55 + t * t * dx * L, 2 * (1 - t) * t * dy * L * .55 + t * t * (dy * L + dr)]; }
+      function T(t) { var p = B(t), q = B(Math.min(1, t + .04)), x = q[0] - p[0], y = q[1] - p[1], m = Math.hypot(x, y) || 1; return [x / m, y / m]; }
+      var up = [], dn = [];
+      for (var i = 0; i <= M; i++) { var t = i / M, p = B(t), tg = T(t), w = 1.5 * Math.pow(1 - t, .6) + .15; up.push((p[0] - tg[1] * w).toFixed(2) + " " + (p[1] + tg[0] * w).toFixed(2)); dn.unshift((p[0] + tg[1] * w).toFixed(2) + " " + (p[1] - tg[0] * w).toFixed(2)); }
+      d += "M" + up.join("L") + "L" + dn.join("L") + "Z";
+      for (i = 1; i <= M; i++) {
+        var t2 = i / M * .96, p2 = B(t2), g = T(t2), len = 4.6 * (1 - t2 * .55);
+        [1, -1].forEach(function (sd) {
+          var nx = -g[1] * sd, ny = g[0] * sd, tx = p2[0] + nx * len * .9 + g[0] * len * .45, ty = p2[1] + ny * len * .9 + g[1] * len * .45 + len * .7;
+          d += "M" + (p2[0] - g[0] * 1.1).toFixed(2) + " " + (p2[1] - g[1] * 1.1).toFixed(2) + "L" + tx.toFixed(2) + " " + ty.toFixed(2) + "L" + (p2[0] + g[0] * 1.1).toFixed(2) + " " + (p2[1] + g[1] * 1.1).toFixed(2) + "Z";
+        });
+      }
+      return d;
+    }
+    var FRD = [-118, -86, -56, -26, 4, 34, 64, 94, 122].map(function (a, k) { return frondD(a, 13 + (k % 2) * 2.2); }).join("");
+    function pal(x, y, h, lean, sc, col, rim) {
+      var tr = "M" + (x - 1.5 * sc) + " " + y + "Q" + (x + lean * .2 - .9 * sc) + " " + (y - h * .55) + " " + (x + lean - .55 * sc) + " " + (y - h) + "L" + (x + lean + .65 * sc) + " " + (y - h) + "Q" + (x + lean * .2 + 1.1 * sc) + " " + (y - h * .55) + " " + (x + 1.6 * sc) + " " + y + "Z", tf = ' transform="translate(' + (x + lean) + " " + (y - h) + ") scale(" + sc + ')"';
+      return '<g stroke-linejoin="round"><path d="' + tr + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"/><path d="' + FRD + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"' + tf + '/><path d="' + tr + '" fill="' + col + '"/><path d="' + FRD + '" fill="' + col + '"' + tf + '/></g>';
+    }
+    function fr3(a, L, dp, lf, M, wd, tip) {
+      var r = a * Math.PI / 180, dx = Math.sin(r), dy = -Math.cos(r), d = "", uu = Math.max(Math.cos(r), 0);
+      function B(t) { var ex = dx * L, ey = L * (.42 - .6 * uu) + dp * L * .3, cx = dx * L * .5, cy = -L * (.22 + .75 * uu); return [2 * (1 - t) * t * cx + t * t * ex, 2 * (1 - t) * t * cy + t * t * ey]; }
+      function T(t) { var p = B(t), q = B(Math.min(1, t + .04)), x = q[0] - p[0], y = q[1] - p[1], m = Math.hypot(x, y) || 1; return [x / m, y / m]; }
+      var up = [], dn = [];
+      for (var i = 0; i <= M; i++) { var t = i / M, p = B(t), g = T(t), w = wd * Math.pow(Math.sin(Math.PI * Math.min(.98, t * .9 + .08)), .7) + .1; if (i === M) w = .05; up.push((p[0] - g[1] * w).toFixed(2) + " " + (p[1] + g[0] * w).toFixed(2)); dn.unshift((p[0] + g[1] * w).toFixed(2) + " " + (p[1] - g[0] * w).toFixed(2)); }
+      d += "M" + up.join("L") + "L" + dn.join("L") + "Z";
+      for (i = 2; i < M; i++) {
+        var t2 = i / M, p2 = B(t2), g2 = T(t2), len = lf * (1 - t2 * .55);
+        [1, -1].forEach(function (sd) { var nx = -g2[1] * sd, ny = g2[0] * sd; d += "M" + (p2[0] - g2[0] * .9).toFixed(2) + " " + (p2[1] - g2[1] * .9).toFixed(2) + "L" + (p2[0] + nx * len * .8 + g2[0] * tip * len).toFixed(2) + " " + (p2[1] + ny * len * .8 + g2[1] * tip * len + len * .55).toFixed(2) + "L" + (p2[0] + g2[0] * .9).toFixed(2) + " " + (p2[1] + g2[1] * .9).toFixed(2) + "Z"; });
+      }
+      return d;
+    }
+    function palmZ(bx, by, cx, cy, sc, col, rim, cfg) {
+      var F = cfg.f.map(function (q) { return fr3(q[0], q[1], q[2], cfg.lf, cfg.M, cfg.wd, cfg.tip); }).join("");
+      var H = by - cy, pts = [], L1 = [], R1 = [], rings = "";
+      function C(t) { var m = 1 - t; return [m * m * m * bx + 3 * m * m * t * (bx - 3.2) + 3 * m * t * t * (cx + 2.6) + t * t * t * cx, m * m * m * by + 3 * m * m * t * (by - H * .35) + 3 * m * t * t * (cy + H * .35) + t * t * t * cy]; }
+      for (var i = 0; i <= 14; i++) { var t = i / 14, p = C(t), q = C(Math.min(1, t + .03)), x = q[0] - p[0], y = q[1] - p[1], m = Math.hypot(x, y) || 1, w = (2.5 * (1 - t) + 1.0 * t) * sc * .62; L1.push((p[0] - y / m * w).toFixed(2) + " " + (p[1] + x / m * w).toFixed(2)); R1.unshift((p[0] + y / m * w).toFixed(2) + " " + (p[1] - x / m * w).toFixed(2)); if (i > 0 && i < 14) rings += "M" + (p[0] - y / m * w).toFixed(2) + " " + (p[1] + x / m * w).toFixed(2) + "L" + (p[0] + y / m * w).toFixed(2) + " " + (p[1] - x / m * w).toFixed(2); }
+      var tr = "M" + L1.join("L") + "L" + R1.join("L") + "Z", tf = ' transform="translate(' + cx + " " + (cy + .6) + ") scale(" + sc + ')"';
+      return '<g stroke-linejoin="round" stroke-linecap="round"><path d="' + tr + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"/><path d="' + F + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"' + tf + '/><path d="' + tr + '" fill="' + col + '"/><path d="' + F + '" fill="' + col + '"' + tf + '/><path d="' + rings + '" stroke="' + rim + '" stroke-opacity=".7" stroke-width=".35" fill="none"/>'
+        + '<circle cx="' + (cx - 1.2) + '" cy="' + (cy + 1.4) + '" r="1.25" fill="#6a3418" stroke="' + rim + '" stroke-width=".35"/><circle cx="' + (cx + 1.3) + '" cy="' + (cy + 1.6) + '" r="1.25" fill="#7a4020" stroke="' + rim + '" stroke-width=".35"/></g>';
+    }
+    var PC = [{ f: [[-102, 16.5, .3], [-72, 17.4, .25], [-42, 15.6, .2], [-14, 12.5, .1], [14, 12.5, .1], [42, 15.6, .2], [72, 17.4, .25], [102, 16.5, .3], [-132, 10, .6], [132, 10, .6]], lf: 4.2, M: 12, wd: 1.0, tip: .6 }];
+    function spk(x, y, s, c) { return '<path d="M' + x + " " + (y - s) + "L" + (x + s * .28) + " " + (y - s * .28) + "L" + (x + s) + " " + y + "L" + (x + s * .28) + " " + (y + s * .28) + "L" + x + " " + (y + s) + "L" + (x - s * .28) + " " + (y + s * .28) + "L" + (x - s) + " " + y + "L" + (x - s * .28) + " " + (y - s * .28) + 'Z" fill="' + c + '"/>'; }
+    function gr(id, a, x2, y2) { var s = '<linearGradient id="' + u + id + '" x1="0" y1="0" x2="' + (x2 || 0) + '" y2="' + (y2 == null ? 1 : y2) + '">'; a.forEach(function (c, k) { s += '<stop offset="' + c[0] + '" stop-color="' + c[1] + '"/>'; }); return s + "</linearGradient>"; }
+    var o = '<svg class="pin" width="' + px + '" height="' + px + '" viewBox="-2 -2 52 52" aria-hidden="true"><defs>'
+      + gr("t", [[0, "#5a4af0"], [.4, "#d84ad0"], [.75, "#ff7a6a"], [1, "#ffb04a"]]) + gr("b", [[0, "#5ff0ff"], [1, "#ff4fd0"]], 1, 0) + gr("q", [[0, "#c690ff"], [.5, "#8a40f0"], [1, "#4a14b0"]]) + gr("v", [[0, "#6a2ad8"], [.5, "#ff4fa3"], [.85, "#ff9a4a"], [1, "#ffd25a"]]) + gr("s", [[0, "#ffb04a"], [.5, "#ff4f9a"], [1, "#9a2ad8"]]) + gr("p", [[0, "#ffd0ec"], [.5, "#ff5fb0"], [1, "#d4207e"]]) + gr("g", [[0, "#fff6c0"], [.5, "#ffc857"], [1, "#b8742a"]]) + gr("m", [[0, "#d8f0c8"], [1, "#5a9a62"]]) + gr("c", [[0, "#ff8ad0"], [1, "#7a2ad8"]]) + gr("bg", [[0, "#7ad88a"], [.55, "#3a9a52"], [1, "#1f5a34"]], 1, 1) + gr("z", [[0, "#a0f0ff"], [.5, "#ff7ac8"], [1, "#7a2ad8"]], 1, 1) + gr("e", [[0, "#f4f4ff"], [.5, "#a0a0c8"], [1, "#50507a"]]) + gr("f", [[0, "#5a5a86"], [1, "#22223e"]]);
+    if (I === 5) {
+      o += '<clipPath id="' + u + 'a"><circle cx="22" cy="26" r="18.4"/></clipPath><clipPath id="' + u + 'k"><path d="' + VI + '"/></clipPath></defs>'
+        + '<circle cx="22" cy="26" r="19.6" fill="#ff4fd0" fill-opacity=".5"/><circle cx="22" cy="26" r="18.6" fill="' + D + '"/><circle cx="22" cy="26" r="17.4" fill="url(#' + u + 's)"/>'
+        + '<g clip-path="url(#' + u + 'a)"><rect x="0" y="31" width="48" height="1.1" fill="' + D + '"/><rect x="0" y="34" width="48" height="1.6" fill="' + D + '"/><rect x="0" y="37.4" width="48" height="2.2" fill="' + D + '"/></g>'
+        + '<circle cx="33" cy="15" r="10" fill="#ff4fd0" fill-opacity=".28"/>' + pal(33, 40, 24, 1, 1.2, "#2a0850", "#ff8ae0") + '<g transform="translate(23 27) skewX(-8) scale(.98 1.26) translate(-3.8 0)">'
+        + '<path d="' + VI + '" fill="' + D + '" stroke="' + D + '" stroke-width="4.4" stroke-linejoin="round"/><path d="' + VI + '" fill="none" stroke="#c66cff" stroke-width="2.6" stroke-linejoin="round"/>'
+        + '<path d="' + VI + '" fill="url(#' + u + 'v)"/><g clip-path="url(#' + u + 'k)"><circle cx="1.6" cy="5.4" r="5.4" fill="#ffe27a" fill-opacity=".9"/><circle cx="18" cy="3" r="4" fill="#ffe27a" fill-opacity=".8"/>'
+        + '<g transform="scale(1 .67)">' + pal(-8, 12, 10, 0, .3, D, "#ff6fd0") + pal(-3.5, 12, 7, .3, .24, D, "#ff6fd0") + pal(16.6, 12, 11, 0, .32, D, "#ff6fd0") + '</g><path d="M13.4 5.2H22.6V8H13.4Z" fill="' + D + '" fill-opacity=".45"/></g>'
+        + '<path d="' + VI + '" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width=".7" stroke-linejoin="round"/></g>';
+    } else if (I === 2) {
+      o += '<clipPath id="' + u + 'a"><rect x="9" y="12" width="30" height="16" rx="1.6"/></clipPath></defs>'
+        + '<g transform="rotate(-6 24 24)"><rect x="2.6" y="8.6" width="42.8" height="30" rx="4" fill="#ff4fd0" fill-opacity=".5" stroke="#ff4fd0" stroke-opacity=".5" stroke-width="5.4"/><rect x="2.6" y="8.6" width="42.8" height="30" rx="4" fill="' + D + '" stroke="' + D + '" stroke-width="3.6"/>'
+        + '<rect x="2.6" y="8.6" width="42.8" height="30" rx="4" fill="url(#' + u + 'c)" stroke="#ffd0ec" stroke-width=".8"/><rect x="4.2" y="10" width="39.6" height="3" rx="1.5" fill="#fff" fill-opacity=".3"/>'
+        + '<rect x="9" y="12" width="30" height="16" rx="1.6" fill="url(#' + u + 's)" stroke="' + D + '" stroke-width=".8"/><g clip-path="url(#' + u + 'a)"><circle cx="24" cy="24.4" r="6.4" fill="#ffe27a"/><rect x="9" y="22.6" width="30" height=".8" fill="#ff2e93"/><rect x="9" y="24.4" width="30" height="1" fill="#ff2e93"/><rect x="9" y="26.4" width="30" height="1.6" fill="#ff2e93"/></g>'
+        + '<g transform="translate(24 19.6) skewX(-8) scale(.5 .56) translate(-3.8 0)"><path d="' + VI + '" fill="' + D + '" stroke="' + D + '" stroke-width="3.6" stroke-linejoin="round"/><path d="' + VI + '" fill="url(#' + u + 'p)" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></g>'
+        + '<path d="M12.6 38.6L16.4 31.6H31.6L35.4 38.6Z" fill="#2a1060" stroke="' + D + '" stroke-width=".8" stroke-linejoin="round"/><circle cx="17.6" cy="35.8" r="1" fill="' + D + '"/><circle cx="30.4" cy="35.8" r="1" fill="' + D + '"/><rect x="21" y="34.2" width="6" height="2.6" rx=".8" fill="' + D + '"/>'
+        + '<rect x="13.4" y="28.6" width="21.2" height="4.8" rx="2.4" fill="' + D + '" stroke="#ffd0ec" stroke-width=".5"/><circle cx="18.8" cy="31" r="1.8" fill="#fff"/><circle cx="29.2" cy="31" r="1.8" fill="#fff"/><path d="M18.8 29.4V32.6M17.2 31H20.4M29.2 29.4V32.6M27.6 31H30.8" stroke="' + D + '" stroke-width=".4"/>'
+        + '<circle cx="6.4" cy="12" r=".9" fill="' + D + '"/><circle cx="41.6" cy="12" r=".9" fill="' + D + '"/><circle cx="6.4" cy="35" r=".9" fill="' + D + '"/><circle cx="41.6" cy="35" r=".9" fill="' + D + '"/></g>'
+        + '<path d="M40 3.4V9.6M40 3.4L44.6 4.6V6.2L40 5" stroke="' + D + '" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 3.4V9.6M40 3.4L44.6 4.6V6.2L40 5" stroke="#ffe27a" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38.6" cy="10" r="1.7" fill="#ffe27a" stroke="' + D + '" stroke-width=".7"/>';
+    } else if (I === 3) {
+      var LT = "M11 -4.4Q10 -9 5 -9Q-1 -9 -1 0Q-1 9 5 9Q11 9 11 3.4V1.2H5.6M14.6 -8.6H27.4M21 -8.6V9M29.4 9L35.2 -9L41 9M31.4 3.2H39", HX = "M1.6 24L10.2 7.4H37.8L46.4 24L37.8 40.6H10.2Z", HI = "M5.4 24L12 10.6H36L42.6 24L36 37.4H12Z";
+      o += '<clipPath id="' + u + 'a"><path d="' + HI + '"/></clipPath><mask id="' + u + 'M" maskUnits="userSpaceOnUse" x="-30" y="-20" width="80" height="40"><path d="' + LT + '" fill="none" stroke="#fff" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/></mask></defs>'
+        + '<path d="' + HX + '" fill="#ffc857" fill-opacity=".55" stroke="#ffc857" stroke-opacity=".55" stroke-width="5.6" stroke-linejoin="round"/><path d="' + HX + '" fill="' + D + '" stroke="' + D + '" stroke-width="3.8" stroke-linejoin="round"/>'
+        + '<path d="' + HX + '" fill="url(#' + u + 'g)" stroke="#fff6c0" stroke-width=".7" stroke-linejoin="round"/><path d="M4 24L11 9.2H37L44 24L37 38.8H11Z" fill="none" stroke="#8a5a1a" stroke-opacity=".7" stroke-width=".6" stroke-linejoin="round"/>'
+        + '<path d="' + HI + '" fill="' + D + '" stroke="' + D + '" stroke-width="1.4" stroke-linejoin="round"/><path d="' + HI + '" fill="url(#' + u + 's)"/>'
+        + '<g clip-path="url(#' + u + 'a)"><rect x="0" y="29.6" width="48" height="1" fill="' + D + '"/><rect x="0" y="32.4" width="48" height="1.5" fill="' + D + '"/><rect x="0" y="35.6" width="48" height="2.4" fill="' + D + '"/>' + pal(10, 38, 16, 1, .72, "#2a0850", "#ff8ae0") + pal(38, 38, 15, -1, .7, "#2a0850", "#ff8ae0") + '</g>'
+        + '<path d="' + HI + '" fill="none" stroke="#ff4fd0" stroke-width=".9" stroke-linejoin="round"/>'
+        + '<g transform="translate(24 24) skewX(-9) scale(.78 .88) translate(-20.6 0)"><path d="' + LT + '" fill="none" stroke="' + D + '" stroke-width="8.8" stroke-linejoin="round" stroke-linecap="round"/><path d="' + LT + '" fill="none" stroke="#ffe9a0" stroke-width="6.8" stroke-linejoin="round" stroke-linecap="round"/><path d="' + LT + '" fill="none" stroke="#b8742a" stroke-width="5.4" stroke-linejoin="round" stroke-linecap="round"/>'
+        + '<g mask="url(#' + u + 'M)"><rect x="-4" y="-12" width="52" height="24" fill="url(#' + u + 'v)"/><circle cx="19" cy="5" r="6.4" fill="#ffe27a" fill-opacity=".9"/><rect x="-4" y="3.4" width="52" height=".8" fill="#ff2e93"/><rect x="-4" y="5.4" width="52" height="1.1" fill="#ff2e93"/><rect x="-4" y="7.6" width="52" height="1.5" fill="#ff2e93"/></g></g>'
+        + '<path d="M10.2 7.4H37.8L33 14H8Z" fill="#fff" fill-opacity=".28"/>';
+    } else {
+      o += '<clipPath id="' + u + 'a"><circle cx="24" cy="25" r="17.2"/></clipPath></defs>'
+        + '<circle cx="24" cy="25" r="20" fill="#ff4fd0" fill-opacity=".5"/><circle cx="24" cy="25" r="18.8" fill="' + D + '"/><circle cx="24" cy="25" r="17.4" fill="url(#' + u + 's)"/>'
+        + '<g clip-path="url(#' + u + 'a)"><rect x="0" y="29" width="48" height="1" fill="' + D + '"/><rect x="0" y="32" width="48" height="1.5" fill="' + D + '"/><rect x="0" y="35.4" width="48" height="2.4" fill="' + D + '"/></g>'
+        + '<path d="M3 43Q24 37 45 43Q24 49 3 43Z" fill="' + D + '" stroke="#ff8ae0" stroke-width=".7"/>' + palmZ(21, 43, 25, 15.6, 1.05, "#1c0646", "#ff8ae0", PC[0]);
+    }
+    return o + "</svg>";
+  }
+  function pinSvg(id, px) {
+    var u = "pn" + (++pinN), D = "#12051f", I = ["sol", "gat", "cas", "gta", "pal", "vi"].indexOf(id); if (I > 1) return pinStk(I, px, u); var tier = I < 2 ? 0 : I < 4 ? 1 : I === 4 ? 2 : 3;
+    function poly(R, n, a0, k) { var o = ""; for (var i = 0; i < n; i++) { var a = (a0 + i * 360 / n) * Math.PI / 180; o += (i ? "L" : "M") + (24 + R * Math.cos(a)).toFixed(2) + " " + (24 + R * Math.sin(a)).toFixed(2); } return o + "Z"; }
+    var teeth = ""; for (var i = 0; i < 40; i++) { var a = (i * 9) * Math.PI / 180, R = i % 2 ? 20.6 : 23.4; teeth += (i ? "L" : "M") + (24 + R * Math.cos(a)).toFixed(2) + " " + (24 + R * Math.sin(a)).toFixed(2); } teeth += "Z";
+    var P = [teeth, poly(23, 6, -90), "M24 1.6L43.4 7.4L43.4 24Q43.4 37.6 24 46.6Q4.6 37.6 4.6 24L4.6 7.4Z", "M13 2H35Q46 2 46 13V35Q46 46 35 46H13Q2 46 2 35V13Q2 2 13 2Z", poly(23.2, 8, -67.5), "M24 2.4A21.6 21.6 0 1 0 24.01 2.4Z"][I];
+    var rim = [["#ffe0c8", "#e08a60", "#7a2f26"], ["#fff2b0", "#ffc857", "#a8661e"], ["#fff2b0", "#ffc857", "#a8661e"], ["#fff2b0", "#ffc857", "#a8661e"], ["#ffffff", "#ffd25a", "#a8661e"], ["#ffffff", "#ffd25a", "#b8741e"]][I];
+    var S = [["#2a0c70", "#b8229a", "#ff5a6a", "#ffa24a"], ["#2a0c70", "#b8229a", "#ff5a6a", "#ffa24a"], ["#0a0630", "#2a1090", "#a8289a", "#3ac8d8"], ["#12043a", "#3a1290", "#7a2ad0", "#d83a9a"], ["#140804", "#3a1c0a", "#8a5018", "#ffc050"], ["#1c0846", "#5a1ab0", "#c02a9a", "#ff6aa8"]][I];
+    var o = '<svg class="pin" width="' + px + '" height="' + px + '" viewBox="-2 -2 52 52" aria-hidden="true"><defs>'
+      + '<linearGradient id="' + u + 'r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + rim[0] + '"/><stop offset=".45" stop-color="' + rim[1] + '"/><stop offset="1" stop-color="' + rim[2] + '"/></linearGradient>'
+      + '<linearGradient id="' + u + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + S[0] + '"/><stop offset=".42" stop-color="' + S[1] + '"/><stop offset=".72" stop-color="' + S[2] + '"/><stop offset="1" stop-color="' + S[3] + '"/></linearGradient>'
+      + '<linearGradient id="' + u + 'd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a0"/><stop offset=".5" stop-color="#ff9a3d"/><stop offset="1" stop-color="#ff2e93"/></linearGradient>'
+      + '<linearGradient id="' + u + 'p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd0ec"/><stop offset=".5" stop-color="#ff5fb0"/><stop offset="1" stop-color="#d4207e"/></linearGradient>'
+      + '<linearGradient id="' + u + 'g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c0"/><stop offset=".5" stop-color="#ffc857"/><stop offset="1" stop-color="#b8742a"/></linearGradient>'
+      + '<clipPath id="' + u + 'c"><path d="' + P + '" transform="translate(24 24) scale(.83) translate(-24 -24)"/></clipPath></defs>';
+    function Pt(sc, extra) { return '<path d="' + P + '" transform="translate(24 24) scale(' + sc + ') translate(-24 -24)" ' + extra + '/>'; }
+    if (I === 5) o += '<g fill="url(#' + u + 'g)" stroke="' + D + '" stroke-width=".7" stroke-linejoin="round"><path d="M3 22Q-3 14 -1 6Q5 8 8 14Q4 14 5 18Q9 18 11 22Z"/><path d="M45 22Q51 14 49 6Q43 8 40 14Q44 14 43 18Q39 18 37 22Z"/><path d="M4 28Q-2 24 -1 17Q4 19 7 23Z"/><path d="M44 28Q50 24 49 17Q44 19 41 23Z"/></g>';
+    o += Pt(1, 'fill="#0a0318" fill-opacity=".5" transform="translate(24 25.4) scale(1) translate(-24 -24)"');
+    o += Pt(1, 'fill="url(#' + u + 'r)" stroke="' + D + '" stroke-width=".9" stroke-linejoin="round"') + Pt(.96, 'fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".6" stroke-linejoin="round"') + Pt(.88, 'fill="' + D + '" stroke="#7a3a10" stroke-width=".5"') + Pt(.83, 'fill="url(#' + u + 's)"');
+    o += '<g clip-path="url(#' + u + 'c)">';
+    function palm(x, y, h, lean, sc, col, rim) {
+      var tx = lean, ty = -h, g = '<g transform="translate(' + x + " " + y + ')"><path d="M-1.6 0Q' + (lean * .3 - 1.1) + " " + (-h * .55) + " " + (tx - .6) + " " + ty + "L" + (tx + .8) + " " + ty + "Q" + (lean * .3 + 1.4) + " " + (-h * .55) + ' 1.9 0Z" fill="' + col + '"/>', rg = "";
+      for (var k = 1; k < 7; k++) { var yy = -h * k / 7.4, xx = tx * (k / 7.4) * (k / 7.4) * .9; rg += "M" + (xx - 1.1) + " " + yy.toFixed(1) + "L" + (xx + 1.3) + " " + (yy - .5).toFixed(1); }
+      g += '<path d="' + rg + '" stroke="' + (rim || "#ff4fa3") + '" stroke-opacity=".55" stroke-width=".4"/><g transform="translate(' + tx + " " + ty + ')">';
+      [[-172, 1], [-146, 1.08], [-118, 1], [-92, .8], [-64, 1], [-36, 1.08], [-8, 1], [14, .8], [166, .8]].forEach(function (q) {
+        var r = q[0] * Math.PI / 180, L = 13 * sc * q[1], c = Math.cos(r), sn = Math.sin(r), w = L * .2, ex = L * c, ey = L * sn * .55 + L * .42, mx = ex * .55, my = ey * .5 - L * .3;
+        g += '<path d="M0 0Q' + (mx - sn * w).toFixed(1) + " " + (my + c * w).toFixed(1) + " " + ex.toFixed(1) + " " + ey.toFixed(1) + "Q" + (mx + sn * w).toFixed(1) + " " + (my - c * w + w * .6).toFixed(1) + ' 0 0Z" fill="' + col + '" stroke="' + (rim || "#ff4fa3") + '" stroke-opacity=".7" stroke-width=".35" stroke-linejoin="round"/>'
+          + '<path d="M0 0Q' + mx.toFixed(1) + " " + (my + .4).toFixed(1) + " " + (ex * .92).toFixed(1) + " " + (ey * .92).toFixed(1) + '" stroke="' + (rim || "#ff4fa3") + '" stroke-opacity=".45" stroke-width=".3" fill="none"/>';
+      });
+      return g + '<circle cx="-.8" cy="1.3" r="1.1" fill="#7a3a1a"/><circle cx="1" cy="1.6" r="1.1" fill="#8a4a22"/></g></g>';
+    }
+    if (I === 0) {
+      o += '<defs><linearGradient id="' + u + 'w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8ab4"/><stop offset=".45" stop-color="#b8229a"/><stop offset="1" stop-color="#2a0c70"/></linearGradient></defs>'
+        + '<ellipse cx="33" cy="13" rx="7" ry=".9" fill="#ffd0e6" fill-opacity=".5"/>'
+        + '<circle cx="24" cy="29" r="17" fill="#ff9a3d" fill-opacity=".25"/><circle cx="24" cy="29" r="12.4" fill="url(#' + u + 'd)"/>';
+      for (i = 0; i < 5; i++) o += '<rect x="9" y="' + (24 + i * 2.2) + '" width="30" height="' + (.45 + i * .4) + '" fill="#c02a98"/>';
+      o += '<rect x="2" y="32.2" width="44" height="16" fill="url(#' + u + 'w)"/><path d="M2 32.4H46" stroke="#ffd0e6" stroke-width=".7"/>';
+      [[24, 33.8, 11], [24, 35.8, 8.6], [24, 37.8, 6.4], [24, 39.8, 4.4]].forEach(function (q, k) { o += '<rect x="' + (q[0] - q[2] / 2) + '" y="' + q[1] + '" width="' + q[2] + '" height="1" rx=".5" fill="' + (k % 2 ? "#ffd25a" : "#fff2a0") + '" fill-opacity=".9"/>'; });
+      o += ''
+        + '<path d="M29.6 18.4q1.2-1.6 2.4 0q1.2-1.6 2.4 0M36 22q.9-1.2 1.8 0q.9-1.2 1.8 0" stroke="' + D + '" stroke-width=".7" fill="none" stroke-linecap="round"/>'
+        + palm(11, 40, 21, 3, 1, D)
+        + '<path d="M2 41.4Q12 38.4 24 40.4Q36 38.4 46 41.4V48H2Z" fill="' + D + '"/><path d="M4 41.6Q13 39 24 40.8Q35 39 44 41.6" stroke="#ffd0e6" stroke-opacity=".7" stroke-width=".6" fill="none"/>';
+    } else if (I === 1) {
+      function tree(x, w, h, col, mo) {
+        var t = '<path d="M' + (x - w * 1.5) + ' 36Q' + (x - w * .4) + " " + (36 - h * .3) + " " + (x - w * .5) + " " + (36 - h) + "L" + (x + w * .5) + " " + (36 - h) + "Q" + (x + w * .4) + " " + (36 - h * .3) + " " + (x + w * 1.5) + ' 36Z" fill="' + col + '"/><ellipse cx="' + x + '" cy="' + (36 - h) + '" rx="' + (w * 3.6) + '" ry="' + (w * 1.3) + '" fill="' + col + '"/><path d="';
+        for (var k = -3; k <= 3; k++) { var mx = x + k * w * .95, ln = (4 + ((k + 3) * 7 % 5)) * (h / 24); t += "M" + mx.toFixed(1) + " " + (36 - h + 1) + "Q" + (mx + (k % 2 ? 1 : -1)).toFixed(1) + " " + (36 - h + ln * .6).toFixed(1) + " " + (mx + (k % 2 ? .6 : -.6)).toFixed(1) + " " + (36 - h + ln).toFixed(1); }
+        return t + '" stroke="' + mo + '" stroke-width=".7" fill="none" stroke-linecap="round"/>';
+      }
+      o += '<defs><linearGradient id="' + u + 'q" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c4f27a"/><stop offset=".5" stop-color="#5aa83a"/><stop offset="1" stop-color="#1a4a1e"/></linearGradient><linearGradient id="' + u + 'm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d83a9a"/><stop offset=".5" stop-color="#4a1a9a"/><stop offset="1" stop-color="#160a40"/></linearGradient></defs>'
+        + '<circle cx="24" cy="27" r="17" fill="#ff9a3d" fill-opacity=".25"/><circle cx="24" cy="27" r="12.6" fill="url(#' + u + 'd)"/><rect x="9" y="24" width="30" height=".6" fill="#c02a98"/><rect x="9" y="26.2" width="30" height=".9" fill="#c02a98"/><rect x="9" y="28.6" width="30" height="1.3" fill="#c02a98"/>'
+        + '<rect x="3" y="26" width="3.4" height="9" fill="#1a0838"/><rect x="7" y="23" width="3.6" height="12" fill="#1a0838"/><rect x="38" y="24.6" width="3.6" height="10.4" fill="#1a0838"/><rect x="42" y="27" width="3.4" height="8" fill="#1a0838"/>'
+        + '<g transform="translate(3.84 5.44) scale(.84)"><path d="M4 31.4Q8 26.6 13 27Q14.4 21.6 19.6 22.2Q23 22.6 25 25.2L38.6 26Q42.6 26.2 43 29L43 31.2Q42.8 33 40 33.2L8 34Z" fill="url(#' + u + 'q)" stroke="#0a2a10" stroke-width=".7" stroke-linejoin="round"/>'
+        + '<path d="M6.4 29.6l1.6-2.6 1.4 2.4 1.8-2.6 1.2 2.4M22.6 24.6l2.4-1.6 1.2 1.8 2-1.6 1 1.8" stroke="#1a4a1e" stroke-width=".9" fill="none" stroke-linejoin="round" stroke-linecap="round"/>'
+        + '<path d="M13.6 25.6Q18 21.8 23.6 25.6" stroke="#eaffc0" stroke-opacity=".6" stroke-width=".8" fill="none" stroke-linecap="round"/><path d="M26 26.6H39" stroke="#eaffc0" stroke-opacity=".5" stroke-width=".7" stroke-linecap="round"/>'
+        + '<circle cx="40.2" cy="27.4" r="1" fill="#0a2a10"/><circle cx="18.2" cy="24.2" r="3.1" fill="#5aa83a" stroke="#0a2a10" stroke-width=".6"/><ellipse cx="18.4" cy="24.2" rx="1.9" ry="1.5" fill="#ffe74a" stroke="#0a2a10" stroke-width=".4"/><ellipse cx="18.5" cy="24.2" rx=".45" ry="1.3" fill="#0a2a10"/><path d="M15.6 22.8Q18.4 20.8 21.2 23" stroke="#0a2a10" stroke-width=".9" fill="none" stroke-linecap="round"/>'
+        + '<path d="M22 31.2L42.2 30.2" stroke="#0a2a10" stroke-width=".9" stroke-linecap="round"/><path d="M24.4 31L25.8 33.2L27.2 30.9L28.6 33L30 30.7L31.4 32.8L32.8 30.5L34.2 32.6L35.6 30.4L37 32.4L38.4 30.3L39.8 32.2L41 30.2Z" fill="#fff"/></g>'
+        + '<path d="M2 32.2Q8 30.2 14 32.2T26 32.2T38 32.2T50 32.2V48H2Z" fill="url(#' + u + 'm)"/><path d="M2 32.4Q8 30.4 14 32.4T26 32.4T38 32.4T50 32.4" stroke="#ffb0e8" stroke-width=".8" fill="none"/>'
+        + '<path d="M6 36.4H15M28 37.6H42M10 41.6H22M30 43.6H40" stroke="#ff8ae0" stroke-opacity=".4" stroke-width=".7" stroke-linecap="round"/>'
+        + '<ellipse cx="36.4" cy="34.4" rx="4.4" ry="1.1" fill="none" stroke="#c8fff0" stroke-opacity=".75" stroke-width=".6"/><ellipse cx="36.4" cy="34.4" rx="7.6" ry="1.9" fill="none" stroke="#c8fff0" stroke-opacity=".4" stroke-width=".5"/>'
+    } else if (I === 2) {
+      var B = [[8.6, 4, 9], [12.8, 3.4, 14], [16.4, 4, 8], [20.8, 3.6, 18], [24.8, 4.4, 11], [29.4, 3.6, 15], [33.2, 4, 8], [37, 3.8, 12]], bl = "";
+      o += '<circle cx="33" cy="13.4" r="9" fill="#ff4fa3" fill-opacity=".22"/><circle cx="33" cy="13.4" r="6.2" fill="url(#' + u + 'd)"/><ellipse cx="24" cy="37.6" rx="22" ry="6" fill="#3ff2e0" fill-opacity=".3"/>';
+      B.forEach(function (q, k) { o += '<rect x="' + (q[0] - 1) + '" y="' + (39 - q[2] - 3) + '" width="' + (q[1] + 2) + '" height="' + (q[2] + 6) + '" fill="#241080" fill-opacity=".8"/>'; });
+      B.forEach(function (q, k) {
+        o += '<rect x="' + q[0] + '" y="' + (39 - q[2]) + '" width="' + q[1] + '" height="' + (q[2] + 1) + '" fill="#0a0630"/>';
+        for (var wy = 39 - q[2] + 1.6; wy < 37.2; wy += 2.2) for (var wx = q[0] + .7; wx < q[0] + q[1] - .6; wx += 1.5) if (((wx * 7 + wy * 13 + k * 5) | 0) % 3) bl += '<rect x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" width=".7" height=".9" fill="' + ["#ff7ac0", "#3ff2e0", "#ffe27a"][((wx * 3 + wy * 5 + k) | 0) % 3] + '"/>';
+      });
+      o += bl + '<path d="M21.6 21V15.4" stroke="#0a0630" stroke-width=".6"/><circle cx="21.6" cy="15" r=".9" fill="#ff3a4a"/>'
+        + palm(14.4, 38, 20, -2, .95, D) + '<rect x="2" y="38.2" width="44" height="10" fill="#06031a"/><path d="M2 38.4H46" stroke="#3ff2e0" stroke-width=".9"/>'
+        + '<path d="M14.6 40.4H33.4L31.8 46H16.2Z" fill="' + D + '" stroke="#ff4fa3" stroke-width=".5" stroke-linejoin="round"/><g transform="translate(24 43.2) skewX(-10) scale(.26)"><path d="M-13 -8L-6.6 -8L-2.6 2.6L1.6 -8L8 -8L.6 8L-5 8Z M9.6 -8H15.6V8H9.6Z" fill="url(#' + u + 'p)" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></g>';
+    } else if (I === 3) {
+      var VV = "M-13 -8L-6.6 -8L-2.6 2.6L1.6 -8L8 -8L.6 8L-5 8Z M9.6 -8H15.6V8H9.6Z";
+      o += '<defs><linearGradient id="' + u + 'y" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8b4ff"/><stop offset=".45" stop-color="#8a4ae8"/><stop offset="1" stop-color="#2a0c70"/></linearGradient></defs>'
+        + '<circle cx="24" cy="26" r="15" fill="#ff4fa3" fill-opacity=".2"/><g transform="translate(24 19) skewX(-10) scale(1.1)"><path d="' + VV + '" fill="#fff" fill-opacity=".1" stroke="#ff7ac0" stroke-opacity=".55" stroke-width=".6" stroke-linejoin="round"/></g>'
+        + palm(7.4, 37, 13, 2, .62, D) + palm(40.6, 37, 12, -2, .58, D)
+        + '<rect x="2" y="36" width="44" height="12" fill="#12043a"/><path d="M2 36.2H46" stroke="#ff4fa3" stroke-width=".9"/>'
+        + '<ellipse cx="24" cy="38.2" rx="19" ry="2" fill="#ff2e93" fill-opacity=".45"/><ellipse cx="24" cy="38" rx="14" ry="1.2" fill="#ff7ac0" fill-opacity=".6"/>'
+        + '<path d="M4.8 36.4L4.8 32.6Q4.8 31.4 6.4 31L12 29.8Q15.4 25.2 22 24.8L29.6 24.8Q34.6 25.2 37.4 29L41.6 30Q43.2 30.4 43.2 32L43.2 36.4Z" fill="url(#' + u + 'y)" stroke="#12043a" stroke-width=".7" stroke-linejoin="round"/>'
+        + '<path d="M16.2 29.6Q18.4 26.4 23 26.2L29 26.2Q32.8 26.6 34.8 29.6Z" fill="#1a0a4a" stroke="#12043a" stroke-width=".5" stroke-linejoin="round"/><path d="M18.6 29.2Q20.4 27 23.4 26.8L24.6 26.8L22.6 29.2Z" fill="#fff" fill-opacity=".45"/><path d="M26 26.4V29.6" stroke="#12043a" stroke-width=".5"/>'
+        + '<path d="M13 29.6Q16.4 25.6 22 25.2L29.6 25.2Q34.4 25.6 37 29" stroke="#fff" stroke-opacity=".55" stroke-width=".6" fill="none"/><path d="M5.6 33.4H42.4" stroke="#ff4fa3" stroke-width=".9"/><path d="M5.4 30.4L3.8 28.2L9.4 29Z" fill="#2a0c70" stroke="#12043a" stroke-width=".4"/>'
+        + '<path d="M4.6 36.6Q13.8 29.6 23 36.6Z" fill="#12043a"/><path d="M26.4 36.6Q35.6 29.6 44.8 36.6Z" fill="#12043a"/>'
+        + '<circle cx="14" cy="36" r="4.2" fill="#0a0220" stroke="#05010c" stroke-width=".5"/><circle cx="14" cy="36" r="2.7" fill="#e8e0ff" stroke="#6a5aa0" stroke-width=".4"/><path d="M14 33.6V38.4M11.6 36H16.4M12.3 34.3L15.7 37.7M15.7 34.3L12.3 37.7" stroke="#6a5aa0" stroke-width=".35"/><circle cx="14" cy="36" r=".8" fill="#2a1060"/>'
+        + '<circle cx="34.4" cy="36" r="4.2" fill="#0a0220" stroke="#05010c" stroke-width=".5"/><circle cx="34.4" cy="36" r="2.7" fill="#e8e0ff" stroke="#6a5aa0" stroke-width=".4"/><path d="M34.4 33.6V38.4M32 36H36.8M32.7 34.3L36.1 37.7M36.1 34.3L32.7 37.7" stroke="#6a5aa0" stroke-width=".35"/><circle cx="34.4" cy="36" r=".8" fill="#2a1060"/>'
+        + '<path d="M43 31.6L48 29.4V34.2Z" fill="#c8f4ff" fill-opacity=".5"/><rect x="40.4" y="30.6" width="3.2" height="1.7" rx=".7" fill="#fff"/><rect x="4.8" y="31.4" width="1.6" height="2" rx=".5" fill="#ff3a4a"/>';
+    } else if (I === 4) {
+      o += '<ellipse cx="24" cy="26" rx="17" ry="13" fill="#ffd25a" fill-opacity=".22"/>' + palm(36.4, 36, 24, -3, 1.05, "#2a1406", "#ffd25a")
+        + '<g transform="translate(4.8 5.2) scale(.8)"><path d="M9 28L15 23.4H41L35 28Z" fill="#c0e8b0" stroke="#2a5a32" stroke-width=".6" stroke-linejoin="round"/><path d="M35 28L41 23.4V33.4L35 38Z" fill="#2f6a3a" stroke="#1a4a22" stroke-width=".6" stroke-linejoin="round"/><rect x="9" y="28" width="26" height="10" fill="url(#' + u + 'j)" stroke="#1a4a22" stroke-width=".6"/>'
+        + '<defs><linearGradient id="' + u + 'j" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ad090"/><stop offset="1" stop-color="#4a8a52"/></linearGradient></defs>';
+      for (var k = 0; k < 7; k++) o += '<path d="M9 ' + (29.3 + k * 1.2) + 'H35" stroke="#2a5a32" stroke-opacity=".55" stroke-width=".35"/>';
+      for (k = 0; k < 4; k++) o += '<path d="M35 ' + (29.2 + k * 2.4) + 'L41 ' + (24.6 + k * 2.4) + '" stroke="#1a4a22" stroke-opacity=".6" stroke-width=".35"/>';
+      o += '<path d="M17 27.2L21 24.4H36.4L33 27.2Z" fill="none" stroke="#2a5a32" stroke-width=".4"/><ellipse cx="27" cy="25.9" rx="3.2" ry="1.4" fill="#8cc088" stroke="#2a5a32" stroke-width=".4"/><circle cx="19" cy="25.8" r=".6" fill="#2a5a32"/><circle cx="34.6" cy="25.8" r=".6" fill="#2a5a32"/>'
+        + '<path d="M19 28L25 28L31 23.4L25 23.4Z" fill="url(#' + u + 'g)" stroke="#8a5a1a" stroke-width=".4" stroke-linejoin="round"/><rect x="19" y="28" width="6" height="10" fill="url(#' + u + 'g)" stroke="#8a5a1a" stroke-width=".4"/>'
+        + '<g transform="translate(22 33)" stroke="#5a3a0a" stroke-width=".9" fill="none" stroke-linecap="round"><path d="M1.5 -2.6C-1.8 -3.6 -2.2 -.4 0 .1C2.2 .6 1.8 3.6 -1.5 2.6M0 -3.8V3.8"/></g>'
+        + '<g transform="translate(18.6 30.4)"><ellipse cx="0" cy="0" rx="2.2" ry="1" fill="#4a8a52" stroke="#2a5a32" stroke-width=".3"/></g></g>'
+        + '<ellipse cx="10.4" cy="41.2" rx="3.6" ry="1.3" fill="url(#' + u + 'g)" stroke="#8a5a1a" stroke-width=".4"/><ellipse cx="10.4" cy="40.4" rx="3.6" ry="1.3" fill="#ffe08a" stroke="#8a5a1a" stroke-width=".4"/><ellipse cx="15.6" cy="42" rx="3.2" ry="1.2" fill="#ffe08a" stroke="#8a5a1a" stroke-width=".4"/>'
+        + '<path d="M38 8l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9z" fill="#fff"/><path d="M9 11l.6 1.4 1.4.6-1.4.6L9 15l-.6-1.4L7 13l1.4-.6z" fill="#ffe27a"/>';
+    } else {
+      o += '<g stroke="#ff7ac0" stroke-opacity=".4" stroke-width=".8">';
+      for (i = 0; i < 16; i++) { var an = i * 22.5 * Math.PI / 180; o += '<path d="M24 24L' + (24 + 30 * Math.cos(an)).toFixed(1) + " " + (24 + 30 * Math.sin(an)).toFixed(1) + '"/>'; }
+      var VP2 = "M-13 -8L-6.6 -8L-2.6 2.6L1.6 -8L8 -8L.6 8L-5 8Z", VR2 = "M9.6 -8H15.6V8H9.6Z";
+      o += '</g><circle cx="24" cy="24" r="15" fill="#ff2e93" fill-opacity=".3"/>' + palm(36, 30, 16, -3, .95, D)
+        + '<defs><linearGradient id="' + u + 'v" x1="0" y1="-8" x2="0" y2="8" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7a3ae8"/><stop offset=".42" stop-color="#ff2e93"/><stop offset=".78" stop-color="#ff8a3d"/><stop offset="1" stop-color="#ffd25a"/></linearGradient><clipPath id="' + u + 'k"><path d="' + VP2 + '"/><path d="' + VR2 + '"/></clipPath></defs>'
+        + '<g transform="translate(23.4 25) skewX(-10) scale(.98)"><g transform="translate(1.1 1.5)" fill="#3a0a50" stroke="#3a0a50" stroke-width="3" stroke-linejoin="round"><path d="' + VP2 + '"/><path d="' + VR2 + '"/></g>'
+        + '<g fill="' + D + '" stroke="' + D + '" stroke-width="3" stroke-linejoin="round"><path d="' + VP2 + '"/><path d="' + VR2 + '"/></g>'
+        + '<g clip-path="url(#' + u + 'k)"><rect x="-14" y="-9" width="31" height="18" fill="url(#' + u + 'v)"/><circle cx="1" cy="4.2" r="6" fill="#ffe27a" fill-opacity=".9"/><rect x="-5" y="3.6" width="12" height=".6" fill="#ff2e93"/><rect x="-5" y="5.4" width="12" height=".9" fill="#ff2e93"/><rect x="-5" y="7.2" width="12" height="1.2" fill="#ff2e93"/>'
+        + palm(-4.4, 9, 8.6, .6, .3, D) + palm(12.6, 9, 8.6, 0, .3, D) + '</g>'
+        + '<g fill="none" stroke="#fff" stroke-width="1" stroke-linejoin="round"><path d="' + VP2 + '"/><path d="' + VR2 + '"/></g></g>'
+        + '<path d="M36.4 8.6l1 2.4 2.4 1-2.4 1-1 2.4-1-2.4-2.4-1 2.4-1z" fill="#fff"/><path d="M10 36l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7z" fill="#ffe27a"/>';
+    }
+    o += '<ellipse cx="17" cy="9" rx="13" ry="5.4" fill="#fff" fill-opacity=".18" transform="rotate(-18 17 9)"/></g>';
+    o += Pt(.83, 'fill="none" stroke="#fff" stroke-opacity=".4" stroke-width=".5" stroke-linejoin="round"');
+    if (tier >= 2) o += '<circle cx="24" cy="-.4" r="1.9" fill="' + (I === 4 ? "#3ff2e0" : "#ff2e93") + '" stroke="' + D + '" stroke-width=".6"/>';
+    if (I === 4) o += '<circle cx="1.6" cy="24" r="1.6" fill="#ff2e93" stroke="' + D + '" stroke-width=".5"/><circle cx="46.4" cy="24" r="1.6" fill="#ff2e93" stroke="' + D + '" stroke-width=".5"/>';
+    return o + '</svg>';
+  }
+  var MX_PIN = { ch: { 5: 15, 6: 35 }, dup: 10 };
+  function mxPinPick() { var t = 0; MX_PINS.forEach(function (q) { t += q.w; }); var r = rand01() * t; for (var i = 0; i < MX_PINS.length; i++) { r -= MX_PINS[i].w; if (r < 0) return MX_PINS[i].id; } return MX_PINS[0].id; }
+  function mxPinById(id) { for (var i = 0; i < MX_PINS.length; i++) if (MX_PINS[i].id === id) return MX_PINS[i]; return null; }
+  /* pin equipado junto al nombre */
+  function mxPinTag(node, px) {
+    var o = node.querySelector(".nmpin"); if (o) o.remove();
+    try { var m = getMax(), id = m.eq && m.eq.pin; if (!id || !m.pins[id] || !mxPinById(id)) return; var sp = el("span", "nmpin"); sp.innerHTML = pinSvg(id, px); sp.setAttribute("title", mxPinById(id).n); node.appendChild(sp); } catch (e) {}
+  }
   function sixIco(px) {
     var u = "sx" + px;
     return '<svg class="six" width="' + px + '" height="' + px + '" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="' + u + 'a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a5cff"/><stop offset=".5" stop-color="#d93cc8"/><stop offset="1" stop-color="#ff2e93"/></linearGradient><linearGradient id="' + u + 'b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a1280"/><stop offset="1" stop-color="#6a1a8a"/></linearGradient><linearGradient id="' + u + 'v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffc2e6"/></linearGradient></defs>'
@@ -7670,6 +7930,9 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
         ov.insertBefore(h, hint); ov.insertBefore(rw, hint);
         var rows = [["st", "⭐", t.st, "Estrellas"], ["xp", "XP", t.xp, "Experiencia"], ["sx", "", t.sx, "Puntos SEIS"]], cnt = [];
         rows.forEach(function (r, k) { var row = mk("div", "rr " + r[0]); row.style.animationDelay = (calm ? 0 : k * 0.22) + "s"; var ic = mk("span", "ic"); if (r[0] === "sx") ic.innerHTML = sixIco(26); else ic.textContent = r[1]; var tx = mk("div", "tx"), n = mk("b", "n", "+0"); tx.appendChild(n); tx.appendChild(mk("small", null, r[3])); row.appendChild(ic); row.appendChild(tx); rw.appendChild(row); cnt.push([n, r[2]]); });
+        var pinGot = null, pinDup = false;
+        if (pk.s >= 5 && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) { pinDup = true; mxSxAdd(mm, MX_PIN.dup); } else mm.pins[pinGot] = Date.now(); maxSave(); }
+        if (pinGot) { var pd = mxPinById(pinGot), prw = mk("div", "rr pin"); prw.style.animationDelay = (calm ? 0 : 3 * 0.22) + "s"; var pic = mk("span", "ic"); pic.innerHTML = pinSvg(pinGot, 34); var ptx = mk("div", "tx"); ptx.appendChild(mk("b", "n", pinDup ? "Pin repetido" : "¡Pin nuevo!")); ptx.appendChild(mk("small", null, pd.n + " · " + pd.r + (pinDup ? " · +" + MX_PIN.dup + " SEIS" : ""))); prw.appendChild(pic); prw.appendChild(ptx); rw.appendChild(prw); }
         later(function () { cnt.forEach(function (c) { mxCount(c[0], c[1], calm, "+"); }); }, 150);
         if (!hit) ov.insertBefore(mk("p", "mx-pkn", "Chance del marco en este sobre: " + t.fp + " %."), hint);
         var more = mxPkList(getMax()).length, b1 = mk("button", "mx-btn mx-pkb", more ? "Siguiente sobre (" + more + ")" : "Cerrar"), b2 = mk("button", "mx-btn", "Cerrar"); b1.type = b2.type = "button"; acts.appendChild(b1); if (more) acts.appendChild(b2);
@@ -7693,17 +7956,41 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
     var g2 = mk("div", "mx-xch"); MX_SHOP.xch.forEach(function (p) { var c = mk("button", "mx-xc"); c.type = "button"; c.appendChild(mk("b", null, p.l)); var pr = mk("span", "pr"); pr.innerHTML = sixIco(15) + " " + fmtMx(p.c); c.appendChild(pr); c.disabled = test || (x.p || 0) < p.c; c.addEventListener("click", function () { buy(p.c, function () { grantXp(p.xp || 0, p.st || 0); }, "Intercambio hecho: " + p.l); }); g2.appendChild(c); }); box.appendChild(g2);
     if (test) box.appendChild(mk("p", "mx-note", "Estás en modo prueba: restablecé tu nivel real para usar la tienda."));
   }
+  var MX_EV_END = new Date(2026, 11, 17, 23, 59, 59, 999).getTime(), mxCdFns = [], mxCdT = 0;
+  function mxCdParts() { var ms = Math.max(0, MX_EV_END - Date.now()), t = Math.floor(ms / 1000); return { end: ms <= 0, d: Math.floor(t / 86400), h: Math.floor(t % 86400 / 3600), m: Math.floor(t % 3600 / 60), s: t % 60 }; }
+  function mxCdAdd(node, fn) {
+    fn(); mxCdFns.push([node, fn]);
+    if (!mxCdT) mxCdT = setInterval(function () {
+      mxCdFns = mxCdFns.filter(function (q) { return document.body.contains(q[0]); });
+      if (!mxCdFns.length) { clearInterval(mxCdT); mxCdT = 0; return; }
+      if (!document.hidden) mxCdFns.forEach(function (q) { q[1](); });
+    }, 1000);
+  }
+  function two(n) { return (n < 10 ? "0" : "") + n; }
+  function mxCdBox() {
+    var w = mk("div", "mx-cdw"), tt = mk("div", "mx-cdt", "El evento termina el 17 de diciembre"), g = mk("div", "mx-cd"), cells = [];
+    ["días", "horas", "minutos", "segundos"].forEach(function (lb) { var c = mk("div"), n = mk("b", null, "00"); c.appendChild(n); c.appendChild(mk("span", null, lb)); g.appendChild(c); cells.push(n); });
+    w.appendChild(tt); w.appendChild(g); w.setAttribute("role", "timer"); w.setAttribute("aria-label", "Tiempo restante del evento");
+    mxCdAdd(w, function () { var p = mxCdParts(); tt.textContent = p.end ? "Evento finalizado" : "El evento termina el 17 de diciembre"; w.classList.toggle("end", p.end); cells[0].textContent = p.d; cells[1].textContent = two(p.h); cells[2].textContent = two(p.m); cells[3].textContent = two(p.s); });
+    return w;
+  }
+  function mxCdLine() {
+    var l = mk("div", "mx-cdl");
+    mxCdAdd(l, function () { var p = mxCdParts(); l.textContent = p.end ? "Evento finalizado" : "Termina en " + p.d + " d " + two(p.h) + " h " + two(p.m) + " min " + two(p.s) + " s"; });
+    return l;
+  }
   function mxEvRender(box, m, prof) {
     if (mxEvSel !== "gta") {
       box.appendChild(mk("div", "mx-sec", "Eventos activos"));
-      var ec = mk("button", "mx-evb"); ec.type = "button"; ec.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); ec.appendChild(mk("h3", null, "GTA VI")); ec.appendChild(mk("p", null, "Conseguí el marco Exclusivo «VI»: cada misión te da un sobre de la suerte y ganás puntos SEIS."));
+      var ec = mk("button", "mx-evb"); ec.type = "button"; ec.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); ec.appendChild(mk("h3", null, "GTA VI")); ec.appendChild(mk("p", null, "Conseguí el marco Exclusivo «VI»: cada misión te da un sobre de la suerte y ganás puntos SEIS.")); ec.appendChild(mxCdLine());
       ec.addEventListener("click", function () { mxEvSel = "gta"; mxEvTab = "main"; mxRender(); $("mxSc").scrollTop = 0; }); box.appendChild(ec);
       box.appendChild(mk("div", "mx-evb2", "Pronto habrá más eventos con XP, estrellas, marcos y portadas."));
       return;
     }
     var bk = mk("button", "mx-evback", "‹ Eventos"); bk.type = "button"; bk.addEventListener("click", function () { mxEvSel = ""; mxRender(); }); box.appendChild(bk);
     var hd = mk("div", "mx-evh"); hd.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); hd.appendChild(mk("h2", null, "GTA VI")); hd.appendChild(mk("p", null, "Ya salió. Completá misiones para ganar sobres, mejoralos tocándolos y probá suerte por el marco Exclusivo."));
-    var sxp = mk("div", "mx-sxp"); sxp.innerHTML = sixIco(18); sxp.appendChild(mk("b", null, fmtMx(mxSx(m).p || 0))); sxp.appendChild(mk("span", null, "SEIS")); hd.appendChild(sxp); box.appendChild(hd);
+    var sxp = mk("div", "mx-sxp"); sxp.innerHTML = sixIco(18); sxp.appendChild(mk("b", null, fmtMx(mxSx(m).p || 0))); sxp.appendChild(mk("span", null, "SEIS")); hd.appendChild(sxp); hd.appendChild(mxCdBox()); box.appendChild(hd);
+    var nt = mk("div", "mx-evn"), ni = mk("span", "mx-evni", "!"), nb = mk("div"); nb.appendChild(mk("b", null, "Se vienen más recompensas")); nb.appendChild(mk("p", null, "Durante estos días se agregarán nuevas recompensas a los sobres del evento. ¡Seguí atento!")); nt.appendChild(ni); nt.appendChild(nb); box.appendChild(nt);
     var tabs = mk("div", "mx-evt"); [["main", "Sobres y marco"], ["shop", "Tienda del evento"]].forEach(function (tb) { var b = mk("button", mxEvTab === tb[0] ? "on" : "", tb[1]); b.type = "button"; b.addEventListener("click", function () { mxEvTab = tb[0]; mxRender(); }); tabs.appendChild(b); }); box.appendChild(tabs);
     var f = frById("gta6"), inv = m.inv, test = !!m.bk;
     if (mxEvTab === "shop") { mxEvShop(box, m, test); return; }
@@ -7715,6 +8002,17 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
     else { act.textContent = "Comprar · ⭐ " + fmtMx(f.p); act.disabled = test || m.stars < f.p; act.addEventListener("click", function () { if (m.bk || m.stars < f.p) return; m.stars -= f.p; inv.gta6 = Date.now(); m.eq.frame = "gta6"; maxSave(); toast("Marco conseguido: GTA VI"); mxRender(); }); }
     box.appendChild(act);
     if (!inv.gta6) box.appendChild(mk("p", "mx-note", test ? "Estás en modo prueba: restablecé tu nivel real para comprar." : "Cuesta ⭐ " + fmtMx(f.p) + ". También podés ganarlo gratis abriendo sobres."));
+    box.appendChild(mk("div", "mx-sec", "Pines del evento"));
+    var pg = mk("div", "mx-pins"), owned = 0;
+    MX_PINS.forEach(function (q) {
+      var has = !!m.pins[q.id], on = m.eq.pin === q.id; if (has) owned++;
+      var b = mk("button", "mx-pn" + (has ? "" : " nol") + (on ? " on" : "")); b.type = "button";
+      var ic = mk("span", "mx-pni"); ic.innerHTML = pinSvg(q.id, 62); b.appendChild(ic); b.appendChild(mk("b", null, has ? q.n : "???")); b.appendChild(mk("small", null, has ? (on ? "Equipado" : q.r) : q.r));
+      if (has) b.addEventListener("click", function () { m.eq.pin = on ? "" : q.id; maxSave(); toast(on ? "Pin quitado" : "Pin equipado: " + q.n); try { renderProfile(); renderMenu(); } catch (e) {} mxRender(); }); else b.disabled = true;
+      pg.appendChild(b);
+    });
+    box.appendChild(pg);
+    box.appendChild(mk("p", "mx-note", "Los sobres de 5 y 6 estrellas pueden traer un pin (" + MX_PIN.ch[5] + " % y " + MX_PIN.ch[6] + " %), nunca más de uno por sobre. Equipalo y se muestra junto a tu nombre. Tenés " + owned + " de " + MX_PINS.length + "."));
     var l = mxPkList(m);
     box.appendChild(mk("div", "mx-sec", "Mis sobres" + (l.length ? " (" + l.length + ")" : "")));
     if (!l.length) {
@@ -7971,7 +8269,7 @@ svg.pk, svg.six { stroke: none; stroke-width: 1; }
   function renderMenu() {
     var p = getProfile(), st = universeStats(), over = backupOverdue();
     paintAvatar($("mnAv"), p); frApply($("mnAv").parentNode, $("mnAv"), frEq(), 60);
-    $("mnName").textContent = p.name || "Explorador";
+    $("mnName").textContent = p.name || "Explorador"; mxPinTag($("mnName"), 18);
     var lv = maxLevel();
     $("mnRank").textContent = "Nivel " + lv.L + " · " + lv.title;
     $("mnLvT").textContent = lv.max ? "Nivel máximo alcanzado" : "Faltan " + lv.left.toLocaleString("es") + " XP para el nivel " + (lv.L + 1);
