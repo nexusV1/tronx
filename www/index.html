@@ -2660,6 +2660,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   settings.quickNotif = !!settings.quickNotif; settings.listSize = [90, 100, 115, 130].indexOf(Number(settings.listSize)) >= 0 ? Number(settings.listSize) : 100; settings.contrast = !!settings.contrast; if (typeof settings.calm !== "boolean") settings.calm = null; settings.encTitle = !!settings.encTitle; settings.secureWin = !!settings.secureWin; settings.achPend = (Array.isArray(settings.achPend) ? settings.achPend : []).filter(function (x) { return typeof x === "string"; }).slice(0, 20); settings.streakAlert = !!settings.streakAlert; if (!/^\d{2}:\d{2}$/.test(settings.streakAt || "") || +settings.streakAt.slice(0, 2) > 23 || +settings.streakAt.slice(3) > 59) settings.streakAt = "21:00"; settings.dueAlert = settings.dueAlert !== false; settings.dueEve = !!settings.dueEve;
   if (!/^\d{2}:\d{2}$/.test(settings.dueAt || "") || +settings.dueAt.slice(0, 2) > 23 || +settings.dueAt.slice(3) > 59) settings.dueAt = "09:00";
   if (!settings.act || typeof settings.act !== "object" || Array.isArray(settings.act)) settings.act = {};
+  if (!settings.actL || typeof settings.actL !== "object" || Array.isArray(settings.actL)) settings.actL = {};
   if (!settings.ach || typeof settings.ach !== "object" || Array.isArray(settings.ach)) settings.ach = {};
   settings.wTot = Math.max(0, Number(settings.wTot) || 0); settings.streakBest = Math.max(0, Number(settings.streakBest) || 0);
   var hadFirstRun = !!settings.firstRun;
@@ -5817,7 +5818,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
-    { v: "1.74.0", d: "21 nov 2026", t: "Misiones del evento GTA VI", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva pestaña Misiones en Eventos, con misiones propias del evento GTA VI", "Seis misiones diarias, que se renuevan a las 00:00: cada una te da 6 puntos SEIS y un sobre de 1 estrella", "Seis misiones semanales, que se renuevan cada lunes: tres fáciles (16 puntos SEIS y sobre de 2 estrellas) y tres difíciles (24 puntos SEIS y sobre de 3 estrellas)", "Cada misión muestra su barra de progreso, el porcentaje y cuánto falta para completarla", "Un aviso en el botón Eventos te indica cuándo tenés misiones listas para reclamar", "Los sobres ahora se abren solos al terminar los toques", "Al tocar un marco en la Tienda se reproduce su animación y sus efectos", "Mejor rendimiento al abrir sobres y al navegar la Tienda de marcos", "El botón Atrás del celular ahora retrocede paso a paso dentro de MAX y en las notas, y pide confirmación antes de cerrar la app"] },
+    { v: "1.74.0", d: "21 nov 2026", t: "Misiones del evento GTA VI", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva pestaña Misiones en Eventos, con misiones propias del evento GTA VI", "Seis misiones diarias, que se renuevan a las 00:00: escribir 6 palabras, escribir 66 letras y usar el modo Enfoque 6 minutos, más tres que van rotando; cada una te da 6 puntos SEIS y un sobre de 1 estrella", "Seis misiones semanales, que se renuevan cada lunes: tres fáciles (16 puntos SEIS y sobre de 2 estrellas) y tres difíciles (24 puntos SEIS y sobre de 3 estrellas)", "Cada misión muestra su barra de progreso, el porcentaje y cuánto falta para completarla", "Un aviso en el botón Eventos te indica cuándo tenés misiones listas para reclamar", "Los sobres ahora se abren solos al terminar los toques", "Al tocar un marco en la Tienda se reproduce su animación y sus efectos", "Mejor rendimiento al abrir sobres y al navegar la Tienda de marcos", "El botón Atrás del celular ahora retrocede paso a paso dentro de MAX y en las notas, y pide confirmación antes de cerrar la app"] },
     { v: "1.73.0", d: "21 nov 2026", t: "Pines y cuenta regresiva GTA VI", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Cuenta regresiva en la pestaña Eventos: el evento GTA VI finaliza el 17 de diciembre", "Nuevo aviso en Eventos: durante estos días se sumarán más recompensas a los sobres", "Seis pines exclusivos de GTA VI, que se muestran junto a tu nombre: Atardecer, Cocodrilo, Casete, GTA, Palmera y VI", "Los pines pueden aparecer en los sobres de 5 y 6 estrellas, con un 15 % y un 35 % de probabilidad; cuanto más raro el pin, menos chances de obtenerlo", "Desde la sección Pines del evento podés equipar o quitar el pin que quieras mostrar", "Si te toca un pin que ya tenés, recibís puntos SEIS a cambio", "Mejor rendimiento al navegar la Tienda y las vistas con marcos animados"] },
     { v: "1.72.0", d: "20 nov 2026", t: "Evento GTA VI", lv: "Hipernova", nm: "Evento GTA VI", cat: "nuevo", l: ["Nueva pestaña Eventos en MAX, con el primer evento: GTA VI", "Nuevo marco Exclusivo GTA VI, con aro metálico, palmeras iluminadas y el VI en acabado cromado dorado; cuesta 6.666.666 ⭐ o se consigue en los sobres", "Sobres de la suerte: se obtienen al completar misiones, de 1 a 3 estrellas según la dificultad", "Tocá el sobre hasta 6 veces: cada toque puede mejorarlo una estrella, con un fondo y efectos propios para cada nivel", "Al abrirlo recibís ⭐, XP y puntos SEIS, y cada sobre tiene una chance de traer el marco, desde 0,002 % hasta 6 % en los de 6 estrellas", "Puntos SEIS y Tienda del evento: comprá sobres, cambialos por ⭐ o XP y subí tu nivel de suerte para mejorar tus chances"] },
     { v: "1.71.0", d: "20 nov 2026", t: "Fusión nuclear y Familias de marcos", lv: "Hipernova", nm: "Marcos de perfil", cat: "nuevo", l: ["Nuevo marco Mítico IV: Fusión nuclear, una armadura de reactor con cámaras de energía, átomo en movimiento y núcleo central", "Animación especial de Fusión nuclear: las cámaras se cargan, el marco se inestabiliza, el núcleo gira cada vez más rápido y la fusión estalla en un destello azul y blanco antes de volver a la calma", "La animación ocurre de forma completamente aleatoria: a veces pasa mucho tiempo sin nada y nunca sigue un intervalo fijo", "En la Tienda de MAX los marcos ahora se agrupan por Familias: Clásicos y Familia nuclear", "Podés ver la animación especial cuando quieras desde la vista previa del marco", "Se pausa con el modo calmo y no consume recursos cuando no está activa", "Pronto llegará un nuevo marco a la Familia nuclear"] },
@@ -6759,8 +6760,14 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     if (n.type === "list") { var c = 0; n.items.forEach(function (i) { c += (String(i.t || "").match(/\S+/g) || []).length; }); return c; }
     return (String(n.body || "").match(/\S+/g) || []).length;
   }
+  function noteLetters(n) {
+    var c = 0, f = function (t) { c += (String(t || "").match(/\p{L}/gu) || []).length; };
+    if (n.type === "list") n.items.forEach(function (i) { f(i.t); }); else f(n.body);
+    return c;
+  }
+  var lcMap = null;
   function statsBoot() {
-    wcMap = new Map(); notes.forEach(function (n) { wcMap.set(n.id, noteWords(n)); });
+    wcMap = new Map(); lcMap = new Map(); notes.forEach(function (n) { wcMap.set(n.id, noteWords(n)); lcMap.set(n.id, noteLetters(n)); });
     if (!settings.statsInit) {
       var t = 0; notes.forEach(function (n) {
         if (n.trashedAt) return; t += noteWords(n);
@@ -6781,6 +6788,8 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var k = dayKey(Date.now()), d = Math.max(0, c - prev);
     maxNote(isNew && c >= 1, d);
     settings.act[k] = (settings.act[k] || 0) + d; settings.wTot += d;
+    var cl = noteLetters(n), pl = lcMap ? lcMap.get(n.id) : null; if (pl == null) pl = Date.now() - n.createdAt < 60000 ? 0 : cl; if (lcMap) lcMap.set(n.id, cl);
+    var dl = Math.max(0, cl - pl); if (dl) { settings.actL[k] = (settings.actL[k] || 0) + dl; var kl = Object.keys(settings.actL); if (kl.length > 60) { kl.sort(); kl.slice(0, kl.length - 45).forEach(function (x) { delete settings.actL[x]; }); } }
     var keys = Object.keys(settings.act);
     if (keys.length > 430) { keys.sort(); keys.slice(0, keys.length - 400).forEach(function (x) { delete settings.act[x]; }); }
     var s = streakInfo(); if (s.best > settings.streakBest) settings.streakBest = s.best;
@@ -7516,7 +7525,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   /* misiones */
   function mxCtx() {
     var m = getMax(), now = Date.now(), d = new Date(now), t0 = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(), dow = (d.getDay() + 6) % 7, w0 = t0 - dow * 86400000;
-    var c = { t0: t0, w0: w0, dk: dayKey(now), wk: dayKey(w0 + 43200000), notesD: 0, notesW: 0, wordsD: settings.act[dayKey(now)] || 0, wordsW: 0, daysW: 0, focusD: 0, focusW: 0, sessD: 0, sessW: 0, touchD: 0, listsD: 0 };
+    var c = { t0: t0, w0: w0, dk: dayKey(now), wk: dayKey(w0 + 43200000), notesD: 0, notesW: 0, wordsD: settings.act[dayKey(now)] || 0, wordsW: 0, lettersD: settings.actL[dayKey(now)] || 0, daysW: 0, focusD: 0, focusW: 0, sessD: 0, sessW: 0, touchD: 0, listsD: 0 };
     notes.forEach(function (n) { if (n.trashedAt) return; if (n.createdAt >= t0) { c.notesD++; if (n.items && n.items.length) c.listsD++; } if (n.createdAt >= w0) c.notesW++; if (n.updatedAt >= t0) c.touchD++; });
     for (var i = 0; i <= dow; i++) { var v = settings.act[dayKey(dayShift(now, -i))]; if (v != null) { c.wordsW += v; c.daysW++; } }
     (settings.focusLog || []).forEach(function (f) { if (f.t >= t0) { c.focusD += f.m; c.sessD++; } if (f.t >= w0) { c.focusW += f.m; c.sessW++; } });
@@ -8042,16 +8051,16 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   }
   /* Misiones del evento: diarias y semanales (puntos SEIS + sobre) */
   var MX_EVD = {
-    e1: { n: "Escribí 150 palabras", t: 150, e: "✍️", u: "palabras", g: function (c) { return c.wordsD; } },
-    e2: { n: "Creá 2 notas", t: 2, e: "📝", u: "notas", g: function (c) { return c.notesD; } },
-    e3: { n: "Usá el modo Enfoque durante 15 minutos", t: 15, e: "🎯", u: "minutos", g: function (c) { return c.focusD; } },
-    e4: { n: "Editá 2 notas", t: 2, e: "✏️", u: "ediciones", g: function (c) { return c.touchD; } },
+    e1: { n: "Escribí 6 palabras", t: 6, e: "✍️", u: "palabras", g: function (c) { return c.wordsD; } },
+    e2: { n: "Escribí 66 letras", t: 66, e: "🔤", u: "letras", g: function (c) { return c.lettersD; } },
+    e3: { n: "Usá el modo Enfoque durante 6 minutos", t: 6, e: "🎯", u: "minutos", g: function (c) { return c.focusD; } },
+    e4: { n: "Escribí 66 palabras", t: 66, e: "📖", u: "palabras", g: function (c) { return c.wordsD; } },
     e5: { n: "Completá 1 sesión del modo Enfoque", t: 1, e: "⏱️", u: "sesión", g: function (c) { return c.sessD; } },
-    e6: { n: "Tildá 3 casillas de una lista", t: 3, e: "☑️", u: "casillas", g: function (c) { return c.tasksD; } },
-    e7: { n: "Escribí 300 palabras", t: 300, e: "📖", u: "palabras", g: function (c) { return c.wordsD; } },
-    e8: { n: "Creá 3 notas", t: 3, e: "🗒️", u: "notas", g: function (c) { return c.notesD; } },
-    e9: { n: "Editá 4 notas", t: 4, e: "🖊️", u: "ediciones", g: function (c) { return c.touchD; } },
-    e10: { n: "Escribí 600 palabras", t: 600, e: "📜", u: "palabras", g: function (c) { return c.wordsD; } }
+    e6: { n: "Tildá 6 casillas de una lista", t: 6, e: "☑️", u: "casillas", g: function (c) { return c.tasksD; } },
+    e7: { n: "Editá 3 notas", t: 3, e: "✏️", u: "ediciones", g: function (c) { return c.touchD; } },
+    e8: { n: "Creá 2 notas", t: 2, e: "📝", u: "notas", g: function (c) { return c.notesD; } },
+    e9: { n: "Creá 6 notas", t: 6, e: "🗒️", u: "notas", g: function (c) { return c.notesD; } },
+    e10: { n: "Escribí 166 palabras", t: 166, e: "📜", u: "palabras", g: function (c) { return c.wordsD; } }
   };
   var MX_EVW = {
     f1: { n: "Creá 10 notas", t: 10, e: "🗂️", u: "notas", g: function (c) { return c.notesW; } },
@@ -8067,7 +8076,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     h6: { n: "Creá 30 notas", t: 30, e: "🏅", u: "notas", g: function (c) { return c.notesW; } }
   };
   var MX_EVR = { d: { sx: 6, s: 1, k: "Diaria", h: 0 }, f: { sx: 16, s: 2, k: "Semanal · Fácil", h: 0 }, h: { sx: 24, s: 3, k: "Semanal · Difícil", h: 1 } };
-  function mxEvDaily(c) { var L = ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10"], i = c.dn % 10; return [0, 1, 3, 5, 7, 9].map(function (k) { return L[(i + k) % 10]; }); }
+  function mxEvDaily(c) { var L = ["e4", "e5", "e6", "e7", "e8", "e9", "e10"], i = c.dn % 7; return ["e1", "e2", "e3"].concat([0, 2, 4].map(function (k) { return L[(i + k) % 7]; })); }
   function mxEvWeekly(c) {
     var w = Math.round(c.w0 / 604800000), F = ["f1", "f2", "f3", "f4", "f5"], H = ["h1", "h2", "h3", "h4", "h5", "h6"];
     return [0, 1, 3].map(function (k) { return F[(w + k) % 5]; }).concat([0, 2, 4].map(function (k) { return H[(w + k) % 6]; }));
