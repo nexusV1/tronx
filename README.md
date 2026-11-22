@@ -4,7 +4,9 @@ App de notas para Android. Funciona sin internet y sin cuenta: las notas se guar
 
 Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK con [Capacitor](https://capacitorjs.com). La carpeta `android/` no se sube a GitHub: Codemagic la genera en cada build.
 
-## Qué hace (versión 1.8)
+## Qué hace
+
+Resumen de las funciones base; el detalle de cada versión está en [Cambios](#cambios).
 
 - **Constelaciones**: el selector «Notas | Constelaciones» de la barra lateral abre un mapa galáctico donde cada nota es una estrella (el tamaño y el brillo dependen del contenido y de lo reciente). Arrastrá para moverte, pellizcá para acercar y tocá una estrella para ver su título y un fragmento, con botones para abrirla, conectarla con otra, o sumarla a una constelación. Las notas con la misma etiqueta se unen con líneas tenues; las conexiones manuales se pueden quitar sin borrar las notas. Podés crear constelaciones con nombre, buscar una nota y ubicarla en el mapa. Todo usa solo tus notas reales, se guarda en el teléfono (también en la copia de seguridad) y la vista de tarjetas no cambia.
 - **Fondos para las notas**: 12 fondos (Nebulosa, Aurora, Galaxia, Estrellas, Medianoche, Atardecer, Océano, Bosque, Rosa cuarzo, Papel, Cuadrícula y Puntos), cada uno en versión clara y oscura. Se elige uno general en Ajustes y cada nota puede tener el suyo en Personalizar. El fondo se ve en el editor y en las tarjetas. Nebulosa, Aurora, Galaxia y los fondos con estrellas se mueven muy despacio; en Ajustes se pueden dejar quietos (también se detienen con «reducir animaciones»).
@@ -38,7 +40,7 @@ Está hecha con HTML, CSS y JavaScript (carpeta `www/`) y se empaqueta como APK 
 ```bash
 git init
 git add .
-git commit -m "Tronx 1.2"
+git commit -m "Primera versión de Tronx"
 git branch -M main
 git remote add origin https://github.com/TU_USUARIO/tronx.git
 git push -u origin main
@@ -90,6 +92,7 @@ www/universe.js         fondo animado y pantalla de inicio
 www/universe.css        estilos de la pantalla de inicio
 www/constellations.js   el mapa de Constelaciones
 www/constellations.css  estilos del mapa
+www/bh/                 imágenes del agujero negro (webp)
 resources/              ícono y pantalla de inicio
 scripts/copy-fonts.mjs  copia las fuentes locales
 scripts/patch-android.mjs  versión y firma
@@ -113,6 +116,184 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.74.1**: Actualización de dependencias: Capacitor 7.6, plugins de Filesystem, Notificaciones, Compartir y Huella, y fuentes a sus últimas versiones compatibles. Sin cambios visibles en la app.
+
+**1.74.0**: Evento GTA VI: pestaña Misiones, recompensa diaria de 7 días, seis misiones diarias y seis semanales, pines en todos los sobres, sobres que se abren solos y mejor rendimiento.
+
+**1.73.0**: Evento GTA VI: cuenta regresiva, aviso de nuevas recompensas, seis pines exclusivos en los sobres y mejor rendimiento en la Tienda.
+
+**1.72.0**: Evento GTA VI en MAX: pestaña Eventos, marco Exclusivo GTA VI, sobres de la suerte, puntos SEIS y Tienda del evento.
+
+**1.71.0**: Marco Mítico Fusión nuclear con animación especial aleatoria y Familias de marcos en la Tienda de MAX.
+
+**1.70.0**: Tienda de MAX con marcos de perfil animados (Neón, Aurora, Constelación, Sol y Nebulosa cósmica).
+
+**1.69.0**: Celebración de logros raros, resumen semanal en MAX y recordatorio de racha.
+
+**1.68.0**: Logros secretos, nueva pestaña Secretos y medalla Estelar renovada.
+
+**1.67.0**: Rarezas de logros Platino, Diamante, Estelar y Cósmico, 35 logros nuevos, más misiones y guía de MAX.
+
+**1.66.0**: Nivel 50 renovado, Singularidad con alas de ángel, halo, nebulosa y aros animados.
+
+**1.65.0**: Insignias de logros con íconos propios y nivel 40 renovado.
+
+**1.64.0**: Insignias de logros rediseñadas, y los niveles 40 y 50 con animación.
+
+**1.63.1**: Esta actualización corrige la foto de perfil, que se veía gigante en el menú.
+
+**1.63.0**: Llega MAX, un centro con niveles por XP, misiones diarias y semanales, rachas y estrellas; la Tienda está en desarrollo.
+
+**1.62.6**: Esta actualización renueva el perfil con foto, portada y frase, y suma una Sala de logros con medallas, categorías y progreso.
+
+**1.62.2**: Esta actualización reúne el buscador, el archivo y la papelera en una sola fila y renueva la barra inferior con un botón + de esquinas suaves.
+
+**1.61.9**: Esta actualización renueva el inicio con navegación inferior flotante, una cabecera más corta, pestañas en píldora y tarjetas con altura natural.
+
+**1.61.7**: Esta actualización renueva la pantalla de inicio con una cabecera más compacta, más espacio entre elementos, filtros plegables y un estado vacío más claro.
+
+**1.61.6**: Esta actualización corrige el botón de buscar notas duplicadas y el marcador del día actual en el mapa de actividad.
+
+**1.61.5**: Esta actualización refuerza los respaldos, permite restaurar notas sueltas, unir duplicadas y mejora la lectura en tablet, horizontal y con accesibilidad.
+
+**1.60.9**: Esta actualización mejora la escritura y refuerza la protección de las notas privadas.
+
+**1.60.3**: Esta actualización acerca la captura de notas a la pantalla de inicio y mejora el trabajo con tareas.
+
+**1.59.6**: Esta actualización mejora la búsqueda, suma el modo enfoque y protege mejor las notas con PIN.
+
+**1.59.0**: Esta actualización reúne la captura rápida de notas y la planificación por fechas.
+
+**1.58.4**: Tema Blanco rediseñado y menú lateral que cambia con el tema.
+
+**1.58.3**: Se restauran los nombres de versión y se revisan los textos de novedades.
+
+**1.58.2**: Novedades con un estilo más sobrio y profesional.
+
+**1.58.1**: Novedades con niveles de actualización, nombres épicos, categorías y nueva numeración de versiones.
+
+**1.58.0**: Constelaciones: sugerencias de conexión, filtro por etiqueta y compartir el mapa como imagen.
+
+**1.57.0**: Ajustes: accesos rápidos, sección Espacio con limpieza de imágenes, atajos y restablecer apariencia.
+
+**1.56.0**: Sistema de novedades: aviso tras actualizar, marcas de nuevo, versiones plegadas y búsqueda.
+
+**1.55.1**: Limpieza de código sin cambios funcionales.
+
+**1.55.0**: Stickers propios: editor (dibujo/foto/emoji), biblioteca, uso como icono, fondo y dentro de la nota.
+
+**1.54.0**: Plantillas propias: guardar, usar, renombrar y borrar; con variables de fecha y hora, incluidas en las copias de seguridad.
+
+**1.53.0**: Botón flotante de nueva nota y gestos de deslizar en las tarjetas (vista de lista), configurables.
+
+**1.52.0**: Exportación masiva a Markdown (.zip) e importación de .md/.txt/.zip, sin dependencias externas.
+
+**1.51.0**: Desbloqueo del PIN general con huella (opcional), con el PIN como respaldo siempre disponible.
+
+**1.50.0**: Listas con subtareas, reordenar arrastrando, fecha por elemento y ocultar hechos. Los campos nuevos son opcionales, así que las listas anteriores siguen igual.
+
+**1.49.0**: Home renovado: controles que se esconden al desplazar, etiquetas visibles en las tarjetas y tarjetas más compactas.
+
+**1.48.0**: Perfil activado con estadísticas de escritura (palabras, rachas, mapa de actividad de 12 semanas) y 16 logros. Los datos se guardan en los ajustes (act, wTot, streakBest, ach) y se calculan solos al actualizar desde tus notas existentes.
+
+**1.47.0**: Compartir una nota como imagen PNG con estilo (Universo, Papel o Color de la nota), con imágenes y marca opcional.
+
+**1.46.0**: papelera sin vencimiento (se quita la purga a los 30 días) y copia automática programable: frecuencia (`autoBkEvery`), hora fija (`autoBkTime`), al salir (`autoBkExit`), solo con cambios (`autoBkChg`), cuántas conservar (`autoBkKeep`); motor `bkDue()` con recuperación al abrir y chequeo cada minuto.
+
+**1.45.1**: correcciones: gate de bloqueo también para notas en la papelera, re-bloqueo por inactividad con PIN general, y regex de resaltado exige texto pegado a los `==`.
+
+**1.45.0**: ajustes de imagen. Campos zm/px/py/br/co/sa/bl; la imagen va dentro de un contenedor `.pclip` que recorta (overflow hidden) y recibe borde/radio/sombra; filtro compuesto `imgFilter` compartido con el PDF, que recorta el área fuente con zoom y encuadre.
+
+**1.44.0**: mapa de enlaces. Overlay `#linkMap` con SVG y layout de fuerzas (Fruchterman-Reingold, hasta 150 nodos conectados), aristas por `[[título]]` y `parent`, huérfanas, enlaces rotos con creación, pan/zoom por pointer events; no lee notas protegidas.
+
+**1.43.0**: orden y gestor de etiquetas/carpetas. Nuevos criterios de orden (oldest, titleDesc, remind, long); overlay `#orgMgr` para renombrar/juntar/quitar con deshacer por snapshot.
+
+**1.42.0**: calendario. Overlay `#calendar` (capa registrada), cuadrícula de 42 días lun→dom, `remAt(r, día)` calcula las ocurrencias de cada repetición; marca de notas creadas; crear nota con aviso preseleccionado.
+
+**1.41.0**: recordatorios completos. `rep` admite `month` y `days` (con `wd`), `n.rems` (hasta 4 extra); las repeticiones mensual/por días se programan como notificaciones individuales (6 / 14 próximas) y se renuevan al abrir la app; primario conserva id y snooze.
+
+**1.40.0**: buscar y reemplazar dentro de la nota. Barra `#findBar` con contador, anterior/siguiente, Aa, reemplazar uno/todo (regex escapada), deshacer vía historial del editor.
+
+**1.39.0**: notas protegidas. Campo `lock` {m: pin|bio|both, s, h} (SHA-256 con sal), desbloqueo por sesión (`unlocked`), reutiliza el overlay de PIN con `lockTarget`, huella con `@aparajita/capacitor-biometric-auth` (checkBiometry/authenticate con respaldo del teléfono), permiso USE_BIOMETRIC en patch-android.
+
+**1.38.0**: resaltado de colores. Sintaxis `==texto==` (amarillo) y `=={verde}texto==` (rosa, celeste, naranja); fila de colores en la barra, render con `<mark>` en el modo Leer, se quita en PDF y notificaciones.
+
+**1.37.0**: posponer avisos y plantillas. Acción `snooze` ("Posponer 10 min") registrada con `registerActionTypes`; se guarda `remind.snz` y se programa una notificación aparte (id derivado `noteId+"z"`). Plantillas nuevas: Receta, Estudio, Película, Gastos, Hábitos.
+
+**1.36.0**: rendimiento con muchas imágenes. Miniaturas de 96 px cacheadas en IndexedDB (clave `src:t`, generadas de a una), `decoding="async"` y `loading="lazy"` en las imágenes; la limpieza de huérfanas contempla las miniaturas.
+
+**1.35.0**: copia automática. Snapshots en IndexedDB (últimas 7, rotación) y archivo `Documentos/Tronx/tronx-copia-auto.json` vía Filesystem cuando hay permiso; estado y recuperación en Ajustes.
+
+**1.34.0**: información en las imágenes. Campos `info` (hasta 600 caracteres), `ip` (abajo, arriba, sobre la imagen abajo o arriba) y `show` (al tocar o siempre) por imagen. Se ve al seleccionarla en edición y al tocarla en modo Leer, también con texto alrededor, y sale como pie de imagen en el PDF. Se corrigió el contraste del botón Editar en modo Leer.
+
+**1.33.2**: notificaciones más lindas. Título y resumen limpios (sin marcas de formato), texto ampliado con `largeBody`, canal propio `recordatorios` con importancia alta, color de acento e ícono `ic_stat_tronx` que crea `scripts/patch-android.mjs` en cada build.
+
+**1.33.1**: diagnóstico del permiso de notificaciones. La sección Recordatorio muestra el estado real (permitido, bloqueado, sin autorizar o plugin ausente) y un botón para pedir el permiso.
+
+**1.33.0**: extras de notas. Foto directa con la cámara (input con `capture`; el parche de Android agrega el permiso CAMERA y marca la cámara como no obligatoria), dibujo a mano alzada que se guarda como una imagen PNG más de la nota, PDF con imágenes (JPEG incrustado, con forma, filtro y opacidad; sin giro) y búsqueda que también encuentra la nota madre cuando coincide una subnota.
+
+**1.32.0**: limpieza. Se eliminaron `galaxy()`, `constellation()`, `OLD_IDS` y 13 definiciones SVG sin uso de `stickers.js`, y 4 funciones sin uso de `index.html`. Las 21 insignias se compararon antes y después con las animaciones pausadas y dieron idénticas.
+
+**1.31.0**: recordatorios con aviso. Una notificación local por nota (campo `remind`: fecha, repetición diaria o semanal), con el plugin `@capacitor/local-notifications`. `scripts/patch-android.mjs` agrega al manifiesto los permisos POST_NOTIFICATIONS, SCHEDULE_EXACT_ALARM, RECEIVE_BOOT_COMPLETED y VIBRATE. La app reconcilia los avisos pendientes al abrirse y al editar. Con la app abierta muestra además un aviso interno.
+
+**1.30.0**: texto alrededor de las imágenes. Opción `wrap` por imagen: en modo Leer flota a izquierda o derecha y el texto la rodea (con forma de círculo usa `shape-outside`). En edición sigue en su posición libre, porque el cuadro de texto no admite envolver.
+
+**1.29.0**: compartir y proteger. Exportar nota a PDF (generado en la app, solo texto) y Markdown; historial de hasta 10 versiones por nota (campo `versions`) con restauración; bloqueo con PIN de 4 dígitos (hash SHA-256 con sal en `tronx.pin.v1`, 30 s de espera tras 5 fallos, no cifra los datos).
+
+**1.28.0**: imágenes en las notas. Hasta 30 por nota, con posición libre, tamaño, giro, opacidad, forma, borde, sombra, espejo, filtros, capa (delante/detrás del texto), bloqueo y duplicado. Las imágenes se reducen a 1600 px y se guardan en IndexedDB (no en las notas); cada nota solo guarda sus ajustes (campo `images`). Las copias de seguridad las incluyen. Las imágenes que ninguna nota usa se limpian solas al abrir la app.
+
+**1.27.0**: más contenido. Enlaces `[[Título]]` entre notas con sugerencias y enlaces entrantes, subnotas (campo `parent` opcional), y tablas Markdown con Enter para agregar filas y vista de tabla en modo Leer. Las notas viejas no cambian. Fotos y recordatorios quedan para más adelante porque requieren plugins nativos.
+
+**1.26.0**: organizar mejor. Carpetas (campo `folder` opcional en cada nota; las notas viejas quedan sin carpeta), selección múltiple con acciones en lote y Deshacer, filtro por tipo y búsqueda que resalta las coincidencias.
+
+**1.25.0**: escribir mejor. Barra de formato (negrita, cursiva, título, cita, viñeta, lista numerada, casilla), deshacer/rehacer propios, modo Leer con formato y casillas tocables, tiempo de lectura en el contador y barra fija sobre el teclado. El formato se guarda como texto Markdown sencillo en la misma nota, así que las notas existentes no cambian.
+
+**1.24.1**: arreglo de compilación: `package.json` había quedado vacío en las versiones 1.22.1 a 1.24.0 y Codemagic fallaba en "Instalar dependencias" (EJSONPARSE). Se restauró. Sin cambios visibles en la app.
+
+**1.24.0**: **guía de bienvenida** de 8 pasos (con insignias animadas, deslizable, con Saltar y Atrás) que explica qué hay en la app; por ahora se muestra una vez a todos los usuarios (clave `tronx.tour`) y se puede volver a ver desde el menú → Guía de Tronx. **Menú mejorado**: nivel de explorador según la cantidad de notas con barra de progreso, atajos (Nota, Lista, Buscar, Papelera) y consejos del día. Sin migración de datos.
+
+**1.23.3**: optimización de la lista tras las Insignias detalladas: de las insignias que se ven en las tarjetas solo 4 se animan a la vez (van rotando) y todas se congelan mientras se desplaza la lista. Sin migración de datos.
+
+**1.23.2**: **Brújula estelar** simplificada: el borde del medallón actúa como aro y la escala de grados va pegada a él; se quitaron los círculos internos duplicados y el aro punteado, de modo que se ve una sola brújula. Sin migración de datos.
+
+**1.23.1**: **Brújula estelar** rediseñada: aro de latón con escala de grados, letras N, E, S, W, rosa de los vientos de 8 puntas con facetas en luz y sombra, aguja roja y blanca que oscila hasta asentarse, y aro punteado que gira lento. Sin migración de datos.
+
+**1.23.0**: 5 insignias nuevas (**Sistema solar**, **Púlsar**, **Ojo cósmico**, **Reloj de arena** y **Satélite**), 21 en total. El Fénix se reemplazó por la **Medusa estelar** (se conserva el identificador interno `fenix` para no perder el ícono en notas existentes). **Estrella** y **Aurora** mejoradas. El selector sigue animando por tandas de 6 para cuidar el rendimiento. Sin migración de datos.
+
+**1.22.1**: **Fénix** y **Nebulosa** rediseñados desde cero. El fénix tiene alas de plumas en tres capas de fuego, cresta, cola en llamas y brasas; la nebulosa son nubes de colores (magenta, cian, violeta y naranja) que giran en sentidos opuestos, con una banda de polvo oscuro y un cúmulo brillante. Sin migración de datos.
+
+**1.22.0**: los Detalles pasan a llamarse **Insignias detalladas** y se rediseñaron desde cero como medallones (aro metálico con ornamentos que giran, cara de cristal y gema superior), 16 en total, cada una con su escena y animaciones propias: Tierra (con Luna orbitando), Galaxia, Estrella, Saturno, Nebulosa, Luna, Agujero negro, Cometa y las nuevas Cohete, Ovni, Constelación, Eclipse, Cristal, Aurora, Fénix y Brújula estelar. Los identificadores se mantienen, así que las insignias elegidas en tus notas se conservan. Menos piezas animadas por insignia y pausa fuera de vista.
+
+**1.21.0**: segunda fila de Detalles rediseñada con animaciones propias: **Nebulosa** (nubes que derivan, pilares de polvo que se mecen y estrellas jóvenes que titilan), **Luna** (antes "Luna cósmica": mares y cráteres, y cambia de fase lentamente), **Agujero negro** (disco con destellos que giran en sentidos opuestos, anillo de fotones, partícula en órbita y materia que cae) y **Cometa** (cola azul de gas y cola dorada de polvo, con partículas que salen disparadas). Las fichas de mantener pulsado se actualizaron. El selector pausa las animaciones que no están a la vista y todas mientras se ve una ficha. Sin migración de datos.
+
+**1.20.0**: la **Tierra** se redibujó con un mapa real simplificado (América, África, Europa, Asia, Australia, desiertos, selvas, hielo polar y nubes) que gira lento; es idéntica en el menú y en Detalles. "Planeta Tierra" pasa a llamarse **Tierra** y "Planeta con anillos" pasa a llamarse **Saturno**. La **Galaxia** se rediseñó con brazos espirales logarítmicos, bandas de polvo oscuro, estrellas de colores según la distancia al núcleo, zonas rosadas de formación estelar y núcleo cálido. Sin migración de datos.
+
+**1.19.0**: los stickers pasan a llamarse **Detalles**. La primera fila (Tierra, Galaxia, Estrella, Planeta con anillos) se rediseñó con animaciones propias: la galaxia tiene brazos, barra central y núcleo que giran por separado; la estrella late, emite ondas y tiene destellos que giran en sentidos opuestos; el planeta tiene bandas de nubes que se desplazan, una tormenta y un anillo que centellea. **Mantené pulsado** un detalle en el selector para ver su ficha (tipo, descripción, qué hace su animación y un dato curioso) con el botón "Usar este detalle". Nueva sección **Novedades** en el menú (Aplicación) con el historial de cambios y un punto de aviso cuando hay una versión nueva sin ver. Tus datos y ajustes se conservan sin migración.
+
+**1.18.0**: nuevo sticker **Planeta Tierra** (océano, continentes, nubes, casquetes polares y atmósfera) que gira muy lento sobre su eje, con las nubes un poco más rápidas que el suelo. Es ahora el avatar por defecto del menú (si ya habías elegido otro avatar, se respeta) y aparece también en el selector de stickers. Las estrellas del fondo del menú ahora tienen dos capas que se desplazan despacio en direcciones distintas y titilan suavemente (solo mientras el menú está abierto y respetando "reducir animaciones").
+
+**1.17.0**: encabezado del menú y botón del menú rediseñados, con un estilo más sobrio y profesional. El botón de arriba a la izquierda es ahora un cuadrado redondeado con tres rayas limpias (sin el puntito en el ícono; solo queda el aviso de copia pendiente en la esquina) y se resalta mientras el menú está abierto. El encabezado "Explorador" muestra el avatar con un aro fino, un rango, el nombre y un panel con tres contadores (notas, constelaciones y vínculos). La tarjeta de Constelaciones es más contenida, con una constelación dibujada a un costado, y el fondo del menú es más calmo. Funciona en los temas Blanco y Universo.
+
+**1.16.0**: el tema claro pasa a llamarse **Blanco** y el oscuro **Universo** (Personalización > Tema). El tema Blanco se rediseñó: fondos blancos y grises muy claros en lugar de lavanda, tarjetas blancas con borde fino y sombra suave, texto más nítido y resplandores de los fondos de nota (Nebulosa, Aurora, Galaxia y Estrellas) a la mitad de intensidad. Universo no cambia. Tu elección de tema se conserva.
+
+**1.15.0**: menú rediseñado. Constelaciones pasa a ser una tarjeta grande con su propio color, las demás opciones son filas limpias con íconos de colores, hay separadores por sección, el encabezado muestra tus notas y constelaciones en una etiqueta y los fondos son más ricos (aurora violeta, rosa y cian). Abrir Constelaciones desde el menú ya no congela tanto: el mapa aparece primero y se arma en el cuadro siguiente (peor cuadro de ~250 ms a ~117 ms en el banco de pruebas con la CPU frenada), y con el mapa abierto la app de atrás no se maqueta ni se pinta. Personalización, Ajustes y Copia de seguridad ya abrían sin trabarse y siguen igual.
+
+**1.14.0**: volver del editor a la lista es más fluido en el celular. La lista ya no se destruye al abrir una nota (se oculta conservando su maquetación) y sus stickers quedan en pausa mientras escribís. En el banco de pruebas (150 notas, CPU x4) el peor cuadro al volver bajó de ~170–280 ms a ~100–115 ms y los fps de 41–44 a 48–50.
+
+**1.13.0**: en el menú, Perfil y Vinculación muestran la etiqueta "En desarrollo" y al tocarlos solo avisan (no abren su panel; el código sigue en la app para activarlos más adelante). Se agregó el apartado MAX, también "En desarrollo". Se corrigió que las opciones del menú podían salirse del panel en pantallas angostas.
+
+**1.12.0**: menú más fluido y sin adornos de más. Se quitó la onda de "supernova" al abrirlo y el giro permanente del aro del avatar; el panel entra con un deslizamiento corto sin rebote y las opciones aparecen más rápido. Además se eliminó el workflow de prueba de Codemagic: queda solo **Tronx APK (firmado)**, que usa tu clave fija y se instala encima de la versión anterior.
+
+**1.11.1**: se quitaron los sonidos de clic de la interfaz (toques, menú y confirmaciones) y su ajuste. Queda solo el sonido del agujero negro, que se sigue pudiendo activar, silenciar y subir o bajar en Ajustes.
+
+**1.11.0**: más optimización y animaciones más fluidas. La lista reutiliza las tarjetas que no cambiaron (antes reconstruía todas en cada tecla), los stickers de las tarjetas se animan solo cuando están por entrar en pantalla, la lista oculta no se redibuja mientras escribís en el celular y la búsqueda no recalcula nada de más. Al pasar de la lista al editor hay una transición corta, y los botones y tarjetas se hunden un poco al tocarlos. Los clics suenan con más cuerpo (chasquido brillante, "pop" y golpecito) y varían un poco de tono en cada toque. Con 150 notas y la CPU frenada x4: escribir pasó de 15 a 60 fps, buscar de 17 a 58 fps (54 ms a 0,3 ms por tecla) y abrir una nota de 98 ms a 16 ms.
+
+**1.10.0**: el menú ya no se traba. Se animan solo transformaciones y opacidad (sin recortes ni máscaras), el fondo del menú es estático, lo que hay debajo (stickers y fondos animados) se pausa mientras el menú está abierto y se evitó el trabajo que bloqueaba la apertura. En un banco de pruebas con 150 notas y la CPU frenada, el peor cuadro al abrir bajó de ~230 ms a ~70 ms y los cuadros lentos de 7–10 a 1.
+
+**1.9.0**: nuevo botón de menú arriba a la izquierda que se despliega con una onda de choque cósmica y opciones animadas: Perfil (nombre y avatar de sticker o emoji, con estadísticas de tu universo), Personalización (tema, color, letra, tamaño y fondos), Constelaciones, Vinculación (abre el mapa para conectar notas), Ajustes (sonido) y Copia de seguridad. Los ajustes de apariencia pasaron de Ajustes a Personalización; el botón de Ajustes de la cabecera ahora está dentro del menú. El perfil se guarda solo en el teléfono dentro de los ajustes y no cambia tus notas. El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
+
+**1.8.1**: Constelaciones mucho más fluido. Al arrastrar el mapa solo se desplaza una imagen ya dibujada (antes se redibujaba todo en cada cuadro); el fondo es un solo bitmap; los efectos de brillo corren a ritmo bajo en reposo y se apagan mientras te movés; se quitó el desenfoque (`backdrop-filter`) de los botones sobre el mapa; la lista de notas y sus stickers animados quedan pausados y ocultos mientras se ve el mapa; y si el teléfono sigue yendo justo, el mapa baja solo la calidad (resolución y efectos). Se ve igual y no cambia ningún dato.
+
 **1.8.0**: nueva función Constelaciones (mapa galáctico interactivo de las notas, con conexiones manuales, constelaciones con nombre, búsqueda con ubicación visual, pantalla de inicio vacía y guardado local incluido en la copia de seguridad). Se pausa cuando no se ve y respeta «reducir animaciones».
 
 **1.7.2**: tipografía de la pantalla de bienvenida rediseñada: título «Tronx» más pequeño y equilibrado con degradado violeta letra por letra y una línea de luz debajo, descripción más ligera (peso regular, blanco lavanda suave, interlineado amplio y ancho controlado) y un resplandor sutil detrás del título. Los tamaños se adaptan de 320 px de ancho a tabletas y a pantalla horizontal. Los textos, el fondo galáctico y la animación del agujero negro no cambian.
@@ -120,6 +301,8 @@ Pasos, una sola vez:
 **1.7.1**: botón «Iniciar universo» rediseñado: píldora de cristal con un anillo de luz que gira por el borde, un planeta con órbita y una flecha que se mueve. Con «reducir animaciones» queda quieto.
 
 **1.7.0**: fondos para las notas (12, con versión clara y oscura, general o por nota), plantillas, barra de formato con viñetas que continúan al apretar Enter, progreso y reordenado en las listas, «Guardar como .txt» y aviso de copia de seguridad. Se corrigió un defecto del tema claro: el fondo de la lista se veía en cuadrados. Las notas existentes se conservan (ganan un campo `bg`; sin él usan el fondo de Ajustes, Nebulosa por defecto).
+
+**1.6.0**: el sonido del agujero negro se rehízo para parlantes de celular (mucho más fuerte, con limitador para que no distorsione feo), con volumen Normal / Alto (por defecto) / Muy alto y botón «Probar sonido» en Ajustes. Se quitó el botón del parlante de la pantalla de inicio (el sonido se silencia desde Ajustes). Los 12 stickers se rediseñaron con más detalle y ahora tienen animaciones (giro, pulso, parpadeo, llama, haz de luz, etc.); en las tarjetas solo se animan mientras se ven y se detienen si el teléfono tiene activada la opción de reducir animaciones.
 
 **1.5.0**: cuadrícula de dos columnas, tema espacial para las notas, emojis y stickers por nota, botón Guardar, sonido del agujero negro y `versionCode` creciente. Las notas y ajustes existentes se conservan (las notas ganan un campo `icon`; el tema pasa al aspecto Tronx solo si no habías elegido otro).
 
@@ -132,119 +315,3 @@ Pasos, una sola vez:
 **1.1.0**: colores, etiquetas, listas con casillas, archivo, papelera, ajustes, copia de seguridad, vista en cuadrícula y orden. Corrige un error de la 1.0 por el que la pantalla de bienvenida tapaba el editor.
 
 **1.0.0**: primera versión.
-
-**1.6.0**: el sonido del agujero negro se rehízo para parlantes de celular (mucho más fuerte, con limitador para que no distorsione feo), con volumen Normal / Alto (por defecto) / Muy alto y botón «Probar sonido» en Ajustes. Se quitó el botón del parlante de la pantalla de inicio (el sonido se silencia desde Ajustes). Los 12 stickers se rediseñaron con más detalle y ahora tienen animaciones (giro, pulso, parpadeo, llama, haz de luz, etc.); en las tarjetas solo se animan mientras se ven y se detienen si el teléfono tiene activada la opción de reducir animaciones.
-
-**1.8.1**: Constelaciones mucho más fluido. Al arrastrar el mapa solo se desplaza una imagen ya dibujada (antes se redibujaba todo en cada cuadro); el fondo es un solo bitmap; los efectos de brillo corren a ritmo bajo en reposo y se apagan mientras te movés; se quitó el desenfoque (`backdrop-filter`) de los botones sobre el mapa; la lista de notas y sus stickers animados quedan pausados y ocultos mientras se ve el mapa; y si el teléfono sigue yendo justo, el mapa baja solo la calidad (resolución y efectos). Se ve igual y no cambia ningún dato.
-
-**1.9.0**: nuevo botón de menú arriba a la izquierda que se despliega con una onda de choque cósmica y opciones animadas: Perfil (nombre y avatar de sticker o emoji, con estadísticas de tu universo), Personalización (tema, color, letra, tamaño y fondos), Constelaciones, Vinculación (abre el mapa para conectar notas), Ajustes (sonido) y Copia de seguridad. Los ajustes de apariencia pasaron de Ajustes a Personalización; el botón de Ajustes de la cabecera ahora está dentro del menú. El perfil se guarda solo en el teléfono dentro de los ajustes y no cambia tus notas.
-
-**1.10.0**: el menú ya no se traba. Se animan solo transformaciones y opacidad (sin recortes ni máscaras), el fondo del menú es estático, lo que hay debajo (stickers y fondos animados) se pausa mientras el menú está abierto y se evitó el trabajo que bloqueaba la apertura. En un banco de pruebas con 150 notas y la CPU frenada, el peor cuadro al abrir bajó de ~230 ms a ~70 ms y los cuadros lentos de 7–10 a 1.
-
-**1.11.0**: más optimización y animaciones más fluidas. La lista reutiliza las tarjetas que no cambiaron (antes reconstruía todas en cada tecla), los stickers de las tarjetas se animan solo cuando están por entrar en pantalla, la lista oculta no se redibuja mientras escribís en el celular y la búsqueda no recalcula nada de más. Al pasar de la lista al editor hay una transición corta, y los botones y tarjetas se hunden un poco al tocarlos. Los clics suenan con más cuerpo (chasquido brillante, "pop" y golpecito) y varían un poco de tono en cada toque. Con 150 notas y la CPU frenada x4: escribir pasó de 15 a 60 fps, buscar de 17 a 58 fps (54 ms a 0,3 ms por tecla) y abrir una nota de 98 ms a 16 ms.
-
-**1.11.1**: se quitaron los sonidos de clic de la interfaz (toques, menú y confirmaciones) y su ajuste. Queda solo el sonido del agujero negro, que se sigue pudiendo activar, silenciar y subir o bajar en Ajustes.
-
-**1.12.0**: menú más fluido y sin adornos de más. Se quitó la onda de "supernova" al abrirlo y el giro permanente del aro del avatar; el panel entra con un deslizamiento corto sin rebote y las opciones aparecen más rápido. Además se eliminó el workflow de prueba de Codemagic: queda solo **Tronx APK (firmado)**, que usa tu clave fija y se instala encima de la versión anterior.
-
-**1.13.0**: en el menú, Perfil y Vinculación muestran la etiqueta "En desarrollo" y al tocarlos solo avisan (no abren su panel; el código sigue en la app para activarlos más adelante). Se agregó el apartado MAX, también "En desarrollo". Se corrigió que las opciones del menú podían salirse del panel en pantallas angostas.
-
-**1.14.0**: volver del editor a la lista es más fluido en el celular. La lista ya no se destruye al abrir una nota (se oculta conservando su maquetación) y sus stickers quedan en pausa mientras escribís. En el banco de pruebas (150 notas, CPU x4) el peor cuadro al volver bajó de ~170–280 ms a ~100–115 ms y los fps de 41–44 a 48–50.
-
-**1.15.0**: menú rediseñado. Constelaciones pasa a ser una tarjeta grande con su propio color, las demás opciones son filas limpias con íconos de colores, hay separadores por sección, el encabezado muestra tus notas y constelaciones en una etiqueta y los fondos son más ricos (aurora violeta, rosa y cian). Abrir Constelaciones desde el menú ya no congela tanto: el mapa aparece primero y se arma en el cuadro siguiente (peor cuadro de ~250 ms a ~117 ms en el banco de pruebas con la CPU frenada), y con el mapa abierto la app de atrás no se maqueta ni se pinta. Personalización, Ajustes y Copia de seguridad ya abrían sin trabarse y siguen igual.
-
-**1.16.0**: el tema claro pasa a llamarse **Blanco** y el oscuro **Universo** (Personalización > Tema). El tema Blanco se rediseñó: fondos blancos y grises muy claros en lugar de lavanda, tarjetas blancas con borde fino y sombra suave, texto más nítido y resplandores de los fondos de nota (Nebulosa, Aurora, Galaxia y Estrellas) a la mitad de intensidad. Universo no cambia. Tu elección de tema se conserva.
-
-**1.17.0**: encabezado del menú y botón del menú rediseñados, con un estilo más sobrio y profesional. El botón de arriba a la izquierda es ahora un cuadrado redondeado con tres rayas limpias (sin el puntito en el ícono; solo queda el aviso de copia pendiente en la esquina) y se resalta mientras el menú está abierto. El encabezado "Explorador" muestra el avatar con un aro fino, un rango, el nombre y un panel con tres contadores (notas, constelaciones y vínculos). La tarjeta de Constelaciones es más contenida, con una constelación dibujada a un costado, y el fondo del menú es más calmo. Funciona en los temas Blanco y Universo.
-
-**1.18.0**: nuevo sticker **Planeta Tierra** (océano, continentes, nubes, casquetes polares y atmósfera) que gira muy lento sobre su eje, con las nubes un poco más rápidas que el suelo. Es ahora el avatar por defecto del menú (si ya habías elegido otro avatar, se respeta) y aparece también en el selector de stickers. Las estrellas del fondo del menú ahora tienen dos capas que se desplazan despacio en direcciones distintas y titilan suavemente (solo mientras el menú está abierto y respetando "reducir animaciones").
-
-**1.19.0**: los stickers pasan a llamarse **Detalles**. La primera fila (Tierra, Galaxia, Estrella, Planeta con anillos) se rediseñó con animaciones propias: la galaxia tiene brazos, barra central y núcleo que giran por separado; la estrella late, emite ondas y tiene destellos que giran en sentidos opuestos; el planeta tiene bandas de nubes que se desplazan, una tormenta y un anillo que centellea. **Mantené pulsado** un detalle en el selector para ver su ficha (tipo, descripción, qué hace su animación y un dato curioso) con el botón "Usar este detalle". Nueva sección **Novedades** en el menú (Aplicación) con el historial de cambios y un punto de aviso cuando hay una versión nueva sin ver. Tus datos y ajustes se conservan sin migración.
-
-**1.20.0**: la **Tierra** se redibujó con un mapa real simplificado (América, África, Europa, Asia, Australia, desiertos, selvas, hielo polar y nubes) que gira lento; es idéntica en el menú y en Detalles. "Planeta Tierra" pasa a llamarse **Tierra** y "Planeta con anillos" pasa a llamarse **Saturno**. La **Galaxia** se rediseñó con brazos espirales logarítmicos, bandas de polvo oscuro, estrellas de colores según la distancia al núcleo, zonas rosadas de formación estelar y núcleo cálido. Sin migración de datos.
-
-**1.21.0**: segunda fila de Detalles rediseñada con animaciones propias: **Nebulosa** (nubes que derivan, pilares de polvo que se mecen y estrellas jóvenes que titilan), **Luna** (antes "Luna cósmica": mares y cráteres, y cambia de fase lentamente), **Agujero negro** (disco con destellos que giran en sentidos opuestos, anillo de fotones, partícula en órbita y materia que cae) y **Cometa** (cola azul de gas y cola dorada de polvo, con partículas que salen disparadas). Las fichas de mantener pulsado se actualizaron. El selector pausa las animaciones que no están a la vista y todas mientras se ve una ficha. Sin migración de datos.
-
-**1.22.0**: los Detalles pasan a llamarse **Insignias detalladas** y se rediseñaron desde cero como medallones (aro metálico con ornamentos que giran, cara de cristal y gema superior), 16 en total, cada una con su escena y animaciones propias: Tierra (con Luna orbitando), Galaxia, Estrella, Saturno, Nebulosa, Luna, Agujero negro, Cometa y las nuevas Cohete, Ovni, Constelación, Eclipse, Cristal, Aurora, Fénix y Brújula estelar. Los identificadores se mantienen, así que las insignias elegidas en tus notas se conservan. Menos piezas animadas por insignia y pausa fuera de vista.
-
-**1.22.1**: **Fénix** y **Nebulosa** rediseñados desde cero. El fénix tiene alas de plumas en tres capas de fuego, cresta, cola en llamas y brasas; la nebulosa son nubes de colores (magenta, cian, violeta y naranja) que giran en sentidos opuestos, con una banda de polvo oscuro y un cúmulo brillante. Sin migración de datos.
-
-**1.23.0**: 5 insignias nuevas (**Sistema solar**, **Púlsar**, **Ojo cósmico**, **Reloj de arena** y **Satélite**), 21 en total. El Fénix se reemplazó por la **Medusa estelar** (se conserva el identificador interno `fenix` para no perder el ícono en notas existentes). **Estrella** y **Aurora** mejoradas. El selector sigue animando por tandas de 6 para cuidar el rendimiento. Sin migración de datos.
-
-**1.23.1**: **Brújula estelar** rediseñada: aro de latón con escala de grados, letras N, E, S, W, rosa de los vientos de 8 puntas con facetas en luz y sombra, aguja roja y blanca que oscila hasta asentarse, y aro punteado que gira lento. Sin migración de datos.
-
-**1.23.2**: **Brújula estelar** simplificada: el borde del medallón actúa como aro y la escala de grados va pegada a él; se quitaron los círculos internos duplicados y el aro punteado, de modo que se ve una sola brújula. Sin migración de datos.
-
-**1.23.3**: optimización de la lista tras las Insignias detalladas: de las insignias que se ven en las tarjetas solo 4 se animan a la vez (van rotando) y todas se congelan mientras se desplaza la lista. Sin migración de datos.
-
-**1.24.0**: **guía de bienvenida** de 8 pasos (con insignias animadas, deslizable, con Saltar y Atrás) que explica qué hay en la app; por ahora se muestra una vez a todos los usuarios (clave `tronx.tour`) y se puede volver a ver desde el menú → Guía de Tronx. **Menú mejorado**: nivel de explorador según la cantidad de notas con barra de progreso, atajos (Nota, Lista, Buscar, Papelera) y consejos del día. Sin migración de datos.
-
-**1.24.1**: arreglo de compilación: `package.json` había quedado vacío en las versiones 1.22.1 a 1.24.0 y Codemagic fallaba en "Instalar dependencias" (EJSONPARSE). Se restauró. Sin cambios visibles en la app.
-**1.25.0**: escribir mejor. Barra de formato (negrita, cursiva, título, cita, viñeta, lista numerada, casilla), deshacer/rehacer propios, modo Leer con formato y casillas tocables, tiempo de lectura en el contador y barra fija sobre el teclado. El formato se guarda como texto Markdown sencillo en la misma nota, así que las notas existentes no cambian.
-**1.26.0**: organizar mejor. Carpetas (campo `folder` opcional en cada nota; las notas viejas quedan sin carpeta), selección múltiple con acciones en lote y Deshacer, filtro por tipo y búsqueda que resalta las coincidencias.
-**1.27.0**: más contenido. Enlaces `[[Título]]` entre notas con sugerencias y enlaces entrantes, subnotas (campo `parent` opcional), y tablas Markdown con Enter para agregar filas y vista de tabla en modo Leer. Las notas viejas no cambian. Fotos y recordatorios quedan para más adelante porque requieren plugins nativos.
-**1.28.0**: imágenes en las notas. Hasta 30 por nota, con posición libre, tamaño, giro, opacidad, forma, borde, sombra, espejo, filtros, capa (delante/detrás del texto), bloqueo y duplicado. Las imágenes se reducen a 1600 px y se guardan en IndexedDB (no en las notas); cada nota solo guarda sus ajustes (campo `images`). Las copias de seguridad las incluyen. Las imágenes que ninguna nota usa se limpian solas al abrir la app.
-**1.29.0**: compartir y proteger. Exportar nota a PDF (generado en la app, solo texto) y Markdown; historial de hasta 10 versiones por nota (campo `versions`) con restauración; bloqueo con PIN de 4 dígitos (hash SHA-256 con sal en `tronx.pin.v1`, 30 s de espera tras 5 fallos, no cifra los datos).
-**1.30.0**: texto alrededor de las imágenes. Opción `wrap` por imagen: en modo Leer flota a izquierda o derecha y el texto la rodea (con forma de círculo usa `shape-outside`). En edición sigue en su posición libre, porque el cuadro de texto no admite envolver.
-**1.31.0**: recordatorios con aviso. Una notificación local por nota (campo `remind`: fecha, repetición diaria o semanal), con el plugin `@capacitor/local-notifications`. `scripts/patch-android.mjs` agrega al manifiesto los permisos POST_NOTIFICATIONS, SCHEDULE_EXACT_ALARM, RECEIVE_BOOT_COMPLETED y VIBRATE. La app reconcilia los avisos pendientes al abrirse y al editar. Con la app abierta muestra además un aviso interno.
-**1.32.0**: limpieza. Se eliminaron `galaxy()`, `constellation()`, `OLD_IDS` y 13 definiciones SVG sin uso de `stickers.js`, y 4 funciones sin uso de `index.html`. Las 21 insignias se compararon antes y después con las animaciones pausadas y dieron idénticas.
-**1.33.0**: extras de notas. Foto directa con la cámara (input con `capture`; el parche de Android agrega el permiso CAMERA y marca la cámara como no obligatoria), dibujo a mano alzada que se guarda como una imagen PNG más de la nota, PDF con imágenes (JPEG incrustado, con forma, filtro y opacidad; sin giro) y búsqueda que también encuentra la nota madre cuando coincide una subnota.
-**1.33.1**: diagnóstico del permiso de notificaciones. La sección Recordatorio muestra el estado real (permitido, bloqueado, sin autorizar o plugin ausente) y un botón para pedir el permiso.
-**1.33.2**: notificaciones más lindas. Título y resumen limpios (sin marcas de formato), texto ampliado con `largeBody`, canal propio `recordatorios` con importancia alta, color de acento e ícono `ic_stat_tronx` que crea `scripts/patch-android.mjs` en cada build.
-**1.34.0**: información en las imágenes. Campos `info` (hasta 600 caracteres), `ip` (abajo, arriba, sobre la imagen abajo o arriba) y `show` (al tocar o siempre) por imagen. Se ve al seleccionarla en edición y al tocarla en modo Leer, también con texto alrededor, y sale como pie de imagen en el PDF. Se corrigió el contraste del botón Editar en modo Leer.
-**1.35.0**: copia automática. Snapshots en IndexedDB (últimas 7, rotación) y archivo `Documentos/Tronx/tronx-copia-auto.json` vía Filesystem cuando hay permiso; estado y recuperación en Ajustes.
-**1.36.0**: rendimiento con muchas imágenes. Miniaturas de 96 px cacheadas en IndexedDB (clave `src:t`, generadas de a una), `decoding="async"` y `loading="lazy"` en las imágenes; la limpieza de huérfanas contempla las miniaturas.
-**1.37.0**: posponer avisos y plantillas. Acción `snooze` ("Posponer 10 min") registrada con `registerActionTypes`; se guarda `remind.snz` y se programa una notificación aparte (id derivado `noteId+"z"`). Plantillas nuevas: Receta, Estudio, Película, Gastos, Hábitos.
-**1.38.0**: resaltado de colores. Sintaxis `==texto==` (amarillo) y `=={verde}texto==` (rosa, celeste, naranja); fila de colores en la barra, render con `<mark>` en el modo Leer, se quita en PDF y notificaciones.
-**1.39.0**: notas protegidas. Campo `lock` {m: pin|bio|both, s, h} (SHA-256 con sal), desbloqueo por sesión (`unlocked`), reutiliza el overlay de PIN con `lockTarget`, huella con `@aparajita/capacitor-biometric-auth` (checkBiometry/authenticate con respaldo del teléfono), permiso USE_BIOMETRIC en patch-android.
-**1.40.0**: buscar y reemplazar dentro de la nota. Barra `#findBar` con contador, anterior/siguiente, Aa, reemplazar uno/todo (regex escapada), deshacer vía historial del editor.
-**1.41.0**: recordatorios completos. `rep` admite `month` y `days` (con `wd`), `n.rems` (hasta 4 extra); las repeticiones mensual/por días se programan como notificaciones individuales (6 / 14 próximas) y se renuevan al abrir la app; primario conserva id y snooze.
-**1.42.0**: calendario. Overlay `#calendar` (capa registrada), cuadrícula de 42 días lun→dom, `remAt(r, día)` calcula las ocurrencias de cada repetición; marca de notas creadas; crear nota con aviso preseleccionado.
-**1.43.0**: orden y gestor de etiquetas/carpetas. Nuevos criterios de orden (oldest, titleDesc, remind, long); overlay `#orgMgr` para renombrar/juntar/quitar con deshacer por snapshot.
-**1.44.0**: mapa de enlaces. Overlay `#linkMap` con SVG y layout de fuerzas (Fruchterman-Reingold, hasta 150 nodos conectados), aristas por `[[título]]` y `parent`, huérfanas, enlaces rotos con creación, pan/zoom por pointer events; no lee notas protegidas.
-**1.45.0**: ajustes de imagen. Campos zm/px/py/br/co/sa/bl; la imagen va dentro de un contenedor `.pclip` que recorta (overflow hidden) y recibe borde/radio/sombra; filtro compuesto `imgFilter` compartido con el PDF, que recorta el área fuente con zoom y encuadre.
-**1.45.1**: correcciones: gate de bloqueo también para notas en la papelera, re-bloqueo por inactividad con PIN general, y regex de resaltado exige texto pegado a los `==`.
-**1.46.0**: papelera sin vencimiento (se quita la purga a los 30 días) y copia automática programable: frecuencia (`autoBkEvery`), hora fija (`autoBkTime`), al salir (`autoBkExit`), solo con cambios (`autoBkChg`), cuántas conservar (`autoBkKeep`); motor `bkDue()` con recuperación al abrir y chequeo cada minuto.
-**1.47.0**: Compartir una nota como imagen PNG con estilo (Universo, Papel o Color de la nota), con imágenes y marca opcional.
-**1.48.0**: Perfil activado con estadísticas de escritura (palabras, rachas, mapa de actividad de 12 semanas) y 16 logros. Los datos se guardan en los ajustes (act, wTot, streakBest, ach) y se calculan solos al actualizar desde tus notas existentes.
-**1.49.0**: Home renovado: controles que se esconden al desplazar, etiquetas visibles en las tarjetas y tarjetas más compactas.
-**1.50.0**: Listas con subtareas, reordenar arrastrando, fecha por elemento y ocultar hechos. Los campos nuevos son opcionales, así que las listas anteriores siguen igual.
-**1.51.0**: Desbloqueo del PIN general con huella (opcional), con el PIN como respaldo siempre disponible.
-**1.52.0**: Exportación masiva a Markdown (.zip) e importación de .md/.txt/.zip, sin dependencias externas.
-**1.53.0**: Botón flotante de nueva nota y gestos de deslizar en las tarjetas (vista de lista), configurables.
-**1.54.0**: Plantillas propias: guardar, usar, renombrar y borrar; con variables de fecha y hora, incluidas en las copias de seguridad.
-**1.55.0**: Stickers propios: editor (dibujo/foto/emoji), biblioteca, uso como icono, fondo y dentro de la nota.
-**1.55.1**: Limpieza de código sin cambios funcionales.
-**1.56.0**: Sistema de novedades: aviso tras actualizar, marcas de nuevo, versiones plegadas y búsqueda.
-**1.57.0**: Ajustes: accesos rápidos, sección Espacio con limpieza de imágenes, atajos y restablecer apariencia.
-**1.58.0**: Constelaciones: sugerencias de conexión, filtro por etiqueta y compartir el mapa como imagen.
-**1.58.1**: Novedades con niveles de actualización, nombres épicos, categorías y nueva numeración de versiones.
-**1.58.2**: Novedades con un estilo más sobrio y profesional.
-**1.58.3**: Se restauran los nombres de versión y se revisan los textos de novedades.
-**1.58.4**: Tema Blanco rediseñado y menú lateral que cambia con el tema.
-**1.59.0**: Esta actualización reúne la captura rápida de notas y la planificación por fechas.
-**1.59.6**: Esta actualización mejora la búsqueda, suma el modo enfoque y protege mejor las notas con PIN.
-**1.60.3**: Esta actualización acerca la captura de notas a la pantalla de inicio y mejora el trabajo con tareas.
-**1.60.9**: Esta actualización mejora la escritura y refuerza la protección de las notas privadas.
-**1.61.5**: Esta actualización refuerza los respaldos, permite restaurar notas sueltas, unir duplicadas y mejora la lectura en tablet, horizontal y con accesibilidad.
-**1.61.6**: Esta actualización corrige el botón de buscar notas duplicadas y el marcador del día actual en el mapa de actividad.
-**1.62.6**: Esta actualización renueva el perfil con foto, portada y frase, y suma una Sala de logros con medallas, categorías y progreso.
-
-**1.74.0**: Evento GTA VI: pestaña Misiones, recompensa diaria de 7 días, seis misiones diarias y seis semanales, pines en todos los sobres, sobres que se abren solos y mejor rendimiento.
-**1.73.0**: Evento GTA VI: cuenta regresiva, aviso de nuevas recompensas, seis pines exclusivos en los sobres y mejor rendimiento en la Tienda.
-**1.72.0**: Evento GTA VI en MAX: pestaña Eventos, marco Exclusivo GTA VI, sobres de la suerte, puntos SEIS y Tienda del evento.
-**1.71.0**: Marco Mítico Fusión nuclear con animación especial aleatoria y Familias de marcos en la Tienda de MAX.
-**1.70.0**: Tienda de MAX con marcos de perfil animados (Neón, Aurora, Constelación, Sol y Nebulosa cósmica).
-**1.69.0**: Celebración de logros raros, resumen semanal en MAX y recordatorio de racha.
-**1.68.0**: Logros secretos, nueva pestaña Secretos y medalla Estelar renovada.
-**1.67.0**: Rarezas de logros Platino, Diamante, Estelar y Cósmico, 35 logros nuevos, más misiones y guía de MAX.
-**1.66.0**: Nivel 50 renovado, Singularidad con alas de ángel, halo, nebulosa y aros animados.
-**1.65.0**: Insignias de logros con íconos propios y nivel 40 renovado.
-**1.64.0**: Insignias de logros rediseñadas, y los niveles 40 y 50 con animación.
-**1.63.1**: Esta actualización corrige la foto de perfil, que se veía gigante en el menú.
-**1.63.0**: Llega MAX, un centro con niveles por XP, misiones diarias y semanales, rachas y estrellas; la Tienda está en desarrollo.
-**1.62.2**: Esta actualización reúne el buscador, el archivo y la papelera en una sola fila y renueva la barra inferior con un botón + de esquinas suaves.
-**1.61.9**: Esta actualización renueva el inicio con navegación inferior flotante, una cabecera más corta, pestañas en píldora y tarjetas con altura natural.
-**1.61.7**: Esta actualización renueva la pantalla de inicio con una cabecera más compacta, más espacio entre elementos, filtros plegables y un estado vacío más claro.
-El menú ahora está ordenado en tres secciones (Tu espacio / Explorar / Aplicación) y cada opción muestra información real: cuántas constelaciones y vínculos tenés, el estado del sonido y cuándo fue tu última copia (con un punto de aviso si hace más de 7 días). **Vinculación** es ahora un panel propio para conectar dos notas y quitar vínculos (con «Deshacer»), que se ven unidos en Constelaciones.
-Sonidos de interfaz sintetizados (`uisound.js`, sin archivos de audio): clic corto, elegir una opción, abrir/cerrar el menú, confirmar y quitar. Se activan o silencian en Ajustes → «Clics de la interfaz» y usan el volumen elegido.
