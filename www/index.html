@@ -1757,6 +1757,19 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-pkb.pulse { animation: mxpkpl 1.1s ease-in-out infinite; }
 @keyframes mxpkpl { 50% { transform: scale(1.04); box-shadow: 0 0 22px var(--gl); } }
 .mx-pko h2 { margin: 0 0 12px; font-size: 24px; letter-spacing: -0.01em; }
+.mx-pkpn { position: relative; width: 190px; height: 190px; margin: 0 auto 6px; display: grid; place-items: center; } .mx-pkpn.sm { width: 140px; height: 140px; }
+.mx-pkpn::before { content: ""; position: absolute; inset: 8%; border-radius: 50%; background: radial-gradient(circle, var(--c), transparent 68%); opacity: 0.55; }
+.mx-pkpn .rays { position: absolute; inset: -34%; border-radius: 50%; background: repeating-conic-gradient(var(--c) 0 5deg, transparent 5deg 20deg); opacity: 0.3; -webkit-mask: radial-gradient(circle, #000 18%, transparent 66%); mask: radial-gradient(circle, #000 18%, transparent 66%); animation: mxpnsp 16s linear infinite; will-change: transform; }
+.mx-pkpn .ring { position: absolute; inset: 14%; border-radius: 50%; border: 2px solid var(--c); opacity: 0; animation: mxpnr 1.1s 0.25s ease-out both; }
+.mx-pkpn .art { position: relative; display: block; line-height: 0; animation: mxpnp 0.8s cubic-bezier(.2,1.4,.4,1) both; filter: drop-shadow(0 0 16px var(--c)) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.5)); }
+.mx-pkpn .art svg { overflow: visible; }
+.mx-pkpn .sp { position: absolute; width: 14px; height: 14px; background: #fff; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); opacity: 0; animation: mxpnt 1.8s ease-in-out infinite; }
+.mx-pkpn .sp.a { left: 8%; top: 18%; animation-delay: 0.5s; } .mx-pkpn .sp.b { right: 6%; top: 30%; width: 10px; height: 10px; animation-delay: 1s; } .mx-pkpn .sp.c { left: 14%; bottom: 14%; width: 9px; height: 9px; animation-delay: 1.4s; } .mx-pkpn .sp.d { right: 12%; bottom: 10%; animation-delay: 0.8s; }
+@keyframes mxpnsp { to { transform: rotate(360deg); } } @keyframes mxpnr { 0% { opacity: 0.9; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes mxpnp { 0% { opacity: 0; transform: scale(0.2) rotate(-28deg); } 60% { opacity: 1; transform: scale(1.18) rotate(6deg); } 100% { opacity: 1; transform: none; } } @keyframes mxpnt { 0%, 100% { opacity: 0; transform: scale(0.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+.mx-pkpnn { display: block; margin-top: 4px; font-size: 27px; letter-spacing: -0.01em; animation: mxrr 0.5s 0.5s ease-out both; }
+.mx-pkpnr { display: inline-block; margin-top: 8px; padding: 4px 13px; border-radius: 99px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); border: 1px solid var(--c); background: rgba(12, 4, 36, 0.55); animation: mxrr 0.5s 0.65s ease-out both; }
+.mx-pkpnd { display: inline-flex; align-items: center; gap: 6px; margin: 12px 0 0; font-size: 13px; font-weight: 800; color: #ff8ac0; animation: mxrr 0.5s 0.8s ease-out both; }
 .mx-pkrw { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 280px; }
 .mx-pkrw .rr { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: rgba(12, 4, 36, 0.55); border: 1px solid rgba(255, 255, 255, 0.2); text-align: left; animation: mxrr 0.5s ease-out both; }
 @keyframes mxrr { 0% { opacity: 0; transform: translateY(14px) scale(.96); } 100% { opacity: 1; transform: none; } }
@@ -1798,7 +1811,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-sxb { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; } .mx-sxb small { display: block; color: #b9bce4; font-size: 12px; } .mx-sxb b { font-size: 30px; letter-spacing: -0.02em; background: linear-gradient(90deg, #ff4fa3, #ffb02e); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .mx-xch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .mx-xc { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 8px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.05); color: #fff; font: inherit; cursor: pointer; } .mx-xc b { font-size: 18px; }
-@media (prefers-reduced-motion: reduce) { .mx-pko svg.pk, .mx-pkfx *, .mx-pkb.pulse, .mx-pko::before { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .mx-pko svg.pk, .mx-pkpn *, .mx-pkpnn, .mx-pkpnr, .mx-pkpnd, .mx-pkfx *, .mx-pkb.pulse, .mx-pko::before { animation: none !important; } }
 .mx-fam { display: flex; align-items: baseline; justify-content: space-between; margin: 22px 2px 0; }
 .mx-fam b { font-size: 15px; }
 .mx-fam span { font-size: 11px; color: #9a9dc8; }
@@ -7677,7 +7690,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       o += '<clipPath id="' + u + 'a"><circle cx="22" cy="26" r="18.4"/></clipPath><clipPath id="' + u + 'k"><path d="' + VI + '"/></clipPath></defs>'
         + '<circle cx="22" cy="26" r="19.6" fill="#ff4fd0" fill-opacity=".5"/><circle cx="22" cy="26" r="18.6" fill="' + D + '"/><circle cx="22" cy="26" r="17.4" fill="url(#' + u + 's)"/>'
         + '<g clip-path="url(#' + u + 'a)"><rect x="0" y="31" width="48" height="1.1" fill="' + D + '"/><rect x="0" y="34" width="48" height="1.6" fill="' + D + '"/><rect x="0" y="37.4" width="48" height="2.2" fill="' + D + '"/></g>'
-        + '<circle cx="33" cy="15" r="10" fill="#ff4fd0" fill-opacity=".28"/>' + pal(33, 40, 24, 1, 1.2, "#2a0850", "#ff8ae0") + '<g transform="translate(23 27) skewX(-8) scale(.98 1.26) translate(-3.8 0)">'
+        + '<g clip-path="url(#' + u + 'a)"><circle cx="33" cy="15" r="10" fill="#ff4fd0" fill-opacity=".28"/>' + pal(33, 40, 24, 1, 1.2, "#2a0850", "#ff8ae0") + '</g><g transform="translate(23 27) skewX(-8) scale(.98 1.26) translate(-3.8 0)">'
         + '<path d="' + VI + '" fill="' + D + '" stroke="' + D + '" stroke-width="4.4" stroke-linejoin="round"/><path d="' + VI + '" fill="none" stroke="#c66cff" stroke-width="2.6" stroke-linejoin="round"/>'
         + '<path d="' + VI + '" fill="url(#' + u + 'v)"/><g clip-path="url(#' + u + 'k)"><circle cx="1.6" cy="5.4" r="5.4" fill="#ffe27a" fill-opacity=".9"/><circle cx="18" cy="3" r="4" fill="#ffe27a" fill-opacity=".8"/>'
         + '<g transform="scale(1 .67)">' + pal(-8, 12, 10, 0, .3, D, "#ff6fd0") + pal(-3.5, 12, 7, .3, .24, D, "#ff6fd0") + pal(16.6, 12, 11, 0, .32, D, "#ff6fd0") + '</g><path d="M13.4 5.2H22.6V8H13.4Z" fill="' + D + '" fill-opacity=".45"/></g>'
@@ -7825,6 +7838,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     if (I === 4) o += '<circle cx="1.6" cy="24" r="1.6" fill="#ff2e93" stroke="' + D + '" stroke-width=".5"/><circle cx="46.4" cy="24" r="1.6" fill="#ff2e93" stroke="' + D + '" stroke-width=".5"/>';
     return o + '</svg>';
   }
+  var MX_PCOL = { "Común": "#ffb27a", "Raro": "#7ac8ff", "Épico": "#c25bff", "Legendario": "#ffd25a" };
   var MX_PIN = { ch: { 1: 0.5, 2: 1.5, 3: 4, 4: 8, 5: 15, 6: 35 }, dup: 10 };
   function mxPinPick() { var t = 0; MX_PINS.forEach(function (q) { t += q.w; }); var r = rand01() * t; for (var i = 0; i < MX_PINS.length; i++) { r -= MX_PINS[i].w; if (r < 0) return MX_PINS[i].id; } return MX_PINS[0].id; }
   function mxPinById(id) { for (var i = 0; i < MX_PINS.length; i++) if (MX_PINS[i].id === id) return MX_PINS[i]; return null; }
@@ -8025,17 +8039,29 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         var t = MX_PK.tiers[pk.s], mm = getMax(), ll = mxPkList(mm), at = ll.indexOf(pk);
         if (at < 0) { close(); return; } ll.splice(at, 1); mm.pk.n = (mm.pk.n || 0) + 1;
         var hit = !mm.inv.gta6 && rand01() * 100 < t.fp; if (hit) { mm.inv.gta6 = Date.now(); mm.eq.frame = "gta6"; }
-        mxSxAdd(mm, t.sx); grantXp(t.xp, t.st); maxSave(); $("mxBal").textContent = "⭐ " + fmtMx(getMax().stars);
-        art.remove(); acts.textContent = ""; sr.classList.add("big"); fx.classList.add("rv");
-        var h = mk("h2"), rw = mk("div", "mx-pkrw");
-        if (hit) { h.textContent = "¡MARCO EXCLUSIVO CONSEGUIDO!"; h.className = "mx-evx"; var pw = mk("div", "mx-pkw"), pa = mk("span", "mx-fpa"); paintAvatar(pa, getProfile()); pw.appendChild(pa); ov.insertBefore(pw, hint); frApply(pw, pa, "gta6", 100); }
-        else h.textContent = pk.s + (pk.s === 1 ? " estrella" : " estrellas");
-        ov.insertBefore(h, hint); ov.insertBefore(rw, hint);
-        var rows = [["st", "⭐", t.st, "Estrellas"], ["xp", "XP", t.xp, "Experiencia"], ["sx", "", t.sx, "Puntos SEIS"]], cnt = [];
-        rows.forEach(function (r, k) { var row = mk("div", "rr " + r[0]); row.style.animationDelay = (calm ? 0 : k * 0.22) + "s"; var ic = mk("span", "ic"); if (r[0] === "sx") ic.innerHTML = sixIco(26); else ic.textContent = r[1]; var tx = mk("div", "tx"), n = mk("b", "n", "+0"); tx.appendChild(n); tx.appendChild(mk("small", null, r[3])); row.appendChild(ic); row.appendChild(tx); rw.appendChild(row); cnt.push([n, r[2]]); });
         var pinGot = null, pinDup = false;
-        if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) { pinDup = true; mxSxAdd(mm, MX_PIN.dup); } else mm.pins[pinGot] = Date.now(); maxSave(); }
-        if (pinGot) { var pd = mxPinById(pinGot), prw = mk("div", "rr pin"); prw.style.animationDelay = (calm ? 0 : 3 * 0.22) + "s"; var pic = mk("span", "ic"); pic.innerHTML = pinSvg(pinGot, 34); var ptx = mk("div", "tx"); ptx.appendChild(mk("b", "n", pinDup ? "Pin repetido" : "¡Pin nuevo!")); ptx.appendChild(mk("small", null, pd.n + " · " + pd.r + (pinDup ? " · +" + MX_PIN.dup + " SEIS" : ""))); prw.appendChild(pic); prw.appendChild(ptx); rw.appendChild(prw); }
+        if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) { pinDup = true; mxSxAdd(mm, MX_PIN.dup); } else mm.pins[pinGot] = Date.now(); }
+        if (!pinGot) { mxSxAdd(mm, t.sx); grantXp(t.xp, t.st); }
+        maxSave(); $("mxBal").textContent = "⭐ " + fmtMx(getMax().stars);
+        art.remove(); acts.textContent = ""; sr.classList.add("big"); fx.classList.add("rv");
+        var h = mk("h2"), rw = mk("div", "mx-pkrw"), cnt = [];
+        if (hit) { h.textContent = "¡MARCO EXCLUSIVO CONSEGUIDO!"; h.className = "mx-evx"; var pw = mk("div", "mx-pkw"), pa = mk("span", "mx-fpa"); paintAvatar(pa, getProfile()); pw.appendChild(pa); ov.insertBefore(pw, hint); frApply(pw, pa, "gta6", 100); }
+        else if (pinGot) { h.textContent = pinDup ? "Pin repetido" : "¡Pin nuevo!"; if (!pinDup) h.className = "mx-evx"; }
+        else h.textContent = pk.s + (pk.s === 1 ? " estrella" : " estrellas");
+        ov.insertBefore(h, hint);
+        if (pinGot) {
+          /* el pin es el premio principal: grande, al centro y con el color de su rareza */
+          var pd = mxPinById(pinGot), pcol = MX_PCOL[pd.r] || "#ffd25a", sh = mk("div", "mx-pkpn" + (hit ? " sm" : ""));
+          sh.style.setProperty("--c", pcol);
+          sh.innerHTML = '<i class="rays"></i><i class="ring"></i><span class="art">' + pinSvg(pinGot, hit ? 104 : 144) + '</span><i class="sp a"></i><i class="sp b"></i><i class="sp c"></i><i class="sp d"></i>';
+          var pnm = mk("b", "mx-pkpnn", pd.n), pch = mk("span", "mx-pkpnr", pd.r); pch.style.setProperty("--c", pcol);
+          ov.insertBefore(sh, hint); ov.insertBefore(pnm, hint); ov.insertBefore(pch, hint);
+          if (pinDup) { var pdp = mk("span", "mx-pkpnd"); pdp.innerHTML = sixIco(18) + "<span>+" + MX_PIN.dup + " puntos SEIS</span>"; ov.insertBefore(pdp, hint); }
+        } else {
+          ov.insertBefore(rw, hint);
+          var rows = [["st", "⭐", t.st, "Estrellas"], ["xp", "XP", t.xp, "Experiencia"], ["sx", "", t.sx, "Puntos SEIS"]];
+          rows.forEach(function (r, k) { var row = mk("div", "rr " + r[0]); row.style.animationDelay = (calm ? 0 : k * 0.22) + "s"; var ic = mk("span", "ic"); if (r[0] === "sx") ic.innerHTML = sixIco(26); else ic.textContent = r[1]; var tx = mk("div", "tx"), n = mk("b", "n", "+0"); tx.appendChild(n); tx.appendChild(mk("small", null, r[3])); row.appendChild(ic); row.appendChild(tx); rw.appendChild(row); cnt.push([n, r[2]]); });
+        }
         later(function () { cnt.forEach(function (c) { mxCount(c[0], c[1], calm, "+"); }); }, 150);
         var more = mxPkList(getMax()).length, b1 = mk("button", "mx-btn mx-pkb", more ? "Siguiente sobre (" + more + ")" : "Cerrar"), b2 = mk("button", "mx-btn", "Cerrar"); b1.type = b2.type = "button"; acts.appendChild(b1); if (more) acts.appendChild(b2);
         b1.addEventListener("click", function () { if (more) { ov.remove(); $("max").classList.remove("pkopen"); mxPkBusy = false; mxPkOpenUi(0); } else close(); }); b2.addEventListener("click", close);
@@ -8228,7 +8254,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       });
     });
     box.appendChild(pg);
-    box.appendChild(mk("p", "mx-note", "Todos los sobres pueden incluir un pin: cuantas más estrellas tiene el sobre, mayor es la probabilidad, desde " + String(MX_PIN.ch[1]).replace(".", ",") + " % en los de 1 estrella hasta " + MX_PIN.ch[6] + " % en los de 6. Cada sobre trae como máximo uno. Equipalo para mostrarlo junto a tu nombre. Tenés " + owned + " de " + MX_PINS.length + "."));
+    box.appendChild(mk("p", "mx-note", "Todos los sobres pueden incluir un pin: cuantas más estrellas tiene el sobre, mayor es la probabilidad, desde " + String(MX_PIN.ch[1]).replace(".", ",") + " % en los de 1 estrella hasta " + MX_PIN.ch[6] + " % en los de 6. Cada sobre trae como máximo uno y, cuando sale, reemplaza las demás recompensas del sobre. Equipalo para mostrarlo junto a tu nombre. Tenés " + owned + " de " + MX_PINS.length + "."));
     var l = mxPkList(m);
     box.appendChild(mk("div", "mx-sec", "Mis sobres" + (l.length ? " (" + l.length + ")" : "")));
     if (!l.length) {
