@@ -7979,7 +7979,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     function drawCt() {
       var left = MX_PK.taps - pk.t; ct.textContent = left > 0 ? "Toques restantes: " + left + " de " + MX_PK.taps + (pk.s < 6 ? " · Mejora: " + Math.round(chance() * 100) + " %" : "") : "Abriendo el sobre…";
       if (left <= 0) { hint.textContent = pk.s === 6 ? "¡Sobre al máximo!" : "Ya no se puede mejorar más."; art.disabled = true; }
-      else hint.textContent = pk.s === 6 ? "¡Sobre al máximo! Seguí tocando: se abre solo al terminar los toques." : "Tocá el sobre: cada toque puede mejorarlo una estrella y, al terminar los toques, se abre solo.";
+      else hint.textContent = pk.s === 6 ? "Sobre al máximo. Seguí tocando: se abrirá solo al terminar los toques." : "Tocá el sobre: cada toque puede mejorarlo una estrella. Al terminar los toques, se abre solo.";
     }
     function draw() { theme(); drawStars(); drawArt(); drawCt(); }
     function flash(kind) { var e = mk("div", "mx-pkup " + kind); ov.appendChild(e); later(function () { e.remove(); }, 900); }
@@ -8014,7 +8014,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) { pinDup = true; mxSxAdd(mm, MX_PIN.dup); } else mm.pins[pinGot] = Date.now(); maxSave(); }
         if (pinGot) { var pd = mxPinById(pinGot), prw = mk("div", "rr pin"); prw.style.animationDelay = (calm ? 0 : 3 * 0.22) + "s"; var pic = mk("span", "ic"); pic.innerHTML = pinSvg(pinGot, 34); var ptx = mk("div", "tx"); ptx.appendChild(mk("b", "n", pinDup ? "Pin repetido" : "¡Pin nuevo!")); ptx.appendChild(mk("small", null, pd.n + " · " + pd.r + (pinDup ? " · +" + MX_PIN.dup + " SEIS" : ""))); prw.appendChild(pic); prw.appendChild(ptx); rw.appendChild(prw); }
         later(function () { cnt.forEach(function (c) { mxCount(c[0], c[1], calm, "+"); }); }, 150);
-        if (!hit) ov.insertBefore(mk("p", "mx-pkn", "Chance del marco en este sobre: " + t.fp + " %."), hint);
+        if (!hit) ov.insertBefore(mk("p", "mx-pkn", "Probabilidad del marco en este sobre: " + t.fp + " %."), hint);
         var more = mxPkList(getMax()).length, b1 = mk("button", "mx-btn mx-pkb", more ? "Siguiente sobre (" + more + ")" : "Cerrar"), b2 = mk("button", "mx-btn", "Cerrar"); b1.type = b2.type = "button"; acts.appendChild(b1); if (more) acts.appendChild(b2);
         b1.addEventListener("click", function () { if (more) { ov.remove(); $("max").classList.remove("pkopen"); mxPkBusy = false; mxPkOpenUi(0); } else close(); }); b2.addEventListener("click", close);
       }, 1700);
@@ -8101,7 +8101,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   }
   function mxEvClaim(key, rw) {
     var m = getMax(), l = mxPkList(m); if (m.cl[key]) return;
-    if (l.length >= 60) { toast("Tenés muchos sobres guardados: abrí alguno para reclamar"); return; }
+    if (l.length >= 60) { toast("Tenés muchos sobres guardados. Abrí alguno para poder reclamar más."); return; }
     m.cl[key] = Date.now(); mxSxAdd(m, rw.sx); var s = mxPkGiveS(rw.s);
     toast("+" + rw.sx + " puntos SEIS · Sobre de " + s + (s === 1 ? " estrella" : " estrellas")); mxRender();
   }
@@ -8114,7 +8114,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var done = prog >= d.t, pct = claimed ? 100 : Math.min(100, Math.floor(prog / d.t * 100)), card = mk("div", "mx-card mx-evm" + (claimed ? " ok" : done ? " rdy" : ""));
     var top = mk("div", "mx-evm-t"); top.appendChild(mk("span", "mx-evm-e", d.e)); top.appendChild(mk("b", null, d.n)); top.appendChild(mk("em", "mx-evm-k" + (rw.h ? " h" : ""), rw.k)); card.appendChild(top);
     var pr = mk("div", "mx-evm-p"), pb = mk("div", "mx-evm-pb"), pi = el("i"); pi.style.width = pct + "%"; pb.appendChild(pi); pr.appendChild(pb); pr.appendChild(mk("span", "mx-evm-pc", pct + " %")); card.appendChild(pr);
-    card.appendChild(mk("div", "mx-evm-s", claimed ? "¡Misión completada!" : done ? "¡Lista para reclamar!" : "Faltan " + fmtMx(d.t - prog) + " " + d.u));
+    card.appendChild(mk("div", "mx-evm-s", claimed ? "Misión completada" : done ? "Lista para reclamar" : "Faltan " + fmtMx(d.t - prog) + " " + d.u));
     var r = mk("div", "mx-evm-r"), si = mk("span", "mx-evm-si"); si.innerHTML = sixIco(26); r.appendChild(si); r.appendChild(mk("b", null, String(rw.sx))); r.appendChild(mk("span", "pl", "+"));
     var pk = mk("span", "mx-evm-pk"); pk.innerHTML = mxPkSvg(rw.s); r.appendChild(pk); r.appendChild(mk("span", "sp"));
     if (claimed) r.appendChild(mk("span", "mx-evm-ok", "✓ Reclamada"));
@@ -8129,7 +8129,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxLgClaim(auto, quiet) {
     var m = getMax(), o = mxLg(m); if (!mxLgDue(m)) return false;
     var idx = o.i, r = MX_LG[idx];
-    if (r.k === "p" && mxPkList(m).length >= 60) { if (!auto) toast("Tenés muchos sobres guardados: abrí alguno para reclamar"); return false; }
+    if (r.k === "p" && mxPkList(m).length >= 60) { if (!auto) toast("Tenés muchos sobres guardados. Abrí alguno para poder reclamar más."); return false; }
     o.d = dayKey(Date.now()); o.i = (idx + 1) % 7; o.n++;
     var txt = mxLgText(r);
     if (r.k === "p") { var sg = mxPkGiveS(r.s); txt = "sobre de " + sg + (sg === 1 ? " estrella" : " estrellas"); }
@@ -8143,7 +8143,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   }
   function mxLgCard(m) {
     var o = mxLg(m), due = mxLgDue(m), done = due ? o.i : (o.i === 0 && o.n > 0 ? 7 : o.i), card = mk("div", "mx-card mx-lg");
-    var hd = mk("div", "mx-lg-h"); hd.appendChild(mk("b", null, "Recompensa diaria")); hd.appendChild(mk("em", null, due ? "Hoy: día " + (o.i + 1) + " de 7" : "¡Reclamada hoy!")); card.appendChild(hd);
+    var hd = mk("div", "mx-lg-h"); hd.appendChild(mk("b", null, "Recompensa diaria")); hd.appendChild(mk("em", null, due ? "Hoy: día " + (o.i + 1) + " de 7" : "Reclamada hoy")); card.appendChild(hd);
     var gr = mk("div", "mx-lg-g");
     MX_LG.forEach(function (r, i) {
       var t = mk("div", "mx-lg-t" + (i < done ? " ok" : "") + (due && i === o.i ? " today" : "") + (i === 6 ? " big" : ""));
@@ -8153,31 +8153,31 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     });
     card.appendChild(gr);
     if (due) { var bt = mk("button", "mx-btn", "Reclamar: " + mxLgText(MX_LG[o.i])); bt.type = "button"; bt.addEventListener("click", function () { mxLgClaim(false); }); card.appendChild(bt); }
-    else card.appendChild(mk("p", "mx-note", "Volvé mañana para el día " + (o.i + 1) + ": " + mxLgText(MX_LG[o.i]) + "."));
+    else card.appendChild(mk("p", "mx-note", "Volvé mañana para reclamar el día " + (o.i + 1) + ": " + mxLgText(MX_LG[o.i]) + "."));
     return card;
   }
   function mxEvMis(box, m) {
     var c = mxCtx();
     box.appendChild(mxLgCard(m));
     box.appendChild(mk("div", "mx-sec", "Misiones diarias"));
-    box.appendChild(mk("p", "mx-note", "Seis misiones que se renuevan todos los días a las 00:00. Cada una te da 6 puntos SEIS y un sobre de 1 estrella. El modo Enfoque es el botón «Enfoque» del editor de notas."));
+    box.appendChild(mk("p", "mx-note", "Seis misiones que se renuevan todos los días a las 00:00. Cada una otorga 6 puntos SEIS y un sobre de 1 estrella. El modo Enfoque se activa con el botón «Enfoque» del editor de notas."));
     mxEvDaily(c).forEach(function (id) { var d = MX_EVD[id], key = mxEvKey("d", c, id); box.appendChild(mxEvCard(d, d.g(c), !!m.cl[key], MX_EVR.d, function () { mxEvClaim(key, MX_EVR.d); })); });
     box.appendChild(mk("div", "mx-sec", "Misiones semanales"));
-    box.appendChild(mk("p", "mx-note", "Seis misiones que se renuevan cada lunes: tres fáciles (16 puntos SEIS y sobre de 2 estrellas) y tres difíciles (24 puntos SEIS y sobre de 3 estrellas)."));
+    box.appendChild(mk("p", "mx-note", "Seis misiones que se renuevan cada lunes: tres fáciles (16 puntos SEIS y un sobre de 2 estrellas) y tres difíciles (24 puntos SEIS y un sobre de 3 estrellas)."));
     mxEvWeekly(c).forEach(function (id, i) { var d = MX_EVW[id], rw = i >= 3 ? MX_EVR.h : MX_EVR.f, key = mxEvKey("w", c, id); box.appendChild(mxEvCard(d, d.g(c), !!m.cl[key], rw, function () { mxEvClaim(key, rw); })); });
   }
   function mxEvRender(box, m, prof) {
     if (mxEvSel !== "gta") {
       box.appendChild(mk("div", "mx-sec", "Eventos activos"));
-      var ec = mk("button", "mx-evb"); ec.type = "button"; ec.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); ec.appendChild(mk("h3", null, "GTA VI")); ec.appendChild(mk("p", null, "Conseguí el marco Exclusivo «VI»: cada misión te da un sobre de la suerte y ganás puntos SEIS.")); ec.appendChild(mxCdLine());
+      var ec = mk("button", "mx-evb"); ec.type = "button"; ec.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); ec.appendChild(mk("h3", null, "GTA VI")); ec.appendChild(mk("p", null, "Conseguí el marco exclusivo «VI»: completá misiones para obtener sobres de la suerte y acumular puntos SEIS.")); ec.appendChild(mxCdLine());
       ec.addEventListener("click", function () { mxEvSel = "gta"; mxEvTab = "mis"; mxLgClaim(true, true); mxRender(); $("mxSc").scrollTop = 0; }); box.appendChild(ec);
-      box.appendChild(mk("div", "mx-evb2", "Pronto habrá más eventos con XP, estrellas, marcos y portadas."));
+      box.appendChild(mk("div", "mx-evb2", "Próximamente: más eventos con XP, estrellas, marcos y portadas."));
       return;
     }
     var bk = mk("button", "mx-evback", "‹ Eventos"); bk.type = "button"; bk.addEventListener("click", function () { mxEvSel = ""; mxRender(); }); box.appendChild(bk);
-    var hd = mk("div", "mx-evh"); hd.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); hd.appendChild(mk("h2", null, "GTA VI")); hd.appendChild(mk("p", null, "Ya salió. Completá misiones para ganar sobres, mejoralos tocándolos y probá suerte por el marco Exclusivo."));
+    var hd = mk("div", "mx-evh"); hd.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); hd.appendChild(mk("h2", null, "GTA VI")); hd.appendChild(mk("p", null, "Completá misiones para ganar sobres, mejoralos con toques y probá suerte para conseguir el marco exclusivo «VI»."));
     var sxp = mk("div", "mx-sxp"); sxp.innerHTML = sixIco(18); sxp.appendChild(mk("b", null, fmtMx(mxSx(m).p || 0))); sxp.appendChild(mk("span", null, "SEIS")); hd.appendChild(sxp); hd.appendChild(mxCdBox()); box.appendChild(hd);
-    var nt = mk("div", "mx-evn"), ni = mk("span", "mx-evni", "!"), nb = mk("div"); nb.appendChild(mk("b", null, "Se vienen más recompensas")); nb.appendChild(mk("p", null, "Durante estos días se agregarán nuevas recompensas a los sobres del evento. ¡Seguí atento!")); nt.appendChild(ni); nt.appendChild(nb); box.appendChild(nt);
+    var nt = mk("div", "mx-evn"), ni = mk("span", "mx-evni", "!"), nb = mk("div"); nb.appendChild(mk("b", null, "Nuevas recompensas en camino")); nb.appendChild(mk("p", null, "Durante el evento se irán sumando nuevas recompensas a los sobres. Volvé a revisar con frecuencia.")); nt.appendChild(ni); nt.appendChild(nb); box.appendChild(nt);
     var tabs = mk("div", "mx-evt"); var er = mxEvReady(); [["mis", "Misiones" + (er ? " · " + er : "")], ["main", "Sobres y marco"], ["shop", "Tienda del evento"]].forEach(function (tb) { var b = mk("button", mxEvTab === tb[0] ? "on" : "", tb[1]); b.type = "button"; b.addEventListener("click", function () { mxEvTab = tb[0]; mxRender(); }); tabs.appendChild(b); }); box.appendChild(tabs);
     var f = frById("gta6"), inv = m.inv, test = !!m.bk;
     if (mxEvTab === "shop") { mxEvShop(box, m, test); return; }
@@ -8206,11 +8206,11 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       });
     });
     box.appendChild(pg);
-    box.appendChild(mk("p", "mx-note", "Todos los sobres pueden traer un pin, y cuantas más estrellas tiene el sobre, más chances: desde " + String(MX_PIN.ch[1]).replace(".", ",") + " % en los de 1 estrella hasta " + MX_PIN.ch[6] + " % en los de 6. Nunca más de uno por sobre. Equipalo y se muestra junto a tu nombre. Tenés " + owned + " de " + MX_PINS.length + "."));
+    box.appendChild(mk("p", "mx-note", "Todos los sobres pueden incluir un pin: cuantas más estrellas tiene el sobre, mayor es la probabilidad, desde " + String(MX_PIN.ch[1]).replace(".", ",") + " % en los de 1 estrella hasta " + MX_PIN.ch[6] + " % en los de 6. Cada sobre trae como máximo uno. Equipalo para mostrarlo junto a tu nombre. Tenés " + owned + " de " + MX_PINS.length + "."));
     var l = mxPkList(m);
     box.appendChild(mk("div", "mx-sec", "Mis sobres" + (l.length ? " (" + l.length + ")" : "")));
     if (!l.length) {
-      var ec2 = mk("div", "mx-card"); ec2.appendChild(mk("b", null, "No tenés sobres")); ec2.appendChild(mk("p", "mx-note", "Cada misión que reclamás te da un sobre: cuanto más difícil, más estrellas trae (de 1 a 3). También podés conseguirlos en la Tienda del evento con puntos SEIS.")); box.appendChild(ec2);
+      var ec2 = mk("div", "mx-card"); ec2.appendChild(mk("b", null, "Todavía no tenés sobres")); ec2.appendChild(mk("p", "mx-note", "Cada misión que reclamás te da un sobre: cuanto más difícil, más estrellas tiene (de 1 a 3). También podés conseguirlos en la Tienda del evento con puntos SEIS.")); box.appendChild(ec2);
       var gm = mk("button", "mx-btn", "Ir a Misiones"); gm.type = "button"; gm.addEventListener("click", function () { mxTab = "mis"; mxRender(); }); box.appendChild(gm);
     } else {
       var gr = mk("div", "mx-pkl"), gen = (mxPkGen = (mxPkGen || 0) + 1);
@@ -8225,8 +8225,8 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     box.appendChild(mk("div", "mx-sec", "Cómo funciona"));
     var oc = mk("div", "mx-card"), tb = el("table"); tb.className = "mx-odd"; var th = el("tr"); ["Estrellas", "Mejora por toque", "Premio", "Marco"].forEach(function (x) { th.appendChild(mk("th", null, x)); }); tb.appendChild(th);
     for (var q = 1; q <= 6; q++) (function (t) { var tr = el("tr"); [t.s + " ★", t.up ? Math.round(t.up * 100) + " %" : "—", "⭐ " + fmtMx(t.st) + " · " + fmtMx(t.xp) + " XP · " + t.sx + " SEIS", t.fp + " %"].forEach(function (x) { tr.appendChild(mk("td", null, x)); }); tb.appendChild(tr); })(MX_PK.tiers[q]);
-    oc.appendChild(tb); oc.appendChild(mk("p", "mx-note", "Los sobres vienen con 1 a 3 estrellas según la dificultad de la misión. Cada toque (hasta 6 por sobre) puede subirlo una estrella, hasta 6. «Marco» es la chance de ganar el marco GTA VI al abrir ese sobre. Los puntos SEIS que ganás al abrir suben tu nivel de suerte."));
-    box.appendChild(oc); box.appendChild(mk("p", "mx-note", "Pronto: portadas del evento."));
+    oc.appendChild(tb); oc.appendChild(mk("p", "mx-note", "Los sobres vienen con 1 a 3 estrellas, según la dificultad de la misión. Cada toque (hasta 6 por sobre) puede subirlo una estrella, hasta un máximo de 6. La columna «Marco» indica la probabilidad de ganar el marco GTA VI al abrir ese sobre. Los puntos SEIS que ganás al abrir sobres aumentan tu nivel de suerte."));
+    box.appendChild(oc); box.appendChild(mk("p", "mx-note", "Próximamente: portadas del evento."));
   }
   var mxTab = "home", mxMisTab = "d", mxFrSel = "", mxPkGen = 0;
   function mxFrRefresh() { mxRender(); try { renderMenu(); } catch (e) { /* menú aún no creado */ } try { renderProfile(); } catch (e2) { /* perfil cerrado */ } }
