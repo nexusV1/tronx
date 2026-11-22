@@ -1697,7 +1697,6 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .mx-pko { --bg: #1a0d45; --gl: #8f6bff; position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 20px 24px; text-align: center; color: #fff; background-color: var(--bg); overflow: hidden; contain: layout paint; }
 .mx-pko::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, var(--gl), transparent 62%); opacity: 0.34; transition: opacity 0.9s; pointer-events: none; }
 .mx-pko[data-s="6"]::before { opacity: 0; }
-.mx-pko[data-s="6"] .mx-pkh, .mx-pko[data-s="6"] .mx-pkc2 { text-shadow: 0 1px 8px rgba(10, 0, 30, 0.95), 0 0 2px rgba(10, 0, 30, 0.9); }
 .mx-pkbeach { position: absolute !important; inset: 0; z-index: 0 !important; opacity: 0; transition: opacity 1.3s ease; pointer-events: none; }
 .mx-pkbeach.on { opacity: 1; }
 .mx-pkbeach svg { display: block; width: 100%; height: 100%; }
@@ -1753,11 +1752,11 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-pks i.nw { animation: mxstp 0.7s cubic-bezier(.2,1.6,.4,1) backwards; }
 @keyframes mxstp { 0% { transform: scale(.3) rotate(-60deg); } 100% { transform: scale(1) rotate(0); } }
 .mx-pks.big i svg { width: 38px; height: 38px; }
-.mx-pkh { margin: 16px 0 4px; font-size: 14px; color: #ffe9f4; min-height: 20px; } .mx-pkc2 { font-size: 12px; color: #e6d6ff; margin-bottom: 14px; min-height: 16px; }
+.mx-pkh { display: none; } .mx-pkd { display: flex; gap: 9px; justify-content: center; margin: 28px 0 16px; } .mx-pkd i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.32); transition: background 0.25s, transform 0.25s, box-shadow 0.25s; } .mx-pkd i.on { background: #fff; transform: scale(1.15); box-shadow: 0 0 10px var(--gl); }
 .mx-pkac { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 300px; }
 .mx-pkb.pulse { animation: mxpkpl 1.1s ease-in-out infinite; }
 @keyframes mxpkpl { 50% { transform: scale(1.04); box-shadow: 0 0 22px var(--gl); } }
-.mx-pko h2 { margin: 0 0 12px; font-size: 24px; letter-spacing: -0.01em; } .mx-pkn { margin: 10px 0 4px; color: #ffd9ec; font-size: 12.5px; }
+.mx-pko h2 { margin: 0 0 12px; font-size: 24px; letter-spacing: -0.01em; }
 .mx-pkrw { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 280px; }
 .mx-pkrw .rr { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: rgba(12, 4, 36, 0.55); border: 1px solid rgba(255, 255, 255, 0.2); text-align: left; animation: mxrr 0.5s ease-out both; }
 @keyframes mxrr { 0% { opacity: 0; transform: translateY(14px) scale(.96); } 100% { opacity: 1; transform: none; } }
@@ -7836,44 +7835,72 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   }
   function sixIco(px) {
     var u = "sx" + px;
-    return '<svg class="six" width="' + px + '" height="' + px + '" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="' + u + 'a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a5cff"/><stop offset=".5" stop-color="#d93cc8"/><stop offset="1" stop-color="#ff2e93"/></linearGradient><linearGradient id="' + u + 'b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a1280"/><stop offset="1" stop-color="#6a1a8a"/></linearGradient><linearGradient id="' + u + 'v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffc2e6"/></linearGradient></defs>'
+    return '<svg class="six" width="' + px + '" height="' + px + '" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="' + u + 'a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a5cff"/><stop offset=".5" stop-color="#d93cc8"/><stop offset="1" stop-color="#ff2e93"/></linearGradient><linearGradient id="' + u + 'b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a1280"/><stop offset="1" stop-color="#6a1a8a"/></linearGradient><linearGradient id="' + u + 'v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffc2e6"/></linearGradient><g id="' + u + 'i"><path d="' + VI_D + '"/></g></defs>'
       + '<circle cx="16" cy="16.8" r="14.6" fill="#14052a" fill-opacity=".45"/><circle cx="16" cy="16" r="14.6" fill="url(#' + u + 'a)"/><circle cx="16" cy="16" r="14.6" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="1.5"/>'
       + '<circle cx="16" cy="16" r="11.2" fill="url(#' + u + 'b)" stroke="#ffb8e6" stroke-opacity=".75" stroke-width=".9"/><path d="M7 11.4Q16 4.6 25 11.4" stroke="#fff" stroke-opacity=".38" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
-      + '<text x="17" y="21.8" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="14.5" fill="#14052a">VI</text>'
-      + '<text x="16" y="20.8" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="14.5" fill="url(#' + u + 'v)" stroke="#ff4fa3" stroke-width=".5">VI</text></svg>';
+      + viSvg(u, 16, 16.4, .27) + '</svg>';
   }
-  function mxPkSvg(s, cls) {
-    var u = "pk" + (++pkUid), t = MX_PT[s] || MX_PT[1], top = "", bot = "", i, X0 = 12;
+  /* "VI" dibujado con trazos propios: se ve igual en cualquier celular, sin depender de fuentes */
+  var VI_D = "M-26 -15H-14L-8 2L-2 -15H10L-2.4 15H-13.6Z M16 -15H27V15H16Z";
+  function viSvg(u, cx, cy, k) {
+    function at(dx, dy) { return "translate(" + (cx + dx * k).toFixed(2) + " " + (cy + dy * k).toFixed(2) + ") skewX(-9) scale(" + k + ")"; }
+    return '<use href="#' + u + 'i" transform="' + at(3, 3.2) + '" fill="#17052e"/><use href="#' + u + 'i" transform="' + at(1.5, 1.6) + '" fill="#5a1d86" stroke="#17052e" stroke-width="2" stroke-linejoin="round"/>'
+      + '<use href="#' + u + 'i" transform="' + at(0, 0) + '" fill="url(#' + u + 'v)" stroke="#fff" stroke-width=".7" stroke-linejoin="round"/>';
+  }
+  /* una paleta por nivel: de azul noche (1★) a dorado holográfico (6★) */
+  var MX_PKT = [null,
+    { sky: ["#0b1442", "#27358f", "#5b46c9", "#a56ae8"], sun: ["#d6e4ff", "#8fb0ff", "#6a6cf0"], lg: ["#ffffff", "#bcd2ff"], rim: "#c9d6ff", gr: "#7ab8ff", ac: "#9ec4ff" },
+    { sky: ["#1a0f5a", "#5a2bb0", "#b53cc4", "#ff7ac8"], sun: ["#fff0b8", "#ffb0e0", "#c05cff"], lg: ["#ffffff", "#ffc6ec"], rim: "#f0d0ff", gr: "#e08cff", ac: "#e8a8ff" },
+    { sky: ["#241068", "#7a2cc4", "#ff2e93", "#ff7a4a"], sun: ["#ffe27a", "#ff9a3d", "#ff2e93"], lg: ["#fff6c8", "#ff9ac8"], rim: "#ffc2dc", gr: "#ff4fa3", ac: "#ff6fb5" },
+    { sky: ["#3a0c58", "#a8207a", "#ff5a3c", "#ffa040"], sun: ["#fff3b0", "#ffb347", "#ff5a3c"], lg: ["#fffbe0", "#ffc27a"], rim: "#ffd2a0", gr: "#ff8a5c", ac: "#ffa060" },
+    { sky: ["#4a1060", "#c8307a", "#ff8a3a", "#ffd060"], sun: ["#fffbe0", "#ffe27a", "#ffa63d"], lg: ["#ffffff", "#ffe9a0"], rim: "#ffe27a", gr: "#ffc060", ac: "#ffd25a" },
+    { sky: ["#1a0a50", "#2f6bff", "#ff4fd8", "#ffd25a"], sun: ["#fff4c8", "#ffd060", "#ff8ac0"], lg: ["#ffffff", "#ffeaa0"], rim: "#fff6c0", gr: "#ffe27a", ac: "#ffe27a" }];
+  var mxPkTpl = {};
+  function mxPkBuild(s) {
+    var t = MX_PKT[s] || MX_PKT[1], i, X0 = 12, top = "", bot = "", rid = "", grid = "", u = "§";
     for (i = 0; i <= 19; i++) top += (i ? "L" : "M") + (X0 + i * 4) + " " + (i % 2 ? 8 : 12);
     for (i = 19; i >= 0; i--) bot += "L" + (X0 + i * 4) + " " + (i % 2 ? 118 : 114);
-    var body = top + "L88 114" + bot + "Z", rid = ""; for (i = 0; i < 38; i++) rid += "M" + (X0 + 1 + i * 2) + " 12V21M" + (X0 + 1 + i * 2) + " 105V114";
-    var grid = ""; for (i = -6; i <= 6; i++) grid += "M50 90L" + (50 + i * 12) + " 104"; for (i = 0; i < 4; i++) grid += "M12 " + (92 + i * i * 1.15 + i * 1.2) + "H88";
-    function palm(x, y, h, lean, sc, fl) {
-      var tx = lean, fr = ""; [[-170, 8], [-140, 9.5], [-108, 8], [-72, 8], [-40, 9.5], [-10, 8], [16, 6.5], [166, 6.5]].forEach(function (q) { var r = q[0] * Math.PI / 180, L = q[1] * sc, c = Math.cos(r), sn = Math.sin(r); fr += "M0 0Q" + (L * .55 * c - sn * 1.2).toFixed(1) + " " + (L * .55 * sn - L * .26 + c * 1.2).toFixed(1) + " " + (L * c).toFixed(1) + " " + (L * sn + L * .42).toFixed(1) + "Q" + (L * .55 * c + sn * 1.2).toFixed(1) + " " + (L * .55 * sn - L * .26 - c * 1.2 + 1.4).toFixed(1) + " 0 0Z"; });
-      return '<g transform="translate(' + x + " " + y + ") scale(" + (fl ? -1 : 1) + ' 1)"><path d="M-1 0C-.6 ' + (-h * .4) + " " + (tx * .5) + " " + (-h * .75) + " " + (tx - .4) + " " + (-h) + "L" + (tx + .8) + " " + (-h) + "C" + (tx * .6 + .8) + " " + (-h * .75) + " .8 " + (-h * .4) + ' 1.2 0Z" fill="#1a0a3a"/><g transform="translate(' + tx + " " + (-h) + ')"><path d="' + fr + '" fill="#1a0a3a" stroke="#ff4fa3" stroke-opacity=".55" stroke-width=".3"/></g></g>';
+    var body = top + "L88 114" + bot + "Z";
+    for (i = 0; i < 38; i++) rid += "M" + (X0 + 1 + i * 2) + " 12V21M" + (X0 + 1 + i * 2) + " 105V114";
+    for (i = -6; i <= 6; i++) grid += "M50 90L" + (50 + i * 12) + " 104"; for (i = 0; i < 4; i++) grid += "M12 " + (92 + i * i * 1.15 + i * 1.2) + "H88";
+    /* palmeras: un solo trazo cada una (tronco + hojas) */
+    function palm(x0, y0, h, lean, sc, fl) {
+      var tx = x0 + fl * lean, ty = y0 - h, d = "M" + (x0 - fl) + " " + y0 + "Q" + (x0 + fl * lean * .5) + " " + (y0 - h * .55) + " " + tx + " " + ty + "L" + (tx + fl * 1.6) + " " + ty + "Q" + (x0 + fl * (lean * .5 + 1.4)) + " " + (y0 - h * .55) + " " + (x0 + fl * 1.2) + " " + y0 + "Z";
+      [[-170, 8], [-140, 9.5], [-108, 8], [-72, 8], [-40, 9.5], [-10, 8], [16, 6.5], [166, 6.5]].forEach(function (q) {
+        var r = q[0] * Math.PI / 180, L = q[1] * sc, c = Math.cos(r) * fl, sn = Math.sin(r);
+        d += "M" + tx + " " + ty + "Q" + (tx + L * .55 * c - sn * 1.2 * fl).toFixed(1) + " " + (ty + L * .55 * sn - L * .26 + c * 1.2).toFixed(1) + " " + (tx + L * c).toFixed(1) + " " + (ty + L * sn + L * .42).toFixed(1)
+          + "Q" + (tx + L * .55 * c + sn * 1.2 * fl).toFixed(1) + " " + (ty + L * .55 * sn - L * .26 - c * 1.2 + 1.4).toFixed(1) + " " + tx + " " + ty + "Z";
+      });
+      return d;
     }
-    var vi = ""; [[2.4, 2.6], [1.8, 2], [1.2, 1.4], [.6, .7]].forEach(function (o, k) { vi += '<text x="' + (50 + o[0]) + '" y="' + (80 + o[1]) + '" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="34" fill="' + (k < 2 ? "#17052e" : "#4a1670") + '">VI</text>'; });
-    return '<svg class="pk ' + (cls || "") + '" viewBox="0 0 100 130" aria-hidden="true"><defs>'
-      + '<linearGradient id="' + u + 'a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241068"/><stop offset=".32" stop-color="#7a2cc4"/><stop offset=".56" stop-color="#ff2e93"/><stop offset=".8" stop-color="#ff7a4a"/><stop offset="1" stop-color="#ffb347"/></linearGradient>'
-      + '<radialGradient id="' + u + 'p" cx=".42" cy=".36" r=".78"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#14052a" stop-opacity=".5"/></radialGradient>'
-      + '<linearGradient id="' + u + 'e" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#14052a" stop-opacity=".45"/><stop offset=".14" stop-color="#14052a" stop-opacity="0"/><stop offset=".8" stop-color="#14052a" stop-opacity="0"/><stop offset="1" stop-color="#14052a" stop-opacity=".58"/></linearGradient>'
-      + '<linearGradient id="' + u + 'c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#14052a" stop-opacity=".4"/></linearGradient>'
-      + '<linearGradient id="' + u + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a"/><stop offset=".5" stop-color="#ff9a3d"/><stop offset="1" stop-color="#ff2e93"/></linearGradient>'
-      + '<linearGradient id="' + u + 'v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c8"/><stop offset=".45" stop-color="#ff9ac8"/><stop offset="1" stop-color="#ff7a3d"/></linearGradient>'
-      + '<radialGradient id="' + u + 'd" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#14052a" stop-opacity=".5"/><stop offset="1" stop-color="#14052a" stop-opacity="0"/></radialGradient>'
-      + '<clipPath id="' + u + 'k"><path d="' + body + '"/></clipPath><clipPath id="' + u + 'u"><circle cx="50" cy="62" r="24"/></clipPath></defs>'
-      + '<ellipse cx="50" cy="125" rx="38" ry="4.6" fill="url(#' + u + 'd)"/><path d="' + body + '" fill="url(#' + u + 'a)"/>'
-      + '<g clip-path="url(#' + u + 'k)"><circle cx="50" cy="62" r="30" fill="#ff2e93" fill-opacity=".28"/><circle cx="50" cy="62" r="24" fill="url(#' + u + 's)"/><g clip-path="url(#' + u + 'u)"><path d="M20 70H80M20 75H80M20 80.4H80M20 86H80" stroke="#7a1a8a" stroke-opacity=".8" stroke-width="1.2"/><path d="M20 72.5H80M20 78H80" stroke="#7a1a8a" stroke-opacity=".0"/></g>'
-      + '<path d="M12 90H88" stroke="#ffd0f0" stroke-opacity=".9" stroke-width=".8"/><rect x="12" y="90" width="76" height="15" fill="#2a0c5a" fill-opacity=".85"/><path d="' + grid + '" stroke="#ff4fa3" stroke-opacity=".85" stroke-width=".5" fill="none"/>'
-      + palm(22, 104, 26, -3, 1, 0) + palm(33, 105, 18, 2, .8, 0) + palm(78, 104, 26, -3, 1, 1) + palm(67, 105, 18, 2, .8, 1)
-      + '<rect x="8" y="6" width="84" height="114" fill="url(#' + u + 'p)"/><rect x="8" y="6" width="84" height="114" fill="url(#' + u + 'e)"/>'
-      + '<path d="M60 6L74 6L40 120L26 120Z" fill="#fff" fill-opacity=".07"/><rect x="12" y="8" width="76" height="14" fill="url(#' + u + 'c)"/><rect x="12" y="104" width="76" height="14" fill="url(#' + u + 'c)" transform="rotate(180 50 111)"/>'
-      + '<path d="' + rid + '" stroke="#14052a" stroke-opacity=".32" stroke-width=".7"/><path d="M12 21.6H88M12 105.4H88" stroke="#fff" stroke-opacity=".55" stroke-width=".6"/>'
+    /* estrellas del nivel (arriba a la derecha) */
+    var stars = "", n = s, sx0 = 82.6 - (n - 1) * 4.7, sc = .17;
+    for (i = 0; i < n; i++) { var cx = sx0 + i * 4.7, cy = 29.6; STAR_P.split(" ").forEach(function (p, k) { var xy = p.split(","); stars += (k ? "L" : "M") + (cx + (xy[0] - 12) * sc).toFixed(2) + " " + (cy + (xy[1] - 12) * sc).toFixed(2); }); stars += "Z"; }
+    var hi = s >= 5, rimFill = hi ? "url(#" + u + "r)" : t.rim;
+    return '<svg class="pk @c" viewBox="0 0 100 130" aria-hidden="true"><defs>'
+      + '<linearGradient id="' + u + 'a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + t.sky[0] + '"/><stop offset=".34" stop-color="' + t.sky[1] + '"/><stop offset=".62" stop-color="' + t.sky[2] + '"/><stop offset="1" stop-color="' + t.sky[3] + '"/></linearGradient>'
+      + '<linearGradient id="' + u + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + t.sun[0] + '"/><stop offset=".5" stop-color="' + t.sun[1] + '"/><stop offset="1" stop-color="' + t.sun[2] + '"/></linearGradient>'
+      + '<linearGradient id="' + u + 'v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + t.lg[0] + '"/><stop offset="1" stop-color="' + t.lg[1] + '"/></linearGradient>'
+      + '<linearGradient id="' + u + 'c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".55" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#14052a" stop-opacity=".38"/></linearGradient>'
+      + '<radialGradient id="' + u + 'p" cx=".5" cy=".42" r=".75"><stop offset=".55" stop-color="#14052a" stop-opacity="0"/><stop offset="1" stop-color="#14052a" stop-opacity=".55"/></radialGradient>'
+      + (hi ? '<linearGradient id="' + u + 'r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff6c0"/><stop offset=".35" stop-color="#ffd25a"/><stop offset=".6" stop-color="#fff6c0"/><stop offset="1" stop-color="#ff9ad0"/></linearGradient>' : "")
+      + '<clipPath id="' + u + 'k"><path d="' + body + '"/></clipPath><clipPath id="' + u + 'u"><circle cx="50" cy="60" r="24"/></clipPath>'
+      + '<g id="' + u + 'i"><path d="' + VI_D + '"/></g></defs>'
+      + '<path d="' + body + '" fill="url(#' + u + 'a)"/>'
+      + '<g clip-path="url(#' + u + 'k)"><circle cx="50" cy="60" r="31" fill="' + t.sun[2] + '" fill-opacity=".26"/><circle cx="50" cy="60" r="24" fill="url(#' + u + 's)"/>'
+      + '<path clip-path="url(#' + u + 'u)" d="M20 70H80M20 75.4H80M20 81H80M20 86.8H80" stroke="' + t.sky[1] + '" stroke-opacity=".85" stroke-width="1.3"/>'
+      + '<path d="M12 90H88" stroke="#fff" stroke-opacity=".8" stroke-width=".8"/><rect x="12" y="90" width="76" height="15" fill="' + t.sky[0] + '" fill-opacity=".88"/><path d="' + grid + '" stroke="' + t.gr + '" stroke-opacity=".85" stroke-width=".5" fill="none"/>'
+      + '<path fill="' + t.sky[0] + '" d="' + palm(22, 104, 26, -3, 1, 1) + palm(33, 105, 18, 2, .8, 1) + palm(78, 104, 26, -3, 1, -1) + palm(67, 105, 18, 2, .8, -1) + '"/>'
+      + '<rect x="8" y="6" width="84" height="114" fill="url(#' + u + 'p)"/><path d="M60 6L74 6L40 120L26 120Z" fill="#fff" fill-opacity=".07"/>'
+      + '<rect x="12" y="8" width="76" height="14" fill="url(#' + u + 'c)"/><rect x="12" y="104" width="76" height="14" fill="url(#' + u + 'c)" transform="rotate(180 50 111)"/>'
+      + '<path d="' + rid + '" stroke="#14052a" stroke-opacity=".3" stroke-width=".7"/><path d="M12 21.6H88M12 105.4H88" stroke="#fff" stroke-opacity=".55" stroke-width=".6"/>'
       + '<g class="shn"><path d="M-30 4L-12 4L22 124L4 124Z" fill="#fff" fill-opacity=".5" transform="translate(-20 0)"/></g></g>'
-      + '<text x="50" y="31" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="5.4" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#fff" fill-opacity=".92" stroke="#14052a" stroke-width=".2">SOBRE DE LA SUERTE</text>'
-      + vi + '<text x="50" y="80" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="34" fill="url(#' + u + 'v)" stroke="#fff" stroke-width=".6">VI</text>'
-      + '<path d="' + body + '" fill="none" stroke="#14052a" stroke-opacity=".7" stroke-width="1.6" stroke-linejoin="round"/><path d="' + body + '" fill="none" stroke="' + t.bd + '" stroke-opacity=".95" stroke-width="' + (s >= 4 ? 1.5 : .9) + '" stroke-linejoin="round"/></svg>';
+      + '<text x="14.5" y="32" font-family="\'Bricolage Grotesque\',\'IBM Plex Sans\',sans-serif" font-weight="800" font-size="8.6" letter-spacing="-.3" fill="#fff" stroke="#14052a" stroke-width=".55" stroke-linejoin="round" paint-order="stroke">Tron<tspan fill="' + t.ac + '">x</tspan></text>'
+      + '<path d="' + stars + '" fill="' + t.rim + '" stroke="#14052a" stroke-width=".25" stroke-opacity=".6"/>'
+      + viSvg(u, 50, 63, .74)
+      + '<path d="' + body + '" fill="none" stroke="#14052a" stroke-opacity=".7" stroke-width="1.6" stroke-linejoin="round"/><path d="' + body + '" fill="none" stroke="' + rimFill + '" stroke-opacity=".95" stroke-width="' + (s >= 4 ? 1.5 : 1.1) + '" stroke-linejoin="round"/></svg>';
   }
+  function mxPkSvg(s, cls) { var tp = mxPkTpl[s] || (mxPkTpl[s] = mxPkBuild(s)); return tp.split("§").join("pk" + (++pkUid)).replace("@c", function () { return cls || ""; }); }
   function mxBeachSvg() {
     function wave(y, amp, fill, cls, dur) {
       var d = "M0 " + y; for (var i = 0; i < 8; i++) d += "q50 " + (-amp) + " 100 0q50 " + amp + " 100 0"; d += "V820H0Z";
@@ -7972,15 +7999,11 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var top = mk("div", "mx-pkt"), x = mk("button", "mx-pkx", "✕"); x.type = "button"; x.setAttribute("aria-label", "Cerrar"); top.appendChild(x); ov.appendChild(top);
     var sr = mk("div", "mx-pks"); for (var i = 0; i < 6; i++) { var si = mk("i"); si.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="' + STAR_P + '"/></svg>'; sr.appendChild(si); } ov.appendChild(sr);
     var art = mk("button", "mx-pka"); art.type = "button"; art.setAttribute("aria-label", "Tocar el sobre para mejorarlo"); ov.appendChild(art);
-    var hint = mk("p", "mx-pkh"), ct = mk("div", "mx-pkc2"), acts = mk("div", "mx-pkac"), bo = mk("button");
-    ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov); $("max").classList.add("pkopen");
+    var hint = mk("p", "mx-pkh"), ct = mk("div", "mx-pkd"), acts = mk("div", "mx-pkac"), bo = mk("button");
+    for (var di = 0; di < MX_PK.taps; di++) ct.appendChild(el("i")); ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov); $("max").classList.add("pkopen");
     function drawStars(prev) { for (var k = 0; k < 6; k++) { sr.children[k].className = k < pk.s ? "on" : ""; if (prev !== undefined && k >= prev && k < pk.s) { sr.children[k].classList.add("nw"); (function (n) { later(function () { n.classList.remove("nw"); }, 900); })(sr.children[k]); } } }
     function drawArt() { art.innerHTML = mxPkSvg(pk.s); }
-    function drawCt() {
-      var left = MX_PK.taps - pk.t; ct.textContent = left > 0 ? "Toques restantes: " + left + " de " + MX_PK.taps + (pk.s < 6 ? " · Mejora: " + Math.round(chance() * 100) + " %" : "") : "Abriendo el sobre…";
-      if (left <= 0) { hint.textContent = pk.s === 6 ? "¡Sobre al máximo!" : "Ya no se puede mejorar más."; art.disabled = true; }
-      else hint.textContent = pk.s === 6 ? "Sobre al máximo. Seguí tocando: se abrirá solo al terminar los toques." : "Tocá el sobre: cada toque puede mejorarlo una estrella. Al terminar los toques, se abre solo.";
-    }
+    function drawCt() { var left = MX_PK.taps - pk.t; for (var k = 0; k < ct.children.length; k++) ct.children[k].className = k < pk.t ? "on" : ""; if (left <= 0) art.disabled = true; }
     function draw() { theme(); drawStars(); drawArt(); drawCt(); }
     function flash(kind) { var e = mk("div", "mx-pkup " + kind); ov.appendChild(e); later(function () { e.remove(); }, 900); }
     function tap() {
@@ -7988,7 +8011,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       var before = pk.s; pk.t++; var up = pk.s < 6 && rand01() < chance(); if (up) pk.s++; maxSave();
       try { if (navigator.vibrate) navigator.vibrate(up ? [18, 30, 28] : 12); } catch (e) { }
       var sv = art.firstChild; if (sv) { sv.classList.remove("tp", "pop"); void sv.getBoundingClientRect(); sv.classList.add("tp"); sv.addEventListener("animationend", function ae(ev) { if (ev.target === sv && ev.animationName === "mxpks") { sv.classList.remove("tp"); sv.removeEventListener("animationend", ae); } }); }
-      if (up) later(function () { flash("up"); theme(); drawStars(before); drawArt(); var sv2 = art.firstChild; if (sv2) { sv2.classList.remove("tp"); sv2.classList.add("pop"); sv2.addEventListener("animationend", function ae2(ev) { if (ev.target === sv2 && ev.animationName === "mxpkp") { sv2.classList.remove("pop"); sv2.removeEventListener("animationend", ae2); } }); } drawCt(); hint.textContent = "¡El sobre mejoró a " + pk.s + (pk.s === 1 ? " estrella!" : " estrellas!"); }, calm ? 0 : 380);
+      if (up) later(function () { flash("up"); theme(); drawStars(before); drawArt(); var sv2 = art.firstChild; if (sv2) { sv2.classList.remove("tp"); sv2.classList.add("pop"); sv2.addEventListener("animationend", function ae2(ev) { if (ev.target === sv2 && ev.animationName === "mxpkp") { sv2.classList.remove("pop"); sv2.removeEventListener("animationend", ae2); } }); } drawCt(); }, calm ? 0 : 380);
       else later(drawCt, calm ? 0 : 380);
       if (pk.t >= MX_PK.taps) later(openNow, up ? 1700 : 1000);
     }
@@ -8014,7 +8037,6 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) { pinDup = true; mxSxAdd(mm, MX_PIN.dup); } else mm.pins[pinGot] = Date.now(); maxSave(); }
         if (pinGot) { var pd = mxPinById(pinGot), prw = mk("div", "rr pin"); prw.style.animationDelay = (calm ? 0 : 3 * 0.22) + "s"; var pic = mk("span", "ic"); pic.innerHTML = pinSvg(pinGot, 34); var ptx = mk("div", "tx"); ptx.appendChild(mk("b", "n", pinDup ? "Pin repetido" : "¡Pin nuevo!")); ptx.appendChild(mk("small", null, pd.n + " · " + pd.r + (pinDup ? " · +" + MX_PIN.dup + " SEIS" : ""))); prw.appendChild(pic); prw.appendChild(ptx); rw.appendChild(prw); }
         later(function () { cnt.forEach(function (c) { mxCount(c[0], c[1], calm, "+"); }); }, 150);
-        if (!hit) ov.insertBefore(mk("p", "mx-pkn", "Probabilidad del marco en este sobre: " + t.fp + " %."), hint);
         var more = mxPkList(getMax()).length, b1 = mk("button", "mx-btn mx-pkb", more ? "Siguiente sobre (" + more + ")" : "Cerrar"), b2 = mk("button", "mx-btn", "Cerrar"); b1.type = b2.type = "button"; acts.appendChild(b1); if (more) acts.appendChild(b2);
         b1.addEventListener("click", function () { if (more) { ov.remove(); $("max").classList.remove("pkopen"); mxPkBusy = false; mxPkOpenUi(0); } else close(); }); b2.addEventListener("click", close);
       }, 1700);
