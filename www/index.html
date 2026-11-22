@@ -1759,7 +1759,6 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-pkpn .rays { position: absolute; inset: -34%; border-radius: 50%; background: repeating-conic-gradient(var(--c) 0 5deg, transparent 5deg 20deg); opacity: 0.3; -webkit-mask: radial-gradient(circle, #000 18%, transparent 66%); mask: radial-gradient(circle, #000 18%, transparent 66%); animation: mxpnsp 16s linear infinite; will-change: transform; }
 .mx-pkpn .ring { position: absolute; inset: 14%; border-radius: 50%; border: 2px solid var(--c); opacity: 0; animation: mxpnr 1.1s 0.25s ease-out both; }
 .mx-pkpn .art { position: relative; display: block; line-height: 0; animation: mxpnp 0.8s cubic-bezier(.2,1.4,.4,1) both; filter: drop-shadow(0 0 16px var(--c)) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.5)); }
-.mx-pkpn .art svg { overflow: visible; }
 .mx-pkpn .sp { position: absolute; width: 14px; height: 14px; background: #fff; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); opacity: 0; animation: mxpnt 1.8s ease-in-out infinite; }
 .mx-pkpn .sp.a { left: 8%; top: 18%; animation-delay: 0.5s; } .mx-pkpn .sp.b { right: 6%; top: 30%; width: 10px; height: 10px; animation-delay: 1s; } .mx-pkpn .sp.c { left: 14%; bottom: 14%; width: 9px; height: 9px; animation-delay: 1.4s; } .mx-pkpn .sp.d { right: 12%; bottom: 10%; animation-delay: 0.8s; }
 @keyframes mxpnsp { to { transform: rotate(360deg); } } @keyframes mxpnr { 0% { opacity: 0.9; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.7); } }
@@ -7652,21 +7651,6 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       return d;
     }
     var FRD = [-118, -86, -56, -26, 4, 34, 64, 94, 122].map(function (a, k) { return frondD(a, 13 + (k % 2) * 2.2); }).join("");
-    /* palmera grande del pin VI: tronco curvo y hojas lisas que cuelgan, como el emoji */
-    function palBig(x, y, cx, cy, L, col, rim) {
-      var mx = x + (cx - x) * .5 + 3.2, my = (y + cy) / 2, tr = "M" + (x - 1.8) + " " + y + "Q" + (mx - 1.2) + " " + my + " " + (cx - .8) + " " + cy + "L" + (cx + 1) + " " + cy + "Q" + (mx + 1.6) + " " + my + " " + (x + 1.8) + " " + y + "Z", fr = "";
-      [[-120, 1, 0], [-82, 1.08, 0], [-44, 1.04, 0], [-8, .7, 0], [30, 1, 0], [68, 1.08, 0], [108, 1, 0]].forEach(function (q) {
-        var r = q[0] * Math.PI / 180, dx = Math.sin(r), dy = -Math.cos(r), l = L * q[1], ad = Math.abs(dx), ex = dx * l, ey = dy * l + ad * l * .62, qx = dx * l * .55, qy = dy * l * .85 - ad * l * .05, M = 14, up = [], dn = [];
-        for (var i = 0; i <= M; i++) {
-          var t = i / M, u = 1 - t, px = 2 * u * t * qx + t * t * ex, py = 2 * u * t * qy + t * t * ey, tgx = 2 * u * qx + 2 * t * (ex - qx), tgy = 2 * u * qy + 2 * t * (ey - qy), n = Math.sqrt(tgx * tgx + tgy * tgy) || 1, nx = -tgy / n, ny = tgx / n,
-            w = 1.2 * Math.pow(Math.sin(Math.PI * Math.min(.99, Math.pow(t, .8))), .85) + .1;
-          up.push((cx + px + nx * w).toFixed(2) + " " + (cy + py + ny * w).toFixed(2));
-          dn.push((cx + px - nx * w * .8).toFixed(2) + " " + (cy + py - ny * w * .8).toFixed(2));
-        }
-        fr += "M" + up.join("L") + "L" + dn.reverse().join("L") + "Z";
-      });
-      return '<g stroke-linejoin="round"><path d="' + tr + fr + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"/><path d="' + tr + fr + '" fill="' + col + '"/><circle cx="' + (cx - .6) + '" cy="' + (cy + 1.4) + '" r="1.5" fill="#7a2a9a"/><circle cx="' + (cx + 1.5) + '" cy="' + (cy + 2) + '" r="1.2" fill="#7a2a9a"/></g>';
-    }
     function pal(x, y, h, lean, sc, col, rim) {
       var tr = "M" + (x - 1.5 * sc) + " " + y + "Q" + (x + lean * .2 - .9 * sc) + " " + (y - h * .55) + " " + (x + lean - .55 * sc) + " " + (y - h) + "L" + (x + lean + .65 * sc) + " " + (y - h) + "Q" + (x + lean * .2 + 1.1 * sc) + " " + (y - h * .55) + " " + (x + 1.6 * sc) + " " + y + "Z", tf = ' transform="translate(' + (x + lean) + " " + (y - h) + ") scale(" + sc + ')"';
       return '<g stroke-linejoin="round"><path d="' + tr + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"/><path d="' + FRD + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"' + tf + '/><path d="' + tr + '" fill="' + col + '"/><path d="' + FRD + '" fill="' + col + '"' + tf + '/></g>';
@@ -7702,7 +7686,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       o += '<clipPath id="' + u + 'a"><circle cx="22" cy="26" r="18.4"/></clipPath><clipPath id="' + u + 'k"><path d="' + VI + '"/></clipPath></defs>'
         + '<circle cx="22" cy="26" r="19.6" fill="#ff4fd0" fill-opacity=".5"/><circle cx="22" cy="26" r="18.6" fill="' + D + '"/><circle cx="22" cy="26" r="17.4" fill="url(#' + u + 's)"/>'
         + '<g clip-path="url(#' + u + 'a)"><rect x="0" y="31" width="48" height="1.1" fill="' + D + '"/><rect x="0" y="34" width="48" height="1.6" fill="' + D + '"/><rect x="0" y="37.4" width="48" height="2.2" fill="' + D + '"/></g>'
-        + '<circle cx="33" cy="14" r="10" fill="#ff4fd0" fill-opacity=".28"/>' + palBig(41, 40, 36, 9.5, 11.5, "#2a0850", "#ff8ae0") + '<g transform="translate(23 27) skewX(-8) scale(.98 1.26) translate(-3.8 0)">'
+        + '<circle cx="33" cy="15" r="10" fill="#ff4fd0" fill-opacity=".28"/>' + pal(33, 40, 24, 1, 1.2, "#2a0850", "#ff8ae0") + '<g transform="translate(23 27) skewX(-8) scale(.98 1.26) translate(-3.8 0)">'
         + '<path d="' + VI + '" fill="' + D + '" stroke="' + D + '" stroke-width="4.4" stroke-linejoin="round"/><path d="' + VI + '" fill="none" stroke="#c66cff" stroke-width="2.6" stroke-linejoin="round"/>'
         + '<path d="' + VI + '" fill="url(#' + u + 'v)"/><g clip-path="url(#' + u + 'k)"><circle cx="1.6" cy="5.4" r="5.4" fill="#ffe27a" fill-opacity=".9"/><circle cx="18" cy="3" r="4" fill="#ffe27a" fill-opacity=".8"/>'
         + '<g transform="scale(1 .67)">' + pal(-8, 12, 10, 0, .3, D, "#ff6fd0") + pal(-3.5, 12, 7, .3, .24, D, "#ff6fd0") + pal(16.6, 12, 11, 0, .32, D, "#ff6fd0") + '</g><path d="M13.4 5.2H22.6V8H13.4Z" fill="' + D + '" fill-opacity=".45"/></g>'
