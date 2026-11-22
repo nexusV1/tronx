@@ -7655,6 +7655,15 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       return d;
     }
     var FRD = [-118, -86, -56, -26, 4, 34, 64, 94, 122].map(function (a, k) { return frondD(a, 13 + (k % 2) * 2.2); }).join("");
+    /* palmera grande del pin VI: hojas curvas y limpias */
+    function palBig(x, y, cx, cy, L, col, rim) {
+      var tr = "M" + (x - 1.3) + " " + y + "Q" + (x + (cx - x) * .2) + " " + (y - (y - cy) * .55) + " " + (cx - .8) + " " + cy + "L" + (cx + .9) + " " + cy + "Q" + (x + (cx - x) * .2 + 2.2) + " " + (y - (y - cy) * .55) + " " + (x + 1.5) + " " + y + "Z", fr = "";
+      [-112, -78, -42, -10, 18, 50, 84, 116].forEach(function (a) {
+        var r = a * Math.PI / 180, dx = Math.sin(r), dy = -Math.cos(r), ad = Math.abs(dx), l = L * (Math.abs(a) < 20 ? .82 : 1), tx = dx * l, ty = dy * l + ad * l * .62, mx = dx * l * .5, my = dy * l * .5 - ad * l * .2, w = 1.5, px = -dy * w, py = dx * w;
+        fr += "M" + cx + " " + cy + "Q" + (cx + mx + px).toFixed(2) + " " + (cy + my + py).toFixed(2) + " " + (cx + tx).toFixed(2) + " " + (cy + ty).toFixed(2) + "Q" + (cx + mx - px).toFixed(2) + " " + (cy + my - py).toFixed(2) + " " + cx + " " + cy + "Z";
+      });
+      return '<g stroke-linejoin="round"><path d="' + tr + fr + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.7"/><path d="' + tr + fr + '" fill="' + col + '"/></g>';
+    }
     function pal(x, y, h, lean, sc, col, rim) {
       var tr = "M" + (x - 1.5 * sc) + " " + y + "Q" + (x + lean * .2 - .9 * sc) + " " + (y - h * .55) + " " + (x + lean - .55 * sc) + " " + (y - h) + "L" + (x + lean + .65 * sc) + " " + (y - h) + "Q" + (x + lean * .2 + 1.1 * sc) + " " + (y - h * .55) + " " + (x + 1.6 * sc) + " " + y + "Z", tf = ' transform="translate(' + (x + lean) + " " + (y - h) + ") scale(" + sc + ')"';
       return '<g stroke-linejoin="round"><path d="' + tr + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"/><path d="' + FRD + '" fill="' + rim + '" stroke="' + rim + '" stroke-width="1.1"' + tf + '/><path d="' + tr + '" fill="' + col + '"/><path d="' + FRD + '" fill="' + col + '"' + tf + '/></g>';
@@ -7690,7 +7699,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       o += '<clipPath id="' + u + 'a"><circle cx="22" cy="26" r="18.4"/></clipPath><clipPath id="' + u + 'k"><path d="' + VI + '"/></clipPath></defs>'
         + '<circle cx="22" cy="26" r="19.6" fill="#ff4fd0" fill-opacity=".5"/><circle cx="22" cy="26" r="18.6" fill="' + D + '"/><circle cx="22" cy="26" r="17.4" fill="url(#' + u + 's)"/>'
         + '<g clip-path="url(#' + u + 'a)"><rect x="0" y="31" width="48" height="1.1" fill="' + D + '"/><rect x="0" y="34" width="48" height="1.6" fill="' + D + '"/><rect x="0" y="37.4" width="48" height="2.2" fill="' + D + '"/></g>'
-        + '<g clip-path="url(#' + u + 'a)"><circle cx="33" cy="15" r="10" fill="#ff4fd0" fill-opacity=".28"/>' + pal(33, 40, 24, 1, 1.2, "#2a0850", "#ff8ae0") + '</g><g transform="translate(23 27) skewX(-8) scale(.98 1.26) translate(-3.8 0)">'
+        + '<circle cx="33" cy="14" r="10" fill="#ff4fd0" fill-opacity=".28"/>' + palBig(39.5, 40, 35.5, 11.5, 12.5, "#2a0850", "#ff8ae0") + '<g transform="translate(23 27) skewX(-8) scale(.98 1.26) translate(-3.8 0)">'
         + '<path d="' + VI + '" fill="' + D + '" stroke="' + D + '" stroke-width="4.4" stroke-linejoin="round"/><path d="' + VI + '" fill="none" stroke="#c66cff" stroke-width="2.6" stroke-linejoin="round"/>'
         + '<path d="' + VI + '" fill="url(#' + u + 'v)"/><g clip-path="url(#' + u + 'k)"><circle cx="1.6" cy="5.4" r="5.4" fill="#ffe27a" fill-opacity=".9"/><circle cx="18" cy="3" r="4" fill="#ffe27a" fill-opacity=".8"/>'
         + '<g transform="scale(1 .67)">' + pal(-8, 12, 10, 0, .3, D, "#ff6fd0") + pal(-3.5, 12, 7, .3, .24, D, "#ff6fd0") + pal(16.6, 12, 11, 0, .32, D, "#ff6fd0") + '</g><path d="M13.4 5.2H22.6V8H13.4Z" fill="' + D + '" fill-opacity=".45"/></g>'
