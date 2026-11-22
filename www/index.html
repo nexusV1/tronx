@@ -1777,6 +1777,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-pkw { position: relative; width: 100px; height: 100px; margin: 38px auto 56px; }
 .mx-pkl { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; margin-bottom: 10px; }
 .mx-pkcard { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 6px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.05); color: #fff; font: inherit; cursor: pointer; }
+.mx-pkph { height: 164.25px; }
 .mx-pkcard svg.pk { width: 78px; height: 101px; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4)); } .mx-pkcard b { font-size: 12.5px; } .mx-pkcard span { font-size: 11px; color: #b9bce4; }
 .mx-pkcard .pr, .mx-xc .pr { display: inline-flex; align-items: center; gap: 4px; font-weight: 800; color: #ffb3d6 !important; font-size: 12px !important; }
 .mx-pkcard:disabled, .mx-xc:disabled { opacity: 0.5; cursor: default; }
@@ -8182,7 +8183,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     if (mxEvTab === "shop") { mxEvShop(box, m, test); return; }
     if (mxEvTab === "mis") { mxEvMis(box, m); return; }
     box.appendChild(mk("div", "mx-sec", "Marco del evento"));
-    var stg = mk("div", "mx-fst"), pw = mk("div", "mx-fpw"), pa = mk("span", "mx-fpa"); paintAvatar(pa, prof); pw.appendChild(pa); stg.appendChild(pw); box.appendChild(stg); frApply(pw, pa, "gta6", 100);
+    var stg = mk("div", "mx-fst"), pw = mk("div", "mx-fpw"), pa = mk("span", "mx-fpa"); paintAvatar(pa, prof); pw.appendChild(pa); stg.appendChild(pw); box.appendChild(stg); requestAnimationFrame(function () { if (pw.isConnected) frApply(pw, pa, "gta6", 100); });
     var info = mk("div", "mx-fin"); info.appendChild(mk("b", null, f.n)); info.appendChild(mk("span", "mx-fr mx-evx", "EXCLUSIVO")); info.appendChild(mk("span", "mx-ft", "“VI”")); stg.appendChild(info);
     var act = mk("button", "mx-btn mx-fbuy"); act.type = "button";
     if (inv.gta6) { var on = frEq() === "gta6"; act.textContent = on ? "Equipado ✓" : "Equipar"; act.disabled = on; if (!on) act.addEventListener("click", function () { m.eq.frame = "gta6"; maxSave(); toast("Marco equipado"); mxRender(); }); }
@@ -8190,13 +8191,19 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     box.appendChild(act);
     if (!inv.gta6) box.appendChild(mk("p", "mx-note", test ? "Estás en modo prueba: restablecé tu nivel real para comprar." : "Cuesta ⭐ " + fmtMx(f.p) + ". También podés ganarlo gratis abriendo sobres."));
     box.appendChild(mk("div", "mx-sec", "Pines del evento"));
-    var pg = mk("div", "mx-pins"), owned = 0;
-    MX_PINS.forEach(function (q) {
-      var has = !!m.pins[q.id], on = m.eq.pin === q.id; if (has) owned++;
-      var b = mk("button", "mx-pn" + (has ? "" : " nol") + (on ? " on" : "")); b.type = "button";
-      var ic = mk("span", "mx-pni"); ic.innerHTML = pinSvg(q.id, 62); b.appendChild(ic); b.appendChild(mk("b", null, has ? q.n : "???")); b.appendChild(mk("small", null, has ? (on ? "Equipado" : q.r) : q.r));
-      if (has) b.addEventListener("click", function () { m.eq.pin = on ? "" : q.id; maxSave(); toast(on ? "Pin quitado" : "Pin equipado: " + q.n); try { renderProfile(); renderMenu(); } catch (e) {} mxRender(); }); else b.disabled = true;
-      pg.appendChild(b);
+    var pg = mk("div", "mx-pins"), owned = MX_PINS.filter(function (q) { return !!m.pins[q.id]; }).length;
+    /* los pines se dibujan en el cuadro siguiente; mientras tanto el espacio queda reservado */
+    pg.style.minHeight = "280px";
+    requestAnimationFrame(function () {
+      if (!pg.isConnected) return;
+      pg.style.minHeight = "";
+      MX_PINS.forEach(function (q) {
+        var has = !!m.pins[q.id], on = m.eq.pin === q.id; 
+        var b = mk("button", "mx-pn" + (has ? "" : " nol") + (on ? " on" : "")); b.type = "button";
+        var ic = mk("span", "mx-pni"); ic.innerHTML = pinSvg(q.id, 62); b.appendChild(ic); b.appendChild(mk("b", null, has ? q.n : "???")); b.appendChild(mk("small", null, has ? (on ? "Equipado" : q.r) : q.r));
+        if (has) b.addEventListener("click", function () { m.eq.pin = on ? "" : q.id; maxSave(); toast(on ? "Pin quitado" : "Pin equipado: " + q.n); try { renderProfile(); renderMenu(); } catch (e) {} mxRender(); }); else b.disabled = true;
+        pg.appendChild(b);
+      });
     });
     box.appendChild(pg);
     box.appendChild(mk("p", "mx-note", "Todos los sobres pueden traer un pin, y cuantas más estrellas tiene el sobre, más chances: desde " + String(MX_PIN.ch[1]).replace(".", ",") + " % en los de 1 estrella hasta " + MX_PIN.ch[6] + " % en los de 6. Nunca más de uno por sobre. Equipalo y se muestra junto a tu nombre. Tenés " + owned + " de " + MX_PINS.length + "."));
@@ -8206,7 +8213,13 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       var ec2 = mk("div", "mx-card"); ec2.appendChild(mk("b", null, "No tenés sobres")); ec2.appendChild(mk("p", "mx-note", "Cada misión que reclamás te da un sobre: cuanto más difícil, más estrellas trae (de 1 a 3). También podés conseguirlos en la Tienda del evento con puntos SEIS.")); box.appendChild(ec2);
       var gm = mk("button", "mx-btn", "Ir a Misiones"); gm.type = "button"; gm.addEventListener("click", function () { mxTab = "mis"; mxRender(); }); box.appendChild(gm);
     } else {
-      var gr = mk("div", "mx-pkl"); l.forEach(function (pk, i) { var c = mk("button", "mx-pkcard"); c.type = "button"; c.disabled = test; c.setAttribute("aria-label", "Abrir sobre de " + pk.s + " estrellas"); var w = mk("div"); w.innerHTML = mxPkSvg(pk.s); c.appendChild(w.firstChild); c.appendChild(mk("b", null, pk.s + (pk.s === 1 ? " estrella" : " estrellas"))); c.appendChild(mk("span", null, pk.t ? "Toques: " + pk.t + "/" + MX_PK.taps : "Sin abrir")); c.addEventListener("click", function () { mxPkOpenUi(i); }); gr.appendChild(c); }); box.appendChild(gr);
+      var gr = mk("div", "mx-pkl"), gen = (mxPkGen = (mxPkGen || 0) + 1);
+      function mkPk(pk, i) { var c = mk("button", "mx-pkcard"); c.type = "button"; c.disabled = test; c.setAttribute("aria-label", "Abrir sobre de " + pk.s + " estrellas"); var w = mk("div"); w.innerHTML = mxPkSvg(pk.s); c.appendChild(w.firstChild); c.appendChild(mk("b", null, pk.s + (pk.s === 1 ? " estrella" : " estrellas"))); c.appendChild(mk("span", null, pk.t ? "Toques: " + pk.t + "/" + MX_PK.taps : "Sin abrir")); c.addEventListener("click", function () { mxPkOpenUi(i); }); return c; }
+      /* los sobres se arman de a 8 por cuadro; los que faltan reservan su lugar para que el scroll no salte */
+      var phs = [];
+      function fillPk(from) { var to = Math.min(l.length, from + 8); for (var q = from; q < to; q++) { var card = mkPk(l[q], q); if (phs[q]) gr.replaceChild(card, phs[q]); else gr.appendChild(card); } if (to < l.length) requestAnimationFrame(function () { if (gen === mxPkGen && gr.isConnected) fillPk(to); }); }
+      box.appendChild(gr); fillPk(0);
+      for (var z = 8; z < l.length; z++) { phs[z] = mk("div", "mx-pkph"); gr.appendChild(phs[z]); }
       if (test) box.appendChild(mk("p", "mx-note", "Estás en modo prueba: restablecé tu nivel real para abrir sobres."));
     }
     box.appendChild(mk("div", "mx-sec", "Cómo funciona"));
@@ -8215,7 +8228,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     oc.appendChild(tb); oc.appendChild(mk("p", "mx-note", "Los sobres vienen con 1 a 3 estrellas según la dificultad de la misión. Cada toque (hasta 6 por sobre) puede subirlo una estrella, hasta 6. «Marco» es la chance de ganar el marco GTA VI al abrir ese sobre. Los puntos SEIS que ganás al abrir suben tu nivel de suerte."));
     box.appendChild(oc); box.appendChild(mk("p", "mx-note", "Pronto: portadas del evento."));
   }
-  var mxTab = "home", mxMisTab = "d", mxFrSel = "";
+  var mxTab = "home", mxMisTab = "d", mxFrSel = "", mxPkGen = 0;
   function mxFrRefresh() { mxRender(); try { renderMenu(); } catch (e) { /* menú aún no creado */ } try { renderProfile(); } catch (e2) { /* perfil cerrado */ } }
   function mk(tag, cls, txt) { var e = el(tag, cls); if (txt != null) e.textContent = txt; return e; }
   function fmtMx(n) { return Number(n).toLocaleString("es"); }
