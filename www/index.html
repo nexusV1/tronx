@@ -1765,7 +1765,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 @keyframes mxpnp { 0% { opacity: 0; transform: scale(0.2) rotate(-28deg); } 60% { opacity: 1; transform: scale(1.18) rotate(6deg); } 100% { opacity: 1; transform: none; } } @keyframes mxpnt { 0%, 100% { opacity: 0; transform: scale(0.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
 .mx-pkpnn { display: block; margin-top: 4px; font-size: 27px; letter-spacing: -0.01em; animation: mxrr 0.5s 0.5s ease-out both; }
 .mx-pkpnr { display: inline-block; margin-top: 8px; padding: 4px 13px; border-radius: 99px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); border: 1px solid var(--c); background: rgba(12, 4, 36, 0.55); animation: mxrr 0.5s 0.65s ease-out both; }
-.mx-pkpnd { display: inline-flex; align-items: center; gap: 6px; margin: 12px 0 0; font-size: 13px; font-weight: 800; color: #ff8ac0; animation: mxrr 0.5s 0.8s ease-out both; }
+.mx-pkpnd { display: inline-flex; align-items: center; gap: 6px; margin: 12px 0 0; font-size: 14px; font-weight: 800; color: #fff; text-shadow: 0 1px 8px rgba(20, 4, 50, 0.85), 0 0 2px rgba(20, 4, 50, 0.9); animation: mxrr 0.5s 0.8s ease-out both; }
 .mx-pkrw { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 280px; }
 .mx-pkrw .rr { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: rgba(12, 4, 36, 0.55); border: 1px solid rgba(255, 255, 255, 0.2); text-align: left; animation: mxrr 0.5s ease-out both; }
 @keyframes mxrr { 0% { opacity: 0; transform: translateY(14px) scale(.96); } 100% { opacity: 1; transform: none; } }
@@ -7594,7 +7594,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxDaily(c) { var A = ["d1", "d6", "d11"], B = ["d2", "d3", "d10", "d8"], C = ["d4", "d5", "d9", "d7", "d12"]; return [A[c.dn % 3], B[(c.dn + 1) % 4], C[(c.dn + 2) % 5]]; }
   function mxWeekly(c) { var w = Math.round(c.w0 / 604800000); return [["w1", "w9"][w % 2], ["w2", "w3", "w5", "w6"][w % 4], ["w4", "w10", "w8"][w % 3]]; }
   function mxClaim(key, xp, stars, msg) {
-    var m = getMax(); if (m.cl[key]) return false; m.cl[key] = Date.now(); grantXp(xp, stars); var ps = mxPkGive(xp); if (msg) toast(msg + " · Sobre de " + ps + (ps === 1 ? " estrella" : " estrellas")); mxRender(); return true;
+    var m = getMax(); if (m.cl[key]) return false; m.cl[key] = Date.now(); grantXp(xp, stars); var ps = mxPkGive(xp); if (msg) toast(msg + mxPkMsg(ps)); mxRender(); return true;
   }
   function mxReady() {
     var c = mxCtx(), n = 0, m = getMax();
@@ -7622,8 +7622,10 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxPkGive(xp) {
     var m = getMax(), s = xp >= 130 ? 3 : xp >= 60 ? 2 : 1, l = mxPkList(m);
     if (rand01() < mxLuck(m) * 0.03) s = Math.min(4, s + 1);
-    if (l.length < 60) l.push({ s: s, t: 0 }); maxSave(); return s;
+    if (l.length >= 60) { maxSave(); return 0; }
+    l.push({ s: s, t: 0 }); maxSave(); return s;
   }
+  function mxPkMsg(ps) { return ps ? " · Sobre de " + ps + (ps === 1 ? " estrella" : " estrellas") : " · Tenés 60 sobres guardados: abrí alguno para recibir más"; }
   var MX_PINS = [
     { id: "sol", n: "Atardecer", r: "Común", w: 30 },
     { id: "gat", n: "Cocodrilo", r: "Común", w: 30 },
@@ -7835,7 +7837,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     return o + '</svg>';
   }
   var MX_PCOL = { "Común": "#ffb27a", "Raro": "#7ac8ff", "Épico": "#c25bff", "Legendario": "#ffd25a" };
-  var MX_PIN = { ch: { 1: 0.5, 2: 1.5, 3: 4, 4: 8, 5: 15, 6: 35 }, dup: 10 };
+  var MX_PIN = { ch: { 1: 0.5, 2: 1.5, 3: 4, 4: 8, 5: 15, 6: 35 } };
   function mxPinPick() { var t = 0; MX_PINS.forEach(function (q) { t += q.w; }); var r = rand01() * t; for (var i = 0; i < MX_PINS.length; i++) { r -= MX_PINS[i].w; if (r < 0) return MX_PINS[i].id; } return MX_PINS[0].id; }
   function mxPinById(id) { for (var i = 0; i < MX_PINS.length; i++) if (MX_PINS[i].id === id) return MX_PINS[i]; return null; }
   /* pin equipado junto al nombre */
@@ -7949,7 +7951,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     { sky: ["#06031a", "#120840", "#27106c", "#46188a"], hz: "#7a3cc4", body: { t: "moon", x: 292, y: 118, r: 30, c: "#e8eaff", g: "#8f86ff" }, st: 46, win: ["#7ad7ff", "#ffd27a", "#ff7ac0"], sea: ["#241080", "#0a0630"], far: "#1a0c4e", near: "#0b0524", ref: "#cfd2ff", cl: 2 },
     { sky: ["#10043a", "#380a6a", "#8a1a8a", "#e0307a"], hz: "#ff4fa3", body: null, st: 22, win: ["#ff2e93", "#25d9c5", "#ffd27a"], sea: ["#5a0a7a", "#14053a"], far: "#3a0c5e", near: "#12052a", ref: "#ff7ac0", cl: 2, neon: 1 },
     { sky: ["#240a58", "#6a1a9a", "#dc3c80", "#ff8a6a"], hz: "#ffb070", body: { t: "sun", x: 210, y: 548, r: 40, c: "#ffd890", g: "#ff7a6a" }, st: 8, win: ["#ffd27a", "#ff9ac8", "#ffffff"], sea: ["#c0407a", "#3a1070"], far: "#5a1a6e", near: "#1a0836", ref: "#ffd890", cl: 3 },
-    { sky: ["#34085a", "#a81c8a", "#ff6258", "#ffb060"], hz: "#ffc880", body: { t: "sun", x: 126, y: 548, r: 58, c: "#ffe29a", g: "#ff8a4a" }, st: 0, win: ["#ffe29a", "#ffffff", "#ffb02e"], sea: ["#e8608a", "#4a1a7a"], far: "#7a2a7a", near: "#2a0c3a", ref: "#ffe29a", cl: 3, boats: 1 },
+    { sky: ["#34085a", "#a81c8a", "#ff6258", "#ffb060"], hz: "#ffc880", body: { t: "sun", x: 126, y: 548, r: 58, c: "#ffe29a", g: "#ff8a4a" }, st: 0, win: ["#ffe29a", "#ffffff", "#ffb02e"], sea: ["#e8608a", "#4a1a7a"], far: "#7a2a7a", near: "#2a0c3a", ref: "#ffe29a", cl: 3 },
     { sky: ["#4a1a6a", "#c83c80", "#ffa860", "#ffe49a"], hz: "#fff0b0", body: { t: "sun", x: 276, y: 546, r: 66, c: "#fffbe0", g: "#ffc060" }, st: 0, win: ["#fff0b0", "#ffffff", "#ffc060"], sea: ["#ffa070", "#6a2a8a"], far: "#a04a7a", near: "#3a1240", ref: "#fff0b0", cl: 2 }];
   var mxScCache = {};
   function mxSceneEl(L) {
@@ -7990,7 +7992,6 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     if (b) { for (i = 0; i < 12; i++) { var yy = 574 + i * 9.5, ww = (b.r * 0.35) + i * (b.r * 0.12); o += '<ellipse class="brf" style="transform-origin:' + b.x + 'px ' + yy + 'px;animation-delay:' + (i * .23).toFixed(2) + 's;animation-duration:' + (1.6 + (i % 3) * .5) + 's" cx="' + b.x + '" cy="' + yy + '" rx="' + ww.toFixed(0) + '" ry="1.5" fill="' + S.ref + '" fill-opacity="' + (0.75 - i * .05).toFixed(2) + '"/>'; } }
     else for (i = 0; i < 14; i++) o += '<rect class="brf" style="transform-origin:' + (30 + rnd() * 340).toFixed(0) + 'px 600px;animation-delay:' + (rnd() * 2).toFixed(1) + 's;animation-duration:' + (1.8 + rnd() * 1.5).toFixed(1) + 's" x="' + (30 + rnd() * 340).toFixed(0) + '" y="' + (574 + rnd() * 100).toFixed(0) + '" width="' + (10 + rnd() * 26).toFixed(0) + '" height="1.6" fill="' + S.win[i % 3] + '" fill-opacity=".6"/>';
     o += '<path class="bw w2" style="animation-duration:9s" d="M0 600' + "q50 -4 100 0q50 4 100 0".repeat(1) + "q50 -4 100 0q50 4 100 0".repeat(7) + 'V690H0Z" fill="rgba(255,255,255,.06)"/>';
-    if (S.boats) [[90, 622, 1], [300, 640, .8]].forEach(function (q, k) { FG += '<g transform="translate(' + q[0] + ' ' + q[1] + ') scale(' + q[2] + ')"><g class="sbt" style="animation-delay:' + (k * 1.3) + 's"><path d="M-22 0L22 0L16 8L-16 8Z" fill="#14062a"/><path d="M-2 -2V-34L18 -4Z" fill="#14062a"/><path d="M-5 -2V-26L-18 -4Z" fill="#14062a" fill-opacity=".9"/></g></g>'; });
     o += '<rect x="0" y="690" width="400" height="110" fill="#10052a"/><path d="M0 690H400" stroke="' + S.hz + '" stroke-opacity=".6" stroke-width="1.4"/>';
     for (i = 0; i < 6; i++) { var lx = 30 + i * 68; o += '<rect x="' + (lx - 1) + '" y="662" width="2" height="30" fill="#0a0318"/><circle class="mxtw" style="animation-delay:' + (i * .5) + 's" cx="' + lx + '" cy="660" r="3" fill="' + S.win[i % 2] + '"/><circle cx="' + lx + '" cy="660" r="9" fill="' + S.win[i % 2] + '" fill-opacity=".22"/>'; }
     function palm(x, y, h, lean, sc) {
@@ -8038,7 +8039,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         if (at < 0) { close(); return; } ll.splice(at, 1); mm.pk.n = (mm.pk.n || 0) + 1;
         var hit = !mm.inv.gta6 && rand01() * 100 < t.fp; if (hit) { mm.inv.gta6 = Date.now(); mm.eq.frame = "gta6"; }
         var pinGot = null, pinDup = false;
-        if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) { pinDup = true; mxSxAdd(mm, MX_PIN.dup); } else mm.pins[pinGot] = Date.now(); }
+        if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) pinDup = true; else mm.pins[pinGot] = Date.now(); }
         if (!pinGot) { mxSxAdd(mm, t.sx); grantXp(t.xp, t.st); }
         maxSave(); $("mxBal").textContent = "⭐ " + fmtMx(getMax().stars);
         art.remove(); acts.textContent = ""; sr.classList.add("big"); fx.classList.add("rv");
@@ -8054,7 +8055,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
           sh.innerHTML = '<i class="rays"></i><i class="ring"></i><span class="art">' + pinSvg(pinGot, hit ? 104 : 144) + '</span><i class="sp a"></i><i class="sp b"></i><i class="sp c"></i><i class="sp d"></i>';
           var pnm = mk("b", "mx-pkpnn", pd.n), pch = mk("span", "mx-pkpnr", pd.r); pch.style.setProperty("--c", pcol);
           ov.insertBefore(sh, hint); ov.insertBefore(pnm, hint); ov.insertBefore(pch, hint);
-          if (pinDup) { var pdp = mk("span", "mx-pkpnd"); pdp.innerHTML = sixIco(18) + "<span>+" + MX_PIN.dup + " puntos SEIS</span>"; ov.insertBefore(pdp, hint); }
+          if (pinDup) ov.insertBefore(mk("span", "mx-pkpnd", "Ya lo tenías en tu colección"), hint);
         } else {
           ov.insertBefore(rw, hint);
           var rows = [["st", "⭐", t.st, "Estrellas"], ["xp", "XP", t.xp, "Experiencia"], ["sx", "", t.sx, "Puntos SEIS"]];
@@ -8397,7 +8398,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
           if (!claimed) { var pb = mk("div", "mx-pb"), pi = el("i"); pi.style.width = Math.min(100, Math.round(ws.best / s * 100)) + "%"; pb.appendChild(pi); tx.appendChild(pb); }
           card.appendChild(ic); card.appendChild(tx);
           if (claimed) card.appendChild(mk("div", "mx-rw done", "+" + fmtMx(xp) + " XP"));
-          else if (ok) { var b = mk("button", "mx-rw", "Reclamar +" + fmtMx(xp) + " XP"); b.type = "button"; b.addEventListener("click", function () { var mm2 = getMax(); if (mm2.sc[s]) return; mm2.sc[s] = Date.now(); grantXp(xp, s * 2); var ps2 = mxPkGive(xp); toast("Racha de " + s + " días: +" + fmtMx(xp) + " XP · Sobre de " + ps2 + (ps2 === 1 ? " estrella" : " estrellas")); mxRender(); }); card.appendChild(b); }
+          else if (ok) { var b = mk("button", "mx-rw", "Reclamar +" + fmtMx(xp) + " XP"); b.type = "button"; b.addEventListener("click", function () { var mm2 = getMax(); if (mm2.sc[s]) return; mm2.sc[s] = Date.now(); grantXp(xp, s * 2); var ps2 = mxPkGive(xp); toast("Racha de " + s + " días: +" + fmtMx(xp) + " XP" + mxPkMsg(ps2)); mxRender(); }); card.appendChild(b); }
           else card.appendChild(mk("div", "mx-rw", "+" + fmtMx(xp) + " XP"));
           box.appendChild(card);
         });
