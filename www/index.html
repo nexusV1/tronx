@@ -1756,8 +1756,14 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 @keyframes mxtw { 50% { transform: scale(1.07); filter: brightness(1.2) drop-shadow(0 0 11px rgba(255, 215, 100, 1)); } }
 .mx-pks i.stn { animation: mxstp 0.8s cubic-bezier(.2,1.5,.4,1) backwards; }
 @keyframes mxstp { 0% { transform: var(--tf) scale(.2) rotate(-100deg); } 55% { transform: var(--tf) scale(1.4) rotate(12deg); } 100% { transform: var(--tf); } }
-.mx-pks i.stn { isolation: isolate; } .mx-pks i.stn::after { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: 100px; height: 100px; margin: -50px 0 0 -50px; border-radius: 50%; background: repeating-conic-gradient(rgba(255, 244, 180, 0.95) 0 5deg, transparent 5deg 30deg); animation: mxsb 0.85s ease-out both; pointer-events: none; }
-@keyframes mxsb { 0% { transform: scale(.3) rotate(0); opacity: 1; } 100% { transform: scale(1.8) rotate(40deg); opacity: 0; } }
+.mx-pks i.stn { isolation: isolate; }
+.mx-pks i.stn::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 2px solid rgba(255, 238, 160, 0.95); box-shadow: 0 0 14px 2px rgba(255, 210, 90, 0.8), inset 0 0 12px rgba(255, 220, 110, 0.6); animation: mxsr 0.75s cubic-bezier(.1,.7,.3,1) both; pointer-events: none; }
+.mx-pks i.stn::after { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; background: radial-gradient(circle, #fff 0 7%, rgba(255, 226, 120, 0.6) 20%, transparent 52%), linear-gradient(90deg, transparent, rgba(255, 246, 190, 0.95) 50%, transparent) center / 100% 2.5px no-repeat, linear-gradient(0deg, transparent, rgba(255, 246, 190, 0.95) 50%, transparent) center / 2.5px 100% no-repeat; animation: mxsb 0.65s ease-out both; pointer-events: none; }
+@keyframes mxsr { 0% { transform: scale(.35); opacity: 1; } 100% { transform: scale(2.7); opacity: 0; } }
+.mx-stp { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; z-index: 2; }
+.mx-stp b { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff6c8; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); animation: mxspk 0.8s ease-out both; }
+@keyframes mxspk { 0% { transform: translate(0, 0) scale(.3); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) scale(1.1) rotate(160deg); opacity: 0; } }
+@keyframes mxsb { 0% { transform: scale(.2); opacity: 1; } 35% { opacity: 1; } 100% { transform: scale(1.25); opacity: 0; } }
 .mx-pkbs { position: absolute !important; left: 50%; top: 42%; width: 0; height: 0; pointer-events: none; z-index: 6; }
 .mx-pkbs i { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; background: #fff3b8; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); animation: mxbp 0.95s ease-out both; }
 .mx-pkbs i:nth-child(3n) { background: var(--gl); } .mx-pkbs i:nth-child(3n+1) { background: #fff; }
@@ -1820,7 +1826,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-sxb { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; } .mx-sxb small { display: block; color: #b9bce4; font-size: 12px; } .mx-sxb b { font-size: 30px; letter-spacing: -0.02em; background: linear-gradient(90deg, #ff4fa3, #ffb02e); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .mx-xch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .mx-xc { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 8px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.05); color: #fff; font: inherit; cursor: pointer; } .mx-xc b { font-size: 18px; }
-@media (prefers-reduced-motion: reduce) { .mx-pko svg.pk, .mx-pkpn *, .mx-pkpnn, .mx-pkpnr, .mx-pkpnd, .mx-pkfx *, .mx-pks i, .mx-pks i svg, .mx-pks i::after, .mx-pkbs i, .mx-pkb.pulse, .mx-pko::before { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .mx-pko svg.pk, .mx-pkpn *, .mx-pkpnn, .mx-pkpnr, .mx-pkpnd, .mx-pkfx *, .mx-pks i, .mx-pks i svg, .mx-pks i::after, .mx-pks i::before, .mx-stp b, .mx-pkbs i, .mx-pkb.pulse, .mx-pko::before { animation: none !important; } }
 .mx-fam { display: flex; align-items: baseline; justify-content: space-between; margin: 22px 2px 0; }
 .mx-fam b { font-size: 15px; }
 .mx-fam span { font-size: 11px; color: #9a9dc8; }
@@ -8028,7 +8034,8 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var art = mk("button", "mx-pka"); art.type = "button"; art.setAttribute("aria-label", "Tocar el sobre para mejorarlo"); ov.appendChild(art);
     var hint = mk("p", "mx-pkh"), ct = mk("div", "mx-pkd"), acts = mk("div", "mx-pkac"), bo = mk("button");
     for (var di = 0; di < MX_PK.taps; di++) ct.appendChild(el("i")); ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov); $("max").classList.add("pkopen");
-    function drawStars(prev) { sr.classList.toggle("full", pk.s === 6); for (var k = 0; k < 6; k++) { sr.children[k].className = k < pk.s ? "on" : ""; if (prev !== undefined && k >= prev && k < pk.s) { sr.children[k].classList.add("stn"); (function (n) { later(function () { n.classList.remove("stn"); }, 900); })(sr.children[k]); } } }
+    function sparks(host) { if (calm) return; var c = mk("span", "mx-stp"); for (var q = 0; q < 8; q++) { var b = el("b"), an = (q / 8) * 6.2832 + rand01() * .6, dd = 28 + rand01() * 26; b.style.setProperty("--x", Math.round(Math.cos(an) * dd) + "px"); b.style.setProperty("--y", Math.round(Math.sin(an) * dd) + "px"); if (q % 2) b.style.width = b.style.height = "5px"; c.appendChild(b); } host.appendChild(c); later(function () { c.remove(); }, 900); }
+    function drawStars(prev) { sr.classList.toggle("full", pk.s === 6); for (var k = 0; k < 6; k++) { sr.children[k].className = k < pk.s ? "on" : ""; if (prev !== undefined && k >= prev && k < pk.s) { sr.children[k].classList.add("stn"); sparks(sr.children[k]); (function (n) { later(function () { n.classList.remove("stn"); }, 900); })(sr.children[k]); } } }
     function drawArt() { art.innerHTML = mxPkSvg(pk.s); }
     function drawCt() { var left = MX_PK.taps - pk.t; for (var k = 0; k < ct.children.length; k++) ct.children[k].className = k < pk.t ? "on" : ""; if (left <= 0) art.disabled = true; }
     function draw() { theme(); drawStars(); drawArt(); drawCt(); }
