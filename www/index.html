@@ -7663,7 +7663,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function rand01() { try { var a = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(a); return a[0] / 4294967296; } catch (e) { return Math.random(); } }
   function mxPkList(m) { if (!m.pk || typeof m.pk !== "object") m.pk = { n: 0, l: [] }; if (!Array.isArray(m.pk.l)) m.pk.l = []; return m.pk.l; }
   function mxSx(m) { if (!m.sx || typeof m.sx !== "object") m.sx = { p: 0, t: 0 }; return m.sx; }
-  var MX_LV = [{ n: 6, s: 1 }, { n: 16, x: 16 }, { n: 36, x: 26 }, { n: 66, x: 40 }, { n: 106, x: 66 }, { n: 206, s: 5, mx: 2 }];
+  var MX_LV = [{ n: 6, s: 1 }, { n: 16, x: 16 }, { n: 36, x: 26 }, { n: 66, x: 40 }, { n: 106, x: 66 }, { n: 206, s: 5, mx: 2 }, { n: 299, l: "gta" }];
   function mxLvProg(m) { var x = mxSx(m); if (typeof x.g !== "number") x.g = x.t || 0; return x.g; }
   function mxLvReached(m) { var g = mxLvProg(m), n = 0; while (n < MX_LV.length && g >= MX_LV[n].n) n++; return n; }
   function mxLvDone(m) { var x = mxSx(m); return Math.min(MX_LV.length, Math.max(0, x.lc | 0)); }
@@ -8128,7 +8128,8 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var m = getMax(), lv = MX_LV[k]; if (m.bk || mxLvDone(m) !== k || k >= mxLvReached(m)) return;
     if (lv.s && mxPkList(m).length >= 60) { toast("Tenés 60 sobres guardados: abrí alguno para reclamar"); return; }
     mxSx(m).lc = k + 1;
-    if (lv.s) { mxPkGiveS(lv.s, lv.mx); toast("Nivel " + (k + 1) + ": sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "")); }
+    if (lv.l) { m.inv["led_" + lv.l] = Date.now(); m.eq.led = lv.l; toast("Nivel " + (k + 1) + ": Luz Vice conseguida"); try { renderProfile(); renderMenu(); } catch (e) { } }
+    else if (lv.s) { mxPkGiveS(lv.s, lv.mx); toast("Nivel " + (k + 1) + ": sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "")); }
     else { mxSxAdd(m, lv.x, false); maxSave(); toast("Nivel " + (k + 1) + ": +" + lv.x + " puntos SEIS"); }
     maxSave(); mxRender();
   }
@@ -8142,7 +8143,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     lc.appendChild(mk("p", "mx-note", (rch >= MX_LV.length ? "¡Completaste todos los niveles! " : "Llevás " + fmtMx(g) + " puntos · faltan " + fmtMx(hi - g) + " para el nivel " + (rch + 1) + ". ") + "Solo suman los puntos SEIS de misiones y sobres; los que te dan los niveles no cuentan."));
     MX_LV.forEach(function (lv, k) {
       var st = k < dn ? "ok" : k < rch ? "rdy" : "", row = mk("div", "mx-lv " + st); row.appendChild(mk("span", "n", String(k + 1)));
-      var t = mk("div", "t"); t.appendChild(mk("b", null, lv.s ? "Sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "") : lv.x + " puntos SEIS")); t.appendChild(mk("small", null, lv.mx ? "Necesitás " + lv.n + " · solo " + lv.mx + " toques para mejorarlo" : "Necesitás " + lv.n + " puntos")); row.appendChild(t);
+      var t = mk("div", "t"); t.appendChild(mk("b", null, lv.l ? "Luz Vice" : lv.s ? "Sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "") : lv.x + " puntos SEIS")); t.appendChild(mk("small", null, lv.l ? "Necesitás " + lv.n + " · luz para tu nombre" : lv.mx ? "Necesitás " + lv.n + " · solo " + lv.mx + " toques para mejorarlo" : "Necesitás " + lv.n + " puntos")); row.appendChild(t);
       if (k < dn) row.appendChild(mk("span", "dn", "✓ Reclamado"));
       else { var bt = mk("button", "mx-btn", "Reclamar"); bt.type = "button"; bt.disabled = test || k !== dn || k >= rch; bt.addEventListener("click", function () { mxLvClaim(k); }); row.appendChild(bt); }
       lc.appendChild(row);
@@ -8155,10 +8156,10 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var g2 = mk("div", "mx-xch"); MX_SHOP.xch.forEach(function (p) { var c = mk("button", "mx-xc"); c.type = "button"; c.appendChild(mk("b", null, p.l)); var pr = mk("span", "pr"); pr.innerHTML = sixIco(15) + " " + fmtMx(p.c); c.appendChild(pr); c.disabled = test || (x.p || 0) < p.c; c.addEventListener("click", function () { buy(p.c, function () { grantXp(p.xp || 0, p.st || 0); }, "Intercambio hecho: " + p.l); }); g2.appendChild(c); }); box.appendChild(g2);
     box.appendChild(mk("div", "mx-sec", "Luces"));
     var ld = MX_LED.gta, lk = "led_gta", lcd = mk("div", "mx-card"), lpv = mk("div", "mx-ledp"), lnm = mk("span", null, (getProfile().name || "Explorador"));
-    mxLedApply(lnm, "gta"); lpv.appendChild(lnm); lcd.appendChild(lpv); lcd.appendChild(mk("b", null, ld.n)); lcd.appendChild(mk("p", "mx-note", "Una luz neón con los colores de GTA VI en las letras de tu nombre, en el perfil y en el menú."));
+    mxLedApply(lnm, "gta"); lpv.appendChild(lnm); lcd.appendChild(lpv); lcd.appendChild(mk("b", null, ld.n)); lcd.appendChild(mk("p", "mx-note", "Una luz neón con los colores de GTA VI en las letras de tu nombre, en el perfil y en el menú. Premio del nivel 7 del Camino SEIS."));
     var lbt = mk("button", "mx-btn"); lbt.type = "button";
     if (m.inv[lk]) { var lon = m.eq.led === "gta"; lbt.textContent = lon ? "Quitar luz" : "Equipar"; lbt.addEventListener("click", function () { m.eq.led = lon ? "" : "gta"; maxSave(); toast(lon ? "Luz quitada" : "Luz equipada"); try { renderProfile(); renderMenu(); } catch (e) { } mxRender(); }); }
-    else { lbt.innerHTML = "Comprar · " + sixIco(15) + " " + fmtMx(ld.p); lbt.disabled = test || (x.p || 0) < ld.p; lbt.addEventListener("click", function () { var mm = getMax(); if (mm.bk || mxSx(mm).p < ld.p) return; mxSx(mm).p -= ld.p; mm.inv[lk] = Date.now(); mm.eq.led = "gta"; maxSave(); toast("Luz Vice conseguida"); try { renderProfile(); renderMenu(); } catch (e) { } mxRender(); }); }
+    else { lbt.textContent = "Se consigue en el Camino SEIS · nivel 7"; lbt.disabled = true; }
     lcd.appendChild(lbt); box.appendChild(lcd);
     if (test) box.appendChild(mk("p", "mx-note", "Estás en modo prueba: restablecé tu nivel real para usar la tienda."));
   }
