@@ -116,6 +116,10 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.74.3**: Luces: nueva categoría de efectos para el nombre, con Luz Vice (neón GTA VI) como premio del nivel 7 del Camino SEIS.
+
+**1.74.2**: Camino SEIS en la Tienda del evento, premios y recompensa diaria que se reclaman a mano, sobres más nítidos, estrellas rediseñadas, pin VI con arte nuevo y botón Atrás del celular.
+
 **1.74.1**: Actualización de dependencias: Capacitor 7.6, plugins de Filesystem, Notificaciones, Compartir y Huella, y fuentes a sus últimas versiones compatibles. Sin cambios visibles en la app.
 
 **1.74.0**: Evento GTA VI: pestaña Misiones, recompensa diaria de 7 días, seis misiones diarias y seis semanales, pines en todos los sobres, sobres que se abren solos y mejor rendimiento.
