@@ -8129,7 +8129,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var x = mxSx(m), g = mxLvProg(m), rch = mxLvReached(m), dn = mxLvDone(m);
     var bal = mk("div", "mx-card mx-sxb"), ic = mk("div", "ic"); ic.innerHTML = sixIco(44); bal.appendChild(ic);
     var tx = mk("div", "tx"); tx.appendChild(mk("small", null, "Tus puntos SEIS")); tx.appendChild(mk("b", null, fmtMx(x.p || 0))); bal.appendChild(tx); box.appendChild(bal);
-    var lc = mk("div", "mx-card"); lc.appendChild(mk("b", null, "Progreso de suerte · Nivel " + rch + " / " + MX_LV.length));
+    var lc = mk("div", "mx-card"); lc.appendChild(mk("b", null, "Camino SEIS · Nivel " + rch + " / " + MX_LV.length));
     var lo = rch ? MX_LV[rch - 1].n : 0, hi = rch < MX_LV.length ? MX_LV[rch].n : lo;
     var pb = mk("div", "mx-pb"), pi = el("i"); pi.style.width = (rch >= MX_LV.length ? 100 : Math.round((g - lo) / (hi - lo) * 100)) + "%"; pb.appendChild(pi); lc.appendChild(pb);
     lc.appendChild(mk("p", "mx-note", (rch >= MX_LV.length ? "¡Completaste todos los niveles! " : "Llevás " + fmtMx(g) + " puntos · faltan " + fmtMx(hi - g) + " para el nivel " + (rch + 1) + ". ") + "Solo suman los puntos SEIS de misiones y sobres; los que te dan los niveles no cuentan."));
@@ -8335,7 +8335,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     box.appendChild(mk("div", "mx-sec", "Cómo funciona"));
     var oc = mk("div", "mx-card"), tb = el("table"); tb.className = "mx-odd"; var th = el("tr"); ["Estrellas", "Mejora por toque", "Premio", "Marco"].forEach(function (x) { th.appendChild(mk("th", null, x)); }); tb.appendChild(th);
     for (var q = 1; q <= 6; q++) (function (t) { var tr = el("tr"); [t.s + " ★", t.up ? Math.round(t.up * 100) + " %" : "—", "⭐ " + fmtMx(t.st) + " · " + fmtMx(t.xp) + " XP · " + t.sx + " SEIS", t.fp + " %"].forEach(function (x) { tr.appendChild(mk("td", null, x)); }); tb.appendChild(tr); })(MX_PK.tiers[q]);
-    oc.appendChild(tb); oc.appendChild(mk("p", "mx-note", "Los sobres vienen con 1 a 3 estrellas, según la dificultad de la misión. Cada toque (hasta 6 por sobre) puede subirlo una estrella, hasta un máximo de 6. La columna «Marco» indica la probabilidad de ganar el marco GTA VI al abrir ese sobre. Los puntos SEIS de misiones y sobres te hacen subir de nivel en el Progreso de suerte."));
+    oc.appendChild(tb); oc.appendChild(mk("p", "mx-note", "Los sobres vienen con 1 a 3 estrellas, según la dificultad de la misión. Cada toque (hasta 6 por sobre) puede subirlo una estrella, hasta un máximo de 6. La columna «Marco» indica la probabilidad de ganar el marco GTA VI al abrir ese sobre. Los puntos SEIS de misiones y sobres te hacen subir de nivel en el Camino SEIS."));
     box.appendChild(oc); box.appendChild(mk("p", "mx-note", "Próximamente: portadas del evento."));
   }
   var mxTab = "home", mxMisTab = "d", mxFrSel = "", mxPkGen = 0;
