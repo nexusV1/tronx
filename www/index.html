@@ -3150,7 +3150,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     try { history.pushState({ d: 0, g: 1 }, ""); } catch {}
   }
   function mxInnerBack() {
-    if (document.querySelector(".mx-pko")) return true;
+    var pko = document.querySelector(".mx-pko .mx-pkx"); if (document.querySelector(".mx-pko")) { if (pko) pko.click(); return true; }
     if (typeof mxTourI !== "undefined" && mxTourI >= 0 && $("mxTour")) { mxTourEnd(true); return true; }
     if (mxEvSel) { mxEvSel = ""; mxRender(); return true; }
     if (mxTab !== "home") { mxTab = "home"; mxRender(); var sc = $("mxSc"); if (sc) sc.scrollTop = 0; return true; }
@@ -3217,6 +3217,29 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var i = layers.indexOf(name);
     if (i >= 0) closeTo(i); else closeLayerUI(name);
   }
+
+  /* Atrás nativo (Android): el plugin App entrega el evento a la app y ella decide, sin depender del historial del WebView.
+     Si no está disponible (versión web o APK anterior) sigue funcionando el historial de arriba. */
+  var exitArmed = 0;
+  function nativeBack() {
+    var lk = $("lock");
+    if (lk && !lk.hidden) { exitApp(); return; }
+    if (layers.length) {
+      var top = layers[layers.length - 1];
+      if (top === "max" && mxInnerBack()) return;
+      closeLayer(top);
+      return;
+    }
+    if (rootInnerBack()) return;
+    if (exitArmed) { exitApp(); return; }
+    exitArmed = 1; toast("Tocá Atrás otra vez para salir");
+    setTimeout(function () { exitArmed = 0; }, 2200);
+  }
+  function exitApp() { var ap = capPlugin("App"); try { if (ap && ap.exitApp) ap.exitApp(); } catch {} }
+  (function () {
+    var ap = capPlugin("App");
+    if (ap && ap.addListener) { try { ap.addListener("backButton", nativeBack); } catch {} }
+  })();
 
   /* ---------- lista de notas ---------- */
   function inTab(n, t) {
