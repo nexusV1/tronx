@@ -2633,7 +2633,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.74.3";
+  var APP_VERSION = "1.74.4";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5879,6 +5879,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.74.4", d: "23 nov 2026", t: "Misiones sin sobres", lv: "Hipernova", nm: "Ha llegado VI", cat: "arreglo", ep: "gta", l: ["Las misiones normales y las recompensas de racha de la pestaña Misiones ya no entregan sobres: dan solo XP y estrellas.","Los sobres se consiguen en las misiones del evento, en el Camino SEIS y en la recompensa diaria."] },
     { v: "1.74.3", d: "23 nov 2026", t: "Luces: Luz Vice para tu nombre", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva categoría Luces: efectos de luz para las letras de tu nombre.","Luz Vice: un neón con los colores de GTA VI (rosa, naranja y violeta) que ilumina tu nombre en el perfil y en el menú.","Se consigue como premio del nivel 7 del Camino SEIS, con 299 puntos.","En Eventos > Tienda, en la sección Luces, podés ver cómo queda, equiparla o quitarla cuando quieras."] },
     { v: "1.74.2", d: "23 nov 2026", t: "Camino SEIS y mejoras en los sobres", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nuevo Camino SEIS en la Tienda del evento: subís de nivel con los puntos SEIS que ganás en misiones y sobres.","Nivel 1 (6 puntos): sobre de 1 estrella. Nivel 2 (16): 16 puntos SEIS. Nivel 3 (36): 26 puntos SEIS. Nivel 4 (66): 40 puntos SEIS. Nivel 5 (106): 66 puntos SEIS. Nivel 6 (206): sobre especial de 5 estrellas que se mejora con solo 2 toques. Nivel 7 (299): Luz Vice.","Los puntos que dan los niveles no cuentan para llegar al siguiente.","Los premios del Camino SEIS y la recompensa diaria del evento se reclaman a mano con un botón; ya no se entregan solos.","Sobres más nítidos al abrirlos, estrellas rediseñadas con nuevos destellos y fondos renovados.","El pin VI estrena arte, y si te sale un pin repetido ya no recibís puntos SEIS.","Aviso claro cuando tenés 60 sobres guardados.","El botón Atrás del celular ahora retrocede dentro de la app y cierra el sobre abierto; solo sale con doble toque desde la pantalla principal."] },
     { v: "1.74.0", d: "21 nov 2026", t: "Misiones y recompensas diarias del evento", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva pestaña Misiones en el evento GTA VI.","Recompensa diaria con ciclo de 7 días: sobres, puntos SEIS, estrellas y XP, con un sobre de 4 estrellas el día 7.","Seis misiones diarias, renovadas a las 00:00, como escribir 6 palabras, 66 letras o usar Enfoque 6 minutos. Cada una da 6 puntos SEIS y un sobre de 1 estrella.","Seis misiones semanales, renovadas los lunes. Las fáciles dan 16 puntos SEIS y un sobre de 2 estrellas; las difíciles, 24 puntos SEIS y un sobre de 3 estrellas.","Cada misión muestra su progreso, y un aviso en Eventos indica cuándo hay recompensas por reclamar.","Los pines ahora también salen en sobres de 1 a 4 estrellas, con menor probabilidad que en los de 5 y 6.","Los sobres se abren solos al terminar los toques, y al tocar un marco en la Tienda se reproduce su animación.","El botón Atrás retrocede paso a paso en MAX y en las notas, y pide confirmación antes de cerrar la app.","Mejor rendimiento al abrir sobres, en la Tienda y en el marco Fusión nuclear."] },
@@ -7642,7 +7643,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxDaily(c) { var A = ["d1", "d6", "d11"], B = ["d2", "d3", "d10", "d8"], C = ["d4", "d5", "d9", "d7", "d12"]; return [A[c.dn % 3], B[(c.dn + 1) % 4], C[(c.dn + 2) % 5]]; }
   function mxWeekly(c) { var w = Math.round(c.w0 / 604800000); return [["w1", "w9"][w % 2], ["w2", "w3", "w5", "w6"][w % 4], ["w4", "w10", "w8"][w % 3]]; }
   function mxClaim(key, xp, stars, msg) {
-    var m = getMax(); if (m.cl[key]) return false; m.cl[key] = Date.now(); grantXp(xp, stars); var ps = mxPkGive(xp); if (msg) toast(msg + mxPkMsg(ps)); mxRender(); return true;
+    var m = getMax(); if (m.cl[key]) return false; m.cl[key] = Date.now(); grantXp(xp, stars); if (msg) toast(msg); mxRender(); return true;
   }
   function mxReady() {
     var c = mxCtx(), n = 0, m = getMax();
@@ -7670,12 +7671,6 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxLvReached(m) { var g = mxLvProg(m), n = 0; while (n < MX_LV.length && g >= MX_LV[n].n) n++; return n; }
   function mxLvDone(m) { var x = mxSx(m); return Math.min(MX_LV.length, Math.max(0, x.lc | 0)); }
   function mxSxAdd(m, n, prog) { var x = mxSx(m); mxLvProg(m); x.p = (x.p || 0) + n; x.t = (x.t || 0) + n; if (prog) x.g += n; }
-  function mxPkGive(xp) {
-    var m = getMax(), s = xp >= 130 ? 3 : xp >= 60 ? 2 : 1, l = mxPkList(m);
-    if (l.length >= 60) { maxSave(); return 0; }
-    l.push({ s: s, t: 0 }); maxSave(); return s;
-  }
-  function mxPkMsg(ps) { return ps ? " · Sobre de " + ps + (ps === 1 ? " estrella" : " estrellas") : " · Tenés 60 sobres guardados: abrí alguno para recibir más"; }
   var MX_PINS = [
     { id: "sol", n: "Atardecer", r: "Común", w: 30 },
     { id: "gat", n: "Cocodrilo", r: "Común", w: 30 },
@@ -8478,7 +8473,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
           if (!claimed) { var pb = mk("div", "mx-pb"), pi = el("i"); pi.style.width = Math.min(100, Math.round(ws.best / s * 100)) + "%"; pb.appendChild(pi); tx.appendChild(pb); }
           card.appendChild(ic); card.appendChild(tx);
           if (claimed) card.appendChild(mk("div", "mx-rw done", "+" + fmtMx(xp) + " XP"));
-          else if (ok) { var b = mk("button", "mx-rw", "Reclamar +" + fmtMx(xp) + " XP"); b.type = "button"; b.addEventListener("click", function () { var mm2 = getMax(); if (mm2.sc[s]) return; mm2.sc[s] = Date.now(); grantXp(xp, s * 2); var ps2 = mxPkGive(xp); toast("Racha de " + s + " días: +" + fmtMx(xp) + " XP" + mxPkMsg(ps2)); mxRender(); }); card.appendChild(b); }
+          else if (ok) { var b = mk("button", "mx-rw", "Reclamar +" + fmtMx(xp) + " XP"); b.type = "button"; b.addEventListener("click", function () { var mm2 = getMax(); if (mm2.sc[s]) return; mm2.sc[s] = Date.now(); grantXp(xp, s * 2); toast("Racha de " + s + " días: +" + fmtMx(xp) + " XP"); mxRender(); }); card.appendChild(b); }
           else card.appendChild(mk("div", "mx-rw", "+" + fmtMx(xp) + " XP"));
           box.appendChild(card);
         });

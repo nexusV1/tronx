@@ -116,6 +116,8 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.74.4**: Las misiones normales y las rachas ya no dan sobres.
+
 **1.74.3**: Luces: nueva categoría de efectos para el nombre, con Luz Vice (neón GTA VI) como premio del nivel 7 del Camino SEIS.
 
 **1.74.2**: Camino SEIS en la Tienda del evento, premios y recompensa diaria que se reclaman a mano, sobres más nítidos, estrellas rediseñadas, pin VI con arte nuevo y botón Atrás del celular.
