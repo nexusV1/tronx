@@ -1726,11 +1726,11 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-pka { border: 0; background: transparent; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; perspective: 800px; }
 .mx-pka:disabled { cursor: default; }
-.mx-pko svg.pk { width: min(66vw, 252px); height: auto; aspect-ratio: 100 / 130; display: block; overflow: visible; animation: mxfl 4.8s ease-in-out infinite; transform-style: preserve-3d; will-change: transform; }
+.mx-pko svg.pk { width: min(66vw, 252px); height: auto; aspect-ratio: 100 / 130; display: block; overflow: visible; animation: mxfl 4.8s ease-in-out infinite; transform-style: preserve-3d; text-rendering: geometricPrecision; }
 .mx-pka { position: relative; }
 .mx-pka::before { content: ""; position: absolute; left: -14%; right: -14%; top: 6%; bottom: -4%; border-radius: 50%; background: radial-gradient(ellipse at 50% 55%, var(--gl) 0%, rgba(0, 0, 0, 0.0) 68%); opacity: 0.5; pointer-events: none; }
 .mx-pka::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: -10px; height: 18px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0) 70%); pointer-events: none; }
-@keyframes mxfl { 0%,100% { transform: translateY(0) rotateY(-9deg) rotateX(2deg); } 50% { transform: translateY(-6px) rotateY(9deg) rotateX(-2deg); } }
+@keyframes mxfl { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 .mx-pko svg.pk .shn { animation: mxshn 3.4s ease-in-out infinite; }
 @keyframes mxshn { 0%,55% { transform: translateX(0); } 100% { transform: translateX(150px); } }
 .mx-pko[data-s="5"] svg.pk .shn, .mx-pko[data-s="6"] svg.pk .shn { animation-duration: 1.8s; }
@@ -8218,15 +8218,15 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxLg(m) { var o = m.lg; if (!o || typeof o !== "object" || Array.isArray(o)) o = m.lg = { d: "", i: 0, n: 0 }; o.i = Math.max(0, Math.min(6, Math.floor(+o.i || 0))); o.n = Math.max(0, Math.floor(+o.n || 0)); return o; }
   function mxLgDue(m) { return mxLg(m).d !== dayKey(Date.now()); }
   function mxLgText(r) { return r.k === "p" ? "sobre de " + r.s + (r.s === 1 ? " estrella" : " estrellas") : r.k === "x" ? r.n + " puntos SEIS" : r.k === "s" ? r.n + " estrellas" : r.n + " XP"; }
-  function mxLgClaim(auto, quiet) {
+  function mxLgClaim() {
     var m = getMax(), o = mxLg(m); if (!mxLgDue(m)) return false;
     var idx = o.i, r = MX_LG[idx];
-    if (r.k === "p" && mxPkList(m).length >= 60) { if (!auto) toast("Tenés muchos sobres guardados. Abrí alguno para poder reclamar más."); return false; }
+    if (r.k === "p" && mxPkList(m).length >= 60) { toast("Tenés muchos sobres guardados. Abrí alguno para poder reclamar más."); return false; }
     o.d = dayKey(Date.now()); o.i = (idx + 1) % 7; o.n++;
     var txt = mxLgText(r);
     if (r.k === "p") { var sg = mxPkGiveS(r.s); txt = "sobre de " + sg + (sg === 1 ? " estrella" : " estrellas"); }
     else if (r.k === "x") mxSxAdd(m, r.n); else if (r.k === "s") grantXp(0, r.n); else grantXp(r.n, 0);
-    maxSave(); toast("Recompensa diaria · Día " + (idx + 1) + ": " + txt); if (!quiet) mxRender(); return true;
+    maxSave(); toast("Recompensa diaria · Día " + (idx + 1) + ": " + txt); mxRender(); return true;
   }
   function mxLgIcon(r) {
     var w = mk("span", "mx-lg-i");
@@ -8262,7 +8262,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     if (mxEvSel !== "gta") {
       box.appendChild(mk("div", "mx-sec", "Eventos activos"));
       var ec = mk("button", "mx-evb"); ec.type = "button"; ec.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); ec.appendChild(mk("h3", null, "GTA VI")); ec.appendChild(mk("p", null, "Conseguí el marco exclusivo «VI»: completá misiones para obtener sobres de la suerte y acumular puntos SEIS.")); ec.appendChild(mxCdLine());
-      ec.addEventListener("click", function () { mxEvSel = "gta"; mxEvTab = "mis"; mxLgClaim(true, true); mxRender(); $("mxSc").scrollTop = 0; }); box.appendChild(ec);
+      ec.addEventListener("click", function () { mxEvSel = "gta"; mxEvTab = "mis"; mxRender(); $("mxSc").scrollTop = 0; }); box.appendChild(ec);
       box.appendChild(mk("div", "mx-evb2", "Próximamente: más eventos con XP, estrellas, marcos y portadas."));
       return;
     }
