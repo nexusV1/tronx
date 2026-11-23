@@ -7889,7 +7889,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxPinPick() { var t = 0; MX_PINS.forEach(function (q) { t += q.w; }); var r = rand01() * t; for (var i = 0; i < MX_PINS.length; i++) { r -= MX_PINS[i].w; if (r < 0) return MX_PINS[i].id; } return MX_PINS[0].id; }
   function mxPinById(id) { for (var i = 0; i < MX_PINS.length; i++) if (MX_PINS[i].id === id) return MX_PINS[i]; return null; }
   /* pin equipado junto al nombre */
-  var MX_LED = { gta: { n: "LED GTA VI", c: ["#ff2fa0", "#b43cff", "#ff8ae0"], p: 120 } };
+  var MX_LED = { gta: { n: "Luz Vice", c: ["#ff2fa0", "#b43cff", "#ff8ae0"], p: 120 } };
   function mxLedId() { try { var m = getMax(), id = m.eq && m.eq.led; return id && MX_LED[id] && m.inv["led_" + id] ? id : ""; } catch (e) { return ""; } }
   function mxLedApply(node, id) { var d = id && MX_LED[id]; node.classList.toggle("nm-led", !!d); if (d) { node.style.setProperty("--l1", d.c[0]); node.style.setProperty("--l2", d.c[1]); node.style.setProperty("--l3", d.c[2]); } }
   function mxPinTag(node, px) {
@@ -8153,12 +8153,12 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     var g1 = mk("div", "mx-pkl"); MX_SHOP.packs.forEach(function (p) { var c = mk("button", "mx-pkcard"); c.type = "button"; var w = mk("div"); w.innerHTML = mxPkSvg(p.s); c.appendChild(w.firstChild); c.appendChild(mk("b", null, "Sobre de " + p.s + (p.s === 1 ? " estrella" : " estrellas"))); var pr = mk("span", "pr"); pr.innerHTML = sixIco(15) + " " + fmtMx(p.c); c.appendChild(pr); c.disabled = test || (x.p || 0) < p.c || mxPkList(m).length >= 60; c.addEventListener("click", function () { buy(p.c, function (mm) { mxPkList(mm).push({ s: p.s, t: 0 }); }, "Sobre de " + p.s + (p.s === 1 ? " estrella" : " estrellas") + " añadido"); }); g1.appendChild(c); }); box.appendChild(g1);
     box.appendChild(mk("div", "mx-sec", "Intercambios"));
     var g2 = mk("div", "mx-xch"); MX_SHOP.xch.forEach(function (p) { var c = mk("button", "mx-xc"); c.type = "button"; c.appendChild(mk("b", null, p.l)); var pr = mk("span", "pr"); pr.innerHTML = sixIco(15) + " " + fmtMx(p.c); c.appendChild(pr); c.disabled = test || (x.p || 0) < p.c; c.addEventListener("click", function () { buy(p.c, function () { grantXp(p.xp || 0, p.st || 0); }, "Intercambio hecho: " + p.l); }); g2.appendChild(c); }); box.appendChild(g2);
-    box.appendChild(mk("div", "mx-sec", "Neón del nombre"));
+    box.appendChild(mk("div", "mx-sec", "Luces"));
     var ld = MX_LED.gta, lk = "led_gta", lcd = mk("div", "mx-card"), lpv = mk("div", "mx-ledp"), lnm = mk("span", null, (getProfile().name || "Explorador"));
-    mxLedApply(lnm, "gta"); lpv.appendChild(lnm); lcd.appendChild(lpv); lcd.appendChild(mk("b", null, ld.n)); lcd.appendChild(mk("p", "mx-note", "Un neón LED rosa y violeta en las letras de tu nombre, en el perfil y en el menú."));
+    mxLedApply(lnm, "gta"); lpv.appendChild(lnm); lcd.appendChild(lpv); lcd.appendChild(mk("b", null, ld.n)); lcd.appendChild(mk("p", "mx-note", "Una luz neón con los colores de GTA VI en las letras de tu nombre, en el perfil y en el menú."));
     var lbt = mk("button", "mx-btn"); lbt.type = "button";
-    if (m.inv[lk]) { var lon = m.eq.led === "gta"; lbt.textContent = lon ? "Quitar neón" : "Equipar"; lbt.addEventListener("click", function () { m.eq.led = lon ? "" : "gta"; maxSave(); toast(lon ? "Neón quitado" : "Neón equipado"); try { renderProfile(); renderMenu(); } catch (e) { } mxRender(); }); }
-    else { lbt.innerHTML = "Comprar · " + sixIco(15) + " " + fmtMx(ld.p); lbt.disabled = test || (x.p || 0) < ld.p; lbt.addEventListener("click", function () { var mm = getMax(); if (mm.bk || mxSx(mm).p < ld.p) return; mxSx(mm).p -= ld.p; mm.inv[lk] = Date.now(); mm.eq.led = "gta"; maxSave(); toast("Neón LED GTA VI conseguido"); try { renderProfile(); renderMenu(); } catch (e) { } mxRender(); }); }
+    if (m.inv[lk]) { var lon = m.eq.led === "gta"; lbt.textContent = lon ? "Quitar luz" : "Equipar"; lbt.addEventListener("click", function () { m.eq.led = lon ? "" : "gta"; maxSave(); toast(lon ? "Luz quitada" : "Luz equipada"); try { renderProfile(); renderMenu(); } catch (e) { } mxRender(); }); }
+    else { lbt.innerHTML = "Comprar · " + sixIco(15) + " " + fmtMx(ld.p); lbt.disabled = test || (x.p || 0) < ld.p; lbt.addEventListener("click", function () { var mm = getMax(); if (mm.bk || mxSx(mm).p < ld.p) return; mxSx(mm).p -= ld.p; mm.inv[lk] = Date.now(); mm.eq.led = "gta"; maxSave(); toast("Luz Vice conseguida"); try { renderProfile(); renderMenu(); } catch (e) { } mxRender(); }); }
     lcd.appendChild(lbt); box.appendChild(lcd);
     if (test) box.appendChild(mk("p", "mx-note", "Estás en modo prueba: restablecé tu nivel real para usar la tienda."));
   }
