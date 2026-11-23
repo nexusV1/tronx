@@ -1823,6 +1823,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-evm-s { font-size: 12px; color: #a9acd6; }
 .mx-evm-r { display: flex; align-items: center; gap: 8px; margin-top: 2px; } .mx-evm-r b { font-size: 18px; color: #fff; } .mx-evm-r .pl { font-size: 17px; font-weight: 900; color: #ffc2e4; } .mx-evm-r .sp { flex: 1; } .mx-evm-si { display: inline-flex; } .mx-evm-pk { display: inline-flex; } .mx-evm-pk svg.pk { width: 34px; height: 44px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45)); }
 .mx-evm-bt { font: inherit; font-weight: 800; font-size: 12.5px; padding: 8px 16px; border: 0; border-radius: 999px; cursor: pointer; color: #3a1500; background: linear-gradient(135deg, #ffd25a, #ff8a3d); } .mx-evm-bt:disabled { cursor: default; color: #8d90bd; background: rgba(255, 255, 255, 0.08); } .mx-evm-ok { font-size: 12.5px; font-weight: 800; color: #6ee7a0; }
+.mx-lv { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; } .mx-lv:first-of-type { border-top: 0; } .mx-lv .n { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 12px; background: rgba(255, 255, 255, 0.12); } .mx-lv .t { flex: 1; min-width: 0; } .mx-lv .t b { display: block; } .mx-lv .t small { color: #b9bce4; font-size: 11.5px; } .mx-lv.ok .n { background: #34d399; color: #062; } .mx-lv.rdy .n { background: linear-gradient(135deg, #ff4fa3, #ffb02e); color: #fff; } .mx-lv .mx-btn { flex: none; width: auto; min-width: 0; margin: 0; padding: 7px 12px; font-size: 12.5px; } .mx-lv .dn { color: #34d399; font-weight: 700; font-size: 12px; }
 .mx-sxb { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; } .mx-sxb small { display: block; color: #b9bce4; font-size: 12px; } .mx-sxb b { font-size: 30px; letter-spacing: -0.02em; background: linear-gradient(90deg, #ff4fa3, #ffb02e); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .mx-xch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .mx-xc { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 8px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.05); color: #fff; font: inherit; cursor: pointer; } .mx-xc b { font-size: 18px; }
@@ -7659,11 +7660,13 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function rand01() { try { var a = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(a); return a[0] / 4294967296; } catch (e) { return Math.random(); } }
   function mxPkList(m) { if (!m.pk || typeof m.pk !== "object") m.pk = { n: 0, l: [] }; if (!Array.isArray(m.pk.l)) m.pk.l = []; return m.pk.l; }
   function mxSx(m) { if (!m.sx || typeof m.sx !== "object") m.sx = { p: 0, t: 0 }; return m.sx; }
-  function mxLuck(m) { return Math.min(MX_PK.lvMax, Math.floor((mxSx(m).t || 0) / MX_PK.lvStep)); }
-  function mxSxAdd(m, n) { var x = mxSx(m); x.p = (x.p || 0) + n; x.t = (x.t || 0) + n; }
+  var MX_LV = [{ n: 6, s: 1 }, { n: 16, x: 16 }, { n: 36, x: 26 }, { n: 66, x: 40 }, { n: 106, x: 66 }, { n: 206, s: 5, mx: 2 }];
+  function mxLvProg(m) { var x = mxSx(m); if (typeof x.g !== "number") x.g = x.t || 0; return x.g; }
+  function mxLvReached(m) { var g = mxLvProg(m), n = 0; while (n < MX_LV.length && g >= MX_LV[n].n) n++; return n; }
+  function mxLvDone(m) { var x = mxSx(m); return Math.min(MX_LV.length, Math.max(0, x.lc | 0)); }
+  function mxSxAdd(m, n, prog) { var x = mxSx(m); mxLvProg(m); x.p = (x.p || 0) + n; x.t = (x.t || 0) + n; if (prog) x.g += n; }
   function mxPkGive(xp) {
     var m = getMax(), s = xp >= 130 ? 3 : xp >= 60 ? 2 : 1, l = mxPkList(m);
-    if (rand01() < mxLuck(m) * 0.03) s = Math.min(4, s + 1);
     if (l.length >= 60) { maxSave(); return 0; }
     l.push({ s: s, t: 0 }); maxSave(); return s;
   }
@@ -8046,32 +8049,32 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxCount(el, to, calm, pre) { if (calm) { el.textContent = pre + fmtMx(to); return; } var t0 = performance.now(), d = 800; (function f(t) { var k = Math.min(1, (t - t0) / d); el.textContent = pre + fmtMx(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(f); })(t0); }
   function mxPkOpenUi(idx) {
     var m = getMax(), l = mxPkList(m), pk = l[idx]; if (!pk || mxPkBusy) return; mxPkBusy = true;
-    var calm = calmOn(), tms = [], ov = mk("div", "mx-pko"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Sobre de la suerte");
+    var TP = pk.mx || MX_PK.taps, calm = calmOn(), tms = [], ov = mk("div", "mx-pko"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Sobre de la suerte");
     function later(f, ms) { if (calm) ms = Math.min(ms, 80); tms.push(setTimeout(f, ms)); }
     var scn = null, scL = 0; function theme() { var t = MX_PT[pk.s]; ov.style.setProperty("--bg", t.bg); ov.style.setProperty("--gl", t.gl); ov.setAttribute("data-s", pk.s); if (scL !== pk.s) { var old = scn; scL = pk.s; scn = mxSceneEl(pk.s); ov.insertBefore(scn, ov.firstChild); void scn.offsetWidth; scn.classList.add("on"); if (old) { old.classList.remove("on"); later(function () { old.remove(); }, 1400); } } }
-    function chance() { return Math.min(0.9, (pk.s < 6 ? MX_PK.tiers[pk.s].up : 0) + mxLuck(getMax()) * 0.02); }
+    function chance() { return pk.s < 6 ? MX_PK.tiers[pk.s].up : 0; }
     var fx = mk("div", "mx-pkfx"); fx.innerHTML = '<i class="hl"></i>'; ov.appendChild(fx);
     var top = mk("div", "mx-pkt"), x = mk("button", "mx-pkx", "✕"); x.type = "button"; x.setAttribute("aria-label", "Cerrar"); top.appendChild(x); ov.appendChild(top);
     var sdf = mk("div"); sdf.innerHTML = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="pkStG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6b8"/><stop offset=".5" stop-color="#ffc93c"/><stop offset="1" stop-color="#f08a1c"/></linearGradient></defs></svg>'; ov.appendChild(sdf.firstChild);
     var sr = mk("div", "mx-pks"); for (var i = 0; i < 6; i++) { var si = mk("i"); si.style.setProperty("--n", i); si.innerHTML = '<svg viewBox="0 0 24 24"><polygon class="b" points="' + STAR_P + '"/><polygon class="hi" points="' + STAR_P + '" transform="translate(12 12.3) scale(.5) translate(-12 -12)"/></svg>'; sr.appendChild(si); } ov.appendChild(sr);
     var art = mk("button", "mx-pka"); art.type = "button"; art.setAttribute("aria-label", "Tocar el sobre para mejorarlo"); ov.appendChild(art);
     var hint = mk("p", "mx-pkh"), ct = mk("div", "mx-pkd"), acts = mk("div", "mx-pkac"), bo = mk("button");
-    for (var di = 0; di < MX_PK.taps; di++) ct.appendChild(el("i")); ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov); $("max").classList.add("pkopen");
+    for (var di = 0; di < TP; di++) ct.appendChild(el("i")); ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov); $("max").classList.add("pkopen");
     function sparks(host) { if (calm) return; var c = mk("span", "mx-stp"); for (var q = 0; q < 8; q++) { var b = el("b"), an = (q / 8) * 6.2832 + rand01() * .6, dd = 28 + rand01() * 26; b.style.setProperty("--x", Math.round(Math.cos(an) * dd) + "px"); b.style.setProperty("--y", Math.round(Math.sin(an) * dd) + "px"); if (q % 2) b.style.width = b.style.height = "5px"; c.appendChild(b); } host.appendChild(c); later(function () { c.remove(); }, 900); }
     function drawStars(prev) { sr.classList.toggle("full", pk.s === 6); for (var k = 0; k < 6; k++) { sr.children[k].className = k < pk.s ? "on" : ""; if (prev !== undefined && k >= prev && k < pk.s) { sr.children[k].classList.add("stn"); sparks(sr.children[k]); (function (n) { later(function () { n.classList.remove("stn"); }, 900); })(sr.children[k]); } } }
     function drawArt() { art.innerHTML = mxPkSvg(pk.s); }
-    function drawCt() { var left = MX_PK.taps - pk.t; for (var k = 0; k < ct.children.length; k++) ct.children[k].className = k < pk.t ? "on" : ""; if (left <= 0) art.disabled = true; }
+    function drawCt() { var left = TP - pk.t; for (var k = 0; k < ct.children.length; k++) ct.children[k].className = k < pk.t ? "on" : ""; if (left <= 0) art.disabled = true; }
     function draw() { theme(); drawStars(); drawArt(); drawCt(); }
     function burst(n, big) { if (calm) return; var c = mk("div", "mx-pkbs"); for (var k = 0; k < n; k++) { var p = mk("i"), an = rand01() * 6.2832, dd = (big ? 130 : 90) + rand01() * (big ? 150 : 90), sz = (big ? .8 : .6) + rand01() * .9; p.style.setProperty("--x", Math.round(Math.cos(an) * dd) + "px"); p.style.setProperty("--y", Math.round(Math.sin(an) * dd) + "px"); p.style.setProperty("--k", sz.toFixed(2)); p.style.animationDelay = (rand01() * .12).toFixed(2) + "s"; c.appendChild(p); } ov.appendChild(c); later(function () { c.remove(); }, 1200); }
     function flash(kind) { burst(kind === "big" ? 22 : 11, kind === "big"); var e = mk("div", "mx-pkup " + kind); ov.appendChild(e); later(function () { e.remove(); }, 900); }
     function tap() {
-      if (pk.t >= MX_PK.taps || ov.classList.contains("opening")) return;
+      if (pk.t >= TP || ov.classList.contains("opening")) return;
       var before = pk.s; pk.t++; var up = pk.s < 6 && rand01() < chance(); if (up) pk.s++; maxSave();
       try { if (navigator.vibrate) navigator.vibrate(up ? [18, 30, 28] : 12); } catch (e) { }
       var sv = art.firstChild; if (sv) { sv.classList.remove("tp", "pop"); void sv.getBoundingClientRect(); sv.classList.add("tp"); sv.addEventListener("animationend", function ae(ev) { if (ev.target === sv && ev.animationName === "mxpks") { sv.classList.remove("tp"); sv.removeEventListener("animationend", ae); } }); }
       if (up) later(function () { flash("up"); theme(); drawStars(before); drawArt(); var sv2 = art.firstChild; if (sv2) { sv2.classList.remove("tp"); sv2.classList.add("pop"); sv2.addEventListener("animationend", function ae2(ev) { if (ev.target === sv2 && ev.animationName === "mxpkp") { sv2.classList.remove("pop"); sv2.removeEventListener("animationend", ae2); } }); } drawCt(); }, calm ? 0 : 380);
       else later(drawCt, calm ? 0 : 380);
-      if (pk.t >= MX_PK.taps) later(openNow, up ? 1700 : 1000);
+      if (pk.t >= TP) later(openNow, up ? 1700 : 1000);
     }
     function close() { tms.forEach(clearTimeout); ov.remove(); $("max").classList.remove("pkopen"); mxPkBusy = false; mxRender(); }
     art.addEventListener("click", tap); x.addEventListener("click", close);
@@ -8085,7 +8088,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         var hit = !mm.inv.gta6 && rand01() * 100 < t.fp; if (hit) { mm.inv.gta6 = Date.now(); mm.eq.frame = "gta6"; }
         var pinGot = null, pinDup = false;
         if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) pinDup = true; else mm.pins[pinGot] = Date.now(); }
-        if (!pinGot) { mxSxAdd(mm, t.sx); grantXp(t.xp, t.st); }
+        if (!pinGot) { mxSxAdd(mm, t.sx, true); grantXp(t.xp, t.st); }
         maxSave(); $("mxBal").textContent = "⭐ " + fmtMx(getMax().stars);
         art.remove(); acts.textContent = ""; sr.classList.add("big"); fx.classList.add("rv");
         var h = mk("h2"), rw = mk("div", "mx-pkrw"), cnt = [];
@@ -8112,15 +8115,31 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       }, 1700);
     };
     draw();
-    if (pk.t >= MX_PK.taps) later(openNow, 700);
+    if (pk.t >= TP) later(openNow, 700);
+  }
+  function mxLvClaim(k) {
+    var m = getMax(), lv = MX_LV[k]; if (m.bk || mxLvDone(m) !== k || k >= mxLvReached(m)) return;
+    if (lv.s && mxPkList(m).length >= 60) { toast("Tenés 60 sobres guardados: abrí alguno para reclamar"); return; }
+    mxSx(m).lc = k + 1;
+    if (lv.s) { mxPkGiveS(lv.s, lv.mx); toast("Nivel " + (k + 1) + ": sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "")); }
+    else { mxSxAdd(m, lv.x, false); maxSave(); toast("Nivel " + (k + 1) + ": +" + lv.x + " puntos SEIS"); }
+    maxSave(); mxRender();
   }
   function mxEvShop(box, m, test) {
-    var x = mxSx(m), lv = mxLuck(m), into = lv >= MX_PK.lvMax ? MX_PK.lvStep : (x.t || 0) % MX_PK.lvStep;
+    var x = mxSx(m), g = mxLvProg(m), rch = mxLvReached(m), dn = mxLvDone(m);
     var bal = mk("div", "mx-card mx-sxb"), ic = mk("div", "ic"); ic.innerHTML = sixIco(44); bal.appendChild(ic);
     var tx = mk("div", "tx"); tx.appendChild(mk("small", null, "Tus puntos SEIS")); tx.appendChild(mk("b", null, fmtMx(x.p || 0))); bal.appendChild(tx); box.appendChild(bal);
-    var lc = mk("div", "mx-card"); lc.appendChild(mk("b", null, "Progreso de suerte · Nivel " + lv + " / " + MX_PK.lvMax));
-    var pb = mk("div", "mx-pb"), pi = el("i"); pi.style.width = (lv >= MX_PK.lvMax ? 100 : Math.round(into / MX_PK.lvStep * 100)) + "%"; pb.appendChild(pi); lc.appendChild(pb);
-    lc.appendChild(mk("p", "mx-note", (lv >= MX_PK.lvMax ? "¡Suerte al máximo! " : "Ganás " + fmtMx(MX_PK.lvStep - into) + " SEIS más para el siguiente nivel. ") + "Cada nivel suma +2 % de mejora por toque y +3 % de chance de que tus sobres de misión vengan con una estrella extra. Los SEIS se ganan al abrir sobres."));
+    var lc = mk("div", "mx-card"); lc.appendChild(mk("b", null, "Progreso de suerte · Nivel " + rch + " / " + MX_LV.length));
+    var lo = rch ? MX_LV[rch - 1].n : 0, hi = rch < MX_LV.length ? MX_LV[rch].n : lo;
+    var pb = mk("div", "mx-pb"), pi = el("i"); pi.style.width = (rch >= MX_LV.length ? 100 : Math.round((g - lo) / (hi - lo) * 100)) + "%"; pb.appendChild(pi); lc.appendChild(pb);
+    lc.appendChild(mk("p", "mx-note", (rch >= MX_LV.length ? "¡Completaste todos los niveles! " : "Llevás " + fmtMx(g) + " puntos · faltan " + fmtMx(hi - g) + " para el nivel " + (rch + 1) + ". ") + "Solo suman los puntos SEIS de misiones y sobres; los que te dan los niveles no cuentan."));
+    MX_LV.forEach(function (lv, k) {
+      var st = k < dn ? "ok" : k < rch ? "rdy" : "", row = mk("div", "mx-lv " + st); row.appendChild(mk("span", "n", String(k + 1)));
+      var t = mk("div", "t"); t.appendChild(mk("b", null, lv.s ? "Sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "") : lv.x + " puntos SEIS")); t.appendChild(mk("small", null, lv.mx ? "Necesitás " + lv.n + " · solo " + lv.mx + " toques para mejorarlo" : "Necesitás " + lv.n + " puntos")); row.appendChild(t);
+      if (k < dn) row.appendChild(mk("span", "dn", "✓ Reclamado"));
+      else { var bt = mk("button", "mx-btn", "Reclamar"); bt.type = "button"; bt.disabled = test || k !== dn || k >= rch; bt.addEventListener("click", function () { mxLvClaim(k); }); row.appendChild(bt); }
+      lc.appendChild(row);
+    });
     box.appendChild(lc);
     function buy(cost, fn, label) { var mm = getMax(); if (mm.bk || mxSx(mm).p < cost) return; mxSx(mm).p -= cost; fn(mm); maxSave(); $("mxBal").textContent = "⭐ " + fmtMx(getMax().stars); toast(label); mxRender(); }
     box.appendChild(mk("div", "mx-sec", "Sobres del evento"));
@@ -8194,13 +8213,12 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxEvClaim(key, rw) {
     var m = getMax(), l = mxPkList(m); if (m.cl[key]) return;
     if (l.length >= 60) { toast("Tenés muchos sobres guardados. Abrí alguno para poder reclamar más."); return; }
-    m.cl[key] = Date.now(); mxSxAdd(m, rw.sx); var s = mxPkGiveS(rw.s);
+    m.cl[key] = Date.now(); mxSxAdd(m, rw.sx, true); var s = mxPkGiveS(rw.s);
     toast("+" + rw.sx + " puntos SEIS · Sobre de " + s + (s === 1 ? " estrella" : " estrellas")); mxRender();
   }
-  function mxPkGiveS(s) {
+  function mxPkGiveS(s, mx) {
     var m = getMax(), l = mxPkList(m);
-    if (rand01() < mxLuck(m) * 0.03) s = Math.min(4, s + 1);
-    l.push({ s: s, t: 0 }); maxSave(); return s;
+    l.push(mx ? { s: s, t: 0, mx: mx } : { s: s, t: 0 }); maxSave(); return s;
   }
   function mxEvCard(d, prog, claimed, rw, onClaim) {
     var done = prog >= d.t, pct = claimed ? 100 : Math.min(100, Math.floor(prog / d.t * 100)), card = mk("div", "mx-card mx-evm" + (claimed ? " ok" : done ? " rdy" : ""));
@@ -8306,7 +8324,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       var gm = mk("button", "mx-btn", "Ir a Misiones"); gm.type = "button"; gm.addEventListener("click", function () { mxTab = "mis"; mxRender(); }); box.appendChild(gm);
     } else {
       var gr = mk("div", "mx-pkl"), gen = (mxPkGen = (mxPkGen || 0) + 1);
-      function mkPk(pk, i) { var c = mk("button", "mx-pkcard"); c.type = "button"; c.disabled = test; c.setAttribute("aria-label", "Abrir sobre de " + pk.s + " estrellas"); var w = mk("div"); w.innerHTML = mxPkSvg(pk.s); c.appendChild(w.firstChild); c.appendChild(mk("b", null, pk.s + (pk.s === 1 ? " estrella" : " estrellas"))); c.appendChild(mk("span", null, pk.t ? "Toques: " + pk.t + "/" + MX_PK.taps : "Sin abrir")); c.addEventListener("click", function () { mxPkOpenUi(i); }); return c; }
+      function mkPk(pk, i) { var c = mk("button", "mx-pkcard"); c.type = "button"; c.disabled = test; c.setAttribute("aria-label", "Abrir sobre de " + pk.s + " estrellas"); var w = mk("div"); w.innerHTML = mxPkSvg(pk.s); c.appendChild(w.firstChild); c.appendChild(mk("b", null, pk.s + (pk.s === 1 ? " estrella" : " estrellas"))); c.appendChild(mk("span", null, pk.t ? "Toques: " + pk.t + "/" + (pk.mx || MX_PK.taps) : pk.mx ? "Especial · " + pk.mx + " toques" : "Sin abrir")); c.addEventListener("click", function () { mxPkOpenUi(i); }); return c; }
       /* los sobres se arman de a 8 por cuadro; los que faltan reservan su lugar para que el scroll no salte */
       var phs = [];
       function fillPk(from) { var to = Math.min(l.length, from + 8); for (var q = from; q < to; q++) { var card = mkPk(l[q], q); if (phs[q]) gr.replaceChild(card, phs[q]); else gr.appendChild(card); } if (to < l.length) requestAnimationFrame(function () { if (gen === mxPkGen && gr.isConnected) fillPk(to); }); }
@@ -8317,7 +8335,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     box.appendChild(mk("div", "mx-sec", "Cómo funciona"));
     var oc = mk("div", "mx-card"), tb = el("table"); tb.className = "mx-odd"; var th = el("tr"); ["Estrellas", "Mejora por toque", "Premio", "Marco"].forEach(function (x) { th.appendChild(mk("th", null, x)); }); tb.appendChild(th);
     for (var q = 1; q <= 6; q++) (function (t) { var tr = el("tr"); [t.s + " ★", t.up ? Math.round(t.up * 100) + " %" : "—", "⭐ " + fmtMx(t.st) + " · " + fmtMx(t.xp) + " XP · " + t.sx + " SEIS", t.fp + " %"].forEach(function (x) { tr.appendChild(mk("td", null, x)); }); tb.appendChild(tr); })(MX_PK.tiers[q]);
-    oc.appendChild(tb); oc.appendChild(mk("p", "mx-note", "Los sobres vienen con 1 a 3 estrellas, según la dificultad de la misión. Cada toque (hasta 6 por sobre) puede subirlo una estrella, hasta un máximo de 6. La columna «Marco» indica la probabilidad de ganar el marco GTA VI al abrir ese sobre. Los puntos SEIS que ganás al abrir sobres aumentan tu nivel de suerte."));
+    oc.appendChild(tb); oc.appendChild(mk("p", "mx-note", "Los sobres vienen con 1 a 3 estrellas, según la dificultad de la misión. Cada toque (hasta 6 por sobre) puede subirlo una estrella, hasta un máximo de 6. La columna «Marco» indica la probabilidad de ganar el marco GTA VI al abrir ese sobre. Los puntos SEIS de misiones y sobres te hacen subir de nivel en el Progreso de suerte."));
     box.appendChild(oc); box.appendChild(mk("p", "mx-note", "Próximamente: portadas del evento."));
   }
   var mxTab = "home", mxMisTab = "d", mxFrSel = "", mxPkGen = 0;
