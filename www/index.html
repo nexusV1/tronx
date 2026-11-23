@@ -1672,6 +1672,10 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .mx-evn b { font-size: 13.5px; color: #ffd25a; }
 .mx-evn p { margin: 3px 0 0; font-size: 12.5px; line-height: 1.4; color: #e4e5ff; }
 .mx-evni { flex: none; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #1a0a3a; background: linear-gradient(135deg, #ffd25a, #ff8a3d); }
+.nm-plate { position: relative; isolation: isolate; display: inline-block; width: fit-content; max-width: 100%; box-sizing: border-box; padding: 7px 64px 7px 16px; justify-self: start; }
+.nm-plate::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 12px; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 4px 14px rgba(255, 46, 147, 0.28);
+  background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60' preserveAspectRatio='xMaxYMax meet'><g fill='%23190636'><path d='M96 60C97 44 99 30 102 16l2 0C102 30 101 44 102 60Z'/><path d='M103 17C96 9 86 8 78 12c8-1 14 1 20 7ZM103 17C99 6 92 2 84 2c8 3 12 8 14 16ZM103 17C106 7 114 3 122 5c-8 1-13 5-17 13ZM103 17C110 12 119 14 124 21c-7-4-14-4-20-1Z'/><path d='M70 60C71 50 72 42 74 34l1.5 0C74 42 73.5 50 74.5 60Z'/><path d='M75 35C70 29 63 28 57 31c6-1 11 0 16 5ZM75 35C73 27 68 24 62 24c6 2 9 6 11 12ZM75 35C77 28 83 25 89 26c-6 1-10 4-13 10Z'/></g></svg>") right bottom / auto 88% no-repeat, radial-gradient(circle at calc(100% - 34px) 74%, #ffe27a 0 9%, #ff9a4a 10% 17%, rgba(255, 62, 165, 0) 22%), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px 5px) bottom / 100% 34% no-repeat, linear-gradient(100deg, #26095a 0%, #7a1fa8 48%, #ff3ea5 84%, #ff9a4a 100%); }
+.nm-plate.nm-led::before { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 4px 14px rgba(255, 46, 147, 0.28); }
 .nm-led { overflow: visible !important; text-overflow: clip !important; color: #fff; -webkit-text-stroke: 1px #ff3ea5; paint-order: stroke fill; text-shadow: 0 0 3px #ff3ea5, 0 0 9px rgba(255, 46, 147, 0.85), 0 0 20px rgba(255, 46, 147, 0.55), 0 0 34px rgba(150, 60, 255, 0.45); animation: nmled 4.2s ease-in-out infinite; }
 @keyframes nmled { 0%, 100% { text-shadow: 0 0 3px #ff3ea5, 0 0 9px rgba(255, 46, 147, 0.85), 0 0 20px rgba(255, 46, 147, 0.55), 0 0 34px rgba(150, 60, 255, 0.45); } 33% { text-shadow: 0 0 3px #ff5fa8, 0 0 9px rgba(255, 90, 120, 0.85), 0 0 20px rgba(255, 140, 50, 0.6), 0 0 34px rgba(255, 46, 147, 0.45); } 66% { text-shadow: 0 0 3px #ff3ea5, 0 0 9px rgba(210, 60, 220, 0.85), 0 0 20px rgba(150, 60, 255, 0.6), 0 0 34px rgba(255, 46, 147, 0.4); } }
 .mx-ledp { display: grid; place-items: center; padding: 18px 8px 16px; } .mx-ledp .nm-led { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
@@ -7892,8 +7896,9 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   var MX_LED = { gta: { n: "Luz Vice", c: ["#ff2fa0", "#b43cff", "#ff8ae0"], p: 120 } };
   function mxLedId() { try { var m = getMax(), id = m.eq && m.eq.led; return id && MX_LED[id] && m.inv["led_" + id] ? id : ""; } catch (e) { return ""; } }
   function mxLedApply(node, id) { var d = id && MX_LED[id]; node.classList.toggle("nm-led", !!d); if (d) { node.style.setProperty("--l1", d.c[0]); node.style.setProperty("--l2", d.c[1]); node.style.setProperty("--l3", d.c[2]); } }
+  function mxPlateOn() { try { var m = getMax(); return !!(m.eq && m.eq.plate === "gta" && m.inv.plate_gta); } catch (e) { return false; } }
   function mxPinTag(node, px) {
-    mxLedApply(node, mxLedId());
+    mxLedApply(node, mxLedId()); node.classList.toggle("nm-plate", mxPlateOn());
     var o = node.querySelector(".nmpin"); if (o) o.remove();
     try { var m = getMax(), id = m.eq && m.eq.pin; if (!id || !m.pins[id] || !mxPinById(id)) return; var sp = el("span", "nmpin"); sp.innerHTML = pinSvg(id, px); sp.setAttribute("title", mxPinById(id).n); node.appendChild(sp); } catch (e) {}
   }
