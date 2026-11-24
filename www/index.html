@@ -697,20 +697,21 @@ h4 .nwvi { font-size: 1.55em; line-height: 0.9; vertical-align: -0.06em; }
 .pf-seg button, .pf-link, .pf-chips button, .pf-mode button, .pf-emo button, .pf-sw button, .pf-edit, .pf-cb { font: inherit; cursor: pointer; background-clip: padding-box; }
 .pf-seg button, .pf-link, .pf-emo button { border: 0; background: transparent; }
 .pf-cb svg, .pf-edit svg, .pf-mode svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-.pf-avw { position: relative; width: 132px; height: 132px; margin: -66px auto 0; z-index: 3; }
-.pf-av { position: relative; width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; overflow: hidden; border: 5px solid var(--solid); box-shadow: 0 14px 30px -12px rgba(80, 40, 200, 0.5); color: #fff; font-weight: 800; letter-spacing: -0.04em; }
+.pf-head { display: flex; align-items: flex-start; gap: 14px; margin: -42px 18px 0; position: relative; z-index: 3; }
+.pf-avw { position: relative; flex: none; width: 92px; height: 92px; z-index: 3; }
+.pf-av { position: relative; width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; overflow: hidden; border: 4px solid var(--solid); box-shadow: 0 10px 22px -10px rgba(80, 40, 200, 0.5); color: #fff; font-weight: 800; letter-spacing: -0.04em; }
 .pf-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pf-av .pf-ini { font-size: 48px; line-height: 1; font-family: var(--font-display, inherit); }
-.pf-av .ic { width: 70px; height: 70px; font-size: 62px; }
+.pf-av .pf-ini { font-size: 34px; line-height: 1; font-family: var(--font-display, inherit); }
+.pf-av .ic { width: 50px; height: 50px; font-size: 44px; }
 .pf-av.pv { width: 116px; height: 116px; margin: 0 auto; }
 .pf-av.pv .pf-ini { font-size: 42px; }
-.pf-edit { position: absolute; right: 2px; bottom: 6px; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--accent); border: 3px solid var(--solid); cursor: pointer; }
-.pf-edit svg { width: 16px; height: 16px; }
-.pf-id { text-align: center; padding: 12px 22px 0; }
-.pf-id h2 { margin: 0; font-size: 26px; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.pf-edit { position: absolute; right: -2px; bottom: 0; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--accent); border: 3px solid var(--solid); cursor: pointer; }
+.pf-edit svg { width: 13px; height: 13px; }
+.pf-id { flex: 1; min-width: 0; text-align: left; padding: 50px 0 0; }
+.pf-id h2 { margin: 0; font-size: 23px; letter-spacing: -0.02em; overflow-wrap: anywhere; }
 .pf-id p { margin: 5px 0 0; color: var(--muted); font-size: 14.5px; line-height: 1.4; overflow-wrap: anywhere; }
 .pf-id p:empty { display: none; }
-.pf-lvl { display: inline-flex; align-items: center; gap: 7px; margin-top: 11px; padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; }
+.pf-lvl { display: inline-flex; align-items: center; gap: 7px; margin-top: 9px; padding: 5px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; }
 .pf-seg { display: flex; gap: 2px; margin: 18px 18px 0; padding: 4px; border-radius: 16px; background: var(--accent-soft); }
 .pf-seg button { flex: 1; min-height: 40px; border-radius: 12px; font-size: 13.5px; font-weight: 600; color: var(--muted); }
 .pf-seg button[aria-selected="true"] { background: var(--raised); color: var(--ink); box-shadow: 0 4px 12px -6px var(--card-glow); }
@@ -2473,8 +2474,10 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         <button class="pf-cb" id="pfEditTop" type="button" aria-label="Editar perfil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg></button>
       </div>
     </div>
+    <div class="pf-head">
     <div class="pf-avw"><span class="pf-av" id="pfAv"></span><button class="pf-edit" id="pfEdit" type="button" aria-label="Cambiar foto o avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></svg></button></div>
     <div class="pf-id"><h2 id="pfNameOut">Explorador</h2><p id="pfBioOut"></p><span class="pf-lvl" id="pfLvl"></span></div>
+    </div>
     <div class="pf-seg" id="pfSeg" role="tablist" aria-label="Secciones del perfil">
       <button type="button" role="tab" data-pt="sum" aria-selected="true">Resumen</button>
       <button type="button" role="tab" data-pt="ach" aria-selected="false">Logros</button>
@@ -2633,7 +2636,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.74.4";
+  var APP_VERSION = "1.74.5";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5879,6 +5882,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.74.5", d: "23 nov 2026", t: "Perfil con nuevo diseño", lv: "Hipernova", nm: "Ha llegado VI", cat: "rediseno", ep: "gta", l: ["El avatar del perfil es más pequeño y pasa a la izquierda.","Tu nombre, la frase y el nivel van al lado del avatar, alineados a la izquierda."] },
     { v: "1.74.4", d: "23 nov 2026", t: "Misiones sin sobres", lv: "Hipernova", nm: "Ha llegado VI", cat: "arreglo", ep: "gta", l: ["Las misiones normales y las recompensas de racha de la pestaña Misiones ya no entregan sobres: dan solo XP y estrellas.","Los sobres se consiguen en las misiones del evento, en el Camino SEIS y en la recompensa diaria."] },
     { v: "1.74.3", d: "23 nov 2026", t: "Luces: Luz Vice para tu nombre", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva categoría Luces: efectos de luz para las letras de tu nombre.","Luz Vice: un neón con los colores de GTA VI (rosa, naranja y violeta) que ilumina tu nombre en el perfil y en el menú.","Se consigue como premio del nivel 7 del Camino SEIS, con 299 puntos.","En Eventos > Tienda, en la sección Luces, podés ver cómo queda, equiparla o quitarla cuando quieras."] },
     { v: "1.74.2", d: "23 nov 2026", t: "Camino SEIS y mejoras en los sobres", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nuevo Camino SEIS en la Tienda del evento: subís de nivel con los puntos SEIS que ganás en misiones y sobres.","Nivel 1 (6 puntos): sobre de 1 estrella. Nivel 2 (16): 16 puntos SEIS. Nivel 3 (36): 26 puntos SEIS. Nivel 4 (66): 40 puntos SEIS. Nivel 5 (106): 66 puntos SEIS. Nivel 6 (206): sobre especial de 5 estrellas que se mejora con solo 2 toques. Nivel 7 (299): Luz Vice.","Los puntos que dan los niveles no cuentan para llegar al siguiente.","Los premios del Camino SEIS y la recompensa diaria del evento se reclaman a mano con un botón; ya no se entregan solos.","Sobres más nítidos al abrirlos, estrellas rediseñadas con nuevos destellos y fondos renovados.","El pin VI estrena arte, y si te sale un pin repetido ya no recibís puntos SEIS.","Aviso claro cuando tenés 60 sobres guardados.","El botón Atrás del celular ahora retrocede dentro de la app y cierra el sobre abierto; solo sale con doble toque desde la pantalla principal."] },

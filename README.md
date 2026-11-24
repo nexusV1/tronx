@@ -116,6 +116,8 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.74.5**: Perfil con nuevo diseño: avatar más pequeño a la izquierda y el nombre a su lado.
+
 **1.74.4**: Las misiones normales y las rachas ya no dan sobres.
 
 **1.74.3**: Luces: nueva categoría de efectos para el nombre, con Luz Vice (neón GTA VI) como premio del nivel 7 del Camino SEIS.
