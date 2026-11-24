@@ -1,0 +1,44 @@
+/* ===== Tema claro: menú lateral (Explorador) acompaña al tema ===== */
+:root:not([data-dark="1"]) .menu { --ink: #14173a; --muted: #565b82; color: #14173a; }
+:root:not([data-dark="1"]) .mn-scrim { background: rgba(28, 30, 84, 0.4); }
+:root:not([data-dark="1"]) .mn-panel { background: linear-gradient(180deg, #f8f7ff 0%, #e9edff 100%); box-shadow: 18px 0 44px -18px rgba(30, 30, 100, 0.45); }
+:root:not([data-dark="1"]) .mn-stars::before { filter: invert(1) hue-rotate(200deg); opacity: 0.22; }
+:root:not([data-dark="1"]) .mn-stars::after { filter: invert(1) hue-rotate(200deg); opacity: 0.16; }
+:root:not([data-dark="1"]) .mn-x { background: rgba(30, 30, 100, 0.08); color: #1b1d45; }
+:root:not([data-dark="1"]) .mn-rank { color: #6d56d8; }
+:root:not([data-dark="1"]) .mn-sub, :root:not([data-dark="1"]) .mn-lv span, :root:not([data-dark="1"]) .mn-tx i, :root:not([data-dark="1"]) .mn-stats span { color: #565b82; }
+:root:not([data-dark="1"]) .mn-lv i { background: rgba(40, 40, 120, 0.12); }
+:root:not([data-dark="1"]) .mn-stats { background: #fff; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.16), 0 6px 16px -12px rgba(40, 40, 140, 0.5); }
+:root:not([data-dark="1"]) .mn-stats > div + div { box-shadow: -1px 0 0 rgba(90, 70, 200, 0.14); }
+:root:not([data-dark="1"]) .mn-stats b { color: #14173a; }
+:root:not([data-dark="1"]) .mn-qa button { background: #fff; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.18), 0 6px 14px -10px rgba(40, 40, 140, 0.5); color: #1b1d45; }
+:root:not([data-dark="1"]) .mn-qa button:active { background-color: #ece9ff; }
+:root:not([data-dark="1"]) .mn-qa svg { stroke: #6b46d6; }
+:root:not([data-dark="1"]) .mn-tip { color: #3a2a08; background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(139, 108, 246, 0.14)); box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.3); }
+:root:not([data-dark="1"]) .mn-tip small { color: #b45309; }
+:root:not([data-dark="1"]) .mn-tip svg { stroke: #d97706; }
+:root:not([data-dark="1"]) .mn-sec { color: #6b6f9a; }
+:root:not([data-dark="1"]) .mn-sec::after { background: linear-gradient(90deg, rgba(90, 70, 200, 0.28), transparent); }
+:root:not([data-dark="1"]) .mn-item:not(.feat) { color: #14173a; background: #fff; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.14), 0 6px 14px -11px rgba(40, 40, 140, 0.55); }
+:root:not([data-dark="1"]) .mn-item:not(.feat):hover, :root:not([data-dark="1"]) .mn-item:not(.feat):focus-visible { background-color: #f1efff; }
+:root:not([data-dark="1"]) .mn-item:not(.feat):active { background-color: #e7e3ff; }
+:root:not([data-dark="1"]) .mn-item:not(.feat):focus-visible { box-shadow: inset 0 0 0 2px rgba(107, 70, 214, 0.8); }
+:root:not([data-dark="1"]) .mn-item.soon { background: #f3f3fb; box-shadow: inset 0 0 0 1px rgba(90, 70, 200, 0.1); }
+:root:not([data-dark="1"]) .mn-item.soon .mn-tx b { color: #6b6f9a; }
+:root:not([data-dark="1"]) .mn-soon { color: #92400e; background: rgba(245, 158, 11, 0.18); }
+:root:not([data-dark="1"]) .mn-go { stroke: rgba(70, 60, 160, 0.5); }
+:root:not([data-dark="1"]) .mn-item.feat { color: #fff; background-color: #2f2490; box-shadow: inset 0 0 0 1px rgba(170, 150, 255, 0.45), 0 12px 24px -14px rgba(60, 40, 180, 0.8); }
+:root:not([data-dark="1"]) .mn-item.feat .mn-tx i { color: #e0dbff; }
+:root:not([data-dark="1"]) .mn-foot { color: #6b6f9a; }
+:root:not([data-dark="1"]) .mb-dot, :root:not([data-dark="1"]) .mn-dot { border-color: #f4f3ff; }
+/* ===== Tema claro: tarjetas y barra con más presencia ===== */
+:root:not([data-dark="1"]) .list[data-view="grid"] .item { box-shadow: 0 12px 26px -14px var(--card-glow), 0 1px 0 #fff inset; }
+:root:not([data-dark="1"]) .list[data-view="grid"] .item .t { color: var(--ink); }
+:root:not([data-dark="1"]) .menubtn, :root:not([data-dark="1"]) .iconbtn { box-shadow: 0 8px 18px -12px var(--card-glow); }
+.fr-xpf,.fr-xz,.fr-xw,.fr-xr,.fr-xe{opacity:0}
+.fr-xc{opacity:0}
+.fr-xs{opacity:0;transform-origin:80px 142px}
+.fr-xk{transform-origin:80px 142px}
+.fr-xw{transform-origin:80px 142px}
+.fr-xr{transform-origin:80px 142px}
+.ev .fr-xc{animation:frxc 10s linear 1 both}

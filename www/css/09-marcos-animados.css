@@ -1,0 +1,90 @@
+@keyframes frxc{0%{opacity:0}4%{opacity:.5}6%{opacity:.1}10%{opacity:.7}12%{opacity:.15}18%{opacity:.8}21%{opacity:.3}28%{opacity:.85}32%{opacity:.4}40%{opacity:.95}46%{opacity:.6}56%{opacity:1}62%{opacity:.75}68%{opacity:1}74%{opacity:1}84%{opacity:.25}100%{opacity:0}}
+.ev .fr-xz{animation:frxz .46s steps(1) 8 both;animation-delay:calc(2.6s + var(--d))}
+@keyframes frxz{0%{opacity:0}10%{opacity:1}20%{opacity:.15}30%{opacity:1}42%{opacity:0}100%{opacity:0}}
+.ev .fr-xp{animation:frxp 10s linear 1 both}
+@keyframes frxp{0%,20%{transform:none}24%{transform:translate(var(--jx),var(--jy))}28%{transform:translate(calc(var(--jx) * -1),var(--jy))}32%{transform:translate(var(--jy),calc(var(--jx) * -1))}37%{transform:translate(calc(var(--jy) * -1),var(--jx))}42%{transform:translate(var(--jx),calc(var(--jy) * -1))}48%{transform:translate(calc(var(--jx) * -1),calc(var(--jy) * -1))}54%{transform:translate(var(--jy),var(--jx))}60%{transform:translate(calc(var(--jx) * -1.3),var(--jy))}66%{transform:translate(var(--jx),calc(var(--jy) * 1.3))}67.5%{transform:none}69%{transform:translate(var(--dx),var(--dy))}73%{transform:translate(calc(var(--dx) * -.35),calc(var(--dy) * -.35))}78%{transform:translate(calc(var(--dx) * .12),calc(var(--dy) * .12))}84%,100%{transform:none}}
+.ev .fr-xpf{animation:frxpf 2.6s ease-out 1 both;animation-delay:calc(6.75s + var(--w))}
+@keyframes frxpf{0%{opacity:0}8%{opacity:.95}30%{opacity:.55}100%{opacity:0}}
+.ev .fr-xs{animation:frxs 10s linear 1 both,frxsf 10s linear 1 both}
+@keyframes frxs{0%,20%{transform:rotate(0);animation-timing-function:cubic-bezier(.6,0,1,.8)}67.5%{transform:rotate(2600deg);animation-timing-function:ease-out}100%{transform:rotate(2900deg)}}
+@keyframes frxsf{0%,18%{opacity:0}26%{opacity:.9}72%{opacity:1}86%{opacity:.4}100%{opacity:0}}
+.ev .fr-xk{animation:frxk 10s ease-in-out 1 both}
+@keyframes frxk{0%,20%{transform:scale(1)}67.5%{transform:scale(1.45)}71%{transform:scale(1.9)}80%{transform:scale(1.15)}100%{transform:scale(1)}}
+.ev .fr-xw{animation:frxw 10s ease-in 1 both}
+@keyframes frxw{0%,50%{opacity:0;transform:scale(.5)}64%{opacity:.5;transform:scale(.9)}68.5%{opacity:1;transform:scale(1.25)}74%{opacity:1;transform:scale(1.7)}84%{opacity:.25;transform:scale(1.2)}100%{opacity:0;transform:scale(1)}}
+.ev .fr-xr{animation:frxr 1.6s cubic-bezier(.1,.6,.3,1) 1 both;animation-delay:6.75s}
+@keyframes frxr{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(8.4)}}
+.ev .fr-xe{animation:frxe 1.4s ease-out 1 both}
+@keyframes frxe{0%{opacity:1;transform:translate(0,0)}70%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+.fr-xcr,.fr-xh,.fr-xg,.fr-xsm,.fr-xl,.fr-xsh,.fr-xm{opacity:0}
+.fr-xk,.fr-xs,.fr-xw,.fr-xr,.fr-xl{transform-origin:80px 144px}
+.fr-xb{animation:frxb 3.6s ease-in infinite;opacity:0}
+@keyframes frxb{0%{opacity:0;transform:translateY(4px)}20%{opacity:.9}100%{opacity:0;transform:translateY(-16px)}}
+.ev .fr-xcr{animation:frxcr 10s linear 1 both}
+@keyframes frxcr{0%,38%{opacity:0}56%{opacity:.55}67%{opacity:1}76%{opacity:1}100%{opacity:0}}
+.ev .fr-xh{animation:frxh 10s linear 1 both}
+@keyframes frxh{0%,68%{opacity:0}72%{opacity:1}100%{opacity:0}}
+.ev .fr-xg{animation:frxg 10s linear 1 both}
+@keyframes frxg{0%,60%{opacity:0}67.5%{opacity:.5}70%{opacity:1}77%{opacity:.8}92%{opacity:.15}100%{opacity:0}}
+.ev .fr-xsm{animation:frxsm 10s linear 1 both}
+@keyframes frxsm{0%,20%{opacity:0}67%{opacity:.9}74%{opacity:1}92%{opacity:.2}100%{opacity:0}}
+.ev .fr-xl{animation:frxl 10s linear 1 both}
+@keyframes frxl{0%,66%{opacity:0;transform:scale(.3)}69%{opacity:1;transform:scale(1.1)}74%{opacity:.85;transform:scale(1.35)}82%{opacity:0;transform:scale(1.6)}100%{opacity:0}}
+.ev .fr-xsh{animation:frxsh 1.6s ease-out 1 both}
+@keyframes frxsh{0%{opacity:1;transform:translate(0,0) rotate(0)}75%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
+.ev .fr-xm{animation:frxm 2.2s ease-out 1 both}
+@keyframes frxm{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+.fr-xcg,.fr-xcd,.fr-xzb{opacity:0}
+.fr-xlq{transform:scaleY(.4)}
+.ev .fr-xlq{animation:frxlq 10s linear 1 both}
+@keyframes frxlq{0%{transform:scaleY(.4);animation-timing-function:ease-in-out}45%{transform:scaleY(1)}69%{transform:scaleY(1);animation-timing-function:ease-out}77%{transform:scaleY(.18);animation-timing-function:ease-in-out}100%{transform:scaleY(.4)}}
+.ev .fr-xls{animation:frxls 10s linear 1 both}
+@keyframes frxls{0%{transform:translateY(0);animation-timing-function:ease-in-out}45%{transform:translateY(-20.4px)}69%{transform:translateY(-20.4px);animation-timing-function:ease-out}77%{transform:translateY(6.8px);animation-timing-function:ease-in-out}100%{transform:translateY(0)}}
+.fr-xls{opacity:.9}
+.ev .fr-xcg{animation:frxcg 10s linear 1 both}
+@keyframes frxcg{0%{opacity:0}6%{opacity:.18}8%{opacity:0}14%{opacity:.24}16%{opacity:.04}24%{opacity:.3}27%{opacity:.08}34%{opacity:.38}37%{opacity:.12}44%{opacity:.5}50%{opacity:.22}58%{opacity:.5}66%{opacity:.4}68%{opacity:.95}74%{opacity:.6}84%{opacity:0}100%{opacity:0}}
+.ev .fr-xcd{animation:frxcd 1.1s linear 5 both,frxcdf 10s linear 1 both;animation-delay:.6s,0s}
+@keyframes frxcd{from{stroke-dashoffset:21}to{stroke-dashoffset:0}}
+@keyframes frxcdf{0%,5%{opacity:0}16%{opacity:1}64%{opacity:1}69%{opacity:0}100%{opacity:0}}
+.ev .fr-xzb{animation:frxzb .5s steps(1) 2 both;animation-delay:calc(6.8s + var(--d))}
+@keyframes frxzb{0%{opacity:0}12%{opacity:1}30%{opacity:.2}46%{opacity:1}70%{opacity:0}100%{opacity:0}}
+.fr-xzg,.fr-xza,.fr-xzb2,.fr-xzb,.fr-xfb,.fr-xry,.fr-xsk{opacity:0}
+.fr-xfb,.fr-xry{transform-origin:80px 144px}
+.ev .fr-xzg{animation:frxzg 2.2s steps(1) 1 both;animation-delay:calc(2.6s + var(--d))}
+@keyframes frxzg{0%{opacity:0}2%{opacity:1}7%{opacity:0}30%{opacity:0}31%{opacity:1}37%{opacity:0}62%{opacity:0}63%{opacity:1}67%{opacity:.4}70%{opacity:1}74%{opacity:0}86%{opacity:0}87%{opacity:1}93%{opacity:0}100%{opacity:0}}
+.ev .fr-xza{animation:frxza .13s steps(1) 30 both;animation-delay:calc(2.6s + var(--d))}
+.ev .fr-xzb2{animation:frxzb2 .13s steps(1) 30 both;animation-delay:calc(2.6s + var(--d))}
+@keyframes frxza{0%{opacity:1}50%{opacity:0}100%{opacity:0}}
+@keyframes frxzb2{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.ev .fr-xzb{animation:frxzb .55s steps(1) 2 both;animation-delay:calc(6.75s + var(--d))}
+@keyframes frxzb{0%{opacity:0}10%{opacity:1}28%{opacity:.25}44%{opacity:1}70%{opacity:0}100%{opacity:0}}
+.ev .fr-xfb{animation:frxfb 1.5s ease-out 1 both;animation-delay:6.75s}
+@keyframes frxfb{0%{opacity:1;transform:scale(.35)}100%{opacity:0;transform:scale(3.4)}}
+.ev .fr-xry{animation:frxry 1.1s ease-out 1 both;animation-delay:6.75s}
+@keyframes frxry{0%{opacity:1;transform:scale(.3) rotate(0)}100%{opacity:0;transform:scale(1.3) rotate(14deg)}}
+.ev .fr-xsk{animation:frxsk 2.4s ease-out 1 both}
+@keyframes frxsk{0%{opacity:0;transform:translate(0,0) scale(.6)}25%{opacity:.5}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(2)}}
+.fr-xex{animation:frxex 1s cubic-bezier(.37,0,.63,1) infinite alternate}
+.fr-xey{animation:frxey 1s cubic-bezier(.37,0,.63,1) infinite alternate}
+.fr-xez{animation:frxez 1s cubic-bezier(.37,0,.63,1) infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes frxex{from{transform:translateX(-10.2px)}to{transform:translateX(10.2px)}}
+@keyframes frxey{from{transform:translateY(-3.6px)}to{transform:translateY(3.6px)}}
+@keyframes frxez{from{transform:scale(.6);opacity:.6}to{transform:scale(1.3);opacity:1}}
+.fr[data-ev] .fr-np{animation:none}
+.fr-xwb{animation:frxwb 8s ease-in-out infinite alternate;transform-origin:80px 14px}
+@keyframes frxwb{from{transform:scaleY(.62)}to{transform:scaleY(1.3)}}
+.fr-xnw{animation:frxnw 2.2s ease-out infinite;transform-origin:80px 14px}
+@keyframes frxnw{0%{transform:scale(.6);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+.fr-xnu{animation:frxnu 5s linear infinite;transform-origin:80px 14px}
+@keyframes frxnu{to{transform:rotate(360deg)}}
+.ev .fr-xex,.ev .fr-xey,.ev .fr-xez{animation-duration:.5s!important}
+.ev .fr-xnu{animation-duration:.8s}
+.fr-xzt{stroke-dashoffset:18}
+.ev .fr-xzt{animation:frxzt .3s linear 12 both;animation-delay:calc(2.6s + var(--d))}
+@keyframes frxzt{from{stroke-dashoffset:18}to{stroke-dashoffset:-100}}
+
+.fr-gp { animation: frgp 5.5s ease-in-out infinite; }
+.fr-gsw { animation: frgsw 5.2s ease-in-out infinite; } @keyframes frgsw { 0% { transform: translateX(0) skewX(-20deg); } 38%, 100% { transform: translateX(52px) skewX(-20deg); } }
+@keyframes frgp { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.8deg); } }
+.mx-evb { position: relative; overflow: hidden; border-radius: 22px; padding: 18px 16px 16px; margin-bottom: 12px; color: #fff; border: 1px solid rgba(255, 255, 255, 0.18); background: linear-gradient(135deg, #7a3cff 0%, #ff2e93 48%, #ff9a3d 100%); text-align: left; width: 100%; font: inherit; cursor: pointer; }
+.mx-evb::after { content: ""; position: absolute; right: -30px; bottom: -46px; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle at 50% 35%, #ffe27a, #ff8a3d 55%, rgba(255, 46, 147, 0) 72%); opacity: 0.85; }

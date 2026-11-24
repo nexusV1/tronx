@@ -6,3 +6,4 @@ www/fonts/
 *.jks
 local.properties
 .DS_Store
+www/js/app.js

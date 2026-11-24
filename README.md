@@ -16,6 +16,11 @@ Resumen de las funciones base; el detalle de cada versión está en [Cambios](#c
 - «Guardar como .txt» en Personalizar.
 - Aviso discreto para hacer una copia de seguridad si pasaron 7 días (se puede cerrar).
 
+- **MAX**: centro con niveles por XP (con emblemas y gemas de progreso dentro de cada rango), misiones diarias y semanales, rachas, logros con medallas, Tienda de marcos de perfil animados y resumen semanal. Las misiones normales y las rachas no dan sobres.
+- **Evento GTA VI**: cuenta regresiva, Camino SEIS con premios, recompensa diaria de 7 días, misiones diarias y semanales, sobres con pines exclusivos, Tienda del evento, la moneda estrella dorada y efectos de nombre en la categoría Luces.
+- **Perfil**: foto con editor de encuadre, zoom y rotación, portada, frase y estadísticas de escritura.
+- **Notas protegidas** con PIN o huella, recordatorios con aviso, calendario, buscar y reemplazar, imágenes dentro de las notas, historial de versiones y exportación a PDF, Markdown e imagen.
+
 - Notas en cuadrícula de dos columnas, con tarjetas redondeadas en tema espacial (oscuro y violeta por defecto; el claro y los demás colores siguen en Ajustes).
 - Cada nota puede tener un emoji o uno de los 12 stickers de Tronx (galaxia, estrella, planeta, nebulosa, luna, agujero negro, cometa, cohete, platillo, constelación, eclipse y cristal). El icono se ve en la tarjeta y en el editor, y se puede cambiar o quitar.
 - Botón **Guardar** en el editor: guarda al instante y avisa. Además todo se sigue guardando solo.
@@ -56,7 +61,7 @@ El número de versión interno (`versionCode`) sale del número de build de Code
 
 ## Probar en la computadora
 
-Abrí `www/index.html` en el navegador. Para ver las fuentes, antes corré `npm install` y `npm run build:web`. En el navegador no existen el menú de compartir ni la carpeta de caché del teléfono: exportar descarga el archivo y compartir copia el texto.
+Primero corré `npm install` y `npm run build:web`: eso arma `www/js/app.js` y copia las fuentes. Después abrí `www/index.html` en el navegador. En el navegador no existen el menú de compartir ni la carpeta de caché del teléfono: exportar descarga el archivo y compartir copia el texto.
 
 ## Compilar en tu computadora (opcional)
 
@@ -85,20 +90,38 @@ El ícono actual se generó con un script de dibujo; para cambiarlo, reemplazá 
 ## Estructura
 
 ```
-www/index.html          la app completa
-www/stickers.js         los stickers (dibujos SVG)
-www/sound.js            el sonido del agujero negro
-www/universe.js         fondo animado y pantalla de inicio
-www/universe.css        estilos de la pantalla de inicio
-www/constellations.js   el mapa de Constelaciones
-www/constellations.css  estilos del mapa
-www/bh/                 imágenes del agujero negro (webp)
-resources/              ícono y pantalla de inicio
-scripts/copy-fonts.mjs  copia las fuentes locales
-scripts/patch-android.mjs  versión y firma
-capacitor.config.json   nombre y paquete (com.tronx.notas)
-codemagic.yaml          workflows de Codemagic
+www/index.html            solo el HTML de las pantallas
+www/css/                  estilos de la app, en el orden en que se cargan:
+  00-base.css               fuentes, colores y diseño general
+  01-lista.css              lista de notas
+  02-editor.css             editor
+  03-paneles-y-guia.css     paneles, personalización y guía de bienvenida
+  04-menu-perfil-logros.css menú, perfil y logros
+  05-fondos-y-herramientas.css  fondos de nota, formato, dibujo, calendario y más
+  06-inicio.css             pantalla de inicio
+  07-max-y-extras.css       MAX, marcos y extras
+  08-tema-claro.css         ajustes del tema Blanco
+  09-marcos-animados.css    marcos de perfil animados
+  10-evento-gta.css         evento GTA VI
+  universe.css              pantalla de inicio con el universo
+  constellations.css        mapa de Constelaciones
+www/js/sound.js           el sonido del agujero negro
+www/js/stickers.js        los stickers (dibujos SVG)
+www/js/universe.js        fondo animado y pantalla de inicio
+www/js/constellations.js  el mapa de Constelaciones
+www/js/boot.js            salvavidas si el universo no carga
+www/js/app.js             la app completa, armada solo (no se sube a GitHub)
+src/js/                   el código de la app, partido por tema (01-... a 19-...)
+www/bh/, www/img/         imágenes
+resources/                ícono y pantalla de inicio
+scripts/copy-fonts.mjs    copia las fuentes locales
+scripts/build-js.mjs      une los archivos de src/js/ en www/js/app.js
+scripts/patch-android.mjs versión y firma
+capacitor.config.json     nombre y paquete (com.tronx.notas)
+codemagic.yaml            workflows de Codemagic
 ```
+
+El código de la app (`src/js/`) está partido por tema, por ejemplo `04-lista.js`, `05-editor.js` o `13-max.js`. `npm run build:web` los une en orden en `www/js/app.js`, que es el archivo que carga la app. Si cambiás algo en `src/js/`, volvé a correr `npm run build:web`; Codemagic ya lo hace en cada build. Todo `src/js/` forma una sola función, así que los archivos comparten variables y el orden de los números importa.
 
 ## Actualizar la app sin desinstalarla
 
@@ -115,6 +138,8 @@ Pasos, una sola vez:
 4. De ahí en adelante, compilá siempre con el workflow firmado: se instala encima sin perder nada.
 
 ## Cambios
+
+**1.75.1**: Código reorganizado en archivos por tema (estilos en `www/css/` y programa en `src/js/`). Sin cambios visibles en la app.
 
 **1.75.0**: Gemas de progreso debajo del emblema de cada nivel y brillo creciente dentro del rango.
 

@@ -1,10 +1,10 @@
 {
   "name": "tronx",
-  "version": "1.75.0",
+  "version": "1.75.1",
   "private": true,
   "description": "Tronx: app de notas sin conexión para Android",
   "scripts": {
-    "build:web": "node scripts/copy-fonts.mjs",
+    "build:web": "node scripts/copy-fonts.mjs && node scripts/build-js.mjs",
     "android:add": "cap add android",
     "android:prepare": "node scripts/patch-android.mjs",
     "android:sync": "cap sync android",

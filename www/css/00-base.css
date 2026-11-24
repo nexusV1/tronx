@@ -1,0 +1,139 @@
+/* Fuentes empaquetadas en la app (se copian desde node_modules con npm run build:web). */
+@font-face { font-family: "Bricolage Grotesque"; font-weight: 700; font-style: normal; font-display: swap; src: url("../fonts/bricolage-grotesque-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Bricolage Grotesque"; font-weight: 800; font-style: normal; font-display: swap; src: url("../fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-style: normal; font-display: swap; src: url("../fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 500; font-style: normal; font-display: swap; src: url("../fonts/ibm-plex-sans-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 600; font-style: normal; font-display: swap; src: url("../fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 400; font-style: normal; font-display: swap; src: url("../fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-style: normal; font-display: swap; src: url("../fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); }
+
+/* Layout: lista de notas a la izquierda, editor a la derecha; en celular una pantalla por vez. */
+/* Paleta "universo": lavanda clara de día, espacio profundo de noche. */
+:root {
+  --bg: #e9ecfb;
+  --panel: #ffffff;
+  --raised: #ffffff;
+  --solid: #fbfbff;
+  --ink: #0f1230;
+  --muted: #4b5174;
+  --line: #d3d8f0;
+  --sel: #e4e1ff;
+  --accent: #6b46d6;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(107, 70, 214, 0.14);
+  --danger: #c0281f;
+  --shadow: rgba(18, 22, 60, 0.28);
+  --card-bg: linear-gradient(160deg, #ffffff 0%, #eef0ff 100%);
+  --card-bd: #c9cfee;
+  --card-glow: rgba(70, 60, 190, 0.38);
+  --cosmos: radial-gradient(ellipse 90% 40% at 8% 0%, rgba(140, 110, 255, 0.22), transparent 70%), radial-gradient(ellipse 80% 40% at 100% 100%, rgba(90, 160, 255, 0.2), transparent 70%);
+  --note-size: 16px;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --note-font: var(--font-body);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #060715;
+    --panel: #0a0c20;
+    --raised: #11143a;
+    --solid: #12153c;
+    --ink: #ece9ff;
+    --muted: #a09ecb;
+    --line: #232652;
+    --sel: #1a1e4c;
+    --accent: #a58bff;
+    --accent-ink: #140a33;
+    --accent-soft: rgba(165, 139, 255, 0.22);
+    --danger: #ff8a80;
+    --shadow: rgba(0, 0, 10, 0.62);
+    --card-bg: linear-gradient(165deg, rgba(44, 38, 118, 0.78) 0%, rgba(17, 20, 58, 0.94) 100%);
+    --card-bd: rgba(150, 135, 255, 0.24);
+    --card-glow: rgba(120, 90, 255, 0.28);
+    --cosmos: radial-gradient(1.2px 1.2px at 22px 38px, rgba(255, 255, 255, 0.55), transparent 100%), radial-gradient(1px 1px at 96px 120px, rgba(210, 200, 255, 0.5), transparent 100%), radial-gradient(1.4px 1.4px at 170px 64px, rgba(255, 255, 255, 0.4), transparent 100%), radial-gradient(1px 1px at 60px 210px, rgba(190, 220, 255, 0.45), transparent 100%), radial-gradient(1.2px 1.2px at 200px 188px, rgba(255, 255, 255, 0.35), transparent 100%), radial-gradient(ellipse 90% 38% at 10% 0%, rgba(110, 70, 235, 0.34), transparent 70%), radial-gradient(ellipse 80% 40% at 100% 100%, rgba(40, 120, 220, 0.22), transparent 70%);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #060715;
+  --panel: #0a0c20;
+  --raised: #11143a;
+  --solid: #12153c;
+  --ink: #ece9ff;
+  --muted: #a09ecb;
+  --line: #232652;
+  --sel: #1a1e4c;
+  --accent: #a58bff;
+  --accent-ink: #140a33;
+  --accent-soft: rgba(165, 139, 255, 0.22);
+  --danger: #ff8a80;
+  --shadow: rgba(0, 0, 10, 0.62);
+  --card-bg: linear-gradient(165deg, rgba(44, 38, 118, 0.78) 0%, rgba(17, 20, 58, 0.94) 100%);
+  --card-bd: rgba(150, 135, 255, 0.24);
+  --card-glow: rgba(120, 90, 255, 0.28);
+  --cosmos: radial-gradient(1.2px 1.2px at 22px 38px, rgba(255, 255, 255, 0.55), transparent 100%), radial-gradient(1px 1px at 96px 120px, rgba(210, 200, 255, 0.5), transparent 100%), radial-gradient(1.4px 1.4px at 170px 64px, rgba(255, 255, 255, 0.4), transparent 100%), radial-gradient(1px 1px at 60px 210px, rgba(190, 220, 255, 0.45), transparent 100%), radial-gradient(1.2px 1.2px at 200px 188px, rgba(255, 255, 255, 0.35), transparent 100%), radial-gradient(ellipse 90% 38% at 10% 0%, rgba(110, 70, 235, 0.34), transparent 70%), radial-gradient(ellipse 80% 40% at 100% 100%, rgba(40, 120, 220, 0.22), transparent 70%);
+  color-scheme: dark;
+}
+:root[data-font="serif"] { --note-font: "Iowan Old Style", "Noto Serif", Georgia, "Times New Roman", serif; }
+:root[data-font="mono"] { --note-font: var(--font-mono); }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { height: 100%; background: var(--bg); }
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+.app {
+  height: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  background: var(--panel);
+  overflow: hidden;
+}
+@media (min-width: 761px) {
+  body { padding: 12px; }
+  .app { border: 1px solid var(--line); border-radius: 10px; }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: var(--raised);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 38px;
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 100%, #fff 10%), var(--accent)); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; box-shadow: 0 6px 18px -8px var(--accent); }
+.btn.primary:hover { filter: brightness(1.06); }
+.btn.icon { padding: 0; width: 38px; }
+.btn.ghost { border-color: transparent; background: transparent; }
+.btn.ghost:hover { background: var(--sel); }
+.btn.danger { color: var(--danger); }
+.btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.btn.small { min-height: 32px; padding: 4px 10px; font-size: 13px; }
+
