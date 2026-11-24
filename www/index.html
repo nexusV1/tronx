@@ -1234,6 +1234,7 @@ body.focus #doc { max-width: 720px; margin: 0 auto; }
 .mx-ttl { flex: 1; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; }
 .mx-ttl i { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; color: #3a1500; background: linear-gradient(140deg, #fbbf24, #ea580c); }
 .mx-ttl i svg { width: 18px; height: 18px; stroke-width: 2.4; }
+.stc { display: inline-block; width: 1.15em; height: 1.15em; vertical-align: -0.22em; margin: 0 0.1em; background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22a%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23fff6b8%22/%3E%3Cstop offset=%22.45%22 stop-color=%22%23ffc933%22/%3E%3Cstop offset=%221%22 stop-color=%22%23d9820a%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22b%22 x1=%221%22 y1=%221%22 x2=%220%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23f0a41c%22/%3E%3Cstop offset=%221%22 stop-color=%22%23ffe98a%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22c%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23fffdf0%22/%3E%3Cstop offset=%22.5%22 stop-color=%22%23ffe14d%22/%3E%3Cstop offset=%221%22 stop-color=%22%23f5a812%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx=%2232%22 cy=%2235%22 rx=%2229%22 ry=%2228%22 fill=%22%237a3f00%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2229%22 fill=%22url(%23a)%22 stroke=%22%238e4d00%22 stroke-width=%222%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2226.5%22 fill=%22none%22 stroke=%22%23fff4b0%22 stroke-width=%221.2%22 stroke-dasharray=%221.6 2.2%22 opacity=%22.8%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2221.5%22 fill=%22url(%23b)%22 stroke=%22%23a65f00%22 stroke-width=%221.6%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2219.5%22 fill=%22none%22 stroke=%22%23fff6c8%22 stroke-width=%22.8%22 opacity=%22.7%22/%3E%3Cpolygon points=%2232.0,18.5 35.9,28.7 46.7,29.2 38.3,36.0 41.1,46.5 32.0,40.6 22.9,46.5 25.7,36.0 17.3,29.2 28.1,28.7%22 fill=%22%238e4d00%22 opacity=%22.55%22/%3E%3Cpolygon points=%2232.0,17.0 35.9,27.2 46.7,27.7 38.3,34.5 41.1,45.0 32.0,39.1 22.9,45.0 25.7,34.5 17.3,27.7 28.1,27.2%22 fill=%22url(%23c)%22 stroke=%22%23a65f00%22 stroke-width=%221.4%22 stroke-linejoin=%22round%22/%3E%3Cpolygon points=%2231.4,22.6 33.5,28.7 40.0,28.8 34.8,32.7 36.7,38.9 31.4,35.2 26.1,38.9 28.0,32.7 22.8,28.8 29.3,28.7%22 fill=%22%23fff%22 opacity=%22.45%22/%3E%3Cpath d=%22M14,16 Q20,9 29,8%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%222.6%22 stroke-linecap=%22round%22 opacity=%22.8%22/%3E%3Cpath d=%22M50,13 l1.2,3 3,1.2 -3,1.2 -1.2,3 -1.2,-3 -3,-1.2 3,-1.2z%22 fill=%22%23fff%22/%3E%3C/svg%3E") center / contain no-repeat; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)); }
 .mx-bal { padding: 7px 12px; border-radius: 999px; font-weight: 800; font-size: 14px; color: #ffd76a; background: rgba(251, 191, 36, 0.14); border: 1px solid rgba(251, 191, 36, 0.35); }
 .mx-sc { position: relative; flex: 1; overflow-y: auto; padding: 4px 18px calc(100px + env(safe-area-inset-bottom, 0px)); -webkit-overflow-scrolling: touch; }
 .mx-tour { position: absolute; inset: 0; z-index: 6; display: flex; align-items: flex-end; justify-content: center; padding: 0 14px calc(92px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(180deg, rgba(8, 9, 28, 0) 30%, rgba(8, 9, 28, 0.78)); pointer-events: none; }
@@ -2668,7 +2669,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.74.7";
+  var APP_VERSION = "1.74.8";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5934,6 +5935,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.74.8", d: "24 nov 2026", t: "Nueva moneda estrella", lv: "Hipernova", nm: "Ha llegado VI", cat: "rediseno", l: ["Rediseñamos la moneda estrella: ahora es una moneda dorada con borde grabado, relieve y una estrella brillante en el centro.","Se ve en tu saldo de MAX, en la tienda, en los precios, en las misiones y en los premios de subida de nivel.","Se ve nítida tanto en tamaño chico como grande."] },
     { v: "1.74.7", d: "24 nov 2026", t: "Barra de formato más clara", lv: "Hipernova", nm: "Ha llegado VI", cat: "mejora", l: ["La barra de formato de las notas ahora separa las herramientas por grupos: historial, estilo, bloques, insertar, tabla y fecha.","Se difuminan los bordes cuando hay más herramientas para deslizar, así no quedan escondidas.","El botón del formato de la línea donde estás (viñeta, lista, casilla, cita o título) queda marcado.","Los botones responden con una pequeña animación al tocarlos."] },
     { v: "1.74.6", d: "23 nov 2026", t: "Editor de foto de perfil", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Antes de poner una foto en tu perfil, ahora podés editarla: moverla, acercarla con el control o con dos dedos, y rotarla.","Se ve el círculo exacto que va a quedar en tu perfil.","Botón Restablecer para volver al encuadre inicial.","Un botón Próximamente anticipa nuevas herramientas para tu foto."] },
     { v: "1.74.5", d: "23 nov 2026", t: "Perfil con nuevo diseño", lv: "Hipernova", nm: "Ha llegado VI", cat: "rediseno", ep: "gta", l: ["El avatar del perfil es más pequeño y pasa a la izquierda.","Tu nombre, la frase y el nivel van al lado del avatar, alineados a la izquierda."] },
@@ -8457,6 +8459,25 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   function mxFrRefresh() { mxRender(); try { renderMenu(); } catch (e) { /* menú aún no creado */ } try { renderProfile(); } catch (e2) { /* perfil cerrado */ } }
   function mk(tag, cls, txt) { var e = el(tag, cls); if (txt != null) e.textContent = txt; return e; }
   function fmtMx(n) { return Number(n).toLocaleString("es"); }
+  // La estrella de las recompensas se muestra como una moneda dorada (solo dentro de MAX, subida de nivel y avisos).
+  (function () {
+    var roots = ["max", "lvlup", "toast"].map(function (i) { return $(i); }).filter(Boolean);
+    function conv(root) {
+      var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), list = [], t;
+      while ((t = w.nextNode())) { if (t.nodeValue.indexOf("\u2b50") >= 0 && t.parentNode && !/^(TEXTAREA|INPUT|SCRIPT|STYLE)$/.test(t.parentNode.nodeName) && !(t.parentNode.closest && t.parentNode.closest('[class*="nm"]'))) list.push(t); }
+      list.forEach(function (n) {
+        var parts = n.nodeValue.split("\u2b50"), f = document.createDocumentFragment();
+        parts.forEach(function (x, i) { if (i) { var c = document.createElement("i"); c.className = "stc"; c.setAttribute("aria-hidden", "true"); f.appendChild(c); } if (x) f.appendChild(document.createTextNode(x)); });
+        n.parentNode.replaceChild(f, n);
+      });
+    }
+    var busy = false;
+    roots.forEach(function (r) {
+      conv(r);
+      new MutationObserver(function () { if (busy) return; busy = true; try { conv(r); } finally { busy = false; } }).observe(r, { childList: true, subtree: true, characterData: true });
+    });
+  })();
+
   function mxMissionRow(def, prog, claimed, onClaim) {
     var done = prog >= def.t, card = mk("div", "mx-card mx-mi"), ic = mk("div", "mx-ic" + (claimed ? " ok" : ""), claimed ? "✓" : def.e), tx = mk("div"), b = mk("b", null, def.n);
     tx.appendChild(b); tx.appendChild(mk("span", "d", claimed ? "¡Conseguida!" : fmtMx(Math.min(prog, def.t)) + " / " + fmtMx(def.t)));
