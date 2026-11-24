@@ -1441,6 +1441,13 @@ button.mx-rw { cursor: pointer; color: #3a1500; background: linear-gradient(135d
 .fmt::-webkit-scrollbar { display: none; }
 .fmt .btn { min-height: 34px; padding: 3px 11px; font-size: 13px; flex: none; }
 .pane .fmt .btn { background: var(--raised); background: color-mix(in srgb, var(--raised) 70%, transparent); }
+.fmt { --ml: 0px; --mr: 0px; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--ml), #000 calc(100% - var(--mr)), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--ml), #000 calc(100% - var(--mr)), transparent 100%); scroll-behavior: smooth; }
+.fmt.sl { --ml: 26px; }
+.fmt.sr { --mr: 34px; }
+.fmt .fsep { flex: none; width: 1px; margin: 7px 3px; background: var(--line); border-radius: 1px; opacity: 0.9; }
+.fmt .btn { transition: background 0.15s, color 0.15s, transform 0.12s; }
+.fmt .btn:active:not(:disabled) { transform: scale(0.94); }
+
 
 /* Progreso de listas */
 .prog { height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; margin: 0 0 10px; max-width: 70ch; }
@@ -1990,28 +1997,35 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
       <div class="fmt" id="fmt" role="toolbar" aria-label="Dar formato a la nota">
         <button class="btn ic" type="button" data-ins="undo" aria-label="Deshacer" disabled>↶</button>
         <button class="btn ic" type="button" data-ins="redo" aria-label="Rehacer" disabled>↷</button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="btn ic" type="button" data-ins="bold" aria-label="Negrita"><b>B</b></button>
         <button class="btn ic" type="button" data-ins="italic" aria-label="Cursiva"><i>I</i></button>
         <button class="btn" type="button" data-ins="hl" aria-pressed="false">🖍 Resaltar</button>
         <button class="btn" type="button" data-ins="find" aria-pressed="false">🔎 Buscar</button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="btn" type="button" data-ins="head">Título</button>
         <button class="btn" type="button" data-ins="quote">❝ Cita</button>
         <button class="btn" type="button" data-ins="bullet">• Viñeta</button>
         <button class="btn" type="button" data-ins="num">1. Lista</button>
         <button class="btn" type="button" data-ins="check">☐ Casilla</button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="btn" type="button" data-ins="image">🖼 Imagen</button>
         <button class="btn" type="button" data-ins="photo">📷 Foto</button>
         <button class="btn" type="button" data-ins="draw">✏️ Dibujo</button>
         <button class="btn" type="button" data-ins="dictate" id="dictBtn" hidden>🎤 Dictar</button>
         <button class="btn" type="button" data-ins="sticker">⭐ Sticker</button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="btn" type="button" data-ins="link">[[ ]] Enlace</button>
         <button class="btn" type="button" data-ins="code">&lt;/&gt; Código</button>
         <button class="btn" type="button" data-ins="strike"><s>Tachado</s></button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="btn" type="button" data-ins="table">▦ Tabla</button>
         <button class="btn" type="button" data-ins="tblrow">▦ + Fila</button>
         <button class="btn" type="button" data-ins="tblcol">▦ + Columna</button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="btn" type="button" data-ins="date">Fecha</button>
         <button class="btn" type="button" data-ins="time">Hora</button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="btn" type="button" data-ins="read" aria-pressed="false">Leer</button>
       </div>
     </div>
@@ -2654,7 +2668,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.74.6";
+  var APP_VERSION = "1.74.7";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5292,6 +5306,26 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     else return;
     fireInput(); histNow();
   });
+
+  // La barra de formato avisa si hay más herramientas a los lados y marca el formato de la línea donde estás.
+  (function () {
+    var fm = $("fmt");
+    function edges() { var l = fm.scrollLeft > 4, r = fm.scrollLeft + fm.clientWidth < fm.scrollWidth - 4; fm.classList.toggle("sl", l); fm.classList.toggle("sr", r); }
+    fm.addEventListener("scroll", edges, { passive: true }); window.addEventListener("resize", edges);
+    new MutationObserver(function () { setTimeout(edges, 0); }).observe(fm, { attributes: true, attributeFilter: ["hidden", "class"] });
+    setTimeout(edges, 300);
+    var FM = { bullet: /^• /, num: /^\d+[.)] /, check: /^\[[ xX]\] /, quote: /^> /, head: /^#{1,2} / };
+    function state() {
+      try {
+        var n = cur(); if (!n || n.type !== "text" || readMode || fm.hidden) return;
+        var b = lineBounds(), line = bodyEl.value.slice(b.ls, b.le);
+        Object.keys(FM).forEach(function (k) { var btn = fm.querySelector('[data-ins="' + k + '"]'); if (btn) btn.setAttribute("aria-pressed", FM[k].test(line) ? "true" : "false"); });
+        edges();
+      } catch (e) { }
+    }
+    ["input", "keyup", "click", "focus"].forEach(function (ev) { bodyEl.addEventListener(ev, state); });
+    document.addEventListener("selectionchange", function () { if (document.activeElement === bodyEl) state(); });
+  })();
   // Enter continúa la viñeta, la casilla o la numeración; Enter en una línea vacía sale de la lista.
   function nextMarker(m) {
     var num = m.match(/^(\d+)([.)])$/);
@@ -5900,6 +5934,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.74.7", d: "24 nov 2026", t: "Barra de formato más clara", lv: "Hipernova", nm: "Ha llegado VI", cat: "mejora", l: ["La barra de formato de las notas ahora separa las herramientas por grupos: historial, estilo, bloques, insertar, tabla y fecha.","Se difuminan los bordes cuando hay más herramientas para deslizar, así no quedan escondidas.","El botón del formato de la línea donde estás (viñeta, lista, casilla, cita o título) queda marcado.","Los botones responden con una pequeña animación al tocarlos."] },
     { v: "1.74.6", d: "23 nov 2026", t: "Editor de foto de perfil", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Antes de poner una foto en tu perfil, ahora podés editarla: moverla, acercarla con el control o con dos dedos, y rotarla.","Se ve el círculo exacto que va a quedar en tu perfil.","Botón Restablecer para volver al encuadre inicial.","Un botón Próximamente anticipa nuevas herramientas para tu foto."] },
     { v: "1.74.5", d: "23 nov 2026", t: "Perfil con nuevo diseño", lv: "Hipernova", nm: "Ha llegado VI", cat: "rediseno", ep: "gta", l: ["El avatar del perfil es más pequeño y pasa a la izquierda.","Tu nombre, la frase y el nivel van al lado del avatar, alineados a la izquierda."] },
     { v: "1.74.4", d: "23 nov 2026", t: "Misiones sin sobres", lv: "Hipernova", nm: "Ha llegado VI", cat: "arreglo", ep: "gta", l: ["Las misiones normales y las recompensas de racha de la pestaña Misiones ya no entregan sobres: dan solo XP y estrellas.","Los sobres se consiguen en las misiones del evento, en el Camino SEIS y en la recompensa diaria."] },
