@@ -116,6 +116,8 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.74.6**: Editor de foto de perfil: encuadre con movimiento, zoom y rotación antes de usar la foto.
+
 **1.74.5**: Perfil con nuevo diseño: avatar más pequeño a la izquierda y el nombre a su lado.
 
 **1.74.4**: Las misiones normales y las rachas ya no dan sobres.

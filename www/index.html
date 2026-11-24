@@ -812,6 +812,15 @@ h4 .nwvi { font-size: 1.55em; line-height: 0.9; vertical-align: -0.06em; }
 .pf-mode button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 .pf-mode svg { width: 24px; height: 24px; }
 .pf-photoact { display: flex; gap: 8px; margin-top: 10px; }
+.pfcr { padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+.pfcr .sheethead { gap: 8px; }
+.pfcr-vp { position: relative; width: min(78vw, 320px); aspect-ratio: 1; margin: 8px auto 14px; border-radius: 20px; overflow: hidden; background: #000; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.pfcr-vp canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pfcr-mask { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at center, transparent 0, transparent calc(50% - 2px), rgba(255, 255, 255, 0.9) calc(50% - 2px), rgba(255, 255, 255, 0.9) 50%, rgba(8, 6, 24, 0.62) 50%); }
+.pfcr-zm { display: flex; align-items: center; gap: 12px; margin: 0 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.pfcr-zm input { flex: 1; accent-color: var(--accent); }
+.pfcr-act { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.pfcr-soon { margin-left: auto; opacity: 0.85; border-style: dashed; }
 .pf-emo { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
 .pf-emo button { min-height: 42px; border-radius: 12px; font-size: 22px; }
 .pf-emo button[aria-pressed="true"] { background: var(--accent-soft); outline: 2px solid var(--accent); }
@@ -2527,6 +2536,15 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     <p class="hint">La foto se guarda solo en este teléfono y no sale de él. Las insignias son solo para las notas.</p>
   </section>
 </div>
+<div class="overlay" id="pfCrop" hidden>
+  <section class="panel pfcr" role="dialog" aria-modal="true" aria-label="Editar foto">
+    <div class="sheethead"><button class="btn small" id="pfCrCancel" type="button">Cancelar</button><strong>Editar foto</strong><button class="btn small primary" id="pfCrOk" type="button">Usar foto</button></div>
+    <div class="pfcr-vp" id="pfCrVp"><canvas id="pfCrCv"></canvas><span class="pfcr-mask" aria-hidden="true"></span></div>
+    <label class="pfcr-zm"><span>Zoom</span><input type="range" id="pfCrZoom" min="1" max="4" step="0.01" value="1" aria-label="Zoom de la foto"></label>
+    <div class="pfcr-act"><button class="btn small" id="pfCrRot" type="button">Rotar</button><button class="btn small" id="pfCrReset" type="button">Restablecer</button><button class="btn small pfcr-soon" id="pfCrSoon" type="button">✨ Próximamente</button></div>
+    <p class="hint">Arrastrá para mover la foto y usá el control o dos dedos para acercar. Solo se ve el círculo.</p>
+  </section>
+</div>
 <div class="overlay" id="links" hidden>
   <section class="panel" role="dialog" aria-modal="true" aria-label="Vinculación">
     <div class="sheethead"><strong>Vinculación</strong><button class="btn small" id="linksClose" type="button">Listo</button></div>
@@ -2636,7 +2654,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.74.5";
+  var APP_VERSION = "1.74.6";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5882,6 +5900,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.74.6", d: "23 nov 2026", t: "Editor de foto de perfil", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Antes de poner una foto en tu perfil, ahora podés editarla: moverla, acercarla con el control o con dos dedos, y rotarla.","Se ve el círculo exacto que va a quedar en tu perfil.","Botón Restablecer para volver al encuadre inicial.","Un botón Próximamente anticipa nuevas herramientas para tu foto."] },
     { v: "1.74.5", d: "23 nov 2026", t: "Perfil con nuevo diseño", lv: "Hipernova", nm: "Ha llegado VI", cat: "rediseno", ep: "gta", l: ["El avatar del perfil es más pequeño y pasa a la izquierda.","Tu nombre, la frase y el nivel van al lado del avatar, alineados a la izquierda."] },
     { v: "1.74.4", d: "23 nov 2026", t: "Misiones sin sobres", lv: "Hipernova", nm: "Ha llegado VI", cat: "arreglo", ep: "gta", l: ["Las misiones normales y las recompensas de racha de la pestaña Misiones ya no entregan sobres: dan solo XP y estrellas.","Los sobres se consiguen en las misiones del evento, en el Camino SEIS y en la recompensa diaria."] },
     { v: "1.74.3", d: "23 nov 2026", t: "Luces: Luz Vice para tu nombre", lv: "Hipernova", nm: "Ha llegado VI", cat: "nuevo", ep: "gta", l: ["Nueva categoría Luces: efectos de luz para las letras de tu nombre.","Luz Vice: un neón con los colores de GTA VI (rosa, naranja y violeta) que ilumina tu nombre en el perfil y en el menú.","Se consigue como premio del nivel 7 del Camino SEIS, con 299 puntos.","En Eventos > Tienda, en la sección Luces, podés ver cómo queda, equiparla o quitarla cuando quieras."] },
@@ -7267,20 +7286,65 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
     if ($("pfName") !== document.activeElement) $("pfName").value = p.name;
     if ($("pfBioIn") !== document.activeElement) $("pfBioIn").value = p.bio;
   }
+  var pfCr = null, PFV = 320;
+  function pfCrDraw(cv, V, px) {
+    var c = pfCr; if (!c) return; var ctx = cv.getContext("2d"), k = px / V, rw = c.rot % 2 ? c.img.naturalHeight : c.img.naturalWidth, rh = c.rot % 2 ? c.img.naturalWidth : c.img.naturalHeight;
+    var sc = V / Math.min(rw, rh) * c.zoom;
+    ctx.clearRect(0, 0, px, px); ctx.fillStyle = "#000"; ctx.fillRect(0, 0, px, px);
+    ctx.save(); ctx.translate(px / 2 + c.ox * k, px / 2 + c.oy * k); ctx.rotate(c.rot * Math.PI / 2); ctx.scale(sc * k, sc * k);
+    ctx.drawImage(c.img, -c.img.naturalWidth / 2, -c.img.naturalHeight / 2); ctx.restore();
+  }
+  function pfCrClamp() {
+    var c = pfCr, V = $("pfCrVp").clientWidth || 280, rw = c.rot % 2 ? c.img.naturalHeight : c.img.naturalWidth, rh = c.rot % 2 ? c.img.naturalWidth : c.img.naturalHeight, sc = V / Math.min(rw, rh) * c.zoom;
+    var mx = Math.max(0, (rw * sc - V) / 2), my = Math.max(0, (rh * sc - V) / 2);
+    c.ox = Math.max(-mx, Math.min(mx, c.ox)); c.oy = Math.max(-my, Math.min(my, c.oy));
+  }
+  function pfCrPaint() {
+    var cv = $("pfCrCv"), V = $("pfCrVp").clientWidth || 280, dpr = Math.min(2, window.devicePixelRatio || 1), px = Math.round(V * dpr);
+    if (cv.width !== px) { cv.width = px; cv.height = px; }
+    pfCrClamp(); pfCrDraw(cv, V, px);
+  }
+  function pfCrFree() { if (pfCr && pfCr.url) { try { URL.revokeObjectURL(pfCr.url); } catch (e) { } } pfCr = null; }
+  layerHandlers.pfcrop = function () { $("pfCrop").hidden = true; pfCrFree(); };
   function pfLoadPhoto(file) {
     if (!file) return;
     var url = URL.createObjectURL(file), img = new Image();
     img.onload = function () {
-      var s = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement("canvas");
-      c.width = c.height = 320;
-      c.getContext("2d").drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, 320, 320);
-      URL.revokeObjectURL(url);
-      setProfile({ photo: c.toDataURL("image/jpeg", 0.85), avatar: "p" });
-      renderPfEditor(); renderProfile(); renderMenu();
+      pfCrFree(); pfCr = { img: img, url: url, rot: 0, zoom: 1, ox: 0, oy: 0 };
+      $("pfCrZoom").value = "1"; $("pfCrop").hidden = false; pushLayer("pfcrop");
+      requestAnimationFrame(pfCrPaint);
     };
     img.onerror = function () { URL.revokeObjectURL(url); toast("No se pudo leer esa imagen"); };
     img.src = url;
   }
+  (function () {
+    var vp = $("pfCrVp"), pts = {}, last = null;
+    function cnt() { return Object.keys(pts).length; }
+    vp.addEventListener("pointerdown", function (e) { if (!pfCr) return; try { vp.setPointerCapture(e.pointerId); } catch (x) { } pts[e.pointerId] = { x: e.clientX, y: e.clientY }; last = null; });
+    vp.addEventListener("pointermove", function (e) {
+      if (!pfCr || !pts[e.pointerId]) return; var n = cnt(), o = pts[e.pointerId];
+      if (n === 1) { pfCr.ox += e.clientX - o.x; pfCr.oy += e.clientY - o.y; pts[e.pointerId] = { x: e.clientX, y: e.clientY }; }
+      else if (n === 2) {
+        pts[e.pointerId] = { x: e.clientX, y: e.clientY }; var ks = Object.keys(pts), a = pts[ks[0]], b = pts[ks[1]], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (last) { pfCr.zoom = Math.max(1, Math.min(4, pfCr.zoom * d / last)); $("pfCrZoom").value = String(pfCr.zoom); } last = d;
+      }
+      pfCrPaint();
+    });
+    function up(e) { delete pts[e.pointerId]; last = null; }
+    vp.addEventListener("pointerup", up); vp.addEventListener("pointercancel", up);
+    vp.addEventListener("wheel", function (e) { if (!pfCr) return; e.preventDefault(); pfCr.zoom = Math.max(1, Math.min(4, pfCr.zoom * (e.deltaY < 0 ? 1.08 : 0.93))); $("pfCrZoom").value = String(pfCr.zoom); pfCrPaint(); }, { passive: false });
+    $("pfCrZoom").addEventListener("input", function () { if (!pfCr) return; pfCr.zoom = parseFloat($("pfCrZoom").value) || 1; pfCrPaint(); });
+    $("pfCrRot").addEventListener("click", function () { if (!pfCr) return; pfCr.rot = (pfCr.rot + 1) % 4; pfCr.ox = pfCr.oy = 0; pfCrPaint(); });
+    $("pfCrReset").addEventListener("click", function () { if (!pfCr) return; pfCr.rot = 0; pfCr.zoom = 1; pfCr.ox = pfCr.oy = 0; $("pfCrZoom").value = "1"; pfCrPaint(); });
+    $("pfCrSoon").addEventListener("click", function () { toast("Próximamente: más herramientas para tu foto"); });
+    $("pfCrCancel").addEventListener("click", function () { closeLayer("pfcrop"); });
+    $("pfCrop").addEventListener("click", function (e) { if (e.target === $("pfCrop")) closeLayer("pfcrop"); });
+    $("pfCrOk").addEventListener("click", function () {
+      if (!pfCr) return; pfCrClamp(); var V = $("pfCrVp").clientWidth || 280, out = document.createElement("canvas"); out.width = out.height = PFV;
+      pfCrDraw(out, V, PFV); var data = out.toDataURL("image/jpeg", 0.88);
+      setProfile({ photo: data, avatar: "p" }); closeLayer("pfcrop"); renderPfEditor(); renderProfile(); renderMenu();
+    });
+  })();
   function openPfEditor() { renderPfEditor(); $("pfEditor").hidden = false; pushLayer("pfedit"); }
   $("profileClose").addEventListener("click", function () { closeLayer("profile"); });
   $("pfEdit").addEventListener("click", openPfEditor); $("pfEditTop").addEventListener("click", openPfEditor);
