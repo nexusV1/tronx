@@ -403,6 +403,13 @@
     $("pfBan").style.background = PF_COVERS[p.cover];
     $("pfNameOut").textContent = p.name || "Explorador"; mxPinTag($("pfNameOut"), 22); $("pfBioOut").textContent = p.bio;
     $("pfLvl").textContent = "⭐ " + lv.title + " · Nivel " + lv.L;
+    var lc = $("pfLvCard"); lc.textContent = "";
+    var lce = el("div", "pf-lve"); lce.innerHTML = emblemSvg(lv.rank.i, lv.L, 84, false); lc.appendChild(lce);
+    var lcb = el("div", "pf-lvb"), lcr = el("span", "pf-lvr"), lct = el("strong"), lcn = el("small"), lcbar = el("div", "pf-lvbar"), lci = el("i"), lcx = el("div", "pf-lvx");
+    lcr.textContent = "Rango " + lv.rank.name; lct.textContent = lv.title; lcn.textContent = "Nivel " + lv.L + " de " + MX_MAXL;
+    lci.style.width = lv.pct + "%"; lcbar.appendChild(lci);
+    lcx.textContent = lv.max ? "Llegaste al rango final" : "Faltan " + fmtMx(lv.left) + " XP para el nivel " + (lv.L + 1);
+    lcb.appendChild(lcr); lcb.appendChild(lct); lcb.appendChild(lcn); lcb.appendChild(lcbar); lcb.appendChild(lcx); lc.appendChild(lcb);
     var sx = $("pfStats"); sx.textContent = "";
     [[st.notes, "Notas"], [st.lists, "Listas"], [compactN(w.total), "Palabras"], [w.cur, "Racha"], [st.groups, "Constelaciones"], [st.links, "Vínculos"]].forEach(function (a) {
       var t = el("div", "pf-stat"), b = el("b"), sp = el("span"); b.textContent = String(a[0]); sp.textContent = a[1]; t.appendChild(b); t.appendChild(sp); sx.appendChild(t);
