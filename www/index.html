@@ -2669,7 +2669,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 <script>
 (function () {
   "use strict";
-  var APP_VERSION = "1.74.9";
+  var APP_VERSION = "1.75.0";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };
@@ -5935,6 +5935,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.75.0", d: "24 nov 2026", t: "Gemas de progreso en los niveles", lv: "Hipernova", cat: "mejora", l: ["Debajo del emblema de cada nivel hay una gema por cada nivel de su rango.","Las gemas se encienden a medida que subís, así ves cuánto te falta para el siguiente rango.","El brillo del emblema crece con cada nivel dentro del rango."] },
     { v: "1.74.9", d: "24 nov 2026", t: "Niveles de versión corregidos", lv: "Destello", cat: "arreglo", l: ["Las versiones recientes mostraban un nivel más alto del que les correspondía.","Ahora cada una muestra su nivel real: Destello, Eclipse o Nova según su alcance, y Hipernova queda para los saltos de ciclo."] },
     { v: "1.74.8", d: "24 nov 2026", t: "Nueva moneda estrella", lv: "Eclipse", cat: "rediseno", l: ["Rediseñamos la moneda estrella: ahora es una moneda dorada con borde grabado, relieve y una estrella brillante en el centro.","Se ve en tu saldo de MAX, en la tienda, en los precios, en las misiones y en los premios de subida de nivel.","Se ve nítida tanto en tamaño chico como grande."] },
     { v: "1.74.7", d: "24 nov 2026", t: "Barra de formato más clara", lv: "Eclipse", cat: "mejora", l: ["La barra de formato de las notas ahora separa las herramientas por grupos: historial, estilo, bloques, insertar, tabla y fecha.","Se difuminan los bordes cuando hay más herramientas para deslizar, así no quedan escondidas.","El botón del formato de la línea donde estás (viñeta, lista, casilla, cita o título) queda marcado.","Los botones responden con una pequeña animación al tocarlos."] },
@@ -7694,7 +7695,19 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
         s += '<path d="M' + x + " " + (y - u * 2.6) + " L" + (x + u * 0.7) + " " + (y - u * 0.7) + " L" + (x + u * 2.6) + " " + y + " L" + (x + u * 0.7) + " " + (y + u * 0.7) + " L" + x + " " + (y + u * 2.6) + " L" + (x - u * 0.7) + " " + (y + u * 0.7) + " L" + (x - u * 2.6) + " " + y + " L" + (x - u * 0.7) + " " + (y - u * 0.7) + 'Z" fill="#fff" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="' + (1.8 + k * 0.35) + 's" begin="' + (k * 0.45) + 's" repeatCount="indefinite"/></path>';
       });
     }
-    return '<svg viewBox="-6 -4 212 204" width="' + size + '" height="' + Math.round(size * 0.962) + '" aria-hidden="true" style="overflow:visible">' + s + '</svg>';
+    /* progreso dentro del rango: una gema por nivel del rango; se encienden las alcanzadas y el brillo crece */
+    var rs = 0, re = 0; MX_RANKS.forEach(function (x, k) { if (x[2] === tier) { rs = x[0]; re = MX_RANKS[k + 1] ? MX_RANKS[k + 1][0] : rs + 10; } });
+    var cnt = re - rs, j = Math.max(0, Math.min(cnt - 1, (n || rs) - rs)), glow = 2 + (cnt > 1 ? j / (cnt - 1) : 0) * 9;
+    if (cnt > 1) {
+      var gs = cnt > 5 ? 6 : 8.2, sp = cnt > 5 ? 15.5 : 23, x0 = 100 - (cnt - 1) * sp / 2, pg = '';
+      for (i = 0; i < cnt; i++) {
+        var gx = x0 + i * sp, gy = 205, on = i <= j, d = "M" + gx + " " + (gy - gs) + " L" + (gx + gs) + " " + gy + " L" + gx + " " + (gy + gs) + " L" + (gx - gs) + " " + gy + "Z";
+        pg += '<path d="' + d + '" fill="' + (on ? "url(#" + id + "m)" : "#0b0820") + '" fill-opacity="' + (on ? 1 : 0.55) + '" stroke="' + (on ? c[3] : c[1]) + '" stroke-opacity="' + (on ? 0.9 : 0.45) + '" stroke-width="1.4"/>';
+        if (on) pg += '<circle cx="' + (gx - gs * 0.25) + '" cy="' + (gy - gs * 0.3) + '" r="' + (gs * 0.22) + '" fill="#fff" stroke="none" opacity=".85"/>';
+      }
+      s += pg;
+    }
+    return '<svg viewBox="-6 -4 212 ' + (cnt > 1 ? 226 : 204) + '" width="' + size + '" height="' + Math.round(size * (cnt > 1 ? 1.066 : 0.962)) + '" aria-hidden="true" style="overflow:visible;filter:drop-shadow(0 0 ' + glow.toFixed(1) + 'px ' + c[1] + ')">' + s + '</svg>';
   }
   /* misiones */
   function mxCtx() {

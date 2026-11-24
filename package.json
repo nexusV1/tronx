@@ -1,6 +1,6 @@
 {
   "name": "tronx",
-  "version": "1.74.9",
+  "version": "1.75.0",
   "private": true,
   "description": "Tronx: app de notas sin conexión para Android",
   "scripts": {

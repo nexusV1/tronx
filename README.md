@@ -116,6 +116,8 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.75.0**: Gemas de progreso debajo del emblema de cada nivel y brillo creciente dentro del rango.
+
 **1.74.9**: Corregidos los niveles de las versiones recientes en Novedades.
 
 **1.74.8**: Nueva moneda estrella dorada con relieve en saldos, tienda, misiones y premios.
