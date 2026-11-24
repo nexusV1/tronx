@@ -122,12 +122,12 @@
     { id: "lv20", n: "Tejedor de nebulosas", d: "Alcanzá el nivel 20 en MAX", g: function (s) { return s.lvl; }, t: 20 },
     { id: "lv30", n: "Oráculo cósmico", d: "Alcanzá el nivel 30 en MAX", g: function (s) { return s.lvl; }, t: 30 },
     { id: "lv50", n: "Singularidad alcanzada", d: "Alcanzá el nivel 50 en MAX", g: function (s) { return s.lvl; }, t: 50 },
-    { id: "sx_night", n: "Búho nocturno", d: "Creá una nota de madrugada, entre las 00:00 y las 05:00", g: function (s) { return s.night; }, t: 1, sec: 1 },
-    { id: "sx_dawn", n: "Madrugador", d: "Creá una nota entre las 05:00 y las 07:00", g: function (s) { return s.dawn; }, t: 1, sec: 1 },
+    { id: "sx_night", n: "Búho nocturno", d: "Creá una nota de madrugada, entre las 00:00 y las 05:00", g: function (s) { return s.night; }, at: function (s) { return s.nightAt; }, t: 1, sec: 1 },
+    { id: "sx_dawn", n: "Madrugador", d: "Creá una nota entre las 05:00 y las 07:00", g: function (s) { return s.dawn; }, at: function (s) { return s.dawnAt; }, t: 1, sec: 1 },
     { id: "sx_tronx", n: "Hola, Tronx", d: "Escribí «Tronx» en el título de una nota", g: function (s) { return s.tronx; }, t: 1, sec: 1 },
     { id: "sx_epic", n: "Nota épica", d: "Escribí una sola nota de más de 1.000 palabras", g: function (s) { return s.epic; }, t: 1, sec: 1 },
-    { id: "sx_burst", n: "Ráfaga creativa", d: "Creá 10 notas en un mismo día", g: function (s) { return s.burst; }, t: 10, sec: 1 },
-    { id: "sx_date", n: "Fecha especial", d: "Creá una nota en Navidad, Nochebuena, Fin de Año o Año Nuevo", g: function (s) { return s.xmas; }, t: 1, sec: 1 },
+    { id: "sx_burst", n: "Ráfaga creativa", d: "Creá 10 notas en un mismo día", g: function (s) { return s.burst; }, at: function (s) { return s.burstAt; }, t: 10, sec: 1 },
+    { id: "sx_date", n: "Fecha especial", d: "Creá una nota en Navidad, Nochebuena, Fin de Año o Año Nuevo", g: function (s) { return s.xmas; }, at: function (s) { return s.xmasAt; }, t: 1, sec: 1 },
     { id: "sx_days", n: "Fiel a Tronx", d: "Escribí en 100 días distintos", g: function (s) { return s.actDays; }, t: 100, sec: 1 },
     { id: "sx_marathon", n: "Maratón de enfoque", d: "Completá una sola sesión de enfoque de 2 horas o más", g: function (s) { return s.maxSess; }, t: 120, sec: 1 },
     { id: "sx_all", n: "Cazador de secretos", d: "Descubrí todos los demás logros secretos", g: function (s) { return s.nSec; }, t: 0, sec: 1 },
@@ -322,28 +322,50 @@
     }
     if (!got.length && !go.length) { var e0 = el("p", "pf-since"); e0.textContent = "No hay logros en esta categoría."; box.appendChild(e0); }
   }
+  /* notas de bienvenida que crea la app sola: no cuentan para logros que piden crear o escribir algo */
+  function isSeedNote(n) { return (n.tags || []).indexOf("bienvenida") >= 0 && (n.title === "Bienvenido a Tronx" || n.title === "Ejemplo de lista"); }
+  /* una nota vacía no cuenta: se crea al abrir el editor y suele descartarse */
+  function hasContent(n) {
+    if (n.lock || n.enc) return true;
+    if (String(n.title || "").trim()) return true;
+    if (n.type === "list") return (n.items || []).some(function (i) { return String(i.t || "").trim(); });
+    return !!String(n.body || "").trim();
+  }
   function achState() {
-    var st = universeStats(); st.w = writeStats(); st.locked = 0; st.done = 0; st.img = 0; st.arch = 0; st.rem = 0; st.night = 0; st.dawn = 0; st.tronx = 0; st.epic = 0; st.burst = 0; st.xmas = 0; var fo = {}, perDay = {};
+    var st = universeStats(); st.w = writeStats(); st.locked = 0; st.done = 0; st.img = 0; st.arch = 0; st.rem = 0; st.night = 0; st.dawn = 0; st.tronx = 0; st.epic = 0; st.burst = 0; st.xmas = 0;
+    st.nightAt = st.dawnAt = st.xmasAt = st.burstAt = 0; var fo = {}, perDay = {};
+    var early = function (cur, ts) { return !cur || ts < cur ? ts : cur; };
     notes.forEach(function (n) {
       if (n.trashedAt) return;
       if (n.lock) st.locked++; if (n.archived) st.arch++; if (n.remind) st.rem++; if (n.folder) fo[n.folder] = 1; if (!n.lock && n.images.length) st.img++;
       n.items.forEach(function (i) { if (i.done && i.t.trim()) st.done++; });
+      if (isSeedNote(n) || !hasContent(n)) return;
       var cd = new Date(n.createdAt), hr = cd.getHours(), mo = cd.getMonth(), dm = cd.getDate();
-      if (hr < 5) st.night++; else if (hr < 7) st.dawn++;
+      if (hr < 5) { st.night++; st.nightAt = early(st.nightAt, n.createdAt); } else if (hr < 7) { st.dawn++; st.dawnAt = early(st.dawnAt, n.createdAt); }
       if ((n.title || "").toLowerCase().indexOf("tronx") >= 0) st.tronx++;
-      if ((n.body || "").length >= 6000) st.epic++;
-      var pk = cd.getFullYear() + "-" + mo + "-" + dm; perDay[pk] = (perDay[pk] || 0) + 1; if (perDay[pk] > st.burst) st.burst = perDay[pk];
-      if ((mo === 11 && (dm === 24 || dm === 25 || dm === 31)) || (mo === 0 && dm === 1)) st.xmas++;
+      if (!n.lock && noteWords(n) > 1000) st.epic++;
+      var pk = cd.getFullYear() + "-" + mo + "-" + dm; (perDay[pk] = perDay[pk] || []).push(n.createdAt);
+      if ((mo === 11 && (dm === 24 || dm === 25 || dm === 31)) || (mo === 0 && dm === 1)) { st.xmas++; st.xmasAt = early(st.xmasAt, n.createdAt); }
     });
-    st.actDays = Object.keys(settings.act || {}).length; st.maxSess = 0; (settings.focusLog || []).forEach(function (f) { if (f.m > st.maxSess) st.maxSess = f.m; });
+    Object.keys(perDay).forEach(function (k) {
+      var a = perDay[k].sort(function (x, y) { return x - y; });
+      if (a.length > st.burst) st.burst = a.length;
+      if (a.length >= 10) st.burstAt = early(st.burstAt, a[9]);
+    });
+    st.actDays = Object.keys(settings.act || {}).filter(function (k) { return settings.act[k] > 0; }).length; st.maxSess = 0; (settings.focusLog || []).forEach(function (f) { if (f.m > st.maxSess) st.maxSess = f.m; });
     var nS = 0; ACH.forEach(function (a) { if (a.sec && a.id !== "sx_all" && settings.ach[a.id]) nS++; }); st.nSec = nS;
     st.lvl = settings.max && settings.max.xp != null ? lvlOf(settings.max.bk ? settings.max.bk.xp : settings.max.xp) : 1; var nA = 0; ACH.forEach(function (a) { if (a.id !== "all" && settings.ach[a.id]) nA++; }); st.nAch = nA;
     st.folders = Object.keys(fo).length; st.fMin = (settings.focus && settings.focus.min) || 0; st.fN = (settings.focus && settings.focus.n) || 0;
     return st;
   }
   function achCheck(silent) {
-    var st = achState(), fresh = [];
-    ACH.forEach(function (a) { if (!settings.ach[a.id] && a.g(st) >= a.t) { settings.ach[a.id] = Date.now(); fresh.push(a); } });
+    var st = achState(), fresh = [], now = Date.now();
+    ACH.forEach(function (a) {
+      var at = a.at ? Math.min(Number(a.at(st)) || 0, now) : 0;
+      if (!settings.ach[a.id] && a.g(st) >= a.t) { settings.ach[a.id] = at || now; fresh.push(a); }
+      else if (settings.ach[a.id] && at && !settings.achAtFix && settings.ach[a.id] > at) settings.ach[a.id] = at;
+    });
+    if (!settings.achAtFix) { settings.achAtFix = 1; clearTimeout(statsSaveT); statsSaveT = setTimeout(saveSettings, 800); }
     fresh.forEach(function (a) { grantXp(TIER_XP[a.tier], Math.round(TIER_XP[a.tier] / 2)); if (a.tier >= 4 || a.sec) settings.achPend.push(a.id); });
     if (fresh.length) {
       var low = fresh.filter(function (a) { return a.tier < 4 && !a.sec; });

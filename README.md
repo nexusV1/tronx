@@ -18,7 +18,7 @@ Resumen de las funciones base; el detalle de cada versión está en [Cambios](#c
 
 - **MAX**: centro con niveles por XP (con emblemas y gemas de progreso dentro de cada rango), misiones diarias y semanales, rachas, logros con medallas, Tienda de marcos de perfil animados y resumen semanal. Las misiones normales y las rachas no dan sobres.
 - **Evento GTA VI**: cuenta regresiva, Camino SEIS con premios, recompensa diaria de 7 días, misiones diarias y semanales, sobres con pines exclusivos, Tienda del evento, la moneda estrella dorada y efectos de nombre en la categoría Luces.
-- **Perfil**: foto con editor de encuadre, zoom y rotación, portada, frase y estadísticas de escritura.
+- **Perfil**: foto con editor de encuadre, zoom y rotación, portada, frase, tu nivel con el emblema del rango y estadísticas de escritura.
 - **Notas protegidas** con PIN o huella, recordatorios con aviso, calendario, buscar y reemplazar, imágenes dentro de las notas, historial de versiones y exportación a PDF, Markdown e imagen.
 
 - Notas en cuadrícula de dos columnas, con tarjetas redondeadas en tema espacial (oscuro y violeta por defecto; el claro y los demás colores siguen en Ajustes).
@@ -138,6 +138,10 @@ Pasos, una sola vez:
 4. De ahí en adelante, compilá siempre con el workflow firmado: se instala encima sin perder nada.
 
 ## Cambios
+
+**1.75.3**: Logros secretos corregidos: los de horario usan la hora real de la nota y no cuentan notas vacías ni de bienvenida, Hola, Tronx ya no salta solo, Nota épica cuenta palabras y Fiel a Tronx cuenta solo días con escritura.
+
+**1.75.2**: Tu nivel en el perfil: tarjeta con el emblema del rango, el título y la barra de XP hacia el siguiente nivel.
 
 **1.75.1**: Código reorganizado en archivos por tema (estilos en `www/css/` y programa en `src/js/`). Sin cambios visibles en la app.
 
