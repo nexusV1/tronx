@@ -116,6 +116,8 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.74.9**: Corregidos los niveles de las versiones recientes en Novedades.
+
 **1.74.8**: Nueva moneda estrella dorada con relieve en saldos, tienda, misiones y premios.
 
 **1.74.7**: Barra de formato de las notas con grupos, bordes que indican más herramientas y formato de la línea marcado.
