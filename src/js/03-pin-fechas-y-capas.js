@@ -146,6 +146,7 @@
   }
   function mxInnerBack() {
     var pko = document.querySelector(".mx-pko .mx-pkx"); if (document.querySelector(".mx-pko")) { if (pko) pko.click(); return true; }
+    var cbo = document.querySelector(".mx-cbo .mx-cbx"); if (document.querySelector(".mx-cbo")) { if (cbo) cbo.click(); return true; }
     if (typeof mxTourI !== "undefined" && mxTourI >= 0 && $("mxTour")) { mxTourEnd(true); return true; }
     if (mxEvSel) { mxEvSel = ""; mxRender(); return true; }
     if (mxTab !== "home") { mxTab = "home"; mxRender(); var sc = $("mxSc"); if (sc) sc.scrollTop = 0; return true; }

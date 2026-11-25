@@ -380,7 +380,7 @@
   function rand01() { try { var a = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(a); return a[0] / 4294967296; } catch (e) { return Math.random(); } }
   function mxPkList(m) { if (!m.pk || typeof m.pk !== "object") m.pk = { n: 0, l: [] }; if (!Array.isArray(m.pk.l)) m.pk.l = []; return m.pk.l; }
   function mxSx(m) { if (!m.sx || typeof m.sx !== "object") m.sx = { p: 0, t: 0 }; return m.sx; }
-  var MX_LV = [{ n: 6, s: 1 }, { n: 16, x: 16 }, { n: 36, x: 26 }, { n: 66, x: 40 }, { n: 106, x: 66 }, { n: 206, s: 5, mx: 2 }, { n: 299, l: "gta" }];
+  var MX_LV = [{ n: 6, s: 1 }, { n: 16, x: 16 }, { n: 36, x: 26 }, { n: 66, x: 40 }, { n: 106, x: 66 }, { n: 206, s: 5, mx: 2 }, { n: 299, l: "gta" }, { n: 366, c: 1 }];
   function mxLvProg(m) { var x = mxSx(m); if (typeof x.g !== "number") x.g = x.t || 0; return x.g; }
   function mxLvReached(m) { var g = mxLvProg(m), n = 0; while (n < MX_LV.length && g >= MX_LV[n].n) n++; return n; }
   function mxLvDone(m) { var x = mxSx(m); return Math.min(MX_LV.length, Math.max(0, x.lc | 0)); }
@@ -391,7 +391,8 @@
     { id: "cas", n: "Casete", r: "Raro", w: 15 },
     { id: "gta", n: "GTA", r: "Raro", w: 15 },
     { id: "pal", n: "Palmera", r: "Épico", w: 7 },
-    { id: "vi", n: "VI", r: "Legendario", w: 3 }];
+    { id: "vi", n: "VI", r: "Legendario", w: 3 },
+    { id: "cub", n: "Cubo del Destino", r: "Mítico", w: 0 }];
   var pinN = 0;
   function pinStk(I, px, u) {
     var D = "#12051f", VP = "M-15 -8H-3.4V-5.8H-5.6L-1.6 3.6L2.4 -5.8H.2V-8H11.8V-5.8H9.6L1.6 8H-4.8L-12.8 -5.8H-15Z", IP = "M13.4 -8H22.6V-5.8H20.4V5.8H22.6V8H13.4V5.8H15.6V-5.8H13.4Z", VI = VP + IP;
@@ -482,6 +483,7 @@
     return o + "</svg>";
   }
   function pinSvg(id, px) {
+    if (id === "cub") return cbPinSvg(px);
     var u = "pn" + (++pinN), D = "#12051f", I = ["sol", "gat", "cas", "gta", "pal", "vi"].indexOf(id); if (I === 5) return '<svg class="pin" width="' + px + '" height="' + px + '" viewBox="-2 -2 52 52" aria-hidden="true"><image href="img/pin-vi.webp" x="1.9" y="-.97" width="48.65" height="47.07"/></svg>'; if (I > 1) return pinStk(I, px, u); var tier = I < 2 ? 0 : I < 4 ? 1 : I === 4 ? 2 : 3;
     function poly(R, n, a0, k) { var o = ""; for (var i = 0; i < n; i++) { var a = (a0 + i * 360 / n) * Math.PI / 180; o += (i ? "L" : "M") + (24 + R * Math.cos(a)).toFixed(2) + " " + (24 + R * Math.sin(a)).toFixed(2); } return o + "Z"; }
     var teeth = ""; for (var i = 0; i < 40; i++) { var a = (i * 9) * Math.PI / 180, R = i % 2 ? 20.6 : 23.4; teeth += (i ? "L" : "M") + (24 + R * Math.cos(a)).toFixed(2) + " " + (24 + R * Math.sin(a)).toFixed(2); } teeth += "Z";
@@ -595,7 +597,7 @@
     if (I === 4) o += '<circle cx="1.6" cy="24" r="1.6" fill="#ff2e93" stroke="' + D + '" stroke-width=".5"/><circle cx="46.4" cy="24" r="1.6" fill="#ff2e93" stroke="' + D + '" stroke-width=".5"/>';
     return o + '</svg>';
   }
-  var MX_PCOL = { "Común": "#ffb27a", "Raro": "#7ac8ff", "Épico": "#c25bff", "Legendario": "#ffd25a" };
+  var MX_PCOL = { "Común": "#ffb27a", "Raro": "#7ac8ff", "Épico": "#c25bff", "Legendario": "#ffd25a", "Mítico": "#b266ff" };
   var MX_PIN = { ch: { 1: 0.5, 2: 1.5, 3: 4, 4: 8, 5: 15, 6: 35 } };
   function mxPinPick() { var t = 0; MX_PINS.forEach(function (q) { t += q.w; }); var r = rand01() * t; for (var i = 0; i < MX_PINS.length; i++) { r -= MX_PINS[i].w; if (r < 0) return MX_PINS[i].id; } return MX_PINS[0].id; }
   function mxPinById(id) { for (var i = 0; i < MX_PINS.length; i++) if (MX_PINS[i].id === id) return MX_PINS[i]; return null; }
@@ -839,7 +841,8 @@
     var m = getMax(), lv = MX_LV[k]; if (m.bk || mxLvDone(m) !== k || k >= mxLvReached(m)) return;
     if (lv.s && mxPkList(m).length >= 60) { toast("Tenés 60 sobres guardados: abrí alguno para reclamar"); return; }
     mxSx(m).lc = k + 1;
-    if (lv.l) { m.inv["led_" + lv.l] = Date.now(); m.eq.led = lv.l; toast("Nivel " + (k + 1) + ": Luz Vice conseguida"); try { renderProfile(); renderMenu(); } catch (e) { } }
+    if (lv.c) { m.cb = mxCbN(m) + 1; toast("Nivel " + (k + 1) + ": Cubo del Destino conseguido"); }
+    else if (lv.l) { m.inv["led_" + lv.l] = Date.now(); m.eq.led = lv.l; toast("Nivel " + (k + 1) + ": Luz Vice conseguida"); try { renderProfile(); renderMenu(); } catch (e) { } }
     else if (lv.s) { mxPkGiveS(lv.s, lv.mx); toast("Nivel " + (k + 1) + ": sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "")); }
     else { mxSxAdd(m, lv.x, false); maxSave(); toast("Nivel " + (k + 1) + ": +" + lv.x + " puntos SEIS"); }
     maxSave(); mxRender();
@@ -854,7 +857,7 @@
     lc.appendChild(mk("p", "mx-note", (rch >= MX_LV.length ? "¡Completaste todos los niveles! " : "Llevás " + fmtMx(g) + " puntos · faltan " + fmtMx(hi - g) + " para el nivel " + (rch + 1) + ". ") + "Solo suman los puntos SEIS de misiones y sobres; los que te dan los niveles no cuentan."));
     MX_LV.forEach(function (lv, k) {
       var st = k < dn ? "ok" : k < rch ? "rdy" : "", row = mk("div", "mx-lv " + st); row.appendChild(mk("span", "n", String(k + 1)));
-      var t = mk("div", "t"); t.appendChild(mk("b", null, lv.l ? "Luz Vice" : lv.s ? "Sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "") : lv.x + " puntos SEIS")); t.appendChild(mk("small", null, lv.l ? "Necesitás " + lv.n + " · luz para tu nombre" : lv.mx ? "Necesitás " + lv.n + " · solo " + lv.mx + " toques para mejorarlo" : "Necesitás " + lv.n + " puntos")); row.appendChild(t);
+      var t = mk("div", "t"); t.appendChild(mk("b", null, lv.c ? "Cubo del Destino" : lv.l ? "Luz Vice" : lv.s ? "Sobre de " + lv.s + (lv.s === 1 ? " estrella" : " estrellas") + (lv.mx ? " especial" : "") : lv.x + " puntos SEIS")); t.appendChild(mk("small", null, lv.c ? "Necesitás " + lv.n + " · " + MX_CB_P + " % de conseguir un pin exclusivo" : lv.l ? "Necesitás " + lv.n + " · luz para tu nombre" : lv.mx ? "Necesitás " + lv.n + " · solo " + lv.mx + " toques para mejorarlo" : "Necesitás " + lv.n + " puntos")); row.appendChild(t);
       if (k < dn) row.appendChild(mk("span", "dn", "✓ Reclamado"));
       else { var bt = mk("button", "mx-btn", "Reclamar"); bt.type = "button"; bt.disabled = test || k !== dn || k >= rch; bt.addEventListener("click", function () { mxLvClaim(k); }); row.appendChild(bt); }
       lc.appendChild(row);
@@ -1060,6 +1063,7 @@
     });
     box.appendChild(pg);
     box.appendChild(mk("p", "mx-note", "Todos los sobres pueden incluir un pin: cuantas más estrellas tiene el sobre, mayor es la probabilidad, desde " + String(MX_PIN.ch[1]).replace(".", ",") + " % en los de 1 estrella hasta " + MX_PIN.ch[6] + " % en los de 6. Cada sobre trae como máximo uno y, cuando sale, reemplaza las demás recompensas del sobre. Equipalo para mostrarlo junto a tu nombre. Tenés " + owned + " de " + MX_PINS.length + "."));
+    mxCubeCard(box, m, test);
     var l = mxPkList(m);
     box.appendChild(mk("div", "mx-sec", "Mis sobres" + (l.length ? " (" + l.length + ")" : "")));
     if (!l.length) {
