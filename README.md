@@ -137,6 +137,14 @@ Pasos, una sola vez:
 3. Desinstalá Tronx del teléfono, compilá con **Tronx APK (firmado)** e instalá ese APK. Importá la copia de seguridad.
 4. De ahí en adelante, compilá siempre con el workflow firmado: se instala encima sin perder nada.
 
+## Cómo se numeran las versiones
+
+El número tiene la forma `X.Y.Z` y el último número (`Z`) cuenta cuántas cosas lleva la actualización:
+
+- Cada cosa nueva, arreglo o mejora suma **0.0.1**. Un ping nuevo suma 0.0.1; un ping más un marco suman 0.0.2, y así hasta 0.0.9.
+- Si se pasa de 9, el siguiente salto es **0.1.0** (por ejemplo, de 1.74.9 a 1.75.0).
+- Cada actualización lleva su entrada en Novedades y su línea en [Cambios](#cambios).
+
 ## Cambios
 
 **1.75.8**: Menú renovado: MAX debajo de Perfil, iconos nuevos de dos tonos, secciones reordenadas y filas más cómodas, y el fondo queda fijo mientras se desplazan las opciones y la tarjeta de Constelaciones muestra una constelación con estrellas brillantes; en el mapa se ven más nombres de notas, los nombres de las constelaciones no se pisan y sus líneas brillan más.
