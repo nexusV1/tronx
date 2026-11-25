@@ -1,5 +1,5 @@
   /* ---------- eventos globales ---------- */
-  document.addEventListener("visibilitychange", function () { if (document.hidden) persistNow(); });
+  document.addEventListener("visibilitychange", function () { if (document.hidden) persistNow(); else mxEvGifts(); });
   window.addEventListener("pagehide", persistNow);
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && layers.length) { closeLayer(layers[layers.length - 1]); }
@@ -41,6 +41,7 @@
     getSettings: function () { return settings; },
     accent: function () { return ACCENTS[settings.accent].dark; }
   });
+  mxEvGifts();
   renderViewBtn();
   renderEditor();
   renderAll();

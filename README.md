@@ -147,6 +147,8 @@ El número tiene la forma `X.Y.Z` y el último número (`Z`) cuenta cuántas cos
 
 ## Cambios
 
+**1.76.0**: Evento GTA VI: regalos por iniciar sesión (sobre de 6 estrellas el 6 de diciembre y sobre mítico con 66 % de probabilidad de marco el último día).
+
 **1.75.8**: Menú renovado: MAX debajo de Perfil, iconos nuevos de dos tonos, secciones reordenadas y filas más cómodas, y el fondo queda fijo mientras se desplazan las opciones y la tarjeta de Constelaciones muestra una constelación con estrellas brillantes; en el mapa se ven más nombres de notas, los nombres de las constelaciones no se pisan y sus líneas brillan más.
 **1.75.3**: Sobres del evento GTA VI más nítidos al tocarlos (se quitó el giro en 3D que los pixelaba).
 

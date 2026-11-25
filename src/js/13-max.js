@@ -767,9 +767,9 @@
   function mxCount(el, to, calm, pre) { if (calm) { el.textContent = pre + fmtMx(to); return; } var t0 = performance.now(), d = 800; (function f(t) { var k = Math.min(1, (t - t0) / d); el.textContent = pre + fmtMx(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(f); })(t0); }
   function mxPkOpenUi(idx) {
     var m = getMax(), l = mxPkList(m), pk = l[idx]; if (!pk || mxPkBusy) return; mxPkBusy = true;
-    var TP = pk.mx || MX_PK.taps, calm = calmOn(), tms = [], ov = mk("div", "mx-pko"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Sobre de la suerte");
+    var TP = pk.mx || MX_PK.taps, calm = calmOn(), tms = [], ov = mk("div", "mx-pko"); ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", pk.mi ? "Sobre mítico" : "Sobre de la suerte"); if (pk.mi) { ov.setAttribute("data-mi", "1"); ov.appendChild(mk("p", "mx-pkmi", "MÍTICO · " + MX_MI_FP + " % de marco")); }
     function later(f, ms) { if (calm) ms = Math.min(ms, 80); tms.push(setTimeout(f, ms)); }
-    var scn = null, scL = 0; function theme() { var t = MX_PT[pk.s]; ov.style.setProperty("--bg", t.bg); ov.style.setProperty("--gl", t.gl); ov.setAttribute("data-s", pk.s); if (scL !== pk.s) { var old = scn; scL = pk.s; scn = mxSceneEl(pk.s); ov.insertBefore(scn, ov.firstChild); void scn.offsetWidth; scn.classList.add("on"); if (old) { old.classList.remove("on"); later(function () { old.remove(); }, 1400); } } }
+    var scn = null, scL = 0; function theme() { var t = pk.mi ? MX_MI : MX_PT[pk.s]; ov.style.setProperty("--bg", t.bg); ov.style.setProperty("--gl", t.gl); ov.setAttribute("data-s", pk.s); if (scL !== pk.s) { var old = scn; scL = pk.s; scn = mxSceneEl(pk.s); ov.insertBefore(scn, ov.firstChild); void scn.offsetWidth; scn.classList.add("on"); if (old) { old.classList.remove("on"); later(function () { old.remove(); }, 1400); } } }
     function chance() { return pk.s < 6 ? MX_PK.tiers[pk.s].up : 0; }
     var fx = mk("div", "mx-pkfx"); fx.innerHTML = '<i class="hl"></i>'; ov.appendChild(fx);
     var top = mk("div", "mx-pkt"), x = mk("button", "mx-pkx", "✕"); x.type = "button"; x.setAttribute("aria-label", "Cerrar"); top.appendChild(x); ov.appendChild(top);
@@ -780,7 +780,7 @@
     for (var di = 0; di < TP; di++) ct.appendChild(el("i")); ov.appendChild(hint); ov.appendChild(ct); ov.appendChild(acts); $("max").appendChild(ov); $("max").classList.add("pkopen");
     function sparks(host) { if (calm) return; var c = mk("span", "mx-stp"); for (var q = 0; q < 8; q++) { var b = el("b"), an = (q / 8) * 6.2832 + rand01() * .6, dd = 28 + rand01() * 26; b.style.setProperty("--x", Math.round(Math.cos(an) * dd) + "px"); b.style.setProperty("--y", Math.round(Math.sin(an) * dd) + "px"); if (q % 2) b.style.width = b.style.height = "5px"; c.appendChild(b); } host.appendChild(c); later(function () { c.remove(); }, 900); }
     function drawStars(prev) { sr.classList.toggle("full", pk.s === 6); for (var k = 0; k < 6; k++) { sr.children[k].className = k < pk.s ? "on" : ""; if (prev !== undefined && k >= prev && k < pk.s) { sr.children[k].classList.add("stn"); sparks(sr.children[k]); (function (n) { later(function () { n.classList.remove("stn"); }, 900); })(sr.children[k]); } } }
-    function drawArt() { art.innerHTML = mxPkSvg(pk.s); }
+    function drawArt() { art.innerHTML = mxPkSvg(pk.s, pk.mi ? "mi" : ""); }
     function drawCt() { var left = TP - pk.t; for (var k = 0; k < ct.children.length; k++) ct.children[k].className = k < pk.t ? "on" : ""; if (left <= 0) art.disabled = true; }
     function draw() { theme(); drawStars(); drawArt(); drawCt(); }
     function burst(n, big) { if (calm) return; var c = mk("div", "mx-pkbs"); for (var k = 0; k < n; k++) { var p = mk("i"), an = rand01() * 6.2832, dd = (big ? 130 : 90) + rand01() * (big ? 150 : 90), sz = (big ? .8 : .6) + rand01() * .9; p.style.setProperty("--x", Math.round(Math.cos(an) * dd) + "px"); p.style.setProperty("--y", Math.round(Math.sin(an) * dd) + "px"); p.style.setProperty("--k", sz.toFixed(2)); p.style.animationDelay = (rand01() * .12).toFixed(2) + "s"; c.appendChild(p); } ov.appendChild(c); later(function () { c.remove(); }, 1200); }
@@ -803,7 +803,7 @@
       later(function () {
         var t = MX_PK.tiers[pk.s], mm = getMax(), ll = mxPkList(mm), at = ll.indexOf(pk);
         if (at < 0) { close(); return; } ll.splice(at, 1); mm.pk.n = (mm.pk.n || 0) + 1;
-        var hit = !mm.inv.gta6 && rand01() * 100 < t.fp; if (hit) { mm.inv.gta6 = Date.now(); mm.eq.frame = "gta6"; }
+        var hit = !mm.inv.gta6 && rand01() * 100 < (pk.mi ? MX_MI_FP : t.fp); if (hit) { mm.inv.gta6 = Date.now(); mm.eq.frame = "gta6"; }
         var pinGot = null, pinDup = false;
         if (MX_PIN.ch[pk.s] && rand01() * 100 < MX_PIN.ch[pk.s]) { pinGot = mxPinPick(); if (!mm.pins) mm.pins = {}; if (mm.pins[pinGot]) pinDup = true; else mm.pins[pinGot] = Date.now(); }
         if (!pinGot) { mxSxAdd(mm, t.sx, true); grantXp(t.xp, t.st); }
@@ -942,6 +942,18 @@
     m.cl[key] = Date.now(); mxSxAdd(m, rw.sx, true); var s = mxPkGiveS(rw.s);
     toast("+" + rw.sx + " puntos SEIS · Sobre de " + s + (s === 1 ? " estrella" : " estrellas")); mxRender();
   }
+  /* sobre mítico: 6 estrellas con MX_MI_FP % de probabilidad de que salga el marco GTA VI */
+  var MX_MI = { bg: "#3a0620", gl: "#ff3d6e", bd: "#ffd0dc" }, MX_MI_FP = 66;
+  /* regalos por iniciar sesión durante el evento: el 6 de diciembre un sobre de 6 estrellas y el último día un sobre mítico */
+  function mxEvGifts() {
+    var m = getMax(), today = dayKey(Date.now()), got = [];
+    if (!m.gf || typeof m.gf !== "object") m.gf = {};
+    if (today === "2026-12-06" && !m.gf.a) { m.gf.a = Date.now(); mxPkList(m).push({ s: 6, t: 0 }); got.push("sobre de 6 estrellas"); }
+    if (today === dayKey(MX_EV_END) && !m.gf.b) { m.gf.b = Date.now(); mxPkList(m).push({ s: 6, t: 0, mi: 1 }); got.push("sobre mítico"); }
+    if (!got.length) return false;
+    maxSave(); toast("Regalo del evento GTA VI: " + got.join(" y ")); if (typeof mxRender === "function" && $("max") && !$("max").hidden) mxRender();
+    return true;
+  }
   function mxPkGiveS(s, mx) {
     var m = getMax(), l = mxPkList(m);
     l.push(mx ? { s: s, t: 0, mx: mx } : { s: s, t: 0 }); maxSave(); return s;
@@ -1014,6 +1026,11 @@
     var hd = mk("div", "mx-evh"); hd.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); hd.appendChild(mk("h2", null, "GTA VI")); hd.appendChild(mk("p", null, "Completá misiones para ganar sobres, mejoralos con toques y probá suerte para conseguir el marco exclusivo «VI»."));
     var sxp = mk("div", "mx-sxp"); sxp.innerHTML = sixIco(18); sxp.appendChild(mk("b", null, fmtMx(mxSx(m).p || 0))); sxp.appendChild(mk("span", null, "SEIS")); hd.appendChild(sxp); hd.appendChild(mxCdBox()); box.appendChild(hd);
     var nt = mk("div", "mx-evn"), ni = mk("span", "mx-evni", "!"), nb = mk("div"); nb.appendChild(mk("b", null, "Nuevas recompensas en camino")); nb.appendChild(mk("p", null, "Durante el evento se irán sumando nuevas recompensas a los sobres. Volvé a revisar con frecuencia.")); nt.appendChild(ni); nt.appendChild(nb); box.appendChild(nt);
+    var gf = getMax().gf || {}, gt = mk("div", "mx-evn"), gi = mk("span", "mx-evni", "🎁"), gb = mk("div");
+    gb.appendChild(mk("b", null, "Regalos por iniciar sesión"));
+    gb.appendChild(mk("p", null, (gf.a ? "✓ " : "") + "6 de diciembre: un sobre de 6 estrellas."));
+    gb.appendChild(mk("p", null, (gf.b ? "✓ " : "") + "17 de diciembre (último día): un sobre mítico con " + MX_MI_FP + " % de probabilidad de conseguir el marco."));
+    gt.appendChild(gi); gt.appendChild(gb); box.appendChild(gt);
     var tabs = mk("div", "mx-evt"); var er = mxEvReady(); [["mis", "Misiones" + (er ? " · " + er : "")], ["main", "Sobres y marco"], ["shop", "Tienda del evento"]].forEach(function (tb) { var b = mk("button", mxEvTab === tb[0] ? "on" : "", tb[1]); b.type = "button"; b.addEventListener("click", function () { mxEvTab = tb[0]; mxRender(); }); tabs.appendChild(b); }); box.appendChild(tabs);
     var f = frById("gta6"), inv = m.inv, test = !!m.bk;
     if (mxEvTab === "shop") { mxEvShop(box, m, test); return; }
@@ -1050,7 +1067,7 @@
       var gm = mk("button", "mx-btn", "Ir a Misiones"); gm.type = "button"; gm.addEventListener("click", function () { mxTab = "mis"; mxRender(); }); box.appendChild(gm);
     } else {
       var gr = mk("div", "mx-pkl"), gen = (mxPkGen = (mxPkGen || 0) + 1);
-      function mkPk(pk, i) { var c = mk("button", "mx-pkcard"); c.type = "button"; c.disabled = test; c.setAttribute("aria-label", "Abrir sobre de " + pk.s + " estrellas"); var w = mk("div"); w.innerHTML = mxPkSvg(pk.s); c.appendChild(w.firstChild); c.appendChild(mk("b", null, pk.s + (pk.s === 1 ? " estrella" : " estrellas"))); c.appendChild(mk("span", null, pk.t ? "Toques: " + pk.t + "/" + (pk.mx || MX_PK.taps) : pk.mx ? "Especial · " + pk.mx + " toques" : "Sin abrir")); c.addEventListener("click", function () { mxPkOpenUi(i); }); return c; }
+      function mkPk(pk, i) { var c = mk("button", "mx-pkcard"); c.type = "button"; c.disabled = test; c.setAttribute("aria-label", pk.mi ? "Abrir sobre mítico" : "Abrir sobre de " + pk.s + " estrellas"); var w = mk("div"); w.innerHTML = mxPkSvg(pk.s, pk.mi ? "mi" : ""); c.appendChild(w.firstChild); c.appendChild(mk("b", null, pk.mi ? "Mítico" : pk.s + (pk.s === 1 ? " estrella" : " estrellas"))); c.appendChild(mk("span", null, pk.t ? "Toques: " + pk.t + "/" + (pk.mx || MX_PK.taps) : pk.mi ? MX_MI_FP + " % de marco" : pk.mx ? "Especial · " + pk.mx + " toques" : "Sin abrir")); c.addEventListener("click", function () { mxPkOpenUi(i); }); return c; }
       /* los sobres se arman de a 8 por cuadro; los que faltan reservan su lugar para que el scroll no salte */
       var phs = [];
       function fillPk(from) { var to = Math.min(l.length, from + 8); for (var q = from; q < to; q++) { var card = mkPk(l[q], q); if (phs[q]) gr.replaceChild(card, phs[q]); else gr.appendChild(card); } if (to < l.length) requestAnimationFrame(function () { if (gen === mxPkGen && gr.isConnected) fillPk(to); }); }

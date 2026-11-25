@@ -181,3 +181,7 @@ svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
 .mx-famd { margin: 3px 2px 0; font-size: 12px; color: #aeb1dc; }
 .mx-ft { font-size: 11px; font-style: italic; color: #aeb1dc; }
 .mx-fev { margin-top: 8px; }
+
+/* sobre mítico */
+.mx-pkmi { position: absolute; top: calc(70px + env(safe-area-inset-top, 0px)); left: 0; right: 0; text-align: center; margin: 0; font-size: 12px; font-weight: 800; letter-spacing: 0.2em; color: #ffd0dc; text-shadow: 0 0 12px rgba(255, 61, 110, 0.9); z-index: 3; pointer-events: none; }
+.mx-pko[data-mi] svg.pk, .mx-pkcard svg.pk.mi { filter: drop-shadow(0 0 14px rgba(255, 61, 110, 0.7)); }
