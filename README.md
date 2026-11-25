@@ -139,6 +139,8 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.75.3**: Sobres del evento GTA VI más nítidos al tocarlos (se quitó el giro en 3D que los pixelaba).
+
 **1.75.2**: Tu nivel en el perfil (tarjeta con el emblema del rango, el título y la barra de XP hacia el siguiente nivel) y arreglo de varios errores en los logros secretos.
 
 **1.75.1**: Código reorganizado en archivos por tema (estilos en `www/css/` y programa en `src/js/`). Sin cambios visibles en la app.

@@ -311,6 +311,7 @@
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.75.3", d: "25 nov 2026", t: "Sobres del evento más nítidos", lv: "Destello", cat: "arreglo", l: ["Al tocar un sobre del evento GTA VI ya no se ve borroso."] },
     { v: "1.75.2", d: "24 nov 2026", t: "Tu nivel en el perfil y logros secretos corregidos", lv: "Eclipse", cat: "mejora", l: ["El perfil muestra una tarjeta con el emblema de tu rango, tu título y tu nivel.","Una barra indica cuánta XP te falta para el siguiente nivel.","Se arreglaron varios errores en los logros secretos.","Ahora se desbloquean en el momento correcto, y los que ya tenías con datos incorrectos se corrigen solos."] },
     { v: "1.75.1", d: "24 nov 2026", t: "Código reorganizado", lv: "Destello", cat: "limpieza", l: ["El código de la app se separó en archivos por tema para que sea más fácil de mantener.","Sin cambios visibles en la aplicación."] },
     { v: "1.75.0", d: "24 nov 2026", t: "Gemas de progreso en los niveles", lv: "Hipernova", cat: "mejora", l: ["Debajo del emblema de cada nivel hay una gema por cada nivel de su rango.","Las gemas se encienden a medida que subís, así ves cuánto te falta para el siguiente rango.","El brillo del emblema crece con cada nivel dentro del rango."] },

@@ -70,9 +70,9 @@
 .mx-pkt { position: absolute !important; top: 14px; right: 14px; }
 .mx-pkx { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.35); color: #fff; font-size: 16px; cursor: pointer; }
 svg.pk, svg.six, svg.pin { stroke: none; stroke-width: 1; }
-.mx-pka { border: 0; background: transparent; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; perspective: 800px; }
+.mx-pka { border: 0; background: transparent; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .mx-pka:disabled { cursor: default; }
-.mx-pko svg.pk { width: min(66vw, 252px); height: auto; aspect-ratio: 100 / 130; display: block; overflow: visible; animation: mxfl 4.8s ease-in-out infinite; transform-style: preserve-3d; text-rendering: geometricPrecision; }
+.mx-pko svg.pk { width: min(66vw, 252px); height: auto; aspect-ratio: 100 / 130; display: block; overflow: visible; animation: mxfl 4.8s ease-in-out infinite; text-rendering: geometricPrecision; }
 .mx-pka { position: relative; }
 .mx-pka::before { content: ""; position: absolute; left: -14%; right: -14%; top: 6%; bottom: -4%; border-radius: 50%; background: radial-gradient(ellipse at 50% 55%, var(--gl) 0%, rgba(0, 0, 0, 0.0) 68%); opacity: 0.5; pointer-events: none; }
 .mx-pka::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: -10px; height: 18px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0) 70%); pointer-events: none; }
