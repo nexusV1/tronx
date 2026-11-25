@@ -139,6 +139,7 @@ Pasos, una sola vez:
 
 ## Cambios
 
+**1.75.4**: Menú renovado: MAX debajo de Perfil, iconos nuevos de dos tonos, secciones reordenadas y filas más cómodas.
 **1.75.3**: Sobres del evento GTA VI más nítidos al tocarlos (se quitó el giro en 3D que los pixelaba).
 
 **1.75.2**: Tu nivel en el perfil (tarjeta con el emblema del rango, el título y la barra de XP hacia el siguiente nivel) y arreglo de varios errores en los logros secretos.

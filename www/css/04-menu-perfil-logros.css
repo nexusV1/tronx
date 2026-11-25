@@ -283,3 +283,16 @@
 .pf-lvbar { height: 7px; margin-top: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
 .pf-lvbar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #a78bfa, #f472b6); }
 .pf-lvx { margin-top: 4px; font-size: 12px; opacity: 0.8; }
+
+/* Menú: iconos de dos tonos y filas más cómodas */
+.mn-ic svg .f, .mn-qa svg .f, .mn-tip svg .f { fill: currentColor; fill-opacity: 0.28; stroke: none; }
+.mn-ic { color: #fff; width: 46px; height: 46px; border-radius: 15px; }
+.mn-ic svg { width: 24px; height: 24px; stroke-width: 1.7; }
+.mn-item { min-height: 64px; gap: 14px; padding: 9px 12px 9px 10px; }
+.mn-list { gap: 7px; }
+.mn-sec { margin: 18px 6px 6px; }
+.mn-tx b { font-size: 15.5px; }
+.mn-qa button { min-height: 62px; }
+.mn-qa svg { width: 24px; height: 24px; color: #c4b5fd; }
+.mn-tip svg { color: #fcd34d; }
+.mn-item.feat .mn-ic svg { width: 30px; height: 30px; }
