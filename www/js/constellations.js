@@ -485,7 +485,7 @@
           e = gEdges[i]; if (e[2] !== ci) continue; a = e[0]; b = e[1];
           if (onScr(a.sx, a.sy, b.sx, b.sy)) { c.moveTo(a.sx, a.sy); c.lineTo(b.sx, b.sy); any = true; }
         }
-        if (any) { c.lineWidth = 1.4; c.strokeStyle = "rgba(" + GCOL[ci].join(",") + "," + (amb ? 0.6 + 0.1 * Math.sin(now / 1500 + ci) : 0.66) + ")"; c.stroke(); }
+        if (any) { if (perf < 2) { c.lineWidth = 5; c.strokeStyle = "rgba(" + GCOL[ci].join(",") + ",0.13)"; c.stroke(); } c.lineWidth = 1.6; c.strokeStyle = "rgba(" + GCOL[ci].join(",") + "," + (amb ? 0.6 + 0.1 * Math.sin(now / 1500 + ci) : 0.66) + ")"; c.stroke(); }
       }
     }
     if (mEdges.length) {
@@ -557,14 +557,27 @@
       if (nd.sx < 0 || nd.sx > W || nd.sy < 0 || nd.sy > H) continue;
       var pr = 0;
       if (nd.id === sel) pr = 1e6; else if (matchSet && matchSet[nd.id]) pr = 5e5; else if (hover && nd.id === hover) pr = 4e5;
-      else if (k >= 1.05) pr = 100 + nd.r; else if (k >= 0.6) pr = nd.n.pinned ? 80 + nd.r : (nd.r >= 8.5 ? nd.r : 0); else if (nd.n.pinned) pr = 50;
+      else if (k >= 1.05 || (nodes.length <= 40 && k >= 0.45)) pr = 100 + nd.r; else if (k >= 0.6) pr = nd.n.pinned ? 80 + nd.r : (nd.r >= 8.5 ? nd.r : 0); else if (nd.n.pinned) pr = 50;
       if (matchSet && !matchSet[nd.id]) pr = 0;
       if (pr > 0) cands.push([pr, nd]);
     }
     cands.sort(function (x, y) { return y[0] - x[0]; });
+    // nombres de constelaciones: se calculan primero y reservan su lugar para que las etiquetas de notas no los pisen
+    var placed = [], maxL = 70, gnames = [];
+    for (i = 0; i < gInfo.length; i++) {
+      gi = gInfo[i]; if (!gi.m.length) continue;
+      var gs = w2s(gi.cx, gi.cy - gi.r * 0.92), fs = clamp(11 + k * 3, 11, 15);
+      if (gs[0] < -120 || gs[0] > W + 120 || gs[1] < -30 || gs[1] > H + 30) continue;
+      c.font = "700 " + fs + "px " + fontDisp;
+      if ("letterSpacing" in c) c.letterSpacing = "1.5px";
+      var gt = gi.g.name.toUpperCase(), gw = c.measureText(gt).width / 2 + 10;
+      if ("letterSpacing" in c) c.letterSpacing = "0px";
+      gs[0] = clamp(gs[0], gw + pad, W - gw - pad); gs[1] = clamp(gs[1], topH + 14 + pad, H - 24 - pad);
+      gnames.push({ gi: gi, x: gs[0], y: gs[1], fs: fs, t: gt });
+      placed.push([gs[0] - gw, gs[1] - fs - 2, gw * 2, fs + 8]);
+    }
     c.font = "500 11.5px " + fontBody;
     c.textAlign = "center"; c.textBaseline = "top";
-    var placed = [], maxL = 70;
     for (i = 0; i < cands.length && placed.length < maxL; i++) {
       nd = cands[i][1];
       if (!nd.lw) nd.lw = c.measureText(nd.label).width;
@@ -576,18 +589,19 @@
       c.lineJoin = "round"; c.lineWidth = 3; c.strokeStyle = "rgba(4,5,16,0.85)"; c.strokeText(nd.label, nd.sx, ly);
       c.fillStyle = "#ece9ff"; c.fillText(nd.label, nd.sx, ly);
     }
-    // nombres de constelaciones
+    // nombres de constelaciones (con una pastilla suave del color del grupo)
     c.globalAlpha = 1; c.textBaseline = "alphabetic";
-    for (i = 0; i < gInfo.length; i++) {
-      gi = gInfo[i]; if (!gi.m.length) continue;
-      var gs = w2s(gi.cx, gi.cy - gi.r * 0.92), fs = clamp(11 + k * 3, 11, 15);
-      if (gs[0] < -120 || gs[0] > W + 120 || gs[1] < -30 || gs[1] > H + 30) continue;
-      c.font = "700 " + fs + "px " + fontDisp;
+    for (i = 0; i < gnames.length; i++) {
+      var gn = gnames[i], col = GCOL[gn.gi.g.color];
+      c.font = "700 " + gn.fs + "px " + fontDisp;
       if ("letterSpacing" in c) c.letterSpacing = "1.5px";
-      var gt = gi.g.name.toUpperCase(), col = GCOL[gi.g.color], gw = c.measureText(gt).width / 2 + 10;
-      gs[0] = clamp(gs[0], gw + pad, W - gw - pad); gs[1] = clamp(gs[1], topH + 14 + pad, H - 24 - pad);
-      c.lineJoin = "round"; c.lineWidth = 4; c.strokeStyle = "rgba(4,5,16,0.8)"; c.strokeText(gt, gs[0], gs[1]);
-      c.fillStyle = "rgba(" + Math.min(255, col[0] + 55) + "," + Math.min(255, col[1] + 55) + "," + Math.min(255, col[2] + 55) + ",0.95)"; c.fillText(gt, gs[0], gs[1]);
+      var tw = c.measureText(gn.t).width, bx0 = gn.x - tw / 2 - 9, by0 = gn.y - gn.fs - 3, bh0 = gn.fs + 10;
+      c.fillStyle = "rgba(6,7,24,0.55)"; c.beginPath();
+      if (c.roundRect) c.roundRect(bx0, by0, tw + 18, bh0, bh0 / 2); else c.rect(bx0, by0, tw + 18, bh0);
+      c.fill();
+      c.lineWidth = 1; c.strokeStyle = "rgba(" + col.join(",") + ",0.55)"; c.stroke();
+      c.fillStyle = "rgba(" + Math.min(255, col[0] + 55) + "," + Math.min(255, col[1] + 55) + "," + Math.min(255, col[2] + 55) + ",0.98)";
+      c.textAlign = "center"; c.fillText(gn.t, gn.x + 0.75, gn.y);
       if ("letterSpacing" in c) c.letterSpacing = "0px";
     }
     c.textAlign = "start";
