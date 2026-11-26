@@ -147,6 +147,8 @@ El número tiene la forma `X.Y.Z` y el último número (`Z`) cuenta cuántas cos
 
 ## Cambios
 
+**1.76.8**: Base del nuevo evento «Elementales» (16 al 30 de diciembre): se activa solo por fecha y cada persona elige a su guardián una única vez.
+
 **1.76.6**: Más misterio en Eventos: una sorpresa especial está por llegar.
 
 **1.76.5**: Una silueta misteriosa aparece en Eventos.

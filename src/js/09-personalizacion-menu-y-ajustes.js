@@ -311,6 +311,7 @@
   $("settingsClose").addEventListener("click", function () { closeLayer("settings"); });
   $("settings").addEventListener("click", function (e) { if (e.target === $("settings")) closeLayer("settings"); });
   var NEWS = [
+    { v: "1.76.8", d: "26 nov 2026", t: "Un nuevo evento se acerca", lv: "Nova", cat: "nuevo", l: ["Se aproxima un evento nuevo con recompensas exclusivas. Muy pronto vas a poder descubrirlo."] },
     { v: "1.76.6", d: "26 nov 2026", t: "Una sorpresa se acerca", lv: "Destello", cat: "mejora", l: ["Ahora hay aún más misterio en Eventos: una sorpresa especial está por llegar."] },
     { v: "1.76.5", d: "26 nov 2026", t: "Misterio en Eventos", lv: "Destello", cat: "mejora", l: ["Descubre una silueta misteriosa en Eventos. ¿Qué se esconde detrás?"] },
     { v: "1.76.4", d: "26 nov 2026", t: "Recompensas renovadas", lv: "Destello", cat: "mejora", l: ["Mejoramos el diseño de una recompensa exclusiva que llegará muy pronto."] },

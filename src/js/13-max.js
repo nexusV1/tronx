@@ -1021,8 +1021,10 @@
     mxEvWeekly(c).forEach(function (id, i) { var d = MX_EVW[id], rw = i >= 3 ? MX_EVR.h : MX_EVR.f, key = mxEvKey("w", c, id); box.appendChild(mxEvCard(d, d.g(c), !!m.cl[key], rw, function () { mxEvClaim(key, rw); })); });
   }
   function mxEvRender(box, m, prof) {
+    if (mxEvSel === "el" && elActive()) { mxElRender(box, m); return; }
     if (mxEvSel !== "gta") {
       box.appendChild(mk("div", "mx-sec", "Eventos activos"));
+      mxElCard(box);
       var ec = mk("button", "mx-evb"); ec.type = "button"; ec.appendChild(mk("span", "mx-evch", "EVENTO · ACTIVO")); ec.appendChild(mk("h3", null, "GTA VI")); ec.appendChild(mk("p", null, "Conseguí el marco exclusivo «VI»: completá misiones para obtener sobres de la suerte y acumular puntos SEIS.")); ec.appendChild(mxCdLine());
       ec.addEventListener("click", function () { mxEvSel = "gta"; mxEvTab = "mis"; mxRender(); $("mxSc").scrollTop = 0; }); box.appendChild(ec);
       box.appendChild(mk("div", "mx-evb2", "Próximamente: más eventos con XP, estrellas, marcos y portadas."));
