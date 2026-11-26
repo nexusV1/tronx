@@ -34,9 +34,9 @@
         o += '<g transform="rotate(' + a.toFixed(1) + ' 50 50) translate(50 13.5)"><g class="' + ["elan-f1", "elan-f2", "elan-f3"][k % 3] + '"><path d="' + P(h, w, ln) + '" fill="' + (k % 2 ? "#d9320f" : "#b81d0a") + '"' + L + ' stroke-width=".7"/><path d="' + P(h * 0.68, w * 0.62, ln * 0.7) + '" fill="#ff7a1f"/><path d="' + P(h * 0.4, w * 0.32, ln * 0.4) + '" fill="#ffd35a"/></g></g>';
       }
     } else if (id === "hielo") {
-      var sh = function (aa, hh, ww, base, c1, c2) { return '<g transform="rotate(' + aa.toFixed(1) + ' 50 50) translate(50 ' + (50 - base) + ')"><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'L-' + ww + ' -' + (hh * 0.38).toFixed(1) + 'Z" fill="' + c1 + '"' + L + ' stroke-width=".7"/><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'Z" fill="' + c2 + '"/><path d="M-0.3 -1L-0.3 -' + (hh * 0.78).toFixed(1) + '" stroke="#fff" stroke-width=".45" style="stroke:#fff" opacity=".85"/></g>'; };
-      for (k = 0; k < 24; k++) o += sh(k * 15 + (rn() - 0.5) * 6, 9.5 + rn() * 4, 2.2 + rn() * 1.2, 36, "#3a86d8", "#7fc4f5");
-      for (k = 0; k < 24; k++) o += sh(k * 15 + 7.5 + (rn() - 0.5) * 6, 6 + rn() * 3.4, 2.6 + rn() * 1, 36.5, "#8fd0f8", "#e4f8ff");
+      var sh = function (aa, hh, ww, base, c1, c2, lean) { return '<g transform="rotate(' + aa.toFixed(1) + ' 50 50) translate(50 ' + (50 - base) + ') rotate(' + (lean || 0) + ')"><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'L-' + ww + ' -' + (hh * 0.38).toFixed(1) + 'Z" fill="' + c1 + '"' + L + ' stroke-width=".7"/><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'Z" fill="' + c2 + '"/><path d="M-0.3 -1L-0.3 -' + (hh * 0.78).toFixed(1) + '" stroke="#fff" stroke-width=".45" style="stroke:#fff" opacity=".85"/></g>'; };
+      for (k = 0; k < 12; k++) o += sh(k * 30 + 15, 6.5, 2.7, 35.5, "#8fd0f8", "#e4f8ff", 0);
+      for (k = 0; k < 12; k++) o += sh(k * 30, 12.5, 3.8, 35.5, "#3a86d8", "#7fc4f5", 0);
     } else if (id === "naturaleza") {
       for (k = 0; k < 34; k++) {
         a = k * 10.6 + (rn() - 0.5) * 5; h = 7.5 + rn() * 4.5; var tl = (k % 2 ? 1 : -1) * (14 + rn() * 28), c = ["#7be86a", "#3fbf4a", "#27a03e", "#52d05a"][k % 4];
