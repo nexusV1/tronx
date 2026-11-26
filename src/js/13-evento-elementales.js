@@ -23,27 +23,52 @@
     piedra: { rim: ["#b8a284", "#7e6a52", "#46382a"], f0: "#8a5a2a", f1: "#1c120a", gl: "#ffb24a", dk: "#2c241b" }
   };
   function elPt(r, a) { var t = a * Math.PI / 180; return [50 + r * Math.sin(t), 50 - r * Math.cos(t)]; }
-  /* anillo exterior decorado: cada elemento tiene el suyo (llamas, cristales, hojas con enredadera, rocas) */
+  function elRnd(sd) { return function () { sd = (sd * 9301 + 49297) % 233280; return sd / 233280; }; }
+  /* anillo exterior decorado e irregular (llamas, cristales, hojas, rocas), con semilla fija para que siempre se vea igual */
   function elDecor(id) {
-    var o = "", k, a, h, pr, L = ' stroke="' + EL_PAL[id].dk + '" stroke-linejoin="round" style="stroke:' + EL_PAL[id].dk + '"';
+    var o = "", k, a, h, w, ln, rn = elRnd(id.length * 977 + 13), D = EL_PAL[id].dk, L = ' stroke="' + D + '" stroke-linejoin="round" style="stroke:' + D + '"';
     if (id === "fuego") {
-      for (k = 0; k < 24; k++) { a = k * 15; h = k % 2 ? 8 : 11; pr = '<g transform="rotate(' + a + ' 50 50) translate(50 11)"><g class="' + ["elan-f1", "elan-f2", "elan-f3"][k % 3] + '">';
-        o += pr + '<path d="M-4.6 0C-5.6 -3 -1.5 -6 1 -' + h + 'C.6 -5 5.6 -3.4 4.6 0Z" fill="#c7200c"' + L + ' stroke-width=".8"/><path d="M-2.8 0C-3.4 -2 -1 -4 .6 -' + (h * 0.66).toFixed(1) + 'C.4 -3.4 3.4 -2.4 2.8 0Z" fill="#ff7a1f"/><path d="M-1.4 0C-1.6 -1.2 0 -2.4 .3 -' + (h * 0.36).toFixed(1) + 'C.4 -2 1.8 -1.2 1.4 0Z" fill="#ffd35a"/></g></g>'; }
+      for (k = 0; k < 40; k++) {
+        a = k * 9 + (rn() - 0.5) * 5; h = 7 + rn() * 6.4; w = 2.7 + rn() * 1.8; ln = (rn() - 0.5) * 4.4;
+        var P = function (hh, ww, lx) { return "M" + (-ww) + " 1C" + (-ww - 0.9) + " -" + (hh * 0.4).toFixed(1) + " " + (lx - 0.8).toFixed(1) + " -" + (hh * 0.62).toFixed(1) + " " + lx.toFixed(1) + " -" + hh.toFixed(1) + "C" + (lx + 0.6).toFixed(1) + " -" + (hh * 0.55).toFixed(1) + " " + (ww + 1).toFixed(1) + " -" + (hh * 0.35).toFixed(1) + " " + ww + " 1Z"; };
+        o += '<g transform="rotate(' + a.toFixed(1) + ' 50 50) translate(50 13.5)"><g class="' + ["elan-f1", "elan-f2", "elan-f3"][k % 3] + '"><path d="' + P(h, w, ln) + '" fill="' + (k % 2 ? "#d9320f" : "#b81d0a") + '"' + L + ' stroke-width=".7"/><path d="' + P(h * 0.68, w * 0.62, ln * 0.7) + '" fill="#ff7a1f"/><path d="' + P(h * 0.4, w * 0.32, ln * 0.4) + '" fill="#ffd35a"/></g></g>';
+      }
     } else if (id === "hielo") {
-      for (k = 0; k < 24; k++) { a = k * 15; h = k % 2 ? 8 : 11.5;
-        o += '<g transform="rotate(' + a + ' 50 50) translate(50 11)"><path d="M0 0L2.8 -' + (h * 0.4).toFixed(1) + 'L0 -' + h + 'L-2.8 -' + (h * 0.4).toFixed(1) + 'Z" fill="#7ac8f5"' + L + ' stroke-width=".8"/><path d="M0 0L2.8 -' + (h * 0.4).toFixed(1) + 'L0 -' + h + 'Z" fill="#d9f4ff"/><path d="M0 -1L0 -' + (h * 0.8).toFixed(1) + '" stroke="#fff" stroke-width=".5" style="stroke:#fff" opacity=".8"/></g>'; }
+      var sh = function (aa, hh, ww, base, c1, c2) { return '<g transform="rotate(' + aa.toFixed(1) + ' 50 50) translate(50 ' + (50 - base) + ')"><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'L-' + ww + ' -' + (hh * 0.38).toFixed(1) + 'Z" fill="' + c1 + '"' + L + ' stroke-width=".7"/><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'Z" fill="' + c2 + '"/><path d="M-0.3 -1L-0.3 -' + (hh * 0.78).toFixed(1) + '" stroke="#fff" stroke-width=".45" style="stroke:#fff" opacity=".85"/></g>'; };
+      for (k = 0; k < 24; k++) o += sh(k * 15 + (rn() - 0.5) * 6, 9.5 + rn() * 4, 2.2 + rn() * 1.2, 36, "#3a86d8", "#7fc4f5");
+      for (k = 0; k < 24; k++) o += sh(k * 15 + 7.5 + (rn() - 0.5) * 6, 6 + rn() * 3.4, 2.6 + rn() * 1, 36.5, "#8fd0f8", "#e4f8ff");
     } else if (id === "naturaleza") {
-      for (k = 0; k < 18; k++) { a = k * 20 + 4; var tl = (k % 2 ? 28 : -28);
-        o += '<g transform="rotate(' + (a + tl) + ' 50 50) translate(50 12)"><path d="M0 0C4.4 -2.6 5.2 -7 0 -10.4C-5.2 -7 -4.4 -2.6 0 0Z" fill="' + (k % 3 === 0 ? "#7be86a" : k % 3 === 1 ? "#3fbf4a" : "#27a03e") + '"' + L + ' stroke-width=".8"/><path d="M0 -1V-10" stroke="#0e5a28" stroke-width=".6" style="stroke:#0e5a28" opacity=".7"/></g>'; }
+      for (k = 0; k < 34; k++) {
+        a = k * 10.6 + (rn() - 0.5) * 5; h = 7.5 + rn() * 4.5; var tl = (k % 2 ? 1 : -1) * (14 + rn() * 28), c = ["#7be86a", "#3fbf4a", "#27a03e", "#52d05a"][k % 4];
+        o += '<g transform="rotate(' + (a + tl).toFixed(1) + ' 50 50) translate(50 13.5)"><path d="M0 0C' + (h * 0.4).toFixed(1) + ' -' + (h * 0.25).toFixed(1) + ' ' + (h * 0.46).toFixed(1) + ' -' + (h * 0.7).toFixed(1) + ' 0 -' + h.toFixed(1) + 'C-' + (h * 0.46).toFixed(1) + ' -' + (h * 0.7).toFixed(1) + ' -' + (h * 0.4).toFixed(1) + ' -' + (h * 0.25).toFixed(1) + ' 0 0Z" fill="' + c + '"' + L + ' stroke-width=".7"/><path d="M0 0L0 -' + (h * 0.85).toFixed(1) + '" stroke="#0e5a28" stroke-width=".5" style="stroke:#0e5a28" opacity=".7"/><path d="M0 0C' + (h * 0.4).toFixed(1) + ' -' + (h * 0.25).toFixed(1) + ' ' + (h * 0.46).toFixed(1) + ' -' + (h * 0.7).toFixed(1) + ' 0 -' + h.toFixed(1) + 'L0 0Z" fill="#fff" opacity=".12"/></g>';
+      }
     } else {
-      var jt = [0.9, 1.15, 1, 0.8, 1.2, 0.95, 1.1, 0.85];
-      for (k = 0; k < 18; k++) { a = k * 20; var sz = 4.6 * jt[k % 8], c0 = elPt(40, a), pp = "", q;
-        for (q = 0; q < 7; q++) { var qa = q / 7 * 6.2832 + k, qr = sz * (0.75 + 0.45 * jt[(q + k) % 8]); pp += (q ? "L" : "M") + (c0[0] + Math.cos(qa) * qr).toFixed(1) + " " + (c0[1] + Math.sin(qa) * qr).toFixed(1); }
-        o += '<path d="' + pp + 'Z" fill="' + (k % 2 ? "#9c8a70" : "#b8a688") + '"' + L + ' stroke-width=".9"/>'; }
-      for (k = 0; k < 9; k++) { a = k * 40 + 10; o += '<g transform="rotate(' + a + ' 50 50) translate(50 9)"><path d="M-3 4L-1.5 -4L1 -7L3 -1L2.5 4Z" fill="#7e6c56"' + L + ' stroke-width=".8"/></g>'; }
+      var rock = function (cx, cy, sz, c1, c2) { var pp = "", pl = "", q, n = 7, pts = []; for (q = 0; q < n; q++) { var qa = q / n * 6.2832 + rn() * 0.6, qr = sz * (0.7 + 0.5 * rn()); pts.push([cx + Math.cos(qa) * qr, cy + Math.sin(qa) * qr]); pp += (q ? "L" : "M") + pts[q][0].toFixed(1) + " " + pts[q][1].toFixed(1); } pl = "M" + pts[4][0].toFixed(1) + " " + pts[4][1].toFixed(1) + "L" + pts[5][0].toFixed(1) + " " + pts[5][1].toFixed(1) + "L" + pts[6][0].toFixed(1) + " " + pts[6][1].toFixed(1) + "L" + pts[0][0].toFixed(1) + " " + pts[0][1].toFixed(1) + "L" + cx.toFixed(1) + " " + cy.toFixed(1) + "Z"; return '<path d="' + pp + 'Z" fill="' + c1 + '"' + L + ' stroke-width=".9"/><path d="' + pl + '" fill="' + c2 + '" opacity=".55"/>'; };
+      o += '<g filter="url(#elf)">';
+      for (k = 0; k < 9; k++) { a = k * 40 + 14 + (rn() - 0.5) * 10; h = 10 + rn() * 4; w = 3 + rn() * 1.6; o += '<g transform="rotate(' + a.toFixed(1) + ' 50 50) translate(50 13)"><path d="M-' + w.toFixed(1) + ' 0L-' + (w * 0.6).toFixed(1) + ' -' + (h * 0.7).toFixed(1) + 'L' + (rn() * 1.5).toFixed(1) + ' -' + h.toFixed(1) + 'L' + w.toFixed(1) + ' -' + (h * 0.5).toFixed(1) + 'L' + (w * 0.9).toFixed(1) + ' 0Z" fill="#8a7a66"' + L + ' stroke-width=".9"/><path d="M0 0L' + w.toFixed(1) + ' -' + (h * 0.5).toFixed(1) + 'L0 -' + h.toFixed(1) + 'Z" fill="#cdbba0" opacity=".5"/></g>'; }
+      for (k = 0; k < 22; k++) { a = k * 16.4 + (rn() - 0.5) * 6; var rr = 36.6, pt = elPt(rr, a); o += rock(pt[0], pt[1], 4.4 + rn() * 2.2, k % 2 ? "#9c8a70" : "#b4a183", "#e6d8bb"); }
+      o += "</g>";
     }
-    /* cuatro adornos cardinales (como en la referencia) */
-    for (k = 0; k < 4; k++) o += '<g transform="rotate(' + k * 90 + ' 50 50) translate(50 2)"><path d="M0 0L4.2 6.4L0 14L-4.2 6.4Z" fill="url(#elk_' + id.charAt(0) + ')"' + L + ' stroke-width="1"/><path d="M0 1.5L2 6.4L0 11Z" fill="#fff" opacity=".35"/></g>';
+    for (k = 0; k < 4; k++) o += '<g transform="rotate(' + k * 90 + ' 50 50) translate(50 2)"><path d="M0 0L4.2 6.4L0 14L-4.2 6.4Z" fill="url(#elk_' + id.charAt(0) + ')"' + L + ' stroke-width="1"/><path d="M0 1.5L2 6.4L0 11Z" fill="#fff" opacity=".4"/></g>';
+    return o;
+  }
+  /* fondo interior de cada medallón */
+  function elBack(id) {
+    var o = "", k, rn = elRnd(id.length * 31 + 5), x, y;
+    if (id === "fuego") {
+      for (k = 0; k < 11; k++) { x = 18 + k * 6.4 + (rn() - 0.5) * 3; var hh = 16 + rn() * 26; o += '<g class="' + ["elan-f1", "elan-f2", "elan-f3"][k % 3] + '"><path d="M' + (x - 5) + ' 84C' + (x - 7) + ' ' + (84 - hh * 0.4) + ' ' + (x - 1) + ' ' + (84 - hh * 0.7) + ' ' + x + ' ' + (84 - hh) + 'C' + (x + 2) + ' ' + (84 - hh * 0.6) + ' ' + (x + 7) + ' ' + (84 - hh * 0.4) + ' ' + (x + 5) + ' 84Z" fill="' + (k % 2 ? "#a8200c" : "#d9320f") + '" opacity=".5"/></g>'; }
+      for (k = 0; k < 14; k++) o += '<circle cx="' + (22 + rn() * 56).toFixed(1) + '" cy="' + (20 + rn() * 60).toFixed(1) + '" r="' + (0.5 + rn() * 0.9).toFixed(1) + '" fill="#ffc83a" opacity=".8"/>';
+    } else if (id === "hielo") {
+      for (k = 0; k < 26; k++) { x = 20 + rn() * 60; y = 20 + rn() * 60; var q = 0.8 + rn() * 1.4; o += (k % 3 === 0 ? '<g transform="translate(' + x.toFixed(1) + " " + y.toFixed(1) + ') scale(' + (q * 0.55).toFixed(2) + ')"><path class="elan-tw" style="animation-delay:' + (k * 0.23).toFixed(2) + 's" d="M0 -5L1.2 -1.2L5 0L1.2 1.2L0 5L-1.2 1.2L-5 0L-1.2 -1.2Z" fill="#cfeeff"/></g>' : '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (0.35 + rn() * 0.7).toFixed(2) + '" fill="#bfe6ff" opacity=".85"/>'); }
+      o += '<circle cx="50" cy="50" r="30.5" fill="none" stroke="#7fd0ff" stroke-width="2.4" style="stroke:#7fd0ff" opacity=".22"/>';
+    } else if (id === "naturaleza") {
+      for (k = 0; k < 9; k++) o += '<path transform="rotate(' + (k * 40 + 10) + ' 50 52)" d="M48 52L50 8L52 52Z" fill="#d9ff7a" opacity=".16"/>';
+      o += '<circle cx="50" cy="56" r="26" fill="#9aff5a" opacity=".18"/><path d="M22 70C34 60 44 66 54 62C64 58 72 64 80 58" fill="none" stroke="#b8ff7a" stroke-width="2" stroke-linecap="round" style="stroke:#b8ff7a" opacity=".35"/>';
+      for (k = 0; k < 10; k++) o += '<circle cx="' + (22 + rn() * 56).toFixed(1) + '" cy="' + (22 + rn() * 56).toFixed(1) + '" r="' + (0.5 + rn() * 0.9).toFixed(1) + '" fill="#eaffb0" opacity=".8"/>';
+    } else {
+      o += '<circle cx="50" cy="62" r="30" fill="#ffb24a" opacity=".22"/>';
+      for (k = 0; k < 9; k++) { x = 20 + rn() * 60; y = 22 + rn() * 56; var rs = 1.3 + rn() * 2; o += '<path d="M' + (x - rs) + ' ' + y + 'L' + x + ' ' + (y - rs) + 'L' + (x + rs) + ' ' + (y + rs * 0.3) + 'L' + (x - rs * 0.2) + ' ' + (y + rs) + 'Z" fill="#8a7a66" stroke="#2c241b" stroke-width=".5" style="stroke:#2c241b" opacity=".9"/>'; }
+    }
     return o;
   }
   /* puño de héroe (compartido por los emblemas): colores por elemento */
@@ -115,7 +140,7 @@
     o += '<linearGradient id="elr_' + pre + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + p.rim[0] + '"/><stop offset=".5" stop-color="' + p.rim[1] + '"/><stop offset="1" stop-color="' + p.rim[2] + '"/></linearGradient>';
     o += '<linearGradient id="elk_' + pre + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + (id === "hielo" ? "#ffffff" : id === "fuego" ? "#ffe08a" : id === "naturaleza" ? "#f3e6a0" : "#e2d6bd") + '"/><stop offset="1" stop-color="' + (id === "hielo" ? "#5ab4ee" : id === "fuego" ? "#d9701a" : id === "naturaleza" ? "#8a6a30" : "#7e6a52") + '"/></linearGradient>';
     o += '<radialGradient id="elfd_' + pre + '" cx=".5" cy=".55" r=".62"><stop offset="0" stop-color="' + p.f0 + '"/><stop offset="1" stop-color="' + p.f1 + '"/></radialGradient>';
-    o += '<clipPath id="elc_' + pre + '"><circle cx="50" cy="50" r="33.4"/></clipPath>';
+    o += '<clipPath id="elc_' + pre + '"><circle cx="50" cy="50" r="31.6"/></clipPath>';
     if (id === "fuego") o += '<linearGradient id="elgb" gradientUnits="userSpaceOnUse" x1="41" y1="0" x2="59" y2="0"><stop offset="0" stop-color="#a81808"/><stop offset=".22" stop-color="#ff4a10"/><stop offset=".5" stop-color="#fff2b8"/><stop offset=".78" stop-color="#ff4a10"/><stop offset="1" stop-color="#a81808"/></linearGradient><linearGradient id="elgg" gradientUnits="userSpaceOnUse" x1="10" y1="50" x2="90" y2="80"><stop offset="0" stop-color="#fff0a8"/><stop offset=".5" stop-color="#f2b53a"/><stop offset="1" stop-color="#b8711a"/></linearGradient><radialGradient id="elgr" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffb0a0"/><stop offset=".35" stop-color="#e01e2a"/><stop offset="1" stop-color="#6a0612"/></radialGradient>';
     else if (id === "hielo") o += '<linearGradient id="elg2" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#6cc8ff"/></linearGradient>';
     else if (id === "naturaleza") o += '<linearGradient id="elg6" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a2f18"/><stop offset=".45" stop-color="#a06c3a"/><stop offset="1" stop-color="#3b2412"/></linearGradient>';
@@ -125,14 +150,14 @@
     /* anillo */
     if (id === "naturaleza") {
       var v1 = "", v2 = "", k, a, r1, r2;
-      for (k = 0; k <= 120; k++) { a = k / 120 * 6.2832; r1 = 37 + 2.2 * Math.sin(a * 9); r2 = 37 - 2.2 * Math.sin(a * 9); v1 += (k ? "L" : "M") + (50 + r1 * Math.cos(a)).toFixed(1) + " " + (50 + r1 * Math.sin(a)).toFixed(1); v2 += (k ? "L" : "M") + (50 + r2 * Math.cos(a)).toFixed(1) + " " + (50 + r2 * Math.sin(a)).toFixed(1); }
+      for (k = 0; k <= 120; k++) { a = k / 120 * 6.2832; r1 = 35 + 2 * Math.sin(a * 9); r2 = 35 - 2 * Math.sin(a * 9); v1 += (k ? "L" : "M") + (50 + r1 * Math.cos(a)).toFixed(1) + " " + (50 + r1 * Math.sin(a)).toFixed(1); v2 += (k ? "L" : "M") + (50 + r2 * Math.cos(a)).toFixed(1) + " " + (50 + r2 * Math.sin(a)).toFixed(1); }
       o += '<path d="' + v1 + 'Z" fill="none" stroke="#2a1608" stroke-width="5.4" style="stroke:#2a1608"/><path d="' + v2 + 'Z" fill="none" stroke="#2a1608" stroke-width="5.4" style="stroke:#2a1608"/><path d="' + v1 + 'Z" fill="none" stroke="#a06c3a" stroke-width="3.4" style="stroke:#a06c3a"/><path d="' + v2 + 'Z" fill="none" stroke="#7a4e26" stroke-width="3.4" style="stroke:#7a4e26"/>';
     } else {
-      o += '<circle cx="50" cy="50" r="37" fill="none" stroke="' + p.dk + '" stroke-width="7.6" style="stroke:' + p.dk + '"/><circle cx="50" cy="50" r="37" fill="none" stroke="url(#elr_' + pre + ')" stroke-width="5.6" style="stroke:url(#elr_' + pre + ')"/><circle cx="50" cy="50" r="38.6" fill="none" stroke="#fff" stroke-width=".7" style="stroke:#fff" opacity=".35"/>';
+      o += '<circle cx="50" cy="50" r="35" fill="none" stroke="' + p.dk + '" stroke-width="7.2" style="stroke:' + p.dk + '"/><circle cx="50" cy="50" r="35" fill="none" stroke="url(#elr_' + pre + ')" stroke-width="5.2" style="stroke:url(#elr_' + pre + ')"/><circle cx="50" cy="50" r="36.6" fill="none" stroke="#fff" stroke-width=".7" style="stroke:#fff" opacity=".35"/>';
     }
-    o += '<circle cx="50" cy="50" r="34" fill="url(#elfd_' + pre + ')"/>';
-    o += '<circle cx="50" cy="50" r="34" fill="none" stroke="' + p.dk + '" stroke-width="1.2" style="stroke:' + p.dk + '"/>';
-    o += '<g clip-path="url(#elc_' + pre + ')"><g transform="' + (id === "fuego" ? "translate(18 17) scale(.64)" : id === "naturaleza" ? "translate(17 17) scale(.66)" : id === "piedra" ? "translate(15 14) scale(.72)" : "translate(19 19) scale(.62)") + '">' + elMotif(id) + '</g></g>';
+    o += '<circle cx="50" cy="50" r="32" fill="url(#elfd_' + pre + ')"/>';
+    o += '<circle cx="50" cy="50" r="32" fill="none" stroke="' + p.dk + '" stroke-width="1.2" style="stroke:' + p.dk + '"/>';
+    o += '<g clip-path="url(#elc_' + pre + ')">' + elBack(id) + '<g transform="' + (id === "fuego" ? "translate(19 19) scale(.62)" : id === "naturaleza" ? "translate(18 18) scale(.64)" : id === "piedra" ? "translate(16 15) scale(.7)" : "translate(20 20) scale(.6)") + '">' + elMotif(id) + "</g></g>";
     o += '<path d="M24 36A28 28 0 0 1 50 20" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" style="stroke:#fff" opacity=".28"/>';
     return o + "</svg>";
   }
