@@ -1,4 +1,4 @@
-  var APP_VERSION = "1.76.5";
+  var APP_VERSION = "1.76.6";
   var KEY = "tronx.notes.v2", KEY1 = "tronx.notes.v1", SKEY = "tronx.settings.v2", WKEY = "tronx.welcomed";
 
   var $ = function (id) { return document.getElementById(id); };

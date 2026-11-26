@@ -203,10 +203,10 @@
   function cbSilhouette() {
     var d = mk("div", "mx-cbsil");
     d.innerHTML = '<svg viewBox="0 0 200 170" aria-hidden="true"><defs><radialGradient id="cbsg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7a3cff" stop-opacity=".55"/><stop offset="1" stop-color="#7a3cff" stop-opacity="0"/></radialGradient></defs>'
-      + '<circle cx="100" cy="86" r="84" fill="url(#cbsg)" stroke="none" style="stroke:none"/>'
-      + '<path d="M100 22L158 55V120L100 153L42 120V55Z" fill="#07030f" stroke="#6a4cc0" stroke-opacity=".5" stroke-width="1.6" stroke-linejoin="round"/>'
-      + '<path d="M42 55L100 88L158 55M100 88V153" fill="none" stroke="#6a4cc0" stroke-opacity=".28" stroke-width="1.2"/>'
-      + '<text x="100" y="116" text-anchor="middle" font-size="64" font-weight="800" fill="#c9a6ff" fill-opacity=".9" font-family="system-ui,sans-serif">?</text></svg>';
+      + '<circle cx="100" cy="85" r="84" fill="url(#cbsg)" stroke="none" style="stroke:none"/>'
+      + '<circle cx="100" cy="85" r="60" fill="#07030f" stroke="#6a4cc0" stroke-opacity=".5" stroke-width="1.6"/>'
+      + '<circle cx="100" cy="85" r="50" fill="none" stroke="#6a4cc0" stroke-opacity=".28" stroke-width="1.2" stroke-dasharray="3 5"/>'
+      + '<text x="100" y="109" text-anchor="middle" font-size="64" font-weight="800" fill="#c9a6ff" fill-opacity=".9" font-family="system-ui,sans-serif" style="stroke:none">?</text></svg>';
     return d;
   }
   /* tarjeta de la pestaña «Sobres y marco»: cubo flotando, cuántos tenés y botón para abrirlo */

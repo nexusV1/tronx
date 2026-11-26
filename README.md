@@ -147,11 +147,13 @@ El número tiene la forma `X.Y.Z` y el último número (`Z`) cuenta cuántas cos
 
 ## Cambios
 
-**1.76.5**: Una silueta misteriosa con un «?» aparece en Eventos; se revelará muy pronto.
+**1.76.6**: Más misterio en Eventos: una sorpresa especial está por llegar.
 
-**1.76.4**: Un pin misterioso que llegará muy pronto tiene un diseño nuevo.
+**1.76.5**: Una silueta misteriosa aparece en Eventos.
 
-**1.76.3**: Un objeto especial misterioso está en camino al evento.
+**1.76.4**: Una recompensa exclusiva que llegará muy pronto tiene un diseño nuevo.
+
+**1.76.3**: Una sorpresa misteriosa con recompensas increíbles llegará muy pronto a Eventos.
 
 **1.76.0**: Evento GTA VI: regalos por iniciar sesión (sobre de 6 estrellas el 6 de diciembre y sobre mítico con 66 % de probabilidad de marco el último día).
 
