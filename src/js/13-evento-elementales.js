@@ -26,20 +26,21 @@
       for (var i = 0; i < 3; i++) { var a = i * 60; ln += '<g transform="rotate(' + a + ' 50 50)"><path d="M50 8V92" /><path d="M50 22L41 13M50 22L59 13M50 78L41 87M50 78L59 87M50 38L43 31M50 38L57 31M50 62L43 69M50 62L57 69"/></g>'; }
       b = '<g fill="none" stroke="#bfeeff" stroke-width="4.5" stroke-linecap="round" style="stroke:#bfeeff">' + ln + '</g><path d="M50 36L62 43V57L50 64L38 57V43Z" fill="#e9fbff" opacity=".95"/><circle cx="50" cy="50" r="5" fill="#46bff5"/>';
     } else if (id === "naturaleza") {
-      o += '<linearGradient id="elg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8f56a"/><stop offset="1" stop-color="#1fae5c"/></linearGradient></defs>';
-      b = '<path d="M50 6C84 18 92 56 50 94C8 56 16 18 50 6Z" fill="url(#elg3)"/><path d="M50 22V92M50 44L34 34M50 58L66 46M50 72L36 62" fill="none" stroke="#0e5b33" stroke-width="3.2" stroke-linecap="round" style="stroke:#0e5b33" opacity=".75"/>';
+      o += '<linearGradient id="elg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6ff7a"/><stop offset="1" stop-color="#17a455"/></linearGradient><linearGradient id="elg6" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9be86a"/><stop offset="1" stop-color="#0f7a45"/></linearGradient><radialGradient id="elg7" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffbc8"/><stop offset="1" stop-color="#fffbc8" stop-opacity="0"/></radialGradient></defs>';
+      b = '<path d="M50 94C50 80 49 66 50 52" fill="none" stroke="#6b4a2a" stroke-width="5" stroke-linecap="round" style="stroke:#6b4a2a"/>' +
+        '<path d="M50 90C40 90 30 94 20 92M50 88C60 90 70 94 82 91M50 84C44 88 38 90 34 96M50 84C56 88 62 91 68 97" fill="none" stroke="#8a6238" stroke-width="2.4" stroke-linecap="round" style="stroke:#8a6238" opacity=".9"/>' +
+        '<path d="M50 56C26 58 8 44 8 22C32 18 50 32 50 56Z" fill="url(#elg6)"/><path d="M50 56C26 44 18 32 12 24" fill="none" stroke="#0b5a33" stroke-width="2" stroke-linecap="round" style="stroke:#0b5a33" opacity=".6"/>' +
+        '<path d="M50 52C74 54 92 40 92 18C68 14 50 28 50 52Z" fill="url(#elg3)"/><path d="M50 52C74 40 82 28 88 20" fill="none" stroke="#0b5a33" stroke-width="2" stroke-linecap="round" style="stroke:#0b5a33" opacity=".6"/>' +
+        '<path d="M50 54C36 42 36 22 50 6C64 22 64 42 50 54Z" fill="url(#elg3)"/><path d="M50 52V12" fill="none" stroke="#0b5a33" stroke-width="2" stroke-linecap="round" style="stroke:#0b5a33" opacity=".6"/>' +
+        '<circle cx="50" cy="24" r="9" fill="url(#elg7)"/><circle cx="22" cy="70" r="2" fill="#eaffb0"/><circle cx="80" cy="66" r="2.4" fill="#eaffb0"/><circle cx="70" cy="40" r="1.6" fill="#eaffb0"/>';
     } else {
-      o += '<linearGradient id="elg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8c7a8"/><stop offset="1" stop-color="#7a6850"/></linearGradient><linearGradient id="elg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ff8a2e"/></linearGradient></defs>';
-      b = '<path d="M4 90L14 66L27 58L34 70L30 90Z" fill="#6e5e4a"/><path d="M14 66L27 58L30 66L20 72Z" fill="#a8957a"/>' +
-        '<path d="M72 90L70 64L82 52L95 66L96 90Z" fill="#6e5e4a"/><path d="M82 52L95 66L86 68L76 62Z" fill="#a8957a"/>' +
-        '<path d="M22 92L26 56L38 30L50 8L63 28L76 52L80 92Z" fill="url(#elg4)"/>' +
-        '<path d="M50 8L63 28L55 36L46 26Z" fill="#f6ecd6"/>' +
-        '<path d="M38 30L46 26L55 36L50 54L36 50L26 56Z" fill="#b9a687"/>' +
-        '<path d="M55 36L63 28L76 52L68 60L50 54Z" fill="#8c7a60"/>' +
-        '<path d="M26 56L36 50L50 54L48 92L22 92Z" fill="#7d6b53" opacity=".85"/>' +
-        '<path d="M50 54L68 60L80 92L48 92Z" fill="#5c4e3c" opacity=".9"/>' +
-        '<path d="M46 62L52 72L47 80L53 90" fill="none" stroke="url(#elg5)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:url(#elg5)"/>' +
-        '<path d="M60 70L65 78" fill="none" stroke="#ffb04a" stroke-width="2" stroke-linecap="round" style="stroke:#ffb04a" opacity=".85"/>';
+      o += '<linearGradient id="elg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3d3b4"/><stop offset="1" stop-color="#6f5d47"/></linearGradient><linearGradient id="elg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ff7a1f"/></linearGradient><linearGradient id="elg8" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3226"/><stop offset="1" stop-color="#1c1710"/></linearGradient></defs>';
+      b = '<path d="M50 3L88 16L88 52C88 74 70 88 50 97C30 88 12 74 12 52L12 16Z" fill="url(#elg4)"/>' +
+        '<path d="M50 3L88 16L88 52C88 74 70 88 50 97Z" fill="#000" opacity=".16"/>' +
+        '<path d="M50 11L80 21L80 51C80 69 66 80 50 88C34 80 20 69 20 51L20 21Z" fill="url(#elg8)"/>' +
+        '<path d="M26 64L40 38L48 48L60 26L74 64Z" fill="#a8957a"/><path d="M60 26L74 64L62 64L56 44Z" fill="#6e5e4a"/><path d="M60 26L66 38L58 36L54 40Z" fill="#f6ecd6"/><path d="M40 38L48 48L42 64L26 64Z" fill="#c9b894"/>' +
+        '<path d="M47 66L52 74L47 80" fill="none" stroke="url(#elg5)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:url(#elg5)"/>' +
+        '<path d="M50 3L88 16" fill="none" stroke="#fff3d6" stroke-width="2" style="stroke:#fff3d6" opacity=".7"/>';
     }
     return o + b + "</svg>";
   }
