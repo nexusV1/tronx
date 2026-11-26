@@ -40,14 +40,20 @@
   function elMotif(id) {
     var b = "", i;
     if (id === "fuego") {
-      var fl = "M50 3C59 22 84 32 84 59C84 80 68 96 50 96C32 96 16 80 16 59C16 45 26 37 32 27C34 39 41 45 46 43C43 29 45 16 50 3Z";
-      var tg = function (sc, x, y, col, cls) { return '<g class="' + cls + '"><path d="' + fl + '" transform="translate(' + (x - 50 * sc).toFixed(1) + " " + (y - 96 * sc).toFixed(1) + ") scale(" + sc + ')" fill="' + col + '"/></g>'; };
-      var tn = function (x, y, h, col, cls) { return '<g class="' + cls + '"><path d="M-7 0C-9 -9 -3 -15 0 -24C2 -16 9 -11 7 0Z" transform="translate(' + x + " " + y + ") scale(" + (h / 24).toFixed(2) + ')" fill="' + col + '"/></g>'; };
-      b = tn(22, 62, 30, "#b01a0a", "elan-f2") + tn(78, 62, 30, "#b01a0a", "elan-f3") + tn(34, 52, 44, "#c7200c", "elan-f1") + tn(66, 52, 44, "#c7200c", "elan-f2") + tn(50, 46, 58, "#d9320f", "elan-f0") + tn(22, 62, 20, "#ff6a1a", "elan-f3") + tn(78, 62, 20, "#ff6a1a", "elan-f2") + tn(34, 52, 30, "#ff7a1f", "elan-f2") + tn(66, 52, 30, "#ff7a1f", "elan-f1") + tn(50, 46, 40, "#ff9a2e", "elan-f1") + tn(50, 46, 22, "#ffd35a", "elan-f3") +
-        elFist({ o: "#3a0c04", fi: ["#d2380f", "#e4491a", "#e4491a", "#d2380f"], kn: ["#ff8a1f", "#ffa62e"], th: "#f06a1c", fa: "#8a1a0a" }) +
-        '<g class="elan-cr"><path d="M30 48V62M44.5 46V64M59 46V64M73.5 48V62M40 84L46 90L42 96" fill="none" stroke="#ffe27a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="stroke:#ffe27a"/></g>' +
-        '<path d="M26 30L31 27M60 26L66 29" fill="none" stroke="#fff3c4" stroke-width="1.5" stroke-linecap="round" style="stroke:#fff3c4" opacity=".75"/>' +
-        tn(29.5, 30, 15, "#ffb02a", "elan-f2") + tn(44.5, 25, 19, "#ffd35a", "elan-f1") + tn(58, 25, 19, "#ffd35a", "elan-f3") + tn(72, 30, 15, "#ffb02a", "elan-f2");
+      var ln = ' stroke="#3a0c04" stroke-linejoin="round" style="stroke:#3a0c04"';
+      var fe = function (x, y, ang, len, cols) {
+        var o = "", k, sc = [1, 0.7, 0.42];
+        for (k = 0; k < 3; k++) { var q = len / 40 * sc[k]; o += '<path d="M0 0C-8 -9 -7 -26 0 -40C7 -26 8 -9 0 0Z" transform="translate(' + x + " " + y + ") rotate(" + ang + ") scale(" + q.toFixed(3) + ')" fill="' + cols[k] + '"' + (k === 0 ? ln + ' stroke-width="' + (1.5 / q).toFixed(2) + '"' : "") + '/>'; }
+        return o;
+      };
+      var wing = function (sg) { var an = [30, 52, 74, 96, 118], ls = [44, 47, 43, 37, 29], o = "", k; for (k = 4; k >= 0; k--) o += fe(50 + sg * 5, 55, sg * an[k], ls[k], ["#c7200c", "#ff6a1a", "#ffc83a"]); return '<g class="' + (sg > 0 ? "elan-wr" : "elan-wl") + '">' + o + "</g>"; };
+      b = '<g class="elan-f1">' + fe(50, 78, 180, 24, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 78, 158, 20, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 78, 202, 20, ["#c7200c", "#ff6a1a", "#ffc83a"]) + "</g>" +
+        wing(1) + wing(-1) +
+        '<path d="M50 38C60 42 62 56 57 68C54 76 52 82 50 90C48 82 46 76 43 68C38 56 40 42 50 38Z" fill="#ff8a1f"' + ln + ' stroke-width="1.6"/>' +
+        '<path d="M50 46C55 50 56 60 53 68C52 73 51 76 50 80C49 76 48 73 47 68C44 60 45 50 50 46Z" fill="#ffd35a"/>' +
+        '<g class="elan-f2">' + fe(50, 33, -24, 15, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 33, 24, 15, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 33, 0, 20, ["#c7200c", "#ff6a1a", "#ffc83a"]) + "</g>" +
+        '<circle cx="50" cy="38" r="7.2" fill="#ff7a1f"' + ln + ' stroke-width="1.6"/><path d="M46.5 41.5L50 49L53.5 41.5Z" fill="#ffd35a"' + ln + ' stroke-width="1.2"/>' +
+        '<path d="M44.5 35.5L48.5 37.5M55.5 35.5L51.5 37.5" fill="none" stroke="#3a0c04" stroke-width="1.6" stroke-linecap="round" style="stroke:#3a0c04"/><circle cx="47.2" cy="38.6" r="1.3" fill="#fff3c4"/><circle cx="52.8" cy="38.6" r="1.3" fill="#fff3c4"/>';
     } else if (id === "hielo") {
       var arms = "", tw = "";
       for (i = 0; i < 3; i++) arms += '<g transform="rotate(' + i * 60 + ' 50 50)"><path d="M50 3V97"/><path d="M50 17L38 5M50 17L62 5M50 83L38 95M50 83L62 95M50 31L40 21M50 31L60 21M50 69L40 79M50 69L60 79M50 46L44 40M50 46L56 40M50 54L44 60M50 54L56 60"/></g>';

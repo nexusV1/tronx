@@ -43,3 +43,8 @@
 @keyframes eldew { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.95; } }
 .elan-cr { animation: elcrack 2.2s ease-in-out infinite; }
 @keyframes elcrack { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+.elan-wr, .elan-wl { transform-box: view-box; }
+.elan-wr { transform-origin: 55px 55px; animation: elwr 2.2s ease-in-out infinite alternate; }
+.elan-wl { transform-origin: 45px 55px; animation: elwl 2.2s ease-in-out infinite alternate; }
+@keyframes elwr { from { transform: rotate(3deg); } to { transform: rotate(-6deg); } }
+@keyframes elwl { from { transform: rotate(-3deg); } to { transform: rotate(6deg); } }
