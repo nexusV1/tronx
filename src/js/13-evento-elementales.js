@@ -30,12 +30,24 @@
     for (k = 0; k < n; k++) { var a0 = (k / n) * 6.2832 - 1.5708, a1 = ((k + 1) / n) * 6.2832 - 1.5708, am = (a0 + a1) / 2, r = 43, rc = 59; d += (k ? "" : "M" + (50 + Math.cos(a0) * r).toFixed(1) + " " + (50 + Math.sin(a0) * r).toFixed(1)) + "Q" + (50 + Math.cos(am) * rc).toFixed(1) + " " + (50 + Math.sin(am) * rc).toFixed(1) + " " + (50 + Math.cos(a1) * r).toFixed(1) + " " + (50 + Math.sin(a1) * r).toFixed(1); }
     return d + "Z";
   }
+  /* puño de héroe (compartido por los emblemas): colores por elemento */
+  function elFist(c) {
+    var O = ' stroke="' + c.o + '" stroke-width="1.7" stroke-linejoin="round" style="stroke:' + c.o + '"', fingers = "", knu = "", i, q, jit = [1, 0.82, 1.08, 0.88, 1.04, 0.84, 1.06, 0.9];
+    for (i = 0; i < 4; i++) fingers += '<rect x="' + (22 + i * 14.5) + '" y="40" width="15" height="34" rx="5" fill="' + c.fi[i] + '"' + O + '/>';
+    for (i = 0; i < 4; i++) { var kx = 29.5 + i * 14.5, ky = (i === 0 || i === 3 ? 38 : 34), kp = ""; for (q = 0; q < 8; q++) { var kr = 9.6 * jit[(q + i * 3) % 8], ka = q / 8 * 6.2832 + 0.2; kp += (q ? "L" : "M") + (kx + Math.cos(ka) * kr).toFixed(1) + " " + (ky + Math.sin(ka) * kr).toFixed(1); } knu += '<path d="' + kp + 'Z" fill="' + (i === 0 || i === 3 ? c.kn[0] : c.kn[1]) + '"' + O + '/>'; }
+    return '<path d="M32 70L68 70L65 98L35 98Z" fill="' + c.fa + '"' + O + '/><path d="M33 84H67" stroke="' + c.o + '" stroke-width="1.4" style="stroke:' + c.o + '" opacity=".6"/>' + fingers + knu + '<path d="M14 66L22 58L52 56L60 63L54 74L22 76Z" transform="rotate(-7 37 66)" fill="' + c.th + '"' + O + '/>';
+  }
   function elMotif(id) {
     var b = "", i;
     if (id === "fuego") {
-      var fl = "M50 3C59 22 84 32 84 59C84 80 68 96 50 96C32 96 16 80 16 59C16 45 26 37 32 27C34 39 41 44 46 42C43 29 45 16 50 3Z";
-      var tf = function (s, col, cls) { return '<g class="' + cls + '"><path d="' + fl + '" transform="translate(' + (50 * (1 - s)).toFixed(1) + " " + (96 * (1 - s)).toFixed(1) + ") scale(" + s + ')" fill="' + col + '"/></g>'; };
-      b = '<g class="elan-f0"><path d="' + fl + '" fill="url(#elg1)"/></g>' + tf(0.72, "#ff8a1f", "elan-f1") + tf(0.47, "#ffc83a", "elan-f2") + tf(0.24, "#fff6cf", "elan-f3");
+      var fl = "M50 3C59 22 84 32 84 59C84 80 68 96 50 96C32 96 16 80 16 59C16 45 26 37 32 27C34 39 41 45 46 43C43 29 45 16 50 3Z";
+      var tg = function (sc, x, y, col, cls) { return '<g class="' + cls + '"><path d="' + fl + '" transform="translate(' + (x - 50 * sc).toFixed(1) + " " + (y - 96 * sc).toFixed(1) + ") scale(" + sc + ')" fill="' + col + '"/></g>'; };
+      var tn = function (x, y, h, col, cls) { return '<g class="' + cls + '"><path d="M-7 0C-9 -9 -3 -15 0 -24C2 -16 9 -11 7 0Z" transform="translate(' + x + " " + y + ") scale(" + (h / 24).toFixed(2) + ')" fill="' + col + '"/></g>'; };
+      b = tn(22, 62, 30, "#b01a0a", "elan-f2") + tn(78, 62, 30, "#b01a0a", "elan-f3") + tn(34, 52, 44, "#c7200c", "elan-f1") + tn(66, 52, 44, "#c7200c", "elan-f2") + tn(50, 46, 58, "#d9320f", "elan-f0") + tn(22, 62, 20, "#ff6a1a", "elan-f3") + tn(78, 62, 20, "#ff6a1a", "elan-f2") + tn(34, 52, 30, "#ff7a1f", "elan-f2") + tn(66, 52, 30, "#ff7a1f", "elan-f1") + tn(50, 46, 40, "#ff9a2e", "elan-f1") + tn(50, 46, 22, "#ffd35a", "elan-f3") +
+        elFist({ o: "#3a0c04", fi: ["#d2380f", "#e4491a", "#e4491a", "#d2380f"], kn: ["#ff8a1f", "#ffa62e"], th: "#f06a1c", fa: "#8a1a0a" }) +
+        '<g class="elan-cr"><path d="M30 48V62M44.5 46V64M59 46V64M73.5 48V62M40 84L46 90L42 96" fill="none" stroke="#ffe27a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="stroke:#ffe27a"/></g>' +
+        '<path d="M26 30L31 27M60 26L66 29" fill="none" stroke="#fff3c4" stroke-width="1.5" stroke-linecap="round" style="stroke:#fff3c4" opacity=".75"/>' +
+        tn(29.5, 30, 15, "#ffb02a", "elan-f2") + tn(44.5, 25, 19, "#ffd35a", "elan-f1") + tn(58, 25, 19, "#ffd35a", "elan-f3") + tn(72, 30, 15, "#ffb02a", "elan-f2");
     } else if (id === "hielo") {
       var arms = "", tw = "";
       for (i = 0; i < 3; i++) arms += '<g transform="rotate(' + i * 60 + ' 50 50)"><path d="M50 3V97"/><path d="M50 17L38 5M50 17L62 5M50 83L38 95M50 83L62 95M50 31L40 21M50 31L60 21M50 69L40 79M50 69L60 79M50 46L44 40M50 46L56 40M50 54L44 60M50 54L56 60"/></g>';
@@ -49,12 +61,7 @@
         '<path d="M50 90V10" fill="none" stroke="#e9ffb0" stroke-width=".9" style="stroke:#e9ffb0" opacity=".5" transform="translate(1.6 0)"/>' +
         '<ellipse class="elan-dw" cx="66" cy="34" rx="3" ry="5" transform="rotate(25 66 34)" fill="#f4ffd0"/></g>';
     } else {
-      var O = ' stroke="#2c241b" stroke-width="1.7" stroke-linejoin="round" style="stroke:#2c241b"', fingers = "", knu = "";
-      for (i = 0; i < 4; i++) fingers += '<rect x="' + (22 + i * 14.5) + '" y="40" width="15" height="34" rx="5" fill="' + ["#8f7d65", "#9c8a70", "#9c8a70", "#8f7d65"][i] + '"' + O + '/>';
-      var jit = [1, 0.82, 1.08, 0.88, 1.04, 0.84, 1.06, 0.9];
-      for (i = 0; i < 4; i++) { var kx = 29.5 + i * 14.5, ky = (i === 0 || i === 3 ? 38 : 34), kp = "", q; for (q = 0; q < 8; q++) { var kr = 9.6 * jit[(q + i * 3) % 8], ka = q / 8 * 6.2832 + 0.2; kp += (q ? "L" : "M") + (kx + Math.cos(ka) * kr).toFixed(1) + " " + (ky + Math.sin(ka) * kr).toFixed(1); } knu += '<path d="' + kp + 'Z" fill="' + (i === 0 || i === 3 ? "#cdbb9c" : "#dccaa8") + '"' + O + '/>'; }
-      b = '<g filter="url(#elf)"><path d="M32 70L68 70L65 98L35 98Z" fill="#6a5a47"' + O + '/><path d="M33 84H67" stroke="#2c241b" stroke-width="1.4" style="stroke:#2c241b" opacity=".6"/>' + fingers + knu +
-        '<path d="M14 66L22 58L52 56L60 63L54 74L22 76Z" transform="rotate(-7 37 66)" fill="#c2b090"' + O + '/></g>' +
+      b = '<g filter="url(#elf)">' + elFist({ o: "#2c241b", fi: ["#8f7d65", "#9c8a70", "#9c8a70", "#8f7d65"], kn: ["#cdbb9c", "#dccaa8"], th: "#c2b090", fa: "#6a5a47" }) + '</g>' +
         '<path d="M29 27L33 34L28 40M44 22L48 30L43 37M59 23L56 31L61 38" fill="none" stroke="#fff3d6" stroke-width="1.5" stroke-linecap="round" style="stroke:#fff3d6" opacity=".65"/>' +
         '<g class="elan-cr"><path d="M52 44L56 51L52 57M64 46L61 53L65 59M42 82L47 88L44 94" fill="none" stroke="url(#elg5)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="stroke:url(#elg5)"/></g>';
     }
