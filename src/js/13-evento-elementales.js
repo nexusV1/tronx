@@ -26,21 +26,27 @@
       for (var i = 0; i < 3; i++) { var a = i * 60; ln += '<g transform="rotate(' + a + ' 50 50)"><path d="M50 8V92" /><path d="M50 22L41 13M50 22L59 13M50 78L41 87M50 78L59 87M50 38L43 31M50 38L57 31M50 62L43 69M50 62L57 69"/></g>'; }
       b = '<g fill="none" stroke="#bfeeff" stroke-width="4.5" stroke-linecap="round" style="stroke:#bfeeff">' + ln + '</g><path d="M50 36L62 43V57L50 64L38 57V43Z" fill="#e9fbff" opacity=".95"/><circle cx="50" cy="50" r="5" fill="#46bff5"/>';
     } else if (id === "naturaleza") {
-      o += '<linearGradient id="elg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6ff7a"/><stop offset="1" stop-color="#17a455"/></linearGradient><linearGradient id="elg6" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9be86a"/><stop offset="1" stop-color="#0f7a45"/></linearGradient><radialGradient id="elg7" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffbc8"/><stop offset="1" stop-color="#fffbc8" stop-opacity="0"/></radialGradient></defs>';
-      b = '<path d="M50 94C50 80 49 66 50 52" fill="none" stroke="#6b4a2a" stroke-width="5" stroke-linecap="round" style="stroke:#6b4a2a"/>' +
-        '<path d="M50 90C40 90 30 94 20 92M50 88C60 90 70 94 82 91M50 84C44 88 38 90 34 96M50 84C56 88 62 91 68 97" fill="none" stroke="#8a6238" stroke-width="2.4" stroke-linecap="round" style="stroke:#8a6238" opacity=".9"/>' +
-        '<path d="M50 56C26 58 8 44 8 22C32 18 50 32 50 56Z" fill="url(#elg6)"/><path d="M50 56C26 44 18 32 12 24" fill="none" stroke="#0b5a33" stroke-width="2" stroke-linecap="round" style="stroke:#0b5a33" opacity=".6"/>' +
-        '<path d="M50 52C74 54 92 40 92 18C68 14 50 28 50 52Z" fill="url(#elg3)"/><path d="M50 52C74 40 82 28 88 20" fill="none" stroke="#0b5a33" stroke-width="2" stroke-linecap="round" style="stroke:#0b5a33" opacity=".6"/>' +
-        '<path d="M50 54C36 42 36 22 50 6C64 22 64 42 50 54Z" fill="url(#elg3)"/><path d="M50 52V12" fill="none" stroke="#0b5a33" stroke-width="2" stroke-linecap="round" style="stroke:#0b5a33" opacity=".6"/>' +
-        '<circle cx="50" cy="24" r="9" fill="url(#elg7)"/><circle cx="22" cy="70" r="2" fill="#eaffb0"/><circle cx="80" cy="66" r="2.4" fill="#eaffb0"/><circle cx="70" cy="40" r="1.6" fill="#eaffb0"/>';
+      o += '<radialGradient id="elg7" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e9ffa8" stop-opacity=".95"/><stop offset="1" stop-color="#7be86a" stop-opacity="0"/></radialGradient><linearGradient id="elg6" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a2f18"/><stop offset=".45" stop-color="#9a6a3a"/><stop offset="1" stop-color="#3b2412"/></linearGradient></defs>';
+      var leaf = function (x, y, ang, len, wd, col, vein) { return '<g transform="translate(' + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (ang + 90).toFixed(1) + ')"><path d="M0 0C' + wd + " " + (-len * 0.3) + " " + wd * 0.6 + " " + (-len * 0.8) + " 0 " + -len + "C" + -wd * 0.6 + " " + (-len * 0.8) + " " + -wd + " " + (-len * 0.3) + ' 0 0Z" fill="' + col + '"/><path d="M0 -1V' + (-len * 0.9).toFixed(1) + '" stroke="' + vein + '" stroke-width=".9" stroke-linecap="round" fill="none" style="stroke:' + vein + '" opacity=".55"/></g>'; };
+      var rings = [[13, 20, 9, 15, "#167a47", "#0a4a2a"], [8.5, 17, 7.5, 12, "#2fb264", "#0e6034"], [4, 13, 6, 9, "#7fdc6e", "#1c7a3a"]], t0 = "", r, k;
+      b = '<circle cx="50" cy="36" r="36" fill="url(#elg7)" opacity=".55"/>';
+      b += '<path d="M44 90C44 78 46 70 47 58H53C54 70 56 78 56 90Z" fill="url(#elg6)"/><path d="M46 88C38 88 30 92 20 91M46 86C40 90 36 94 31 97M54 88C62 88 70 92 80 91M54 86C60 90 64 94 69 97M50 90V97" fill="none" stroke="#7a5230" stroke-width="2.6" stroke-linecap="round" style="stroke:#7a5230"/><path d="M48 62V84" stroke="#d2a066" stroke-width="1.2" stroke-linecap="round" fill="none" style="stroke:#d2a066" opacity=".6"/>';
+      for (r = 0; r < 3; r++) for (k = 0; k < rings[r][2] + 5 * (r < 2 ? 1 : 0); k++) { var n = rings[r][2] + 5 * (r < 2 ? 1 : 0), an = k / n * 360 + r * 17, rad = an * Math.PI / 180; t0 += leaf(50 + Math.cos(rad) * rings[r][0], 36 + Math.sin(rad) * rings[r][0], an, rings[r][1] - (k % 2) * 2, rings[r][3] / 2 + (k % 3), rings[r][4], rings[r][5]); }
+      b += t0 + '<circle cx="50" cy="36" r="7" fill="url(#elg7)"/><circle cx="14" cy="70" r="1.6" fill="#eaffb0"/><circle cx="87" cy="62" r="2" fill="#eaffb0"/><circle cx="24" cy="12" r="1.4" fill="#eaffb0"/><circle cx="80" cy="14" r="1.6" fill="#eaffb0"/>';
     } else {
-      o += '<linearGradient id="elg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3d3b4"/><stop offset="1" stop-color="#6f5d47"/></linearGradient><linearGradient id="elg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ff7a1f"/></linearGradient><linearGradient id="elg8" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3226"/><stop offset="1" stop-color="#1c1710"/></linearGradient></defs>';
-      b = '<path d="M50 3L88 16L88 52C88 74 70 88 50 97C30 88 12 74 12 52L12 16Z" fill="url(#elg4)"/>' +
-        '<path d="M50 3L88 16L88 52C88 74 70 88 50 97Z" fill="#000" opacity=".16"/>' +
-        '<path d="M50 11L80 21L80 51C80 69 66 80 50 88C34 80 20 69 20 51L20 21Z" fill="url(#elg8)"/>' +
-        '<path d="M26 64L40 38L48 48L60 26L74 64Z" fill="#a8957a"/><path d="M60 26L74 64L62 64L56 44Z" fill="#6e5e4a"/><path d="M60 26L66 38L58 36L54 40Z" fill="#f6ecd6"/><path d="M40 38L48 48L42 64L26 64Z" fill="#c9b894"/>' +
-        '<path d="M47 66L52 74L47 80" fill="none" stroke="url(#elg5)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:url(#elg5)"/>' +
-        '<path d="M50 3L88 16" fill="none" stroke="#fff3d6" stroke-width="2" style="stroke:#fff3d6" opacity=".7"/>';
+      o += '<filter id="elf" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".085" numOctaves="4" seed="7" result="n"/><feDiffuseLighting in="n" lighting-color="#ffffff" surfaceScale="3.2" result="l"><feDistantLight azimuth="235" elevation="58"/></feDiffuseLighting><feComposite in="l" in2="SourceGraphic" operator="arithmetic" k1="1.25" k2="0" k3="0" k4="0" result="m"/><feComposite in="m" in2="SourceAlpha" operator="in"/></filter><linearGradient id="elg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".5" stop-color="#ffb23a"/><stop offset="1" stop-color="#ff6a1a"/></linearGradient><radialGradient id="elg4" cx=".5" cy=".6" r=".55"><stop offset="0" stop-color="#ffb24a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb24a" stop-opacity="0"/></radialGradient></defs>';
+      b = '<ellipse cx="50" cy="66" rx="46" ry="32" fill="url(#elg4)"/><g filter="url(#elf)">' +
+        '<path d="M6 94L12 74L22 66L28 78L26 94Z" fill="#8a7a66"/>' +
+        '<path d="M74 94L72 70L84 62L94 76L96 94Z" fill="#8a7a66"/>' +
+        '<path d="M22 94L26 58L34 36L42 12L50 4L58 20L66 38L76 62L80 94Z" fill="#a5937a"/>' +
+        '<path d="M34 36L42 12L50 4L48 40L38 52L26 58Z" fill="#cdbba0"/>' +
+        '<path d="M50 4L58 20L66 38L60 52L48 40Z" fill="#8a7860"/>' +
+        '<path d="M38 52L48 40L60 52L56 94L22 94L26 58Z" fill="#9c8a70"/>' +
+        '<path d="M60 52L66 38L76 62L80 94L56 94Z" fill="#6c5d49"/>' +
+        '</g>' +
+        '<path d="M50 4L42 12L34 36" fill="none" stroke="#fff3d6" stroke-width="1.6" stroke-linejoin="round" style="stroke:#fff3d6" opacity=".75"/>' +
+        '<path d="M49 44L53 54L47 62L52 72L48 82L51 92" fill="none" stroke="url(#elg5)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="stroke:url(#elg5)"/>' +
+        '<path d="M40 70L44 66M62 66L66 72M60 80L65 84" fill="none" stroke="#ffb23a" stroke-width="2" stroke-linecap="round" style="stroke:#ffb23a" opacity=".85"/>';
     }
     return o + b + "</svg>";
   }
