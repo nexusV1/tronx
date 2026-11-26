@@ -164,6 +164,7 @@
   }
   /* pin exclusivo: medalla de metal oscuro con engarces violetas y, dentro, un cubo de obsidiana con grietas de energía */
   function cbPinSvg(px) {
+    if (!MX_CB_ON) return cbPinSilSvg(px);
     var u = "cp" + (++pinN), rim = "", i, a, R;
     for (i = 0; i < 32; i++) { a = (i * 11.25 - 90) * Math.PI / 180; R = i % 2 ? 21.6 : 23.6; rim += (i ? "L" : "M") + (24 + R * Math.cos(a)).toFixed(2) + " " + (24 + R * Math.sin(a)).toFixed(2); }
     rim += "Z";
@@ -194,15 +195,29 @@
       + gems
       + '<path d="M9.6 8.4A21 21 0 0 1 24 2.6" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".9" stroke-linecap="round"/></svg>';
   }
+  /* mientras el cubo no esté disponible, su pin y su tarjeta son solo una silueta con un «?» */
+  function cbPinSilSvg(px) {
+    return '<svg class="pin" width="' + px + '" height="' + px + '" viewBox="-2 -2 52 52" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#120a26" stroke="#3a2a66" stroke-width="1"/><circle cx="24" cy="24" r="18.5" fill="#080413"/>'
+      + '<text x="24" y="31.5" text-anchor="middle" font-size="22" font-weight="800" fill="#5b3fa8" font-family="system-ui,sans-serif">?</text></svg>';
+  }
+  function cbSilhouette() {
+    var d = mk("div", "mx-cbsil");
+    d.innerHTML = '<svg viewBox="0 0 200 170" aria-hidden="true"><defs><radialGradient id="cbsg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7a3cff" stop-opacity=".55"/><stop offset="1" stop-color="#7a3cff" stop-opacity="0"/></radialGradient></defs>'
+      + '<circle cx="100" cy="86" r="84" fill="url(#cbsg)" stroke="none" style="stroke:none"/>'
+      + '<path d="M100 22L158 55V120L100 153L42 120V55Z" fill="#07030f" stroke="#6a4cc0" stroke-opacity=".5" stroke-width="1.6" stroke-linejoin="round"/>'
+      + '<path d="M42 55L100 88L158 55M100 88V153" fill="none" stroke="#6a4cc0" stroke-opacity=".28" stroke-width="1.2"/>'
+      + '<text x="100" y="116" text-anchor="middle" font-size="64" font-weight="800" fill="#c9a6ff" fill-opacity=".9" font-family="system-ui,sans-serif">?</text></svg>';
+    return d;
+  }
   /* tarjeta de la pestaña «Sobres y marco»: cubo flotando, cuántos tenés y botón para abrirlo */
   function mxCubeCard(box, m, test) {
-    var n = mxCbN(m), card = mk("div", "mx-card mx-cbcard"), cv = mk("canvas", "mx-cbpv");
+    var n = mxCbN(m), card = mk("div", "mx-card mx-cbcard"), cv = MX_CB_ON ? mk("canvas", "mx-cbpv") : cbSilhouette();
     card.appendChild(cv);
-    var hd = mk("div", "mx-cbhd"); hd.appendChild(mk("b", null, "Cubo del Destino")); hd.appendChild(mk("em", null, !MX_CB_ON ? "Próximamente" : n ? "Tenés " + n : "Artefacto especial")); card.appendChild(hd);
-    card.appendChild(mk("p", "mx-note", !MX_CB_ON ? "Un artefacto especial con una probabilidad fija del " + MX_CB_P + "\u00a0% de darte un pin exclusivo que no sale en ningún sobre. Muy pronto vas a poder conseguirlo." : "Probabilidad fija del " + MX_CB_P + " % de conseguir un pin exclusivo que no sale en ningún sobre. Si el destino no acompaña, recibís ⭐ " + MX_CB_LOSE.st + ", " + MX_CB_LOSE.xp + " XP y " + MX_CB_LOSE.sx + " puntos SEIS."));
+    var hd = mk("div", "mx-cbhd"); hd.appendChild(mk("b", null, MX_CB_ON ? "Cubo del Destino" : "???")); hd.appendChild(mk("em", null, !MX_CB_ON ? "Próximamente" : n ? "Tenés " + n : "Artefacto especial")); card.appendChild(hd);
+    card.appendChild(mk("p", "mx-note", !MX_CB_ON ? "Algo misterioso está en camino al evento. Muy pronto vas a poder descubrirlo." : "Probabilidad fija del " + MX_CB_P + " % de conseguir un pin exclusivo que no sale en ningún sobre. Si el destino no acompaña, recibís ⭐ " + MX_CB_LOSE.st + ", " + MX_CB_LOSE.xp + " XP y " + MX_CB_LOSE.sx + " puntos SEIS."));
     var bt = mk("button", "mx-btn mx-cbbtn", !MX_CB_ON ? "Próximamente" : n ? "Abrir el cubo" : "Se gana en el Camino SEIS · nivel 8"); bt.type = "button"; bt.disabled = !MX_CB_ON || test || !n;
     bt.addEventListener("click", function () { mxCubeOpenUi(); }); card.appendChild(bt); box.appendChild(card);
-    requestAnimationFrame(function () { if (cv.isConnected) mxCubeMake(cv, { calm: calmOn(), fps: 30, scale: 0.26, cy: 0.5 }); });
+    if (MX_CB_ON) requestAnimationFrame(function () { if (cv.isConnected) mxCubeMake(cv, { calm: calmOn(), fps: 30, scale: 0.26, cy: 0.5 }); });
   }
   function mxCubeOpenUi() {
     var m = getMax(); if (!MX_CB_ON || mxCbN(m) < 1 || mxPkBusy || !$("max")) return; mxPkBusy = true;

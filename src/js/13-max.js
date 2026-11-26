@@ -864,7 +864,7 @@
       else { var bt = mk("button", "mx-btn", "Reclamar"); bt.type = "button"; bt.disabled = test || k !== dn || k >= rch; bt.addEventListener("click", function () { mxLvClaim(k); }); row.appendChild(bt); }
       lc.appendChild(row);
     });
-    if (!MX_CB_ON) { var sr = mk("div", "mx-lv"); sr.appendChild(mk("span", "n", String(MX_LV.length + 1))); var stx = mk("div", "t"); stx.appendChild(mk("b", null, "Cubo del Destino")); stx.appendChild(mk("small", null, "Próximamente")); sr.appendChild(stx); lc.appendChild(sr); }
+    if (!MX_CB_ON) { var sr = mk("div", "mx-lv"); sr.appendChild(mk("span", "n", String(MX_LV.length + 1))); var stx = mk("div", "t"); stx.appendChild(mk("b", null, "???")); stx.appendChild(mk("small", null, "Próximamente")); sr.appendChild(stx); lc.appendChild(sr); }
     box.appendChild(lc);
     function buy(cost, fn, label) { var mm = getMax(); if (mm.bk || mxSx(mm).p < cost) return; mxSx(mm).p -= cost; fn(mm); maxSave(); $("mxBal").textContent = "⭐ " + fmtMx(getMax().stars); toast(label); mxRender(); }
     box.appendChild(mk("div", "mx-sec", "Sobres del evento"));
