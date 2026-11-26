@@ -26,3 +26,20 @@
 .mx-eld b { color: var(--c2); }
 .mx-elbtn.sure { background: linear-gradient(135deg, #ff7a3d, #ff2e6a); }
 @media (prefers-reduced-motion: reduce) { .mx-elbig { animation: none; } }
+/* animaciones de los emblemas (el modo calma las detiene) */
+.elan-f0, .elan-f1, .elan-f2, .elan-f3, .elan-lf, .elan-sn, .elan-tw, .elan-cr, .elan-dw { transform-box: fill-box; }
+.elan-f0, .elan-f1, .elan-f2, .elan-f3 { transform-origin: 50% 100%; animation: elflame 1.5s ease-in-out infinite alternate; }
+.elan-f1 { animation-duration: 1.2s; animation-delay: -0.4s; }
+.elan-f2 { animation-duration: 0.95s; animation-delay: -0.2s; }
+.elan-f3 { animation-duration: 0.7s; }
+@keyframes elflame { 0% { transform: scale(1, 1) skewX(0deg); } 50% { transform: scale(0.97, 1.05) skewX(-2.2deg); } 100% { transform: scale(1.02, 0.97) skewX(2deg); } }
+.elan-sn { transform-origin: 50% 50%; animation: elspin 28s linear infinite; }
+@keyframes elspin { to { transform: rotate(360deg); } }
+.elan-tw { transform-origin: 50% 50%; animation: eltw 2.8s ease-in-out infinite; opacity: 0; }
+@keyframes eltw { 0%, 100% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1); } }
+.elan-lf { transform-origin: 50% 100%; animation: elsway 5s ease-in-out infinite alternate; }
+@keyframes elsway { from { transform: rotate(-2.6deg); } to { transform: rotate(2.6deg); } }
+.elan-dw { animation: eldew 3.2s ease-in-out infinite; }
+@keyframes eldew { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.95; } }
+.elan-cr { animation: elcrack 2.2s ease-in-out infinite; }
+@keyframes elcrack { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
