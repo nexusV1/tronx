@@ -40,20 +40,33 @@
   function elMotif(id) {
     var b = "", i;
     if (id === "fuego") {
-      var ln = ' stroke="#3a0c04" stroke-linejoin="round" style="stroke:#3a0c04"';
-      var fe = function (x, y, ang, len, cols) {
-        var o = "", k, sc = [1, 0.7, 0.42];
-        for (k = 0; k < 3; k++) { var q = len / 40 * sc[k]; o += '<path d="M0 0C-8 -9 -7 -26 0 -40C7 -26 8 -9 0 0Z" transform="translate(' + x + " " + y + ") rotate(" + ang + ") scale(" + q.toFixed(3) + ')" fill="' + cols[k] + '"' + (k === 0 ? ln + ' stroke-width="' + (1.5 / q).toFixed(2) + '"' : "") + '/>'; }
-        return o;
+      var LN = ' stroke="#3a0c04" stroke-linejoin="round" style="stroke:#3a0c04"';
+      /* llama curva: sg = +1 se inclina a la derecha, -1 a la izquierda; tres capas (roja, naranja, dorada) */
+      var ft = function (x, y, h, sg, cls, rot) {
+        var sc = h / 30, o = "", cols = ["#c7200c", "#ff6a1a", "#ffd35a"], sz = [1, 0.66, 0.34], k;
+        for (k = 0; k < 3; k++) o += '<path d="M0 0C-8 -8 -6 -20 3 -30C0 -20 9 -14 7 -6C6 -2 3 0 0 0Z" transform="translate(' + x + " " + y + ") rotate(" + (sg * (rot || 0)) + ") scale(" + (sg * sc * sz[k] * 0.8).toFixed(3) + " " + (sc * sz[k]).toFixed(3) + ')" fill="' + cols[k] + '"' + (k === 0 ? LN + ' stroke-width="' + (1.5 / sc).toFixed(2) + '"' : "") + '/>';
+        return '<g class="' + cls + '">' + o + "</g>";
       };
-      var wing = function (sg) { var an = [30, 52, 74, 96, 118], ls = [44, 47, 43, 37, 29], o = "", k; for (k = 4; k >= 0; k--) o += fe(50 + sg * 5, 55, sg * an[k], ls[k], ["#c7200c", "#ff6a1a", "#ffc83a"]); return '<g class="' + (sg > 0 ? "elan-wr" : "elan-wl") + '">' + o + "</g>"; };
-      b = '<g class="elan-f1">' + fe(50, 78, 180, 24, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 78, 158, 20, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 78, 202, 20, ["#c7200c", "#ff6a1a", "#ffc83a"]) + "</g>" +
-        wing(1) + wing(-1) +
-        '<path d="M50 38C60 42 62 56 57 68C54 76 52 82 50 90C48 82 46 76 43 68C38 56 40 42 50 38Z" fill="#ff8a1f"' + ln + ' stroke-width="1.6"/>' +
-        '<path d="M50 46C55 50 56 60 53 68C52 73 51 76 50 80C49 76 48 73 47 68C44 60 45 50 50 46Z" fill="#ffd35a"/>' +
-        '<g class="elan-f2">' + fe(50, 33, -24, 15, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 33, 24, 15, ["#c7200c", "#ff6a1a", "#ffc83a"]) + fe(50, 33, 0, 20, ["#c7200c", "#ff6a1a", "#ffc83a"]) + "</g>" +
-        '<circle cx="50" cy="38" r="7.2" fill="#ff7a1f"' + ln + ' stroke-width="1.6"/><path d="M46.5 41.5L50 49L53.5 41.5Z" fill="#ffd35a"' + ln + ' stroke-width="1.2"/>' +
-        '<path d="M44.5 35.5L48.5 37.5M55.5 35.5L51.5 37.5" fill="none" stroke="#3a0c04" stroke-width="1.6" stroke-linecap="round" style="stroke:#3a0c04"/><circle cx="47.2" cy="38.6" r="1.3" fill="#fff3c4"/><circle cx="52.8" cy="38.6" r="1.3" fill="#fff3c4"/>';
+      var BL = "M50 1L57.5 12L58.5 66L41.5 66L42.5 12Z";
+      b = '<circle cx="50" cy="42" r="48" fill="url(#elga)"/>';
+      for (i = 0; i < 12; i++) b += '<path transform="rotate(' + i * 30 + ' 50 42)" d="M48 42L50 -6L52 42Z" fill="#ffd35a" opacity=".13"/>';
+      var fan = [[7, 62, 54, "elan-f1"], [20, 64, 50, "elan-f2"], [34, 66, 42, "elan-f3"], [50, 68, 32, "elan-f1"]], fq;
+      for (fq = 0; fq < fan.length; fq++) b += ft(50 + 4 + fq * 2, fan[fq][1], fan[fq][2], 1, fan[fq][3], fan[fq][0] + 2) + ft(50 - 4 - fq * 2, fan[fq][1], fan[fq][2], -1, fan[fq][3], fan[fq][0] + 2);
+      b += ft(50, 12, 24, 1, "elan-f2", 0);
+      /* hoja */
+      b += '<path d="' + BL + '" fill="#f3f7fc"' + LN + ' stroke-width="1.9"/><path d="M50 1L57.5 12L58.5 66L50 66Z" fill="#a9b6c8"/><path d="' + BL + '" fill="url(#elgh)"/>' +
+        '<path d="M50 10V62" stroke="#5e6c80" stroke-width="2.4" stroke-linecap="round" style="stroke:#5e6c80" opacity=".55"/><path d="M45 14L45.4 62M55 14L54.6 62" stroke="#ffffff" stroke-width=".9" style="stroke:#ffffff" opacity=".7"/>' +
+        '<g class="elan-cr"><path d="M50 18L52.4 21L50 24L47.6 21ZM50 29L52.4 32L50 35L47.6 32ZM50 40L52.4 43L50 46L47.6 43ZM50 51L52.4 54L50 57L47.6 54Z" fill="#ffd35a"/></g>';
+      /* guarda alada con rubí */
+      b += '<path d="M57 63C66 62 76 58 87 47C87 58 82 69 73 74C67 76 62 74 57 72Z" fill="url(#elgg)"' + LN + ' stroke-width="1.8"/><path d="M43 63C34 62 24 58 13 47C13 58 18 69 27 74C33 76 38 74 43 72Z" fill="url(#elgg)"' + LN + ' stroke-width="1.8"/>' +
+        '<path d="M60 66C68 64 76 60 83 53M40 66C32 64 24 60 17 53M62 71C69 70 75 66 79 62M38 71C31 70 25 66 21 62" fill="none" stroke="#fff3c4" stroke-width="1.1" stroke-linecap="round" style="stroke:#fff3c4" opacity=".7"/>' +
+        '<circle cx="50" cy="68" r="11" fill="#ffb23a" opacity=".5"/>' +
+        '<path d="M50 58L59 68L50 79L41 68Z" fill="url(#elgg)"' + LN + ' stroke-width="1.8"/><path class="elan-cr" d="M50 61.5L56 68L50 75.5L44 68Z" fill="url(#elgr)"/><path d="M50 61.5L53 68L50 70L47 68Z" fill="#ffd9d0" opacity=".8"/>';
+      /* empuñadura y pomo */
+      b += '<path d="M45.5 79L54.5 79L53.5 91L46.5 91Z" fill="#7a1010"' + LN + ' stroke-width="1.7"/><path d="M45.6 82L54.4 80.5M45.9 86L54.1 84.5M46.2 90L53.8 88.6" stroke="#ffc83a" stroke-width="1.2" style="stroke:#ffc83a" opacity=".85"/>' +
+        '<circle cx="50" cy="94.5" r="5.2" fill="url(#elgg)"' + LN + ' stroke-width="1.7"/><circle cx="50" cy="94.5" r="2.2" fill="url(#elgr)"/>';
+      /* brasas */
+      b += '<g class="elan-tw"><circle cx="30" cy="30" r="1.8" fill="#ffd35a"/></g><g class="elan-tw" style="animation-delay:.9s"><circle cx="71" cy="22" r="1.6" fill="#ffd35a"/></g><g class="elan-tw" style="animation-delay:1.6s"><circle cx="80" cy="40" r="1.4" fill="#ff9a2e"/></g><g class="elan-tw" style="animation-delay:2.2s"><circle cx="20" cy="46" r="1.5" fill="#ff9a2e"/></g>';
     } else if (id === "hielo") {
       var arms = "", tw = "";
       for (i = 0; i < 3; i++) arms += '<g transform="rotate(' + i * 60 + ' 50 50)"><path d="M50 3V97"/><path d="M50 17L38 5M50 17L62 5M50 83L38 95M50 83L62 95M50 31L40 21M50 31L60 21M50 69L40 79M50 69L60 79M50 46L44 40M50 46L56 40M50 54L44 60M50 54L56 60"/></g>';
@@ -79,7 +92,7 @@
     o += '<linearGradient id="elr_' + pre + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + p.rim[0] + '"/><stop offset=".5" stop-color="' + p.rim[1] + '"/><stop offset="1" stop-color="' + p.rim[2] + '"/></linearGradient>';
     o += '<radialGradient id="elfd_' + pre + '" cx=".5" cy=".42" r=".62"><stop offset="0" stop-color="' + p.f0 + '"/><stop offset="1" stop-color="' + p.f1 + '"/></radialGradient>';
     o += '<radialGradient id="elgl_' + pre + '" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="' + p.gl + '" stop-opacity=".7"/><stop offset="1" stop-color="' + p.gl + '" stop-opacity="0"/></radialGradient>';
-    if (id === "fuego") o += '<linearGradient id="elg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb02a"/><stop offset="1" stop-color="#d4200c"/></linearGradient>';
+    if (id === "fuego") o += '<linearGradient id="elgh" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="68"><stop offset="0" stop-color="#ff7a1f" stop-opacity="0"/><stop offset=".55" stop-color="#ff7a1f" stop-opacity=".55"/><stop offset="1" stop-color="#ff3d0f" stop-opacity=".95"/></linearGradient><linearGradient id="elgg" gradientUnits="userSpaceOnUse" x1="10" y1="50" x2="90" y2="80"><stop offset="0" stop-color="#fff0a8"/><stop offset=".5" stop-color="#f2b53a"/><stop offset="1" stop-color="#b8711a"/></linearGradient><radialGradient id="elgr" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffb0a0"/><stop offset=".35" stop-color="#e01e2a"/><stop offset="1" stop-color="#6a0612"/></radialGradient><radialGradient id="elga" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffb23a" stop-opacity=".75"/><stop offset="1" stop-color="#ff4a10" stop-opacity="0"/></radialGradient>';
     else if (id === "hielo") o += '<linearGradient id="elg2" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#7fd8ff"/></linearGradient>';
     else if (id === "naturaleza") o += '<linearGradient id="elg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b6f56a"/><stop offset=".55" stop-color="#2fb264"/><stop offset="1" stop-color="#0f6a3a"/></linearGradient>';
     else o += '<filter id="elf" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".085" numOctaves="4" seed="7" result="n"/><feDiffuseLighting in="n" lighting-color="#ffffff" surfaceScale="3.2" result="l"><feDistantLight azimuth="235" elevation="58"/></feDiffuseLighting><feComposite in="l" in2="SourceGraphic" operator="arithmetic" k1="1.25" k2="0" k3="0" k4="0" result="m"/><feComposite in="m" in2="SourceAlpha" operator="in"/></filter><linearGradient id="elg5" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="95"><stop offset="0" stop-color="#fff0a8"/><stop offset=".5" stop-color="#ffb23a"/><stop offset="1" stop-color="#ff6a1a"/></linearGradient>';
