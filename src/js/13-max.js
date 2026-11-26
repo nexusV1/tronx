@@ -380,7 +380,9 @@
   function rand01() { try { var a = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(a); return a[0] / 4294967296; } catch (e) { return Math.random(); } }
   function mxPkList(m) { if (!m.pk || typeof m.pk !== "object") m.pk = { n: 0, l: [] }; if (!Array.isArray(m.pk.l)) m.pk.l = []; return m.pk.l; }
   function mxSx(m) { if (!m.sx || typeof m.sx !== "object") m.sx = { p: 0, t: 0 }; return m.sx; }
-  var MX_LV = [{ n: 6, s: 1 }, { n: 16, x: 16 }, { n: 36, x: 26 }, { n: 66, x: 40 }, { n: 106, x: 66 }, { n: 206, s: 5, mx: 2 }, { n: 299, l: "gta" }, { n: 366, c: 1 }];
+  /* el Cubo del Destino todavía no se puede conseguir ni abrir: se muestra como «Próximamente». Para activarlo, poné true. */
+  var MX_CB_ON = false;
+  var MX_LV = [{ n: 6, s: 1 }, { n: 16, x: 16 }, { n: 36, x: 26 }, { n: 66, x: 40 }, { n: 106, x: 66 }, { n: 206, s: 5, mx: 2 }, { n: 299, l: "gta" }].concat(MX_CB_ON ? [{ n: 366, c: 1 }] : []);
   function mxLvProg(m) { var x = mxSx(m); if (typeof x.g !== "number") x.g = x.t || 0; return x.g; }
   function mxLvReached(m) { var g = mxLvProg(m), n = 0; while (n < MX_LV.length && g >= MX_LV[n].n) n++; return n; }
   function mxLvDone(m) { var x = mxSx(m); return Math.min(MX_LV.length, Math.max(0, x.lc | 0)); }
@@ -862,6 +864,7 @@
       else { var bt = mk("button", "mx-btn", "Reclamar"); bt.type = "button"; bt.disabled = test || k !== dn || k >= rch; bt.addEventListener("click", function () { mxLvClaim(k); }); row.appendChild(bt); }
       lc.appendChild(row);
     });
+    if (!MX_CB_ON) { var sr = mk("div", "mx-lv"); sr.appendChild(mk("span", "n", String(MX_LV.length + 1))); var stx = mk("div", "t"); stx.appendChild(mk("b", null, "Cubo del Destino")); stx.appendChild(mk("small", null, "Próximamente")); sr.appendChild(stx); lc.appendChild(sr); }
     box.appendChild(lc);
     function buy(cost, fn, label) { var mm = getMax(); if (mm.bk || mxSx(mm).p < cost) return; mxSx(mm).p -= cost; fn(mm); maxSave(); $("mxBal").textContent = "⭐ " + fmtMx(getMax().stars); toast(label); mxRender(); }
     box.appendChild(mk("div", "mx-sec", "Sobres del evento"));

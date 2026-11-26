@@ -198,14 +198,14 @@
   function mxCubeCard(box, m, test) {
     var n = mxCbN(m), card = mk("div", "mx-card mx-cbcard"), cv = mk("canvas", "mx-cbpv");
     card.appendChild(cv);
-    var hd = mk("div", "mx-cbhd"); hd.appendChild(mk("b", null, "Cubo del Destino")); hd.appendChild(mk("em", null, n ? "Tenés " + n : "Artefacto especial")); card.appendChild(hd);
-    card.appendChild(mk("p", "mx-note", "Probabilidad fija del " + MX_CB_P + " % de conseguir un pin exclusivo que no sale en ningún sobre. Si el destino no acompaña, recibís ⭐ " + MX_CB_LOSE.st + ", " + MX_CB_LOSE.xp + " XP y " + MX_CB_LOSE.sx + " puntos SEIS."));
-    var bt = mk("button", "mx-btn mx-cbbtn", n ? "Abrir el cubo" : "Se gana en el Camino SEIS · nivel 8"); bt.type = "button"; bt.disabled = test || !n;
+    var hd = mk("div", "mx-cbhd"); hd.appendChild(mk("b", null, "Cubo del Destino")); hd.appendChild(mk("em", null, !MX_CB_ON ? "Próximamente" : n ? "Tenés " + n : "Artefacto especial")); card.appendChild(hd);
+    card.appendChild(mk("p", "mx-note", !MX_CB_ON ? "Un artefacto especial con una probabilidad fija del " + MX_CB_P + "\u00a0% de darte un pin exclusivo que no sale en ningún sobre. Muy pronto vas a poder conseguirlo." : "Probabilidad fija del " + MX_CB_P + " % de conseguir un pin exclusivo que no sale en ningún sobre. Si el destino no acompaña, recibís ⭐ " + MX_CB_LOSE.st + ", " + MX_CB_LOSE.xp + " XP y " + MX_CB_LOSE.sx + " puntos SEIS."));
+    var bt = mk("button", "mx-btn mx-cbbtn", !MX_CB_ON ? "Próximamente" : n ? "Abrir el cubo" : "Se gana en el Camino SEIS · nivel 8"); bt.type = "button"; bt.disabled = !MX_CB_ON || test || !n;
     bt.addEventListener("click", function () { mxCubeOpenUi(); }); card.appendChild(bt); box.appendChild(card);
     requestAnimationFrame(function () { if (cv.isConnected) mxCubeMake(cv, { calm: calmOn(), fps: 30, scale: 0.26, cy: 0.5 }); });
   }
   function mxCubeOpenUi() {
-    var m = getMax(); if (mxCbN(m) < 1 || mxPkBusy || !$("max")) return; mxPkBusy = true;
+    var m = getMax(); if (!MX_CB_ON || mxCbN(m) < 1 || mxPkBusy || !$("max")) return; mxPkBusy = true;
     var calm = calmOn(), tms = [], ov = mk("div", "mx-cbo"), cube;
     function later(f, ms) { tms.push(setTimeout(f, calm ? Math.min(ms, 120) : ms)); }
     ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Cubo del Destino");

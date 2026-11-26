@@ -147,9 +147,9 @@ El número tiene la forma `X.Y.Z` y el último número (`Z`) cuenta cuántas cos
 
 ## Cambios
 
-**1.76.4**: Pin del Cubo del Destino con un diseño nuevo: medalla de metal oscuro con engarces violetas y un cubo de obsidiana con grietas brillantes.
+**1.76.4**: Nuevo diseño del pin del Cubo del Destino, que llegará muy pronto.
 
-**1.76.3**: Cubo del Destino: objeto especial de obsidiana con grietas violetas, con 66 % de probabilidad de dar un pin exclusivo, que se gana en el nivel 8 del Camino SEIS.
+**1.76.3**: Cubo del Destino (próximamente): objeto especial de obsidiana con grietas violetas que se ve en Eventos; tendrá 66 % de probabilidad de dar un pin exclusivo.
 
 **1.76.0**: Evento GTA VI: regalos por iniciar sesión (sobre de 6 estrellas el 6 de diciembre y sobre mítico con 66 % de probabilidad de marco el último día).
 
