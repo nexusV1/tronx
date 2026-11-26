@@ -162,18 +162,37 @@
     raf = requestAnimationFrame(frame);
     return { charge: function (cb) { if (st !== "idle") return; st = "charge"; stT = performance.now(); burstCb = cb; }, stop: stop };
   }
-  /* pin exclusivo: cubo de obsidiana con grietas violetas dentro de una medalla oscura */
+  /* pin exclusivo: medalla de metal oscuro con engarces violetas y, dentro, un cubo de obsidiana con grietas de energía */
   function cbPinSvg(px) {
-    var u = "cp" + (++pinN);
+    var u = "cp" + (++pinN), rim = "", i, a, R;
+    for (i = 0; i < 32; i++) { a = (i * 11.25 - 90) * Math.PI / 180; R = i % 2 ? 21.6 : 23.6; rim += (i ? "L" : "M") + (24 + R * Math.cos(a)).toFixed(2) + " " + (24 + R * Math.sin(a)).toFixed(2); }
+    rim += "Z";
+    var gems = "";
+    [[24, 3.1], [44.9, 24], [24, 44.9], [3.1, 24]].forEach(function (g, k) { gems += '<circle cx="' + g[0] + '" cy="' + g[1] + '" r="1.5" fill="url(#' + u + 'm)" stroke="#2a0f55" stroke-width=".4"/><circle cx="' + (g[0] - 0.4) + '" cy="' + (g[1] - 0.4) + '" r=".45" fill="#fff" fill-opacity=".85"/>'; });
+    var cr = "M24 25L21.6 29.6L24.8 33L22.6 38.6M24 25L29.2 27.2L33.4 25.6M24 25L20 21.6L15.6 22.4M29.6 16L26.6 19.4";
     return '<svg class="pin" width="' + px + '" height="' + px + '" viewBox="-2 -2 52 52" aria-hidden="true"><defs>'
-      + '<linearGradient id="' + u + 'r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6d4ff"/><stop offset=".45" stop-color="#8b4dff"/><stop offset="1" stop-color="#2a0f55"/></linearGradient>'
-      + '<radialGradient id="' + u + 'd" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#2a1250"/><stop offset="1" stop-color="#05020c"/></radialGradient></defs>'
-      + '<circle cx="24" cy="24" r="23.2" fill="url(#' + u + 'r)"/><circle cx="24" cy="24" r="20" fill="url(#' + u + 'd)"/>'
-      + '<circle cx="24" cy="24" r="19.4" fill="none" stroke="#b57bff" stroke-opacity=".5" stroke-width=".6"/>'
-      + '<path d="M24 9L37 16.5L24 24L11 16.5Z" fill="#241240"/><path d="M11 16.5L24 24V39L11 31.5Z" fill="#0b0518"/><path d="M24 24L37 16.5V31.5L24 39Z" fill="#150a2a"/>'
-      + '<path d="M24 9L37 16.5V31.5L24 39L11 31.5V16.5Z" fill="none" stroke="#b57bff" stroke-width=".9" stroke-linejoin="round"/><path d="M11 16.5L24 24L37 16.5M24 24V39" fill="none" stroke="#b57bff" stroke-width=".7" stroke-opacity=".8"/>'
-      + '<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M24 24L22 28.5L25 32L23 37.5M24 24L28.5 26.5L33 25M17 18.8L20.5 20.5M30 15.5L27 18" stroke="#8a3cff" stroke-opacity=".5" stroke-width="2.6"/><path d="M24 24L22 28.5L25 32L23 37.5M24 24L28.5 26.5L33 25M17 18.8L20.5 20.5M30 15.5L27 18" stroke="#f1e3ff" stroke-width=".9"/></g>'
-      + '<path d="M24 14.2l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" fill="#fff" fill-opacity=".9"/></svg>';
+      + '<linearGradient id="' + u + 'r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1e6ff"/><stop offset=".3" stop-color="#a97bff"/><stop offset=".62" stop-color="#4b1fa8"/><stop offset="1" stop-color="#1c0a45"/></linearGradient>'
+      + '<radialGradient id="' + u + 'd" cx=".5" cy=".42" r=".62"><stop offset="0" stop-color="#3b1a7a"/><stop offset=".55" stop-color="#150a33"/><stop offset="1" stop-color="#05020c"/></radialGradient>'
+      + '<radialGradient id="' + u + 'm" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#f0e0ff"/><stop offset=".5" stop-color="#a45bff"/><stop offset="1" stop-color="#4a15b0"/></radialGradient>'
+      + '<linearGradient id="' + u + 't" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2a8e"/><stop offset="1" stop-color="#1a0d3a"/></linearGradient>'
+      + '<linearGradient id="' + u + 'l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0c38"/><stop offset="1" stop-color="#05020d"/></linearGradient>'
+      + '<linearGradient id="' + u + 'q" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1458"/><stop offset="1" stop-color="#070310"/></linearGradient>'
+      + '<linearGradient id="' + u + 'e" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6d4ff"/><stop offset="1" stop-color="#8a4cff"/></linearGradient>'
+      + '<filter id="' + u + 'g" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.15"/></filter></defs>'
+      + '<path d="' + rim + '" fill="url(#' + u + 'r)" stroke="#12062b" stroke-width=".5" stroke-linejoin="round"/>'
+      + '<circle cx="24" cy="24" r="19.6" fill="#0a0418" stroke="#d9c2ff" stroke-opacity=".55" stroke-width=".5"/><circle cx="24" cy="24" r="18.6" fill="url(#' + u + 'd)"/>'
+      + '<g fill="#fff"><circle cx="11" cy="13" r=".5" fill-opacity=".8"/><circle cx="37.5" cy="12" r=".4" fill-opacity=".7"/><circle cx="9.6" cy="31" r=".35" fill-opacity=".6"/><circle cx="38.6" cy="33.4" r=".5" fill-opacity=".75"/><circle cx="31" cy="8.6" r=".3" fill-opacity=".6"/><circle cx="16.4" cy="40.4" r=".35" fill-opacity=".6"/></g>'
+      + '<ellipse cx="24" cy="25" rx="19" ry="6.4" transform="rotate(-24 24 25)" fill="none" stroke="#b57bff" stroke-opacity=".38" stroke-width=".5" stroke-dasharray="1.4 1.8"/>'
+      + '<circle cx="24" cy="38.5" r="4.2" fill="#8a3cff" fill-opacity=".55" filter="url(#' + u + 'g)"/>'
+      + '<path d="M24 10.2L36.6 17.5L24 24.8L11.4 17.5Z" fill="url(#' + u + 't)"/><path d="M11.4 17.5L24 24.8V39.4L11.4 32Z" fill="url(#' + u + 'l)"/><path d="M24 24.8L36.6 17.5V32L24 39.4Z" fill="url(#' + u + 'q)"/>'
+      + '<path d="M15.4 15.2L24 10.2L30 13.6L21.6 18.6Z" fill="#fff" fill-opacity=".13"/><path d="M26.4 22L34 17.7V21.6L26.4 26Z" fill="#fff" fill-opacity=".07"/>'
+      + '<path d="' + cr + '" fill="none" stroke="#8a3cff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#' + u + 'g)"/>'
+      + '<path d="' + cr + '" fill="none" stroke="#f1e3ff" stroke-width=".85" stroke-linecap="round" stroke-linejoin="round"/>'
+      + '<path d="M24 10.2L36.6 17.5V32L24 39.4L11.4 32V17.5Z" fill="none" stroke="url(#' + u + 'e)" stroke-width=".9" stroke-linejoin="round"/><path d="M11.4 17.5L24 24.8L36.6 17.5M24 24.8V39.4" fill="none" stroke="#b57bff" stroke-opacity=".75" stroke-width=".6"/>'
+      + '<path d="M24 15.4l1 2.3 2.3 1-2.3 1-1 2.3-1-2.3-2.3-1 2.3-1z" fill="#fff" fill-opacity=".95"/>'
+      + '<path d="M38.4 9.4l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z" fill="#e9d9ff"/><circle cx="8.8" cy="20.4" r=".55" fill="#d9c2ff"/>'
+      + gems
+      + '<path d="M9.6 8.4A21 21 0 0 1 24 2.6" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".9" stroke-linecap="round"/></svg>';
   }
   /* tarjeta de la pestaña «Sobres y marco»: cubo flotando, cuántos tenés y botón para abrirlo */
   function mxCubeCard(box, m, test) {
