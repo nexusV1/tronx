@@ -29,8 +29,17 @@
       o += '<linearGradient id="elg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8f56a"/><stop offset="1" stop-color="#1fae5c"/></linearGradient></defs>';
       b = '<path d="M50 6C84 18 92 56 50 94C8 56 16 18 50 6Z" fill="url(#elg3)"/><path d="M50 22V92M50 44L34 34M50 58L66 46M50 72L36 62" fill="none" stroke="#0e5b33" stroke-width="3.2" stroke-linecap="round" style="stroke:#0e5b33" opacity=".75"/>';
     } else {
-      o += '</defs>';
-      b = '<path d="M10 82L20 48L38 24L60 18L80 40L92 82Z" fill="#7d6d5a"/><path d="M38 24L60 18L80 40L56 46Z" fill="#cdbba0"/><path d="M20 48L38 24L56 46L40 84L10 82Z" fill="#a08c72"/><path d="M56 46L80 40L92 82L40 84Z" fill="#6a5b4a"/><path d="M44 30L58 26L68 38L54 41Z" fill="#f0e2c8" opacity=".6"/><path d="M26 58L40 84M66 52L74 82" stroke="#4a3f33" stroke-width="2" fill="none" style="stroke:#4a3f33" opacity=".6"/>';
+      o += '<linearGradient id="elg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8c7a8"/><stop offset="1" stop-color="#7a6850"/></linearGradient><linearGradient id="elg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ff8a2e"/></linearGradient></defs>';
+      b = '<path d="M4 90L14 66L27 58L34 70L30 90Z" fill="#6e5e4a"/><path d="M14 66L27 58L30 66L20 72Z" fill="#a8957a"/>' +
+        '<path d="M72 90L70 64L82 52L95 66L96 90Z" fill="#6e5e4a"/><path d="M82 52L95 66L86 68L76 62Z" fill="#a8957a"/>' +
+        '<path d="M22 92L26 56L38 30L50 8L63 28L76 52L80 92Z" fill="url(#elg4)"/>' +
+        '<path d="M50 8L63 28L55 36L46 26Z" fill="#f6ecd6"/>' +
+        '<path d="M38 30L46 26L55 36L50 54L36 50L26 56Z" fill="#b9a687"/>' +
+        '<path d="M55 36L63 28L76 52L68 60L50 54Z" fill="#8c7a60"/>' +
+        '<path d="M26 56L36 50L50 54L48 92L22 92Z" fill="#7d6b53" opacity=".85"/>' +
+        '<path d="M50 54L68 60L80 92L48 92Z" fill="#5c4e3c" opacity=".9"/>' +
+        '<path d="M46 62L52 72L47 80L53 90" fill="none" stroke="url(#elg5)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke:url(#elg5)"/>' +
+        '<path d="M60 70L65 78" fill="none" stroke="#ffb04a" stroke-width="2" stroke-linecap="round" style="stroke:#ffb04a" opacity=".85"/>';
     }
     return o + b + "</svg>";
   }
