@@ -5,12 +5,12 @@
 .mx-evb.mx-elb { background: linear-gradient(135deg, #7a1d0c 0%, #1b4f8a 36%, #14693a 68%, #5a4a38 100%); }
 .mx-evb.mx-elb::after { display: none; }
 .mx-elrow { display: flex; gap: 8px; margin: 10px 0 8px; }
-.mx-elrow span { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: rgba(8, 6, 20, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); }
+.mx-elrow span { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; background: rgba(8, 6, 20, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); }
 .mx-evh.mx-elh { background: linear-gradient(160deg, #1d1633 0%, #0f1a33 100%); border: 1px solid rgba(255, 255, 255, 0.14); }
 .mx-evh.mx-elh h2 { margin: 8px 0 4px; font-size: 26px; letter-spacing: -0.02em; }
 .mx-evh.mx-elh p { margin: 4px 0 10px; font-size: 13px; line-height: 1.45; color: #e6e8ff; }
 .mx-elhero { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 85% 0%, color-mix(in srgb, var(--c1) 55%, transparent) 0%, transparent 60%), linear-gradient(160deg, var(--bg) 0%, #0b0b1a 100%); border-color: color-mix(in srgb, var(--c1) 60%, transparent); box-shadow: 0 0 28px color-mix(in srgb, var(--c1) 28%, transparent); }
-.mx-elbig { position: absolute; right: 10px; top: 10px; opacity: 0.95; filter: drop-shadow(0 0 16px var(--c1)); animation: elfloat 4s ease-in-out infinite; }
+.mx-elbig { position: absolute; right: 6px; top: 8px; opacity: 1; }
 .mx-elhero > *:not(.mx-elbig) { position: relative; z-index: 1; }
 .mx-elhero h2, .mx-elhero .mx-elt, .mx-elhero p { max-width: 58%; }
 .mx-elt { display: block; font-style: normal; font-size: 13px; font-weight: 700; color: var(--c2); }
@@ -21,30 +21,12 @@
 .mx-elc b { font-size: 15px; margin-top: 6px; }
 .mx-elc small { font-size: 11.5px; color: var(--c2); }
 .mx-elc.on { border-color: var(--c1); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c1) 40%, transparent), 0 0 22px color-mix(in srgb, var(--c1) 40%, transparent); }
-.mx-elic { filter: drop-shadow(0 0 10px var(--c1)); }
+.mx-elic { display: grid; place-items: center; }
 .mx-eld { border-color: color-mix(in srgb, var(--c1) 55%, transparent); }
 .mx-eld b { color: var(--c2); }
 .mx-elbtn.sure { background: linear-gradient(135deg, #ff7a3d, #ff2e6a); }
 @media (prefers-reduced-motion: reduce) { .mx-elbig { animation: none; } }
-/* animaciones de los emblemas (el modo calma las detiene) */
-.elan-f0, .elan-f1, .elan-f2, .elan-f3, .elan-lf, .elan-sn, .elan-tw, .elan-cr, .elan-dw { transform-box: fill-box; }
-.elan-f0, .elan-f1, .elan-f2, .elan-f3 { transform-origin: 50% 100%; animation: elflame 1.5s ease-in-out infinite alternate; }
-.elan-f1 { animation-duration: 1.2s; animation-delay: -0.4s; }
-.elan-f2 { animation-duration: 0.95s; animation-delay: -0.2s; }
-.elan-f3 { animation-duration: 0.7s; }
-@keyframes elflame { 0% { transform: scale(1, 1) skewX(0deg); } 50% { transform: scale(0.97, 1.05) skewX(-2.2deg); } 100% { transform: scale(1.02, 0.97) skewX(2deg); } }
-.elan-sn { transform-origin: 50% 50%; animation: elspin 28s linear infinite; }
-@keyframes elspin { to { transform: rotate(360deg); } }
-.elan-tw { transform-origin: 50% 50%; animation: eltw 2.8s ease-in-out infinite; opacity: 0; }
-@keyframes eltw { 0%, 100% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1); } }
-.elan-lf { transform-origin: 50% 100%; animation: elsway 5s ease-in-out infinite alternate; }
-@keyframes elsway { from { transform: rotate(-2.6deg); } to { transform: rotate(2.6deg); } }
-.elan-dw { animation: eldew 3.2s ease-in-out infinite; }
-@keyframes eldew { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.95; } }
-.elan-cr { animation: elcrack 2.2s ease-in-out infinite; }
-@keyframes elcrack { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
-.elan-wr, .elan-wl { transform-box: view-box; }
-.elan-wr { transform-origin: 55px 55px; animation: elwr 2.2s ease-in-out infinite alternate; }
-.elan-wl { transform-origin: 45px 55px; animation: elwl 2.2s ease-in-out infinite alternate; }
-@keyframes elwr { from { transform: rotate(3deg); } to { transform: rotate(-6deg); } }
-@keyframes elwl { from { transform: rotate(-3deg); } to { transform: rotate(6deg); } }
+/* emblemas: respiran con un brillo suave del color del elemento (el modo calma los detiene) */
+.mx-elimg { display: block; max-width: 100%; height: auto; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c1) 55%, transparent)); animation: elbreath 3.4s ease-in-out infinite; }
+@keyframes elbreath { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--c1) 45%, transparent)); } 50% { transform: scale(1.035); filter: drop-shadow(0 0 13px color-mix(in srgb, var(--c1) 85%, transparent)); } }
+@media (prefers-reduced-motion: reduce) { .mx-elimg { animation: none; } }
