@@ -12,7 +12,7 @@
 .mx-elhero { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 85% 0%, color-mix(in srgb, var(--c1) 55%, transparent) 0%, transparent 60%), linear-gradient(160deg, var(--bg) 0%, #0b0b1a 100%); border-color: color-mix(in srgb, var(--c1) 60%, transparent); box-shadow: 0 0 28px color-mix(in srgb, var(--c1) 28%, transparent); }
 .mx-elbig { position: absolute; right: 10px; top: 10px; opacity: 0.95; filter: drop-shadow(0 0 16px var(--c1)); animation: elfloat 4s ease-in-out infinite; }
 .mx-elhero > *:not(.mx-elbig) { position: relative; z-index: 1; }
-.mx-elhero h2, .mx-elhero .mx-elt, .mx-elhero p { max-width: 62%; }
+.mx-elhero h2, .mx-elhero .mx-elt, .mx-elhero p { max-width: 58%; }
 .mx-elt { display: block; font-style: normal; font-size: 13px; font-weight: 700; color: var(--c2); }
 .mx-elhero .mx-elt { margin-bottom: 4px; }
 @keyframes elfloat { 50% { transform: translateY(-5px); } }
