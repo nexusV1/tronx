@@ -48,24 +48,32 @@
     if (id !== "fuego") for (k = 0; k < 4; k++) o += '<g transform="rotate(' + k * 90 + ' 50 50) translate(50 2)"><path d="M0 0L4.2 6.4L0 14L-4.2 6.4Z" fill="url(#elk_' + id.charAt(0) + ')"' + L + ' stroke-width="1"/><path d="M0 1.5L2 6.4L0 11Z" fill="#fff" opacity=".4"/></g>';
     return o;
   }
-  /* marco de Ignar: aro de obsidiana forjada con runas de lava, bordes de oro y cuatro rubíes */
+  /* gran fuego por detrás del marco: arde alrededor del emblema, con las mismas llamas del centro */
+  function elFireBehind() {
+    var o = "", k, ft = function (ln, w, lean) { var l1 = lean * 0.5, l2 = lean; return "M" + (-w) + " 2C" + (-w * 1.05) + " -" + (ln * 0.3).toFixed(1) + " " + (-w * 0.3 + l1 * 0.5).toFixed(1) + " -" + (ln * 0.55).toFixed(1) + " " + (l1).toFixed(1) + " -" + (ln * 0.76).toFixed(1) + "C" + (l1 + 0.6).toFixed(1) + " -" + (ln * 0.88).toFixed(1) + " " + (l2 * 0.9).toFixed(1) + " -" + (ln * 0.95).toFixed(1) + " " + l2.toFixed(1) + " -" + ln + "C" + (w * 0.5 + l2 * 0.5).toFixed(1) + " -" + (ln * 0.66).toFixed(1) + " " + (w * 1.05).toFixed(1) + " -" + (ln * 0.3).toFixed(1) + " " + w + " 2Z"; },
+      an;
+    /* masa de fuego continua detrás del aro y lenguas anchas que suben por todo el contorno */
+    o += '<circle cx="50" cy="50" r="38.5" fill="#b81d0a"/><circle cx="50" cy="50" r="38.5" fill="url(#elga)" opacity=".9"/>';
+    for (k = 0; k < 13; k++) { an = -120 + k * 20; var lnn = 13 + 3.4 * Math.cos(an * 0.0175), lean = an === 0 ? 0 : (an < 0 ? -3.2 : 3.2); if (k === 6) lean = 2;
+      o += '<g transform="rotate(' + an + ' 50 50) translate(50 18)"><g class="' + ["elan-f1", "elan-f2", "elan-f3"][k % 3] + '"><path d="' + ft(lnn, 9.4, lean) + '" fill="url(#elgf)"/><path d="' + ft(lnn * 0.66, 5.6, lean * 0.6) + '" fill="url(#elgf2)" opacity=".92"/></g></g>'; }
+    /* chispas que saltan de la punta del fuego */
+    var sp = [[50, 6.5, 1.5], [43.5, 7.4, 1], [57, 6.2, 1.1], [47, 3.4, 0.8], [54, 2.6, 0.8], [38, 9.5, 0.7], [62.5, 8.6, 0.7], [29, 15, 0.7], [71.5, 14, 0.7]];
+    for (k = 0; k < sp.length; k++) o += '<g class="elan-tw" style="animation-delay:' + (k * 0.37).toFixed(2) + 's"><path transform="translate(' + sp[k][0] + " " + sp[k][1] + ') scale(' + sp[k][2] + ')" d="M0 -2.4L0.6 -0.6L2.4 0L0.6 0.6L0 2.4L-0.6 0.6L-2.4 0L-0.6 -0.6Z" fill="' + (k % 2 ? "#ffd35a" : "#ffe9a8") + '"/></g>';
+    return o;
+  }
+  /* marco de Ignar: banda de obsidiana roja con aros de cobre, cuatro rubíes (el de abajo, un escudo con llama) */
   function elFireFrame() {
-    var o = "", k, a, gl = ["M0 -2.4V2.4M-1.5 -0.9L0 -2.4L1.5 -0.9", "M-1.5 -2.4L1.5 2.4M1.5 -2.4L-1.5 2.4", "M-1.2 -2.4V2.4L1.5 0.2", "M0 -2.5L1.7 0L0 2.5L-1.7 0Z", "M-1.5 -2.4H1.5M0 -2.4V2.4M-1.5 2.4H1.5", "M-1.4 2.4L0 -2.4L1.4 2.4M-0.9 0.6H0.9"], D = "#2a0a04";
-    /* banda de obsidiana */
+    var o = "", k, D = "#2a0a04";
     o += '<circle cx="50" cy="50" r="41.2" fill="none" stroke="' + D + '" stroke-width="9.4" style="stroke:' + D + '"/><circle cx="50" cy="50" r="41.2" fill="none" stroke="url(#elbd)" stroke-width="7.6" style="stroke:url(#elbd)"/>';
     o += '<circle cx="50" cy="50" r="43.6" fill="none" stroke="#fff" stroke-width=".7" style="stroke:#fff" opacity=".13"/>';
-    /* borde interior de lava */
-    o += '<circle cx="50" cy="50" r="37.9" fill="none" stroke="#ff7a1f" stroke-width="1.3" style="stroke:#ff7a1f" opacity=".35"/><circle class="elan-cr" cx="50" cy="50" r="37.9" fill="none" stroke="#ffb23a" stroke-width=".55" style="stroke:#ffb23a"/>';
-    /* río de lava que recorre la banda, con brasas */
-    var lv = "", q, qa, qr;
-    for (q = 0; q <= 240; q++) { qa = q / 240 * 6.2832; qr = 41.2 + 1.7 * Math.sin(qa * 18); lv += (q ? "L" : "M") + (50 + qr * Math.cos(qa)).toFixed(2) + " " + (50 + qr * Math.sin(qa)).toFixed(2); }
-    o += '<path d="' + lv + 'Z" fill="none" stroke="#2a0a04" stroke-width="3.6" stroke-linejoin="round" style="stroke:#2a0a04"/><path d="' + lv + 'Z" fill="none" stroke="#ff4a10" stroke-width="2.3" stroke-linejoin="round" style="stroke:#ff4a10"/><g class="elan-cr"><path d="' + lv + 'Z" fill="none" stroke="#ff9a2e" stroke-width="1.35" stroke-linejoin="round" style="stroke:#ff9a2e"/><path d="' + lv + 'Z" fill="none" stroke="#ffe08a" stroke-width=".5" stroke-linejoin="round" style="stroke:#ffe08a"/></g>';
-    for (k = 0; k < 24; k++) { if (k % 6 === 0) continue; var ep = elPt(43.9 + (k % 2) * -5.4, k * 15 + 7.5); o += '<circle class="elan-tw" style="animation-delay:' + (k % 6 * 0.4).toFixed(2) + 's" cx="' + ep[0].toFixed(1) + '" cy="' + ep[1].toFixed(1) + '" r="' + (0.7 + (k % 3) * 0.2).toFixed(1) + '" fill="#ffc83a"/>'; }
-    /* aros de oro: exterior e interior */
     o += '<circle cx="50" cy="50" r="45.7" fill="none" stroke="' + D + '" stroke-width="2.8" style="stroke:' + D + '"/><circle cx="50" cy="50" r="45.7" fill="none" stroke="url(#elgq)" stroke-width="1.7" style="stroke:url(#elgq)"/>';
     o += '<circle cx="50" cy="50" r="34.4" fill="none" stroke="' + D + '" stroke-width="5.6" style="stroke:' + D + '"/><circle cx="50" cy="50" r="34.4" fill="none" stroke="url(#elgq)" stroke-width="4.2" style="stroke:url(#elgq)"/><circle cx="50" cy="50" r="35.2" fill="none" stroke="#fff" stroke-width=".7" style="stroke:#fff" opacity=".45"/><circle cx="50" cy="50" r="33" fill="none" stroke="#7a3a08" stroke-width=".6" style="stroke:#7a3a08" opacity=".7"/>';
-    /* cuatro rubíes engarzados */
-    for (k = 0; k < 4; k++) o += '<g transform="rotate(' + k * 90 + ' 50 50) translate(50 9)"><path d="M0 -7.4L5.6 -3.4L5.6 3.2L0 7.6L-5.6 3.2L-5.6 -3.4Z" fill="url(#elgq)"' + ' stroke="' + D + '" stroke-width="1.1" stroke-linejoin="round" style="stroke:' + D + '"/><path d="M0 -5.6L3.8 -2.6L3.8 2.4L0 5.6L-3.8 2.4L-3.8 -2.6Z" fill="#7a1208" stroke="#7a3a08" stroke-width=".6" style="stroke:#7a3a08"/><path class="elan-cr" d="M0 -4.4L3 -1.9L3 1.8L0 4.4L-3 1.8L-3 -1.9Z" fill="url(#elgr)"/><path d="M-1.6 -2.6L0.4 -3.6L1.2 -2.2L-0.6 -1.2Z" fill="#fff" opacity=".7"/></g>';
+    for (k = 0; k < 4; k++) {
+      if (k === 2) continue;
+      o += '<g transform="rotate(' + k * 90 + ' 50 50) translate(50 9)"><path d="M0 -7.4L5.6 -3.4L5.6 3.2L0 7.6L-5.6 3.2L-5.6 -3.4Z" fill="url(#elgq)" stroke="' + D + '" stroke-width="1.1" stroke-linejoin="round" style="stroke:' + D + '"/><path d="M0 -5.6L3.8 -2.6L3.8 2.4L0 5.6L-3.8 2.4L-3.8 -2.6Z" fill="#7a1208" stroke="#7a3a08" stroke-width=".6" style="stroke:#7a3a08"/><path class="elan-cr" d="M0 -4.4L3 -1.9L3 1.8L0 4.4L-3 1.8L-3 -1.9Z" fill="url(#elgr)"/><path d="M-1.6 -2.6L0.4 -3.6L1.2 -2.2L-0.6 -1.2Z" fill="#fff" opacity=".7"/></g>';
+    }
+    /* escudo con llama (abajo) */
+    o += '<g transform="translate(50 90.6)"><path d="M-7.4 -7.2H7.4V1.8C7.4 5.8 3.6 8.4 0 10C-3.6 8.4 -7.4 5.8 -7.4 1.8Z" fill="url(#elgq)" stroke="' + D + '" stroke-width="1.2" stroke-linejoin="round" style="stroke:' + D + '"/><path d="M-5.4 -5.2H5.4V1.5C5.4 4.4 2.7 6.3 0 7.6C-2.7 6.3 -5.4 4.4 -5.4 1.5Z" fill="#4a0c06" stroke="#7a3a08" stroke-width=".6" style="stroke:#7a3a08"/><g class="elan-f2"><path d="M0 -4.6C1.4 -2.6 3.4 -1.4 3.4 1.2C3.4 3.2 1.9 4.6 0 4.6C-1.9 4.6 -3.4 3.2 -3.4 1.2C-3.4 -0.6 -2 -1.2 -1.2 -2.8C-0.8 -1.6 -0.3 -1.4 0 -1.8C-0.2 -2.8 -0.2 -3.8 0 -4.6Z" fill="url(#elgf)"/><path d="M0 -0.6C0.9 0.4 1.7 1 1.7 2.2C1.7 3.2 0.9 3.8 0 3.8C-0.9 3.8 -1.7 3.2 -1.7 2.2C-1.7 1.2 -0.8 0.8 0 -0.6Z" fill="url(#elgf2)"/></g><path d="M-4.6 -6L-1.4 -6.2" stroke="#fff" stroke-width=".7" stroke-linecap="round" style="stroke:#fff" opacity=".6"/></g>';
     return o;
   }
   /* fondo interior de cada medallón */
@@ -155,6 +163,7 @@
     else if (id === "naturaleza") o += '<linearGradient id="elg6" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a2f18"/><stop offset=".45" stop-color="#a06c3a"/><stop offset="1" stop-color="#3b2412"/></linearGradient>';
     else o += '<filter id="elf" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".085" numOctaves="4" seed="7" result="n"/><feDiffuseLighting in="n" lighting-color="#ffffff" surfaceScale="3.2" result="l"><feDistantLight azimuth="235" elevation="58"/></feDiffuseLighting><feComposite in="l" in2="SourceGraphic" operator="arithmetic" k1="1.25" k2="0" k3="0" k4="0" result="m"/><feComposite in="m" in2="SourceAlpha" operator="in"/></filter><linearGradient id="elg5" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="95"><stop offset="0" stop-color="#fff0a8"/><stop offset=".5" stop-color="#ffb23a"/><stop offset="1" stop-color="#ff6a1a"/></linearGradient>';
     o += '</defs>';
+    if (id === "fuego") o += elFireBehind() + '<g transform="translate(14 14.5) scale(.72)">';
     o += elDecor(id);
     /* anillo */
     if (id === "naturaleza") {
@@ -168,7 +177,7 @@
     o += '<circle cx="50" cy="50" r="32" fill="none" stroke="' + p.dk + '" stroke-width="1.2" style="stroke:' + p.dk + '"/>';
     o += '<g clip-path="url(#elc_' + pre + ')">' + elBack(id) + '<g transform="' + (id === "fuego" ? "translate(19 19) scale(.62)" : id === "naturaleza" ? "translate(18 18) scale(.64)" : id === "piedra" ? "translate(16 15) scale(.7)" : "translate(20 20) scale(.6)") + '">' + elMotif(id) + "</g></g>";
     o += '<path d="M24 36A28 28 0 0 1 50 20" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" style="stroke:#fff" opacity=".28"/>';
-    return o + "</svg>";
+    return o + (id === "fuego" ? "</g>" : "") + "</svg>";
   }
   function elTimer(txtOn) {
     var w = mk("div", "mx-cdw"), tt = mk("div", "mx-cdt", "El evento termina el 30 de diciembre"), g = mk("div", "mx-cd"), cells = [];
