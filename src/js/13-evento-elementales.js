@@ -28,11 +28,13 @@
   function elDecor(id) {
     var o = "", k, a, h, w, ln, rn = elRnd(id.length * 977 + 13), D = EL_PAL[id].dk, L = ' stroke="' + D + '" stroke-linejoin="round" style="stroke:' + D + '"';
     if (id === "fuego") {
-      for (k = 0; k < 40; k++) {
-        a = k * 9 + (rn() - 0.5) * 5; h = 7 + rn() * 6.4; w = 2.7 + rn() * 1.8; ln = (rn() - 0.5) * 4.4;
-        var P = function (hh, ww, lx) { return "M" + (-ww) + " 1C" + (-ww - 0.9) + " -" + (hh * 0.4).toFixed(1) + " " + (lx - 0.8).toFixed(1) + " -" + (hh * 0.62).toFixed(1) + " " + lx.toFixed(1) + " -" + hh.toFixed(1) + "C" + (lx + 0.6).toFixed(1) + " -" + (hh * 0.55).toFixed(1) + " " + (ww + 1).toFixed(1) + " -" + (hh * 0.35).toFixed(1) + " " + ww + " 1Z"; };
-        o += '<g transform="rotate(' + a.toFixed(1) + ' 50 50) translate(50 13.5)"><g class="' + ["elan-f1", "elan-f2", "elan-f3"][k % 3] + '"><path d="' + P(h, w, ln) + '" fill="' + (k % 2 ? "#d9320f" : "#b81d0a") + '"' + L + ' stroke-width=".7"/><path d="' + P(h * 0.68, w * 0.62, ln * 0.7) + '" fill="#ff7a1f"/><path d="' + P(h * 0.4, w * 0.32, ln * 0.4) + '" fill="#ffd35a"/></g></g>';
-      }
+      /* anillo de fuego: lenguas curvas que giran en un solo sentido (silueta distinta a los cristales del hielo) */
+      var fT = function (hh, ww, ln2, fill, st) { return '<path d="M' + (-ww) + " 1C" + (-ww) + " -" + (hh * 0.3).toFixed(1) + " " + (-ww * 0.2 + ln2 * 0.25).toFixed(1) + " -" + (hh * 0.52).toFixed(1) + " " + (ln2 * 0.55).toFixed(1) + " -" + (hh * 0.74).toFixed(1) + "C" + (ln2 * 0.95).toFixed(1) + " -" + (hh * 0.88).toFixed(1) + " " + (ln2 * 0.85).toFixed(1) + " -" + (hh * 0.96).toFixed(1) + " " + ln2.toFixed(1) + " -" + hh.toFixed(1) + "C" + (ww * 0.6 + ln2 * 0.3).toFixed(1) + " -" + (hh * 0.6).toFixed(1) + " " + ww + " -" + (hh * 0.3).toFixed(1) + " " + ww + ' 1Z" fill="' + fill + '"' + (st ? L + ' stroke-width=".8"' : "") + "/>"; };
+      var rnd2 = elRnd(77), n2 = 22;
+      for (k = 0; k < n2; k++) { a = k * 360 / n2 + (rnd2() - 0.5) * 3; h = 11 + rnd2() * 3; w = 4.2 + rnd2() * 1.2; var cl = ["elan-f1", "elan-f2", "elan-f3"][k % 3];
+        o += '<g transform="rotate(' + a.toFixed(1) + ' 50 50) translate(50 13.5)"><g class="' + cl + '">' + fT(h, w, 5.2, "#b81d0a", 1) + fT(h * 0.72, w * 0.7, 3.8, "#ff6a1a", 0) + fT(h * 0.44, w * 0.4, 2.4, "#ffd35a", 0) + "</g></g>"; }
+      for (k = 0; k < n2; k++) { a = k * 360 / n2 + 360 / n2 / 2 + (rnd2() - 0.5) * 3; h = 6 + rnd2() * 2.4; w = 3 + rnd2() * 0.8; var cl2 = ["elan-f3", "elan-f1", "elan-f2"][k % 3];
+        o += '<g transform="rotate(' + a.toFixed(1) + ' 50 50) translate(50 14.5)"><g class="' + cl2 + '">' + fT(h, w, 3.6, "#ff7a1f", 1) + fT(h * 0.6, w * 0.6, 2.2, "#ffd35a", 0) + "</g></g>"; }
     } else if (id === "hielo") {
       var sh = function (aa, hh, ww, base, c1, c2, lean) { return '<g transform="rotate(' + aa.toFixed(1) + ' 50 50) translate(50 ' + (50 - base) + ') rotate(' + (lean || 0) + ')"><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'L-' + ww + ' -' + (hh * 0.38).toFixed(1) + 'Z" fill="' + c1 + '"' + L + ' stroke-width=".7"/><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'Z" fill="' + c2 + '"/><path d="M-0.3 -1L-0.3 -' + (hh * 0.78).toFixed(1) + '" stroke="#fff" stroke-width=".45" style="stroke:#fff" opacity=".85"/></g>'; };
       for (k = 0; k < 12; k++) o += sh(k * 30 + 15, 6.5, 2.7, 35.5, "#8fd0f8", "#e4f8ff", 0);
