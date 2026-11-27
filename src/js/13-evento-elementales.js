@@ -81,37 +81,27 @@
   function elMotif(id) {
     var b = "", i;
     if (id === "fuego") {
-      var LN = ' stroke="#3a0c04" stroke-linejoin="round" style="stroke:#3a0c04"', fq;
-      /* lengua de fuego en S: base (x,y), alto h, ancho w, inclinación lean */
-      var tg = function (x, y, h, w, lean, fill, op, stroke) {
-        return '<path d="M' + (x - w) + " " + y + "C" + (x - w) + " " + (y - h * 0.3) + " " + (x - w * 0.2 + lean * 0.3) + " " + (y - h * 0.5) + " " + (x + lean * 0.55) + " " + (y - h * 0.72) + "C" + (x + lean * 0.9) + " " + (y - h * 0.86) + " " + (x + lean * 0.8) + " " + (y - h * 0.95) + " " + (x + lean) + " " + (y - h) + "C" + (x + w * 0.5 + lean * 0.3) + " " + (y - h * 0.62) + " " + (x + w) + " " + (y - h * 0.34) + " " + (x + w) + " " + y + 'Z" fill="' + fill + '"' + (op ? ' opacity="' + op + '"' : "") + (stroke ? LN + ' stroke-width=".9"' : "") + "/>";
-      };
-      var fl3 = function (x, y, h, w, lean, cls) { return '<g class="' + cls + '">' + tg(x, y, h, w, lean, "#c42008", 0, 1) + tg(x, y, h * 0.76, w * 0.72, lean * 0.7, "#ff6a1a", 0, 0) + tg(x, y, h * 0.5, w * 0.46, lean * 0.4, "#ffc83a", 0, 0) + tg(x, y, h * 0.26, w * 0.24, lean * 0.2, "#fff4c0", 0, 0) + "</g>"; };
-      var BL = "M50 4L56.8 17L58.4 66L41.6 66L43.2 17Z";
-      b = '<ellipse cx="50" cy="42" rx="32" ry="46" fill="url(#elga)"/>';
-      /* corona de fuego detrás de la espada */
-      b += fl3(23, 64, 36, 8, -12, "elan-f3") + fl3(77, 64, 36, 8, 12, "elan-f2") + fl3(31, 66, 52, 10, -13, "elan-f1") + fl3(69, 66, 52, 10, 13, "elan-f3") + fl3(40, 66, 64, 11, -6, "elan-f2") + fl3(60, 66, 64, 11, 6, "elan-f1") + fl3(50, 66, 74, 13, 2, "elan-f2");
-      /* hoja */
-      b += '<path d="' + BL + '" fill="url(#elgs)"' + LN + ' stroke-width="1.9"/><path d="M50 4L56.8 17L58.4 66L50 66Z" fill="#7b8a9e" opacity=".5"/>' +
-        '<path d="M50 4L53 17L50 66Z" fill="#ffffff" opacity=".55"/>' +
-        '<path d="M47.4 22L52.6 22L52.2 62L47.8 62Z" fill="#46556a" opacity=".65"/><path d="M47.4 22L47.8 62M52.6 22L52.2 62" stroke="#ffffff" stroke-width=".7" style="stroke:#ffffff" opacity=".8"/>' +
-        '<path d="M44.4 18L44.7 64M55.6 18L55.3 64" stroke="#ffffff" stroke-width="1" stroke-linecap="round" style="stroke:#ffffff" opacity=".85"/><path d="M50 4L43.2 17" stroke="#fff" stroke-width="1" style="stroke:#fff" opacity=".8"/>' +
+      var LN = ' stroke="#3a0c04" stroke-linejoin="round" style="stroke:#3a0c04"';
+      var BL = "M50 11L57.5 21L58.5 66L41.5 66L42.5 21Z";
+      /* resplandor detrás */
+      b = '<ellipse cx="50" cy="42" rx="30" ry="44" fill="url(#elga)"/>';
+      /* llama trasera */
+      b += '<g class="elan-f1"><path d="M50 -4C54 10 66 16 68 30C70 42 72 54 68 68L32 68C28 54 30 42 32 30C34 16 46 10 50 -4Z" fill="url(#elgf)" opacity=".92"/></g><g class="elan-f2"><path d="M30 66C22 54 20 40 25 26C28 38 33 42 35 40C33 32 35 24 39 18C39 30 43 36 44 42L42 66Z" fill="url(#elgf)" opacity=".85"/><path d="M70 66C78 54 80 40 75 26C72 38 67 42 65 40C67 32 65 24 61 18C61 30 57 36 56 42L58 66Z" fill="url(#elgf)" opacity=".85"/></g>';
+      /* espada de acero */
+      b += '<path d="' + BL + '" fill="url(#elgs)"' + LN + ' stroke-width="1.8"/><path d="M50 11L57.5 21L58.5 66L50 66Z" fill="#7f8da0" opacity=".45"/>' +
+        '<path d="M50 20V62" stroke="#5a6678" stroke-width="2.2" stroke-linecap="round" style="stroke:#5a6678" opacity=".55"/><path d="M45 24L45.3 62M55 24L54.7 62" stroke="#ffffff" stroke-width=".9" style="stroke:#ffffff" opacity=".75"/>' +
         '<path d="' + BL + '" fill="url(#elgh)"/>' +
-        '<g class="elan-cr"><path d="M50 27L51.8 29.8L50 32.6L48.2 29.8ZM50 36L51.8 38.8L50 41.6L48.2 38.8ZM50 45L51.8 47.8L50 50.6L48.2 47.8ZM50 54L51.8 56.8L50 59.6L48.2 56.8Z" fill="#ff9a2e"/></g>';
-      /* guarda alada con plumas y rubí */
-      var wg = function (sg) { var X = function (v) { return sg > 0 ? v : 100 - v; };
-        return '<path d="M' + X(57) + " 62C" + X(67) + " 61 " + X(78) + " 55 " + X(91) + " 43L" + X(87) + " 53L" + X(92) + " 56C" + X(88) + " 66 " + X(81) + " 73 " + X(73) + " 76C" + X(66) + " 78 " + X(61) + " 76 " + X(57) + ' 73Z" fill="url(#elgg)"' + LN + ' stroke-width="1.8"/>' +
-          '<path d="M' + X(60) + " 66C" + X(70) + " 64 " + X(79) + " 58 " + X(86) + " 51M" + X(60) + " 70C" + X(69) + " 69 " + X(77) + " 64 " + X(83) + " 59M" + X(62) + " 74C" + X(69) + " 73 " + X(74) + " 70 " + X(78) + ' 67" fill="none" stroke="#8a4a0e" stroke-width="1" stroke-linecap="round" style="stroke:#8a4a0e" opacity=".8"/>' +
-          '<path d="M' + X(60) + " 63C" + X(70) + " 61 " + X(80) + " 55 " + X(89) + ' 45" fill="none" stroke="#fff3c4" stroke-width="1.2" stroke-linecap="round" style="stroke:#fff3c4" opacity=".85"/>'; };
-      b += wg(1) + wg(-1) +
-        '<circle cx="50" cy="68" r="12" fill="#ffb23a" opacity=".45"/><path d="M50 56.5L61 68L50 80L39 68Z" fill="url(#elgg)"' + LN + ' stroke-width="1.9"/><path d="M50 60L57.5 68L50 76.5L42.5 68Z" fill="#7a0c10"' + LN + ' stroke-width="1"/><path class="elan-cr" d="M50 61.5L56 68L50 75L44 68Z" fill="url(#elgr)"/><path d="M50 61.5L53 68L50 70L47 68Z" fill="#ffe2da" opacity=".85"/>' +
-        '<path d="M50 54L52 57L48 57Z M63 68L60 66L60 70Z M37 68L40 66L40 70Z M50 82L48 79L52 79Z" fill="#ffd35a"' + LN + ' stroke-width=".8"/>' +
-        '<path d="M45.5 80L54.5 80L53.6 91L46.4 91Z" fill="#7a1010"' + LN + ' stroke-width="1.7"/><path d="M45.6 83L54.4 81.5M45.9 87L54.1 85.5M46.2 91L53.8 89.4" stroke="#ffc83a" stroke-width="1.3" style="stroke:#ffc83a" opacity=".9"/>' +
-        '<path d="M44 94.5L50 91L56 94.5L50 98Z" fill="url(#elgg)"' + LN + ' stroke-width="1.6"/><circle cx="50" cy="94.5" r="2" fill="url(#elgr)"/>';
-      /* llamas translúcidas que arden sobre la hoja (se ve el acero detrás) */
-      b += '<g class="elan-f1">' + tg(50, 62, 56, 10, 2, "url(#elgf)", 0.34, 0) + "</g>" + '<g class="elan-f2">' + tg(44, 62, 42, 6, -5, "url(#elgf)", 0.34, 0) + tg(56, 62, 42, 6, 5, "url(#elgf)", 0.34, 0) + "</g>" +
-        '<g class="elan-f3">' + tg(50, 62, 32, 5, -1, "url(#elgf2)", 0.42, 0) + "</g>" + '<g class="elan-f1">' + tg(50, 62, 16, 2.6, 0, "#fff6cf", 0.5, 0) + "</g>";
-      for (fq = 0; fq < 7; fq++) { var ex = [26, 72, 82, 18, 62, 36, 50][fq], ey = [26, 20, 40, 44, 10, 14, 4][fq]; b += '<g class="elan-tw" style="animation-delay:' + (fq * 0.45).toFixed(2) + 's"><circle cx="' + ex + '" cy="' + ey + '" r="' + (1.1 + (fq % 3) * 0.3) + '" fill="' + (fq % 2 ? "#ff9a2e" : "#ffd35a") + '"/></g>'; }
+        '<g class="elan-cr"><path d="M50 28L52.2 31L50 34L47.8 31ZM50 39L52.2 42L50 45L47.8 42ZM50 50L52.2 53L50 56L47.8 53Z" fill="#ff9a2e"/></g>';
+      /* guarda alada con rubí */
+      b += '<path d="M57 63C66 62 76 58 87 47C87 58 82 69 73 74C67 76 62 74 57 72Z" fill="url(#elgg)"' + LN + ' stroke-width="1.8"/><path d="M43 63C34 62 24 58 13 47C13 58 18 69 27 74C33 76 38 74 43 72Z" fill="url(#elgg)"' + LN + ' stroke-width="1.8"/>' +
+        '<path d="M60 66C68 64 76 60 83 53M40 66C32 64 24 60 17 53M62 71C69 70 75 66 79 62M38 71C31 70 25 66 21 62" fill="none" stroke="#fff3c4" stroke-width="1.1" stroke-linecap="round" style="stroke:#fff3c4" opacity=".7"/>' +
+        '<circle cx="50" cy="68" r="11" fill="#ffb23a" opacity=".45"/><path d="M50 58L59 68L50 79L41 68Z" fill="url(#elgg)"' + LN + ' stroke-width="1.8"/><path class="elan-cr" d="M50 61.5L56 68L50 75.5L44 68Z" fill="url(#elgr)"/><path d="M50 61.5L53 68L50 70L47 68Z" fill="#ffd9d0" opacity=".8"/>' +
+        '<path d="M45.5 79L54.5 79L53.5 91L46.5 91Z" fill="#7a1010"' + LN + ' stroke-width="1.7"/><path d="M45.6 82L54.4 80.5M45.9 86L54.1 84.5M46.2 90L53.8 88.6" stroke="#ffc83a" stroke-width="1.2" style="stroke:#ffc83a" opacity=".85"/><circle cx="50" cy="94.5" r="5.2" fill="url(#elgg)"' + LN + ' stroke-width="1.7"/><circle cx="50" cy="94.5" r="2.2" fill="url(#elgr)"/>';
+      /* llama transparente que arde sobre la hoja: se ve el acero a través */
+      b += '<g class="elan-f1"><path d="M50 -2C53 10 64 16 66 30C68 42 66 52 58 61L42 61C34 52 32 42 34 30C36 16 47 10 50 -2Z" fill="url(#elgf)" opacity=".34"/></g>' +
+        '<g class="elan-f3"><path d="M50 10C52 20 58 26 59 38C60 46 58 54 54 61L46 61C42 54 40 46 41 38C42 26 48 20 50 10Z" fill="url(#elgf2)" opacity=".38"/></g>' +
+        '<g class="elan-f2"><path d="M50 32C52 40 55 44 55 50C55 55 53 59 52 61L48 61C47 59 45 55 45 50C45 44 48 40 50 32Z" fill="#fff6cf" opacity=".4"/></g>' +
+        '<g class="elan-tw"><circle cx="30" cy="22" r="1.6" fill="#ffd35a"/></g><g class="elan-tw" style="animation-delay:.9s"><circle cx="72" cy="16" r="1.5" fill="#ffd35a"/></g><g class="elan-tw" style="animation-delay:1.7s"><circle cx="80" cy="38" r="1.3" fill="#ff9a2e"/></g><g class="elan-tw" style="animation-delay:2.3s"><circle cx="20" cy="40" r="1.4" fill="#ff9a2e"/></g>';
     } else if (id === "hielo") {
       var arms = "", tw = "", sp = "";
       for (i = 0; i < 3; i++) arms += '<g transform="rotate(' + i * 60 + ' 50 50)"><path d="M50 4V96"/><path d="M50 18L38 6M50 18L62 6M50 82L38 94M50 82L62 94M50 32L40 22M50 32L60 22M50 68L40 78M50 68L60 78M50 46L44 40M50 46L56 40M50 54L44 60M50 54L56 60"/></g>';
