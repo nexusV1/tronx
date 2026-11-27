@@ -28,11 +28,15 @@
   function elDecor(id) {
     var o = "", k, a, h, w, ln, rn = elRnd(id.length * 977 + 13), D = EL_PAL[id].dk, L = ' stroke="' + D + '" stroke-linejoin="round" style="stroke:' + D + '"';
     if (id === "fuego") {
-      /* anillo de fuego: lenguas curvas que giran en un solo sentido (silueta distinta a los cristales del hielo) */
+      /* marco de hierro forjado: placas con brasas entre ellas y corona de llamas arriba */
       var fT = function (hh, ww, ln2, fill, st) { return '<path d="M' + (-ww) + " 1C" + (-ww) + " -" + (hh * 0.3).toFixed(1) + " " + (-ww * 0.2 + ln2 * 0.25).toFixed(1) + " -" + (hh * 0.52).toFixed(1) + " " + (ln2 * 0.55).toFixed(1) + " -" + (hh * 0.74).toFixed(1) + "C" + (ln2 * 0.95).toFixed(1) + " -" + (hh * 0.88).toFixed(1) + " " + (ln2 * 0.85).toFixed(1) + " -" + (hh * 0.96).toFixed(1) + " " + ln2.toFixed(1) + " -" + hh.toFixed(1) + "C" + (ww * 0.6 + ln2 * 0.3).toFixed(1) + " -" + (hh * 0.6).toFixed(1) + " " + ww + " -" + (hh * 0.3).toFixed(1) + " " + ww + ' 1Z" fill="' + fill + '"' + (st ? L + ' stroke-width=".8"' : "") + "/>"; };
-      var rnd2 = elRnd(77), n2 = 16;
-      for (k = 0; k < n2; k++) { a = k * 360 / n2 + 360 / n2 / 2; h = 10.5 + (k % 2) * 1.5; w = 4.4; var cl = ["elan-f1", "elan-f2", "elan-f3"][k % 3];
-        o += '<g transform="rotate(' + a.toFixed(1) + ' 50 50) translate(50 14)"><g class="' + cl + '">' + fT(h, w, 4.6, "#b81d0a", 1) + fT(h * 0.7, w * 0.68, 3.4, "#ff6a1a", 0) + fT(h * 0.4, w * 0.38, 2.1, "#ffd35a", 0) + "</g></g>"; }
+      for (k = 0; k < 24; k++) {
+        o += '<g transform="rotate(' + (k * 15 + 7.5) + ' 50 50)"><path d="M47.4 17.6L52.6 17.6L53.6 10.4L46.4 10.4Z" fill="#7a3220"' + L + ' stroke-width=".9"/><path d="M47.8 15.8L52.2 15.8" stroke="#ff8a2a" stroke-width="1.1" stroke-linecap="round" style="stroke:#ff8a2a"/></g>';
+        o += '<circle class="elan-tw" style="animation-delay:' + (k % 6 * 0.35).toFixed(2) + 's" cx="' + elPt(15.2, k * 15)[0].toFixed(1) + '" cy="' + elPt(15.2, k * 15)[1].toFixed(1) + '" r="1.3" fill="#ffb23a"/>';
+      }
+      /* corona de llamas (solo arriba) */
+      var crn = [[-52, 7], [-34, 9], [-17, 10], [17, 10], [34, 9], [52, 7]];
+      for (k = 0; k < crn.length; k++) o += '<g transform="rotate(' + crn[k][0] + ' 50 50) translate(50 10)"><g class="' + ["elan-f1", "elan-f2", "elan-f3"][k % 3] + '">' + fT(crn[k][1], 4.6, 3.6 * (crn[k][0] < 0 ? -1 : 1) * 0 + 4, "#b81d0a", 1) + fT(crn[k][1] * 0.7, 3.2, 3, "#ff6a1a", 0) + fT(crn[k][1] * 0.4, 1.8, 1.8, "#ffd35a", 0) + "</g></g>";
     } else if (id === "hielo") {
       var sh = function (aa, hh, ww, base, c1, c2, lean) { return '<g transform="rotate(' + aa.toFixed(1) + ' 50 50) translate(50 ' + (50 - base) + ') rotate(' + (lean || 0) + ')"><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'L-' + ww + ' -' + (hh * 0.38).toFixed(1) + 'Z" fill="' + c1 + '"' + L + ' stroke-width=".7"/><path d="M0 0L' + ww + ' -' + (hh * 0.38).toFixed(1) + 'L0.6 -' + hh.toFixed(1) + 'Z" fill="' + c2 + '"/><path d="M-0.3 -1L-0.3 -' + (hh * 0.78).toFixed(1) + '" stroke="#fff" stroke-width=".45" style="stroke:#fff" opacity=".85"/></g>'; };
       for (k = 0; k < 12; k++) o += sh(k * 30 + 15, 6.5, 2.7, 35.5, "#8fd0f8", "#e4f8ff", 0);
@@ -83,9 +87,9 @@
     if (id === "fuego") {
       var LN = ' stroke="#3a0c04" stroke-linejoin="round" style="stroke:#3a0c04"';
       var BL = "M50 6L57 16L57.5 62L42.5 62L43 16Z";
-      b = '<ellipse cx="50" cy="40" rx="26" ry="42" fill="url(#elga)"/>';
-      /* llama trasera: abraza la hoja */
-      b += '<g class="elan-f1"><path d="M50 -8C54 4 62 10 63 24C64 36 66 48 62 62L38 62C34 48 36 36 37 24C38 10 46 4 50 -8Z" fill="url(#elgf)" opacity=".9"/></g><g class="elan-f2"><path d="M38 62C32 54 30 44 33 34C36 41 38 42 40 40C39 34 40 28 43 24L43 62Z" fill="url(#elgf)" opacity=".8"/><path d="M62 62C68 54 70 44 67 34C64 41 62 42 60 40C61 34 60 28 57 24L57 62Z" fill="url(#elgf)" opacity=".8"/></g>';
+      b = '<ellipse cx="50" cy="38" rx="42" ry="48" fill="url(#elga)"/>';
+      /* llama trasera: grande, domina el fondo */
+      b += '<g class="elan-f1"><path d="M50 -22C56 -6 72 2 74 20C76 34 80 48 74 64L26 64C20 48 24 34 26 20C28 2 44 -6 50 -22Z" fill="url(#elgf)" opacity=".92"/></g><g class="elan-f2"><path d="M28 64C14 54 10 38 16 20C21 32 27 36 30 34C27 24 29 12 35 4C35 18 40 26 42 34L42 64Z" fill="url(#elgf)" opacity=".85"/><path d="M72 64C86 54 90 38 84 20C79 32 73 36 70 34C73 24 71 12 65 4C65 18 60 26 58 34L58 64Z" fill="url(#elgf)" opacity=".85"/></g><g class="elan-f3"><path d="M50 -10C54 2 62 8 63 22C64 34 66 46 62 62L38 62C34 46 36 34 37 22C38 8 46 2 50 -10Z" fill="url(#elgf2)" opacity=".55"/></g>';
       /* espada de acero */
       b += '<path d="' + BL + '" fill="url(#elgs)"' + LN + ' stroke-width="1.8"/><path d="M50 6L57 16L57.5 62L50 62Z" fill="#7f8da0" opacity=".45"/>' +
         '<path d="M50 16V58" stroke="#5a6678" stroke-width="2" stroke-linecap="round" style="stroke:#5a6678" opacity=".55"/><path d="M46 20L46.2 58M54 20L53.8 58" stroke="#ffffff" stroke-width=".9" style="stroke:#ffffff" opacity=".75"/>' +
@@ -97,8 +101,9 @@
         '<circle cx="50" cy="67" r="9" fill="#ffb23a" opacity=".4"/><path d="M50 61L56 67L50 73L44 67Z" fill="url(#elgg)"' + LN + ' stroke-width="1.6"/><path class="elan-cr" d="M50 63.2L53.8 67L50 70.8L46.2 67Z" fill="url(#elgr)"/>' +
         '<path d="M46.5 72L53.5 72L52.7 86L47.3 86Z" fill="#7a1010"' + LN + ' stroke-width="1.6"/><path d="M46.7 76L53.3 75M46.9 80L53.1 79M47.1 84L52.9 83" stroke="#ffc83a" stroke-width="1.1" style="stroke:#ffc83a" opacity=".85"/><circle cx="50" cy="90" r="4.6" fill="url(#elgg)"' + LN + ' stroke-width="1.6"/><circle cx="50" cy="90" r="1.9" fill="url(#elgr)"/>';
       /* llama transparente que arde sobre la hoja: se ve el acero a través */
-      b += '<g class="elan-f1"><path d="M50 -2C53 8 59 14 59 26C60 38 58 50 55 60L45 60C42 50 40 38 41 26C41 14 47 8 50 -2Z" fill="url(#elgf)" opacity=".34"/></g>' +
-        '<g class="elan-f3"><path d="M50 12C52 21 56 26 56.5 36C57 44 56 52 53 59L47 59C44 52 43 44 43.5 36C44 26 48 21 50 12Z" fill="url(#elgf2)" opacity=".38"/></g>' +
+      b += '<g class="elan-f1"><path d="M50 -10C55 4 66 10 67 24C68 38 66 50 60 60L40 60C34 50 32 38 33 24C34 10 45 4 50 -10Z" fill="url(#elgf)" opacity=".36"/></g>' +
+        '<g class="elan-f3"><path d="M50 6C53 17 60 23 60.5 35C61 45 59 53 55 60L45 60C41 53 39 45 39.5 35C40 23 47 17 50 6Z" fill="url(#elgf2)" opacity=".4"/></g>' +
+        '<g class="elan-f2"><path d="M40 60C34 52 33 44 36 36C39 42 41 42 42 40C42 46 44 52 46 60Z" fill="#fff0a8" opacity=".35"/><path d="M60 60C66 52 67 44 64 36C61 42 59 42 58 40C58 46 56 52 54 60Z" fill="#fff0a8" opacity=".35"/></g>' +
         '<g class="elan-tw"><circle cx="30" cy="24" r="1.5" fill="#ffd35a"/></g><g class="elan-tw" style="animation-delay:.9s"><circle cx="71" cy="18" r="1.4" fill="#ffd35a"/></g><g class="elan-tw" style="animation-delay:1.7s"><circle cx="76" cy="40" r="1.2" fill="#ff9a2e"/></g><g class="elan-tw" style="animation-delay:2.3s"><circle cx="24" cy="42" r="1.3" fill="#ff9a2e"/></g>';
     } else if (id === "hielo") {
       var arms = "", tw = "", sp = "";
