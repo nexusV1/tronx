@@ -56,13 +56,11 @@
     o += '<circle cx="50" cy="50" r="43.6" fill="none" stroke="#fff" stroke-width=".7" style="stroke:#fff" opacity=".13"/>';
     /* borde interior de lava */
     o += '<circle cx="50" cy="50" r="37.9" fill="none" stroke="#ff7a1f" stroke-width="1.3" style="stroke:#ff7a1f" opacity=".35"/><circle class="elan-cr" cx="50" cy="50" r="37.9" fill="none" stroke="#ffb23a" stroke-width=".55" style="stroke:#ffb23a"/>';
-    /* anillo de llamas dentro de la banda: mismas llamas y colores que el centro */
-    var tg = function (sc) { return '<path d="M-3.1 0C-3.7 -2.8 -1.2 -4.4 0.3 -7.6C0.9 -5.2 3.7 -4 3.1 0Z" transform="scale(' + sc + ')"/>'; };
-    for (k = 0; k < 24; k++) {
-      if (k % 6 === 0) continue;
-      var cl = ["elan-f1", "elan-f2", "elan-f3"][k % 3];
-      o += '<g transform="rotate(' + k * 15 + ' 50 50) translate(50 12.6)"><g class="' + cl + '"><g fill="url(#elgf)" stroke="#3a0c04" stroke-width=".7" stroke-linejoin="round" style="stroke:#3a0c04">' + tg(1) + '</g><g fill="url(#elgf2)">' + tg(0.58) + "</g></g></g>";
-    }
+    /* río de lava que recorre la banda, con brasas */
+    var lv = "", q, qa, qr;
+    for (q = 0; q <= 240; q++) { qa = q / 240 * 6.2832; qr = 41.2 + 1.7 * Math.sin(qa * 18); lv += (q ? "L" : "M") + (50 + qr * Math.cos(qa)).toFixed(2) + " " + (50 + qr * Math.sin(qa)).toFixed(2); }
+    o += '<path d="' + lv + 'Z" fill="none" stroke="#2a0a04" stroke-width="3.6" stroke-linejoin="round" style="stroke:#2a0a04"/><path d="' + lv + 'Z" fill="none" stroke="#ff4a10" stroke-width="2.3" stroke-linejoin="round" style="stroke:#ff4a10"/><g class="elan-cr"><path d="' + lv + 'Z" fill="none" stroke="#ff9a2e" stroke-width="1.35" stroke-linejoin="round" style="stroke:#ff9a2e"/><path d="' + lv + 'Z" fill="none" stroke="#ffe08a" stroke-width=".5" stroke-linejoin="round" style="stroke:#ffe08a"/></g>';
+    for (k = 0; k < 24; k++) { if (k % 6 === 0) continue; var ep = elPt(43.9 + (k % 2) * -5.4, k * 15 + 7.5); o += '<circle class="elan-tw" style="animation-delay:' + (k % 6 * 0.4).toFixed(2) + 's" cx="' + ep[0].toFixed(1) + '" cy="' + ep[1].toFixed(1) + '" r="' + (0.7 + (k % 3) * 0.2).toFixed(1) + '" fill="#ffc83a"/>'; }
     /* aros de oro: exterior e interior */
     o += '<circle cx="50" cy="50" r="45.7" fill="none" stroke="' + D + '" stroke-width="2.8" style="stroke:' + D + '"/><circle cx="50" cy="50" r="45.7" fill="none" stroke="url(#elgq)" stroke-width="1.7" style="stroke:url(#elgq)"/>';
     o += '<circle cx="50" cy="50" r="34.4" fill="none" stroke="' + D + '" stroke-width="5.6" style="stroke:' + D + '"/><circle cx="50" cy="50" r="34.4" fill="none" stroke="url(#elgq)" stroke-width="4.2" style="stroke:url(#elgq)"/><circle cx="50" cy="50" r="35.2" fill="none" stroke="#fff" stroke-width=".7" style="stroke:#fff" opacity=".45"/><circle cx="50" cy="50" r="33" fill="none" stroke="#7a3a08" stroke-width=".6" style="stroke:#7a3a08" opacity=".7"/>';
